@@ -1,101 +1,68 @@
-# Orchestration
+# Codex Orchestration
 
-<a alt="Nx logo" href="https://nx.dev" target="_blank" rel="noreferrer"><img src="https://raw.githubusercontent.com/nrwl/nx/master/images/nx-logo.png" width="45"></a>
+This Nx workspace implements the event-driven, BATDD-governed Codex orchestration system. It is the implementation surface for the process control plane, pg-boss delivery, monitor service, dmux transport integration, Codex lifecycle hooks, and the role-scoped interfaces used by Coordinators, Right Hands, Workers, Verifiers, and Judges.
 
-✨ Your new, shiny [Nx workspace](https://nx.dev) is ready ✨.
+The workspace does not own the architecture constitution. Durable doctrine and architecture live in the shared Agent Wiki.
 
-[Learn more about this workspace setup and its capabilities](https://nx.dev/nx-api/node?utm_source=nx_project&amp;utm_medium=readme&amp;utm_campaign=nx_projects) or run `npx nx graph` to visually explore what was created. Now, let's get you up to speed!
+## Canonical documentation
 
-## Run tasks
+Start with the [Codex Event-Driven BATDD Orchestration SPEC](obsidian://open?vault=Agent%20Wiki&file=codex%2Forchestration%2FSPEC).
 
-To run the dev server for your app, use:
+- Vault: `Agent Wiki`
+- Note: `codex/orchestration/SPEC.md`
+- Filesystem: `/Users/mcasa_atlantis/Documents/vaults/Agent Wiki/codex/orchestration/SPEC.md`
 
-```sh
-npx nx serve daemon
-```
-
-To create a production bundle:
+Read it from the command line with:
 
 ```sh
-npx nx build daemon
+obsidian vault="Agent Wiki" read path="codex/orchestration/SPEC.md"
 ```
 
-To see all available targets to run for a project, run:
+The SPEC routes to the governing BATDD, Gherkin, orchestration, audit, and role standards. Repository source is authoritative for concrete implementation; the Agent Wiki is authoritative for cross-project doctrine and architecture. Do not copy the full SPEC into this repository or create a second mutable architecture ledger.
+
+Agent Wiki notes are readable by agents. Editing, creating, moving, renaming, or deleting a Wiki note requires explicit user approval and the global `agent-wiki` skill.
+
+## Architecture snapshot
+
+- PostgreSQL `process` data is the durable source of campaign, DAG, execution, event, artifact, and verdict truth.
+- pg-boss is the single delivery, lease, and retry authority.
+- The canonical monitor awaits reducer-approved logical events and resumes higher-level Codex work only at decision boundaries.
+- dmux is the canonical tmux, worktree, and Codex-process transport primitive behind a versioned adapter.
+- cmux is non-canonical; Mercury transport development is suspended.
+- Codex Subagents V2 are bounded judgment fan-out, not the durable campaign DAG.
+- Runtime completion is an observation. Only executable acceptance, independent verification, and authorized verdict reduction can accept work.
+
+The canonical details and exceptions remain in the Wiki SPEC.
+
+## Workspace projects
+
+| Project                     | Purpose                    | Principal targets                                             |
+| --------------------------- | -------------------------- | ------------------------------------------------------------- |
+| `@orchestration/daemon`     | Node orchestration daemon  | `serve`, `build`, `test`, `lint`, `typecheck`, `docker:build` |
+| `@orchestration/daemon-e2e` | Daemon boundary acceptance | `e2e`, `lint`, `typecheck`                                    |
+
+Inspect the resolved Nx configuration rather than guessing from package files:
 
 ```sh
-npx nx show project daemon
+bun nx show projects
+bun nx show project @orchestration/daemon
+bun nx show project @orchestration/daemon-e2e
 ```
 
-These targets are either [inferred automatically](https://nx.dev/concepts/inferred-tasks?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) or defined in the `project.json` or `package.json` files.
-
-[More about running tasks in the docs &raquo;](https://nx.dev/features/run-tasks?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-
-## Add new projects
-
-While you could add new projects to your workspace manually, you might want to leverage [Nx plugins](https://nx.dev/concepts/nx-plugins?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) and their [code generation](https://nx.dev/features/generate-code?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) feature.
-
-Use the plugin's generator to create new projects.
-
-To generate a new application, use:
+## Common commands
 
 ```sh
-npx nx g @nx/node:app demo
+# Develop and build the daemon
+bun nx serve @orchestration/daemon
+bun nx build @orchestration/daemon
+
+# Run project gates
+bun nx test @orchestration/daemon
+bun nx lint @orchestration/daemon
+bun nx typecheck @orchestration/daemon
+
+# Run real daemon boundary acceptance
+bun nx e2e @orchestration/daemon-e2e
 ```
 
-To generate a new library, use:
-
-```sh
-npx nx g @nx/node:lib mylib
-```
-
-You can use `npx nx list` to get a list of installed plugins. Then, run `npx nx list <plugin-name>` to learn about more specific capabilities of a particular plugin. Alternatively, [install Nx Console](https://nx.dev/getting-started/editor-setup?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) to browse plugins and generators in your IDE.
-
-[Learn more about Nx plugins &raquo;](https://nx.dev/concepts/nx-plugins?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) | [Browse the plugin registry &raquo;](https://nx.dev/plugin-registry?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-
-## Set up CI!
-
-### Step 1
-
-To connect to Nx Cloud, run the following command:
-
-```sh
-npx nx connect
-```
-
-Connecting to Nx Cloud ensures a [fast and scalable CI](https://nx.dev/ci/intro/why-nx-cloud?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) pipeline. It includes features such as:
-
-- [Remote caching](https://nx.dev/ci/features/remote-cache?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-- [Task distribution across multiple machines](https://nx.dev/ci/features/distribute-task-execution?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-- [Automated e2e test splitting](https://nx.dev/ci/features/split-e2e-tasks?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-- [Task flakiness detection and rerunning](https://nx.dev/ci/features/flaky-tasks?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-
-### Step 2
-
-Use the following command to configure a CI workflow for your workspace:
-
-```sh
-npx nx g ci-workflow
-```
-
-[Learn more about Nx on CI](https://nx.dev/ci/intro/ci-with-nx#ready-get-started-with-your-provider?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-
-## Install Nx Console
-
-Nx Console is an editor extension that enriches your developer experience. It lets you run tasks, generate code, and improves code autocompletion in your IDE. It is available for VSCode and IntelliJ.
-
-[Install Nx Console &raquo;](https://nx.dev/getting-started/editor-setup?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-
-## Useful links
-
-Learn more:
-
-- [Learn more about this workspace setup](https://nx.dev/nx-api/node?utm_source=nx_project&amp;utm_medium=readme&amp;utm_campaign=nx_projects)
-- [Learn about Nx on CI](https://nx.dev/ci/intro/ci-with-nx?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-- [Releasing Packages with Nx release](https://nx.dev/features/manage-releases?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-- [What are Nx plugins?](https://nx.dev/concepts/nx-plugins?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-
-And join the Nx community:
-- [Discord](https://go.nx.dev/community)
-- [Follow us on X](https://twitter.com/nxdevtools) or [LinkedIn](https://www.linkedin.com/company/nrwl)
-- [Our Youtube channel](https://www.youtube.com/@nxdevtools)
-- [Our blog](https://nx.dev/blog?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
+Read [AGENTS.md](./AGENTS.md) before changing the workspace. It defines the operating rules and required authority boundaries for every Codex agent working here.
