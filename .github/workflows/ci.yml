@@ -31,9 +31,22 @@ jobs:
 
       - run: bun install --no-cache
 
-      # Prepend any command with "nx record --" to record its logs to Nx Cloud
-      # - run: bun nx record -- echo Hello World
-      - run: bun nx run-many -t lint test build typecheck
+      - name: Resolve immutable affected boundary
+        id: affected
+        env:
+          EVENT_BASE: ${{ github.event.pull_request.base.sha || github.event.before }}
+        run: |
+          if [[ -z "$EVENT_BASE" || "$EVENT_BASE" =~ ^0+$ ]]; then
+            EVENT_BASE="$(git rev-list --max-parents=0 HEAD)"
+          fi
+          echo "base=$EVENT_BASE" >> "$GITHUB_OUTPUT"
+
+      - name: Validate changed projects and transitive dependents
+        run: >-
+          bun nx affected -t lint,typecheck,build,test
+          --base=${{ steps.affected.outputs.base }}
+          --head=${{ github.sha }}
+          --outputStyle=static
       # Nx Cloud recommends fixes for failures to help you get CI green faster. Learn more: https://nx.dev/ci/features/self-healing-ci
       - run: bun nx fix-ci
         if: always()

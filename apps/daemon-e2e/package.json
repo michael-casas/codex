@@ -7,18 +7,51 @@
       "@orchestration/daemon"
     ],
     "targets": {
-      "e2e": {
-        "executor": "@nx/jest:jest",
-        "outputs": [
-          "{projectRoot}/test-output/jest/coverage"
-        ],
+      "test-l2-e2e": {
+        "executor": "nx:run-commands",
         "dependsOn": [
-          "@orchestration/daemon:build",
-          "@orchestration/daemon:serve"
+          "@orchestration/daemon:build"
         ],
         "options": {
-          "jestConfig": "apps/daemon-e2e/jest.config.cts",
-          "passWithNoTests": true
+          "command": "vitest run --config apps/daemon-e2e/vitest.config.ts src/daemon/daemon.spec.ts --testNamePattern='L2:E2E'"
+        }
+      },
+      "test-l2": {
+        "executor": "nx:run-commands",
+        "dependsOn": [
+          "@orchestration/daemon:build"
+        ],
+        "options": {
+          "command": "vitest run --config apps/daemon-e2e/vitest.config.ts src/daemon/daemon.spec.ts"
+        }
+      },
+      "e2e": {
+        "executor": "nx:run-commands",
+        "dependsOn": [
+          "@orchestration/daemon:build"
+        ],
+        "options": {
+          "command": "vitest run --config apps/daemon-e2e/vitest.config.ts src/daemon/daemon.spec.ts"
+        }
+      },
+      "test": {
+        "executor": "nx:run-commands",
+        "cache": false,
+        "dependsOn": [
+          "@orchestration/daemon:build"
+        ],
+        "outputs": [
+          "{workspaceRoot}/test-output/ground-zero/daemon-e2e.json"
+        ],
+        "options": {
+          "command": "bun packages/testing/src/cli.ts aggregate packages/testing/manifests/daemon-e2e.json"
+        },
+        "configurations": {
+          "ground-zero": {
+            "env": {
+              "GROUND_ZERO_UNCACHED": "1"
+            }
+          }
         }
       }
     }

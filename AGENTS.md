@@ -7,13 +7,37 @@ These rules apply to every agent operating anywhere in this workspace. More spec
 Before making assumptions or writing files:
 
 1. Read the nearest `README.md`, beginning with the workspace root and repeating at every package, app, or tool sub-root entered.
-2. Read `/Users/mcasa_atlantis/Documents/vaults/Agent Wiki/codex/orchestration/SPEC.md` with the global `agent-wiki` skill.
-3. Read the SPEC sections and linked BATDD, Gherkin, orchestration, audit, and role standards relevant to the assigned role and lane.
-4. Read the durable assignment, repository execution profile, acceptance contract, write surface, dependency artifacts, and stop boundary before implementation.
+2. Determine the role-specific context path before loading broad doctrine.
+3. An ordinary Worker with a schema-valid compiled assignment MUST invoke the global `batdd` skill and read `.agents/batdd/WORKER-CONTRACT.md`, `.agents/batdd/profile.json`, and its named assignment envelope. Read repository `TESTING.md` or full Wiki doctrine only on the compiled profile's escalation conditions.
+4. Coordinators, contract authors, Verifiers, Judges, agents amending doctrine, and agents resolving a missing, invalid, stale, version-conflicted, or ambiguous compiled contract MUST read `/Users/mcasa_atlantis/Documents/vaults/Agent Wiki/codex/orchestration/SPEC.md` and the relevant linked standards with the `agent-wiki` skill.
+5. Read the durable assignment, acceptance contract, write surface, dependency artifacts, immutable revisions, and stop boundary before implementation.
 
 Authority descends from explicit human rulings and repository law through the Wiki standards, immutable campaign assignment, executable acceptance, reducer-approved state, skills, prompts, and self-report. A lower layer MUST NOT weaken or silently expand a higher layer.
 
 The Agent Wiki is read-only unless the user explicitly approves a Wiki write in the current request. Use the `agent-wiki` skill and its CLI-first workflow for every approved Wiki mutation. Do not duplicate the Wiki specification into repository files; link to it and keep implementation-specific documentation local.
+
+## Testing authority and layer ownership
+
+Before creating, editing, moving, or classifying any test:
+
+1. Invoke the global `batdd` skill.
+2. Read `.agents/batdd/WORKER-CONTRACT.md`, validate `.agents/batdd/profile.json`, and load the named assignment envelope when present.
+3. Read repository [TESTING.md](./TESTING.md) or canonical Wiki standards when the compiled profile declares escalation.
+4. Inspect the resolved Nx project and targets before selecting a runner.
+
+Layer ownership is fixed:
+
+- L1 owns unit and in-process integration tests in `*.test.ts` through Vitest.
+- L2 owns real-boundary integration and end-to-end tests. Non-UI TypeScript uses Vitest `*.spec.ts`, web uses Playwright `*.spec.ts`, and mobile uses Maestro `*.spec.yaml`.
+- L3 owns canonical `*.feature` behavior executed through Cucumber `*.steps.ts` and direct runtime-appropriate dogfood.
+- L3 step definitions MUST NOT invoke L1 or L2 targets or import their test entrypoints. Layers MAY share framework-neutral fixtures and drivers.
+- UI behavior requires a UI-capable runtime. An API or data proxy does not prove rendering, hydration, visibility, or interaction.
+- Zero-test success, no-op assertions, unawaited assertions, scenario-order dependency, pending steps, and assertion-free bindings are invalid evidence.
+- After the Ground-0 baseline is ratified, run only changed and transitively affected Nx projects unless an explicit full-workspace gate is required.
+
+The Wiki `TESTING` standard defines cross-repository meaning. This repository's `TESTING.md` resolves exact runners, targets, boundaries, affected inputs, and Ground-0 status without duplicating the canonical doctrine.
+
+For implementation or repair, BATDD invocation MUST create and maintain a runtime-native execution plan before the first product write. The plan represents every required L1/L2/L3 obligation, basic-to-adversarial design, all-row meaningful RED, contract freeze, fidelity-ordered GREEN, affected closure, cleanup, evidence, and stop boundary. `vertical-slice` is the default completion scope; a layer-specific assignment MUST NOT claim feature completion.
 
 ## BATDD execution law
 

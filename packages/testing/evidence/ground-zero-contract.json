@@ -1,0 +1,84 @@
+{
+  "schemaVersion": 1,
+  "authority": {
+    "assignment": "Ground-0 BATDD harness",
+    "baseRevision": "2b617bcf21aeec0ec14056950efa10af58a910c4",
+    "stopBoundary": "READY-FOR-AUDIT"
+  },
+  "greenContract": {
+    "frozen": true,
+    "web": "not-applicable",
+    "mobile": "not-applicable",
+    "requiredLayers": [
+      "l1-unit",
+      "l1-integration",
+      "l2-integration",
+      "l2-e2e",
+      "l3"
+    ],
+    "negativeGuarantees": [
+      "zero-collector-rejected",
+      "marker-order-enforced",
+      "cross-layer-entrypoint-import-rejected",
+      "cucumber-runner-of-runners-rejected",
+      "undefined-ambiguous-pending-skipped-rejected",
+      "no-op-assertion-free-unawaited-rejected",
+      "child-failure-propagated",
+      "malformed-machine-result-rejected",
+      "add-modify-delete-rename-normalized",
+      "unrelated-project-excluded",
+      "transitive-dependent-selected",
+      "live-l2-l3-cache-disabled",
+      "success-failure-cleanup"
+    ]
+  },
+  "meaningfulRed": [
+    {
+      "command": "bun nx test-l1-unit @orchestration/testing --outputStyle=static --skipNxCache",
+      "exitCode": 1,
+      "selected": 18,
+      "failed": 18,
+      "decisive": "Ground-0 contract behavior is not implemented"
+    },
+    {
+      "command": "bun nx test-l1-integration @orchestration/testing --outputStyle=static --skipNxCache",
+      "exitCode": 1,
+      "selected": 3,
+      "failed": 3,
+      "decisive": "Ground-0 contract behavior is not implemented"
+    },
+    {
+      "command": "bun nx test-l2 @orchestration/testing --outputStyle=static --skipNxCache",
+      "exitCode": 1,
+      "selected": 22,
+      "failed": 15,
+      "decisive": "aggregate, Cucumber verifier, and shared affected inputs were absent"
+    },
+    {
+      "command": "bun nx test-l3 @orchestration/testing --outputStyle=static --skipNxCache",
+      "exitCode": 1,
+      "selected": 1,
+      "failed": 1,
+      "steps": 6,
+      "decisive": "public Ground-0 aggregate exited 70 because behavior was not implemented"
+    }
+  ],
+  "contractFiles": [
+    {
+      "path": "packages/testing/src/ground-zero/harness.test.ts",
+      "sha256": "76785423a3a44a806c3319f27b67d521b8d66ffd2a77c88d40d974cbfacd1b8d"
+    },
+    {
+      "path": "packages/testing/src/ground-zero/harness.spec.ts",
+      "sha256": "7fe52807abc6ac5ebf8ad9932bca0901f4b0272e1807ef64a8f7c9c382925090"
+    },
+    {
+      "path": "packages/testing/src/ground-zero/ground-zero.feature",
+      "sha256": "2430e1171c6e40632f7164a4ec7c097de748f8d1cb6a36e2e1f58bfce3797370"
+    },
+    {
+      "path": "packages/testing/src/ground-zero/index.steps.ts",
+      "sha256": "de5f10728e9513a0218321749cb958e2aed22f94ca599512089d1f722fd44320"
+    }
+  ]
+}

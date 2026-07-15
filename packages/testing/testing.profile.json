@@ -1,0 +1,16 @@
+{
+  "surfaces": {
+    "nonUi": {
+      "status": "applicable",
+      "runtime": "vitest-and-cucumber"
+    },
+    "web": {
+      "status": "not-applicable",
+      "reason": "The orchestration workspace owns no web product surface."
+    },
+    "mobile": {
+      "status": "not-applicable",
+      "reason": "The orchestration workspace owns no mobile product surface."
+    }
+  }
+}

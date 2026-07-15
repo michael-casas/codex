@@ -1,0 +1,84 @@
+{
+  "project": "@orchestration/testing",
+  "result": "test-output/ground-zero/testing.json",
+  "temporaryDirectory": "tmp/ground-zero-testing",
+  "suites": [
+    {
+      "groupHeading": "=== Layer 1 Test Suite ===",
+      "heading": "--- Unit Tests [L1:UNIT] ---",
+      "layer": "l1-unit",
+      "command": [
+        "bun",
+        "vitest",
+        "run",
+        "--config",
+        "packages/testing/vitest.config.ts",
+        "src/ground-zero/harness.test.ts",
+        "--testNamePattern=L1:UNIT"
+      ],
+      "expected": "vitest-output",
+      "artifact": "nx://@orchestration/testing/test/l1-unit"
+    },
+    {
+      "heading": "--- In-Process Integration Tests [L1:INTEGRATION] ---",
+      "layer": "l1-integration",
+      "command": [
+        "bun",
+        "vitest",
+        "run",
+        "--config",
+        "packages/testing/vitest.config.ts",
+        "src/ground-zero/harness.test.ts",
+        "--testNamePattern=L1:INTEGRATION"
+      ],
+      "expected": "vitest-output",
+      "artifact": "nx://@orchestration/testing/test/l1-integration"
+    },
+    {
+      "groupHeading": "=== Layer 2 Test Suite ===",
+      "heading": "--- Real-Boundary Integration Tests [L2:INTEGRATION] ---",
+      "layer": "l2-integration",
+      "command": [
+        "bun",
+        "vitest",
+        "run",
+        "--config",
+        "packages/testing/vitest.config.ts",
+        "src/ground-zero/harness.spec.ts",
+        "--testNamePattern=L2:INTEGRATION"
+      ],
+      "expected": "vitest-output",
+      "artifact": "nx://@orchestration/testing/test/l2-integration"
+    },
+    {
+      "heading": "--- End-to-End Tests [L2:E2E] ---",
+      "layer": "l2-e2e",
+      "command": [
+        "bun",
+        "vitest",
+        "run",
+        "--config",
+        "packages/testing/vitest.config.ts",
+        "src/ground-zero/harness.spec.ts",
+        "--testNamePattern=L2:E2E"
+      ],
+      "expected": "vitest-output",
+      "artifact": "nx://@orchestration/testing/test/l2-e2e"
+    },
+    {
+      "groupHeading": "=== Layer 3 Test Suite ===",
+      "heading": "--- Cucumber Behavioral Tests ---",
+      "layer": "l3",
+      "command": [
+        "bun",
+        "packages/testing/src/cli.ts",
+        "verify-cucumber",
+        "packages/testing/src/ground-zero/ground-zero.feature",
+        "packages/testing/src/ground-zero/index.steps.ts",
+        "test-output/cucumber/ground-zero.json"
+      ],
+      "expected": "cucumber-output",
+      "artifact": "test-output/cucumber/ground-zero.json"
+    }
+  ]
+}

@@ -1,0 +1,55 @@
+{
+  "project": "@orchestration/daemon",
+  "result": "test-output/ground-zero/daemon.json",
+  "temporaryDirectory": "tmp/ground-zero-daemon",
+  "suites": [
+    {
+      "groupHeading": "=== Layer 1 Test Suite ===",
+      "heading": "--- Unit Tests [L1:UNIT] ---",
+      "layer": "l1-unit",
+      "command": [
+        "bun",
+        "vitest",
+        "run",
+        "--config",
+        "apps/daemon/vitest.config.ts",
+        "src/main.test.ts",
+        "--testNamePattern=L1:UNIT"
+      ],
+      "expected": "vitest-output",
+      "artifact": "nx://@orchestration/daemon/test/l1-unit"
+    },
+    {
+      "heading": "--- In-Process Integration Tests [L1:INTEGRATION] ---",
+      "layer": "l1-integration",
+      "reason": "N/A: the daemon remains a single-module Nx scaffold"
+    },
+    {
+      "groupHeading": "=== Layer 2 Test Suite ===",
+      "heading": "--- Real-Boundary Integration Tests [L2:INTEGRATION] ---",
+      "layer": "l2-integration",
+      "reason": "N/A: no product persistence, protocol, or infrastructure boundary exists yet"
+    },
+    {
+      "heading": "--- End-to-End Tests [L2:E2E] ---",
+      "layer": "l2-e2e",
+      "command": [
+        "bun",
+        "vitest",
+        "run",
+        "--config",
+        "apps/daemon-e2e/vitest.config.ts",
+        "src/daemon/daemon.spec.ts",
+        "--testNamePattern=L2:E2E"
+      ],
+      "expected": "vitest-output",
+      "artifact": "nx://@orchestration/daemon/test/l2-e2e"
+    },
+    {
+      "groupHeading": "=== Layer 3 Test Suite ===",
+      "heading": "--- Cucumber Behavioral Tests ---",
+      "layer": "l3",
+      "reason": "N/A: the generated daemon scaffold is not a ratified product behavior surface"
+    }
+  ]
+}

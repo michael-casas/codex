@@ -1,0 +1,76 @@
+{
+  "name": "@orchestration/testing",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "packages/testing/src",
+  "projectType": "library",
+  "tags": ["scope:testing", "type:harness"],
+  "targets": {
+    "test-policy": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "bun packages/testing/src/cli.ts policy apps packages"
+      }
+    },
+    "test-l1-unit": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "vitest run --config packages/testing/vitest.config.ts src/ground-zero/harness.test.ts --testNamePattern='L1:UNIT'"
+      }
+    },
+    "test-l1-integration": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "vitest run --config packages/testing/vitest.config.ts src/ground-zero/harness.test.ts --testNamePattern='L1:INTEGRATION'"
+      }
+    },
+    "test-l1": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "vitest run --config packages/testing/vitest.config.ts src/ground-zero/harness.test.ts"
+      }
+    },
+    "test-l2-integration": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "vitest run --config packages/testing/vitest.config.ts src/ground-zero/harness.spec.ts --testNamePattern='L2:INTEGRATION'"
+      }
+    },
+    "test-l2-e2e": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "vitest run --config packages/testing/vitest.config.ts src/ground-zero/harness.spec.ts --testNamePattern='L2:E2E'"
+      }
+    },
+    "test-l2": {
+      "executor": "nx:run-commands",
+      "cache": false,
+      "options": {
+        "command": "vitest run --config packages/testing/vitest.config.ts src/ground-zero/harness.spec.ts"
+      }
+    },
+    "test-l3": {
+      "executor": "nx:run-commands",
+      "cache": false,
+      "outputs": ["{workspaceRoot}/test-output/cucumber/ground-zero.json"],
+      "options": {
+        "command": "bun packages/testing/src/cli.ts verify-cucumber packages/testing/src/ground-zero/ground-zero.feature packages/testing/src/ground-zero/index.steps.ts test-output/cucumber/ground-zero.json"
+      }
+    },
+    "test": {
+      "executor": "nx:run-commands",
+      "cache": false,
+      "outputs": ["{workspaceRoot}/test-output/ground-zero/testing.json"],
+      "dependsOn": ["test-policy"],
+      "options": {
+        "command": "bun packages/testing/src/cli.ts aggregate packages/testing/manifests/testing.json"
+      },
+      "configurations": {
+        "ground-zero": {
+          "env": {
+            "GROUND_ZERO_UNCACHED": "1"
+          }
+        }
+      }
+    }
+  }
+}

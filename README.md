@@ -40,6 +40,7 @@ The canonical details and exceptions remain in the Wiki SPEC.
 | --------------------------- | -------------------------- | ------------------------------------------------------------- |
 | `@orchestration/daemon`     | Node orchestration daemon  | `serve`, `build`, `test`, `lint`, `typecheck`, `docker:build` |
 | `@orchestration/daemon-e2e` | Daemon boundary acceptance | `e2e`, `lint`, `typecheck`                                    |
+| `@orchestration/testing`    | Ground-0 BATDD harness     | `test-l1`, `test-l2`, `test-l3`, `test`, `test-policy`        |
 
 Inspect the resolved Nx configuration rather than guessing from package files:
 
@@ -63,6 +64,9 @@ bun nx typecheck @orchestration/daemon
 
 # Run real daemon boundary acceptance
 bun nx e2e @orchestration/daemon-e2e
+
+# Run the complete uncached Ground-0 closure
+bun run ground-zero
 ```
 
 Read [AGENTS.md](./AGENTS.md) before changing the workspace. It defines the operating rules and required authority boundaries for every Codex agent working here.

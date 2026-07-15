@@ -97,8 +97,47 @@
         }
       },
       "test": {
+        "executor": "nx:run-commands",
+        "cache": false,
+        "dependsOn": [
+          "build"
+        ],
+        "outputs": [
+          "{workspaceRoot}/test-output/ground-zero/daemon.json"
+        ],
         "options": {
-          "passWithNoTests": true
+          "command": "bun packages/testing/src/cli.ts aggregate packages/testing/manifests/daemon.json"
+        },
+        "configurations": {
+          "ground-zero": {
+            "env": {
+              "GROUND_ZERO_UNCACHED": "1"
+            }
+          }
+        }
+      },
+      "test-l1-unit": {
+        "executor": "nx:run-commands",
+        "options": {
+          "command": "vitest run --config apps/daemon/vitest.config.ts src/main.test.ts --testNamePattern='L1:UNIT'"
+        }
+      },
+      "test-l1": {
+        "executor": "nx:run-commands",
+        "options": {
+          "command": "vitest run --config apps/daemon/vitest.config.ts src/main.test.ts"
+        }
+      },
+      "test-l2-e2e": {
+        "executor": "nx:run-commands",
+        "options": {
+          "command": "bun nx test-l2-e2e @orchestration/daemon-e2e --outputStyle=static"
+        }
+      },
+      "test-l2": {
+        "executor": "nx:run-commands",
+        "options": {
+          "command": "bun nx test-l2-e2e @orchestration/daemon-e2e --outputStyle=static"
         }
       },
       "docker:build": {

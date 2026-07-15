@@ -1,0 +1,45 @@
+{
+  "project": "@orchestration/daemon-e2e",
+  "result": "test-output/ground-zero/daemon-e2e.json",
+  "temporaryDirectory": "tmp/ground-zero-daemon-e2e",
+  "suites": [
+    {
+      "groupHeading": "=== Layer 1 Test Suite ===",
+      "heading": "--- Unit Tests [L1:UNIT] ---",
+      "layer": "l1-unit",
+      "reason": "N/A: this project owns only the daemon process boundary"
+    },
+    {
+      "heading": "--- In-Process Integration Tests [L1:INTEGRATION] ---",
+      "layer": "l1-integration",
+      "reason": "N/A: this project owns only the daemon process boundary"
+    },
+    {
+      "groupHeading": "=== Layer 2 Test Suite ===",
+      "heading": "--- Real-Boundary Integration Tests [L2:INTEGRATION] ---",
+      "layer": "l2-integration",
+      "reason": "N/A: the scaffold exposes only a complete process invocation"
+    },
+    {
+      "heading": "--- End-to-End Tests [L2:E2E] ---",
+      "layer": "l2-e2e",
+      "command": [
+        "bun",
+        "vitest",
+        "run",
+        "--config",
+        "apps/daemon-e2e/vitest.config.ts",
+        "src/daemon/daemon.spec.ts",
+        "--testNamePattern=L2:E2E"
+      ],
+      "expected": "vitest-output",
+      "artifact": "nx://@orchestration/daemon-e2e/test/l2-e2e"
+    },
+    {
+      "groupHeading": "=== Layer 3 Test Suite ===",
+      "heading": "--- Cucumber Behavioral Tests ---",
+      "layer": "l3",
+      "reason": "N/A: the generated daemon scaffold is not a ratified product behavior surface"
+    }
+  ]
+}

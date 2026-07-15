@@ -9,11 +9,26 @@
       "!{projectRoot}/eslint.config.mjs",
       "!{projectRoot}/**/?(*.)+(spec|test).[jt]s?(x)?(.snap)",
       "!{projectRoot}/tsconfig.spec.json",
-      "!{projectRoot}/jest.config.[jt]s",
+      "!{projectRoot}/vitest.config.[jt]s",
       "!{projectRoot}/src/test-setup.[jt]s",
       "!{projectRoot}/test-setup.[jt]s"
     ],
-    "sharedGlobals": ["{workspaceRoot}/.github/workflows/ci.yml"]
+    "sharedGlobals": [
+      "{workspaceRoot}/.github/workflows/ci.yml",
+      "{workspaceRoot}/AGENTS.md",
+      "{workspaceRoot}/TESTING.md",
+      "{workspaceRoot}/package.json",
+      "{workspaceRoot}/bun.lock",
+      "{workspaceRoot}/nx.json",
+      "{workspaceRoot}/tsconfig.base.json",
+      "{workspaceRoot}/cucumber.mjs",
+      "{workspaceRoot}/commitlint.config.mjs",
+      "{workspaceRoot}/lint-staged.config.mjs",
+      "{workspaceRoot}/db/**/*.sql",
+      "{workspaceRoot}/migrations/**/*.sql",
+      "{workspaceRoot}/schemas/**/*.json",
+      "{workspaceRoot}/protocol/**/*.json"
+    ]
   },
   "plugins": [
     {
@@ -35,13 +50,6 @@
       "options": {
         "targetName": "lint"
       }
-    },
-    {
-      "plugin": "@nx/jest/plugin",
-      "options": {
-        "targetName": "test"
-      },
-      "exclude": ["apps/daemon-e2e/**/*"]
     },
     {
       "plugin": "@nx/docker",
@@ -69,7 +77,32 @@
       ]
     },
     "test": {
-      "dependsOn": ["^build"]
+      "inputs": ["default", "^default"]
+    },
+    "test-l1-unit": {
+      "inputs": ["default", "^default"]
+    },
+    "test-l1-integration": {
+      "inputs": ["default", "^default"]
+    },
+    "test-l1": {
+      "inputs": ["default", "^default"]
+    },
+    "test-l2-integration": {
+      "cache": false,
+      "inputs": ["default", "^default"]
+    },
+    "test-l2-e2e": {
+      "cache": false,
+      "inputs": ["default", "^default"]
+    },
+    "test-l2": {
+      "cache": false,
+      "inputs": ["default", "^default"]
+    },
+    "test-l3": {
+      "cache": false,
+      "inputs": ["default", "^default"]
     }
   }
 }
