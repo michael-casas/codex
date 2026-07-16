@@ -200,7 +200,7 @@ When implemented, L2 and L3 profiles must account for applicable real boundaries
 - `LISTEN/NOTIFY` plus reconciliation;
 - Unix socket and persistent service lifecycle;
 - CLI and MCP adapters;
-- dmux/tmux process, prompt-delivery, identity, restart, and cleanup behavior;
+- direct tmux process, prompt-delivery, identity, restart, reconciliation, and cleanup behavior;
 - Codex hook publication and hook-missing recovery;
 - scoped database clients and destructive-action rejection;
 - resource inventory and zero-delta cleanup.

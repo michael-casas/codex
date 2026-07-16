@@ -1,0 +1,154 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://orchestration.local/schemas/batdd/profile.schema.json",
+  "$comment": "Tracked compiled Worker contract schema.",
+  "title": "BATDD Repository Profile",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "profileVersion",
+    "status",
+    "standardVersions",
+    "skill",
+    "packageManager",
+    "nxCommand",
+    "completionScopeDefault",
+    "testStrategy",
+    "redPolicy",
+    "layers",
+    "targets",
+    "stopBoundary"
+  ],
+  "properties": {
+    "$schema": { "type": "string" },
+    "schemaVersion": { "const": "1.0.0" },
+    "profileVersion": {
+      "type": "string",
+      "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"
+    },
+    "status": { "enum": ["ground-zero", "active", "deprecated"] },
+    "standardVersions": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["testing", "gherkin", "batdd"],
+      "properties": {
+        "testing": { "type": "string" },
+        "gherkin": { "type": "string" },
+        "batdd": { "type": "string" }
+      }
+    },
+    "skill": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "minimumVersion"],
+      "properties": {
+        "name": { "const": "batdd" },
+        "minimumVersion": { "type": "string" }
+      }
+    },
+    "packageManager": { "type": "string", "minLength": 1 },
+    "nxCommand": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 },
+      "minItems": 2
+    },
+    "completionScopeDefault": { "const": "vertical-slice" },
+    "testStrategy": { "const": "basic-then-adversarial" },
+    "redPolicy": { "const": "all-new-or-changed-contract-rows" },
+    "layers": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["l1", "l2", "l3", "web", "mobile"],
+      "properties": {
+        "l1": { "$ref": "#/$defs/layer" },
+        "l2": { "$ref": "#/$defs/layer" },
+        "l3": { "$ref": "#/$defs/layer" },
+        "web": { "$ref": "#/$defs/layer" },
+        "mobile": { "$ref": "#/$defs/layer" }
+      }
+    },
+    "targets": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "l1Unit",
+        "l1Integration",
+        "l1",
+        "l2Integration",
+        "l2E2E",
+        "l2",
+        "l3",
+        "aggregate"
+      ],
+      "properties": {
+        "l1Unit": { "type": "string" },
+        "l1Integration": { "type": "string" },
+        "l1": { "type": "string" },
+        "l2Integration": { "type": "string" },
+        "l2E2E": { "type": "string" },
+        "l2": { "type": "string" },
+        "l3": { "type": "string" },
+        "aggregate": { "type": "string" }
+      }
+    },
+    "context": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "workerContract",
+        "repositoryTesting",
+        "canonicalEscalation"
+      ],
+      "properties": {
+        "workerContract": { "type": "string" },
+        "repositoryTesting": { "type": "string" },
+        "canonicalEscalation": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      }
+    },
+    "evidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["machineResultRequired", "nonzeroRequired", "resourceDelta"],
+      "properties": {
+        "machineResultRequired": { "const": true },
+        "nonzeroRequired": { "const": true },
+        "resourceDelta": { "const": "zero" }
+      }
+    },
+    "stopBoundary": { "const": "READY-FOR-AUDIT" }
+  },
+  "$defs": {
+    "layer": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status"],
+      "properties": {
+        "status": { "enum": ["required", "not-applicable"] },
+        "reason": { "type": "string", "minLength": 1 },
+        "runtime": { "type": "string", "minLength": 1 },
+        "patterns": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 },
+          "minItems": 1
+        },
+        "cachePolicy": {
+          "enum": ["cacheable", "uncached-live", "profile-selected"]
+        }
+      },
+      "allOf": [
+        {
+          "if": { "properties": { "status": { "const": "required" } } },
+          "then": { "required": ["runtime", "patterns", "cachePolicy"] }
+        },
+        {
+          "if": { "properties": { "status": { "const": "not-applicable" } } },
+          "then": { "required": ["reason"] }
+        }
+      ]
+    }
+  }
+}

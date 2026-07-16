@@ -1,6 +1,6 @@
 # Codex Orchestration
 
-This Nx workspace implements the event-driven, BATDD-governed Codex orchestration system. It is the implementation surface for the process control plane, pg-boss delivery, monitor service, dmux transport integration, Codex lifecycle hooks, and the role-scoped interfaces used by Coordinators, Right Hands, Workers, Verifiers, and Judges.
+This Nx workspace implements the event-driven, BATDD-governed Codex orchestration system. It is the implementation surface for the process control plane, pg-boss delivery, hierarchical monitor service, direct tmux agent transport, Codex lifecycle hook bridge, routing manifests, and the role-scoped interfaces used by Campaign Coordinators, Project Orchestrators, Workers, Verifiers, and Wave Judges.
 
 The workspace does not own the architecture constitution. Durable doctrine and architecture live in the shared Agent Wiki.
 
@@ -26,8 +26,10 @@ Agent Wiki notes are readable by agents. Editing, creating, moving, renaming, or
 
 - PostgreSQL `process` data is the durable source of campaign, DAG, execution, event, artifact, and verdict truth.
 - pg-boss is the single delivery, lease, and retry authority.
-- The canonical monitor awaits reducer-approved logical events and resumes higher-level Codex work only at decision boundaries.
-- dmux is the canonical tmux, worktree, and Codex-process transport primitive behind a versioned adapter.
+- The canonical monitor awaits reducer-approved logical events and can aggregate frozen conditions across jobs, waves, workspaces, and campaigns before resuming the appropriate coordinator.
+- Direct, orchestration-owned tmux is the canonical worktree and Codex-process transport primitive behind the versioned `TmuxAgentTransport` adapter; dmux is not canonical.
+- Global and project-local `.codex/orchestration/manifest.json` files describe tmux target routing only; PostgreSQL remains authoritative for jobs, retries, evidence, and acceptance.
+- The Codex hook bridge binds lifecycle observations to exact process executions through execution-scoped pane environment and the scoped orchestration CLI.
 - cmux is non-canonical; Mercury transport development is suspended.
 - Codex Subagents V2 are bounded judgment fan-out, not the durable campaign DAG.
 - Runtime completion is an observation. Only executable acceptance, independent verification, and authorized verdict reduction can accept work.

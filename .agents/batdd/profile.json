@@ -1,0 +1,76 @@
+{
+  "$schema": "./profile.schema.json",
+  "schemaVersion": "1.0.0",
+  "profileVersion": "1.0.0",
+  "status": "ground-zero",
+  "standardVersions": {
+    "testing": "1.1.0",
+    "gherkin": "2.0.0",
+    "batdd": "2.1.0"
+  },
+  "skill": {
+    "name": "batdd",
+    "minimumVersion": "1.1.0"
+  },
+  "packageManager": "bun",
+  "nxCommand": ["bun", "nx"],
+  "completionScopeDefault": "vertical-slice",
+  "testStrategy": "basic-then-adversarial",
+  "redPolicy": "all-new-or-changed-contract-rows",
+  "layers": {
+    "l1": {
+      "status": "required",
+      "runtime": "vitest",
+      "patterns": ["*.test.ts"],
+      "cachePolicy": "cacheable"
+    },
+    "l2": {
+      "status": "required",
+      "runtime": "vitest",
+      "patterns": ["*.spec.ts"],
+      "cachePolicy": "uncached-live"
+    },
+    "l3": {
+      "status": "required",
+      "runtime": "cucumber",
+      "patterns": ["*.feature", "*.steps.ts"],
+      "cachePolicy": "uncached-live"
+    },
+    "web": {
+      "status": "not-applicable",
+      "reason": "No web product surface exists in Ground-0."
+    },
+    "mobile": {
+      "status": "not-applicable",
+      "reason": "No mobile product surface exists in Ground-0."
+    }
+  },
+  "targets": {
+    "l1Unit": "test-l1-unit",
+    "l1Integration": "test-l1-integration",
+    "l1": "test-l1",
+    "l2Integration": "test-l2-integration",
+    "l2E2E": "test-l2-e2e",
+    "l2": "test-l2",
+    "l3": "test-l3",
+    "aggregate": "test"
+  },
+  "context": {
+    "workerContract": ".agents/batdd/WORKER-CONTRACT.md",
+    "repositoryTesting": "TESTING.md",
+    "canonicalEscalation": [
+      "missing-or-invalid-compiled-contract",
+      "standard-version-mismatch",
+      "authority-conflict",
+      "contract-authoring-or-amendment",
+      "verification-or-judgment",
+      "unresolved-boundary-or-fidelity"
+    ]
+  },
+  "evidence": {
+    "machineResultRequired": true,
+    "nonzeroRequired": true,
+    "resourceDelta": "zero"
+  },
+  "stopBoundary": "READY-FOR-AUDIT"
+}

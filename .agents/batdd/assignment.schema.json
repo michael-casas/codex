@@ -1,0 +1,126 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://orchestration.local/schemas/batdd/assignment.schema.json",
+  "$comment": "Tracked immutable assignment envelope schema.",
+  "title": "BATDD Assignment Envelope",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "assignmentId",
+    "status",
+    "dispatchable",
+    "role",
+    "objective",
+    "completionScope",
+    "mayReportFeatureComplete",
+    "requiredLayers",
+    "writeSurface",
+    "baseRevision",
+    "stopBoundary",
+    "greenContract",
+    "commitAuthority"
+  ],
+  "properties": {
+    "$schema": { "type": "string" },
+    "schemaVersion": { "const": "1.0.0" },
+    "assignmentId": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]*$"
+    },
+    "status": { "enum": ["draft", "ready", "active", "terminal"] },
+    "dispatchable": { "type": "boolean" },
+    "role": {
+      "enum": ["worker", "preflight", "verifier", "judge", "coordinator"]
+    },
+    "objective": { "type": "string", "minLength": 1 },
+    "completionScope": { "enum": ["vertical-slice", "layer"] },
+    "mayReportFeatureComplete": { "type": "boolean" },
+    "feature": { "type": "string", "minLength": 1 },
+    "requiredLayers": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["l1", "l2", "l3"],
+      "properties": {
+        "l1": { "$ref": "#/$defs/requirement" },
+        "l2": { "$ref": "#/$defs/requirement" },
+        "l3": { "$ref": "#/$defs/requirement" }
+      }
+    },
+    "writeSurface": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 },
+      "minItems": 1,
+      "uniqueItems": true
+    },
+    "baseRevision": { "type": "string", "minLength": 7 },
+    "candidateRevision": { "type": "string", "minLength": 7 },
+    "stopBoundary": {
+      "enum": ["READY-FOR-AUDIT", "RETRY", "HALT", "STAND-DOWN", "CLOSEOUT"]
+    },
+    "greenContract": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "strategy", "redPolicy", "adversarialRequired"],
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "strategy": { "const": "basic-then-adversarial" },
+        "redPolicy": { "const": "all-new-or-changed-contract-rows" },
+        "adversarialRequired": { "const": true }
+      }
+    },
+    "commitAuthority": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["allowed", "maxCommits"],
+      "properties": {
+        "allowed": { "type": "boolean" },
+        "maxCommits": { "type": "integer", "minimum": 0 },
+        "message": { "type": "string" }
+      }
+    },
+    "dependencies": {
+      "type": "array",
+      "items": { "type": "string" },
+      "uniqueItems": true
+    },
+    "evidence": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 },
+      "uniqueItems": true
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": { "completionScope": { "const": "vertical-slice" } }
+      },
+      "then": {
+        "properties": { "mayReportFeatureComplete": { "const": true } }
+      }
+    },
+    {
+      "if": { "properties": { "completionScope": { "const": "layer" } } },
+      "then": {
+        "properties": { "mayReportFeatureComplete": { "const": false } }
+      }
+    }
+  ],
+  "$defs": {
+    "requirement": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status"],
+      "properties": {
+        "status": { "enum": ["required", "not-applicable"] },
+        "reason": { "type": "string", "minLength": 1 }
+      },
+      "allOf": [
+        {
+          "if": { "properties": { "status": { "const": "not-applicable" } } },
+          "then": { "required": ["reason"] }
+        }
+      ]
+    }
+  }
+}

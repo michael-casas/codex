@@ -1,0 +1,52 @@
+{
+  "$schema": "../assignment.schema.json",
+  "schemaVersion": "1.0.0",
+  "assignmentId": "G0.W1",
+  "status": "terminal",
+  "dispatchable": false,
+  "role": "worker",
+  "objective": "Establish and dogfood the Nx-native Ground-0 BATDD testing harness.",
+  "completionScope": "vertical-slice",
+  "mayReportFeatureComplete": true,
+  "feature": "packages/testing/src/ground-zero/FEATURE.md",
+  "requiredLayers": {
+    "l1": { "status": "required" },
+    "l2": { "status": "required" },
+    "l3": { "status": "required" }
+  },
+  "writeSurface": [
+    "packages/testing/**",
+    "cucumber.mjs",
+    "package.json",
+    "bun.lock",
+    "nx.json",
+    "tsconfig.json",
+    ".agents/batdd/**",
+    "AGENTS.md",
+    "TESTING.md"
+  ],
+  "baseRevision": "2b617bcf21aeec0ec14056950efa10af58a910c4",
+  "candidateRevision": "1eea780c480beeaf9e04783020a9ef0b3903f2ab",
+  "stopBoundary": "READY-FOR-AUDIT",
+  "greenContract": {
+    "id": "G0.W1-GC1",
+    "strategy": "basic-then-adversarial",
+    "redPolicy": "all-new-or-changed-contract-rows",
+    "adversarialRequired": true
+  },
+  "commitAuthority": {
+    "allowed": true,
+    "maxCommits": 1,
+    "message": "chore(testing): establish Ground-0 BATDD harness"
+  },
+  "dependencies": [],
+  "evidence": [
+    "meaningful-red-per-new-contract-row",
+    "frozen-contract",
+    "ordered-l1-l2-l3-green",
+    "affected-selection",
+    "machine-result",
+    "zero-resource-delta",
+    "baseline-revision"
+  ]
+}

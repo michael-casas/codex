@@ -58,24 +58,31 @@ For implementation or repair, BATDD invocation MUST create and maintain a runtim
 - The deterministic reducer alone advances durable orchestration state.
 - pg-boss owns delivery timing, leases, retries, and recovery. Do not create a second retry authority in application code, hooks, or transport logic.
 - Workers may emit claims and evidence but MUST NOT write acceptance transitions or final gavels.
-- Right Hands coordinate workspace lanes but MUST NOT self-verify or synthesize missing evidence.
+- Project Orchestrators coordinate workspace lanes but MUST NOT self-verify or synthesize missing evidence.
 - Verifiers that implement a repair lose independence for that repair.
-- Judges inspect reducer-approved evidence and submit schema-valid verdicts; they MUST NOT implement product changes.
+- A fresh Preflight identity MUST register immutable proof over the exact candidate, including uncached selected gates, machine-readable test artifacts, and cleanup/resource deltas. Valid reducer-approved Preflight proof satisfies deterministic execution evidence; Judges spend their independent pass on semantic completeness, false-green attacks, blockers, and targeted adversarial checks rather than reenacting the same standing suite.
+- Judgment Attempt 1 MUST audit every lane and touched surface and produce one complete, tier-escalated retry charter when blocked. After the chartered retry DAG, Judgment Attempt 2 either approves or may activate Founder-ratified T5 Purity Recovery.
+- Judges MUST NOT implement product changes before Purity Recovery. A Judge entering Purity Recovery becomes a Judge-Remediator, loses gavel authority for every repair it touches, and MUST be replaced by a fresh successor Judge before final acceptance.
+- T5 Purity Recovery is closed-world repair. It may improve only the accepted feature IDs, frozen contracts, findings, code paths, tests, package/integration seams, and write surfaces already registered for that wave. It MUST NOT add a new feature, behavior, package, application, service, transport, domain dependency, DAG edge, infrastructure surface, or write surface; required expansion stops recovery and escalates to the Founder.
+- `T0` through `T5` are portable capability and cost tiers, not provider or model identities and not authority roles. Campaign profiles map evaluated models to tiers; assignments separately grant Worker, Preflight, Verifier, Judge, Coordinator, or other authority.
+- Every work-bearing wave MUST maintain at least four safe active lanes or carry a dependency-backed parallelism waiver. Activation, dependency-join, failed-only-repair, and gavel-only waves may be narrower.
 - Codex Subagents V2 are bounded, depth-one judgment fan-out unless a later ratified SPEC changes that boundary. The V2 tree is not the durable DAG.
 - General agents MUST use scoped event, artifact, monitor, and verdict clients rather than arbitrary SQL or unrestricted database credentials.
 
-## dmux transport law
+## Direct tmux transport law
 
-- dmux is the canonical tmux, Git-worktree, and Codex-process transport primitive. Implement it behind the versioned `AgentTransport` boundary in the SPEC.
+- Direct, orchestration-owned tmux is the canonical Git-worktree and Codex-process transport primitive. Implement it behind the versioned `TmuxAgentTransport` boundary in the SPEC. dmux is not canonical.
 - Mercury transport development is suspended. Do not add a parallel Mercury runner or a second tmux orchestration path.
 - cmux is non-canonical and MUST NOT be required for campaign portability, capacity, recovery, or acceptance.
-- dmux provisions and observes executions; it does not decide readiness, retries, evidence sufficiency, or verdicts.
-- Treat dmux terminal-activity polling, idle detection, OpenRouter analysis, parsed options, and all similar status heuristics as operator-facing advisory state only.
-- Explicitly set model, reasoning level, permissions, hooks, base revision, worktree, and assignment envelope. Never inherit a dmux convenience default silently.
+- `TmuxAgentTransport` provisions and observes executions; it does not decide readiness, retries, evidence sufficiency, or verdicts.
+- Treat terminal-activity polling, idle detection, parsed options, pane text, and all similar status heuristics as operator-facing advisory state only.
+- Explicitly set model, reasoning level, permissions, hooks, base revision, worktree, assignment envelope, manifest digest, and transport incarnation. Never inherit an undeclared convenience default silently.
+- Use `~/.codex/orchestration/manifest.json` for Campaign-Coordinator routing and `<repo>/.codex/orchestration/manifest.json` for project-local target routing. These manifests MUST NOT contain job state, retry state, evidence, verdicts, pg-boss identifiers, or acceptance state.
 - Use one isolated worktree per implementation lane by default. Shared-worktree agents require serialized assignments under one authorized write lease.
 - Disable automatic commits, merges, rebases, branch cleanup, worktree deletion, and autopilot unless a reducer-authorized command and repository profile explicitly permit the operation.
-- Prove prompt delivery, stable pane/process identity, restart reconciliation, descendant cleanup, and clean lane diffs. Generated `.codex` hooks, prompt files, and dmux state MUST be externalized, ignored, or proven absent from product changes.
-- Do not automate the interactive dmux TUI as the canonical control seam. Pin and test a supported typed or headless adapter.
+- Prove prompt delivery, stable pane/process identity, restart reconciliation, descendant cleanup, and clean lane diffs. Generated hook spools, prompt envelopes, scoped credentials, pane metadata, and transport state MUST be externalized, ignored, or proven absent from product changes.
+- Create panes with execution-scoped orchestration identity and launch the standardized Codex hooks. Hook callbacks MUST publish through the scoped orchestration CLI; a `Stop` hook is a turn observation and MUST NOT complete or accept a job.
+- Do not automate an interactive TUI as the canonical control seam. Pin and test explicit sockets, argv-based tmux commands, and parseable format output.
 
 ## Workspace and validation discipline
 
@@ -84,7 +91,7 @@ For implementation or repair, BATDD invocation MUST create and maintain a runtim
 - Run build, test, lint, typecheck, e2e, serve, and other project tasks through Nx rather than invoking underlying tools directly.
 - Invoke the `nx-generate` skill before scaffolding projects, applications, libraries, or generators.
 - Never guess an unfamiliar Nx flag; inspect `--help` or the applicable Nx documentation first.
-- Validate changes in proportion to risk, including real PostgreSQL, pg-boss, dmux/tmux, Codex-hook, monitor, restart, cleanup, and dogfood boundaries when those seams are touched.
+- Validate changes in proportion to risk, including real PostgreSQL, pg-boss, direct tmux, routing-manifest, Codex-hook, hierarchical-monitor, restart, cleanup, and dogfood boundaries when those seams are touched.
 - Keep lane-local success distinct from unrelated workspace-wide baseline failures. Record both accurately; do not hide either.
 
 ## Repository hygiene
