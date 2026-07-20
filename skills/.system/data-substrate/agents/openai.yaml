@@ -1,0 +1,4 @@
+interface:
+  display_name: "Data Substrate"
+  short_description: "Use local Postgres, Redis, and Neo4j"
+  default_prompt: "Use $data-substrate to store and query task-scoped local data."

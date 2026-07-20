@@ -1,0 +1,74 @@
+# Secrets and machine-local credentials
+/.env/
+/.envrc
+/auth.json
+*.pem
+*.key
+*.p12
+*.pfx
+
+# Local service data
+/.volume/
+
+# Sessions, transcripts, attachments, and generated conversation artifacts
+/sessions/
+/session_index.jsonl
+/history.jsonl
+/transcription-history.jsonl
+/shell_snapshots/
+/attachments/
+/generated_images/
+/visualizations/
+/ambient-suggestions/
+/browser/sessions/
+
+# Codex runtime databases and mutable state
+/*.sqlite
+/*.sqlite-shm
+/*.sqlite-wal
+/sqlite/
+/.codex-global-state.json
+/.codex-global-state.json.bak
+/..codex-global-state.json.tmp-*
+/.app-server-state-reconciled-*
+/.personality_migration
+/installation_id
+/process_manager/
+/ipc/
+/mcp-oauth-locks/
+/node_repl/
+/pets/
+/tmp/
+/.tmp/
+/worktrees/
+
+# Logs, caches, downloaded runtimes, and generated host metadata
+/log/
+/cache/
+/computer-use/
+/plugins/
+/vendor_imports/
+/models_cache.json
+/version.json
+/chrome-native-hosts.json
+/chrome-native-hosts-v2.json
+
+# Independent repositories and generated memory stores
+/orchestration/
+/memories/
+
+# System-managed skills are reproducible; keep only local authored additions.
+/skills/.system/*
+!/skills/.system/data-substrate/
+!/skills/.system/data-substrate/**
+
+# Skill discovery links whose targets live outside this repository
+/skills/agent-wiki
+/skills/batdd-bootstrap
+
+# External, machine-specific configuration symlink
+/preflight.config.toml
+
+# Editor and operating-system state
+/.vscode/
+.DS_Store

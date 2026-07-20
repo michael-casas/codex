@@ -1,0 +1,78 @@
+name: codex-services
+
+services:
+  postgres:
+    image: postgres:17-alpine
+    restart: unless-stopped
+    labels:
+      codex.owner: codex-agents
+    env_file:
+      - ./.env/postgres.env
+    ports:
+      - "127.0.0.1:5433:5432"
+    volumes:
+      - type: bind
+        source: ./.volume/postgres
+        target: /var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U \"$$POSTGRES_USER\" -d \"$$POSTGRES_DB\""]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+      start_period: 10s
+
+  redis:
+    image: redis:7.4-alpine
+    restart: unless-stopped
+    labels:
+      codex.owner: codex-agents
+    env_file:
+      - ./.env/redis.env
+    command:
+      - /bin/sh
+      - -ec
+      - |
+        printf 'user default off\nuser %s on >%s ~* &* +@all\n' "$$REDIS_USER" "$$REDIS_PASSWORD" > /tmp/users.acl
+        exec redis-server --appendonly yes --aclfile /tmp/users.acl
+    ports:
+      - "127.0.0.1:6379:6379"
+    volumes:
+      - type: bind
+        source: ./.volume/redis
+        target: /data
+    healthcheck:
+      test: ["CMD-SHELL", "REDISCLI_AUTH=\"$$REDIS_PASSWORD\" redis-cli --user \"$$REDIS_USER\" --no-auth-warning ping | grep -q PONG"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+      start_period: 5s
+
+  neo4j:
+    image: neo4j:5.26-community
+    restart: unless-stopped
+    labels:
+      codex.owner: codex-agents
+    env_file:
+      - ./.env/neo4j.env
+    environment:
+      NEO4J_initial_dbms_default__database: codex
+    ports:
+      - "127.0.0.1:7474:7474"
+      - "127.0.0.1:7687:7687"
+    volumes:
+      - type: bind
+        source: ./.volume/neo4j
+        target: /data
+      - type: bind
+        source: ./.volume/neo4j-logs
+        target: /logs
+    healthcheck:
+      test:
+        - CMD-SHELL
+        - >-
+          cypher-shell -u "$${NEO4J_AUTH%%/*}" -p "$${NEO4J_AUTH#*/}"
+          "RETURN 1;" >/dev/null
+      interval: 10s
+      timeout: 10s
+      retries: 30
+      start_period: 30s
