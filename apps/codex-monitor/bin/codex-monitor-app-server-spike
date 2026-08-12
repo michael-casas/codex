@@ -1,0 +1,5 @@
+#!/bin/bash
+set -euo pipefail
+ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../../.." && pwd)"
+export PYTHONPATH="$ROOT/apps/codex-monitor/src${PYTHONPATH:+:$PYTHONPATH}"
+exec python3 -m codex_monitor.cli "$@"

@@ -1,0 +1,89 @@
+{
+  "name": "@orchestration/process",
+  "version": "0.0.1",
+  "private": true,
+  "type": "module",
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    "./package.json": "./package.json",
+    ".": {
+      "@orchestration/source": "./src/index.ts",
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "default": "./dist/index.js"
+    }
+  },
+  "bin": {
+    "codex-process": "./dist/cli.js",
+    "codex-process-provision": "./dist/provision.js"
+  },
+  "nx": {
+    "targets": {
+      "test-l1-unit": {
+        "executor": "nx:run-commands",
+        "options": {
+          "command": "vitest run --config packages/process/vitest.config.ts src/proof-recovery/reducer.test.ts --testNamePattern='L1:UNIT'"
+        }
+      },
+      "test-l1-integration": {
+        "executor": "nx:run-commands",
+        "options": {
+          "command": "vitest run --config packages/process/vitest.config.ts src/proof-recovery/reducer.test.ts --testNamePattern='L1:INTEGRATION'"
+        }
+      },
+      "test-l1": {
+        "executor": "nx:run-commands",
+        "options": {
+          "command": "vitest run --config packages/process/vitest.config.ts src/proof-recovery/reducer.test.ts"
+        }
+      },
+      "test-l2-integration": {
+        "executor": "nx:run-commands",
+        "cache": false,
+        "options": {
+          "command": "vitest run --config packages/process/vitest.config.ts src/proof-recovery/process-control.spec.ts --testNamePattern='L2:INTEGRATION'"
+        }
+      },
+      "test-l2-e2e": {
+        "executor": "nx:run-commands",
+        "cache": false,
+        "dependsOn": ["build"],
+        "options": {
+          "command": "vitest run --config packages/process/vitest.config.ts src/proof-recovery/process-control.spec.ts --testNamePattern='L2:E2E'"
+        }
+      },
+      "test-l2": {
+        "executor": "nx:run-commands",
+        "cache": false,
+        "dependsOn": ["build"],
+        "options": {
+          "command": "vitest run --config packages/process/vitest.config.ts src/proof-recovery/process-control.spec.ts"
+        }
+      },
+      "test-pre-build": {
+        "executor": "nx:run-commands",
+        "options": {
+          "command": "tsc -p packages/process/tsconfig.cucumber.json"
+        }
+      },
+      "test-l3": {
+        "executor": "nx:run-commands",
+        "cache": false,
+        "dependsOn": ["build", "test-pre-build"],
+        "outputs": ["{workspaceRoot}/test-output/cucumber/process-proof-recovery.json"],
+        "options": {
+          "command": "bun packages/testing/src/cli.ts verify-cucumber packages/process/src/proof-recovery/proof-recovery.feature packages/process/out-tsc/cucumber/proof-recovery/index.steps.js test-output/cucumber/process-proof-recovery.json"
+        }
+      }
+    }
+  },
+  "dependencies": {
+    "pg": "^8.23.0",
+    "tslib": "^2.3.0"
+  },
+  "devDependencies": {
+    "@types/pg": "^8.21.0"
+  }
+}

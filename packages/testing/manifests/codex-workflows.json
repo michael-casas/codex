@@ -1,0 +1,119 @@
+{
+  "project": "@orchestration/codex-workflows",
+  "result": "test-output/codex-workflows/codex-workflows.json",
+  "temporaryDirectory": "tmp/codex-workflows-app",
+  "suites": [
+    {
+      "groupHeading": "=== Layer 1 Test Suite ===",
+      "heading": "--- Unit Tests [L1:UNIT] ---",
+      "layer": "l1-unit",
+      "command": [
+        "bun",
+        "vitest",
+        "run",
+        "--config",
+        "apps/codex-workflows/vitest.config.ts",
+        "src/cli/cli.test.ts",
+        "src/features/daily-facts/daily-facts.test.ts",
+        "src/features/cra-red-green/cra-red-green.test.ts",
+        "--testNamePattern=L1:UNIT"
+      ],
+      "expected": "vitest-output",
+      "artifact": "nx://@orchestration/codex-workflows/test/l1-unit"
+    },
+    {
+      "heading": "--- In-Process Integration Tests [L1:INTEGRATION] ---",
+      "layer": "l1-integration",
+      "command": [
+        "bun",
+        "vitest",
+        "run",
+        "--config",
+        "apps/codex-workflows/vitest.config.ts",
+        "src/runtime/journal.test.ts",
+        "--testNamePattern=L1:INTEGRATION"
+      ],
+      "expected": "vitest-output",
+      "artifact": "nx://@orchestration/codex-workflows/test/l1-integration"
+    },
+    {
+      "groupHeading": "=== Layer 2 Test Suite ===",
+      "heading": "--- Real-Boundary Integration Tests [L2:INTEGRATION] ---",
+      "layer": "l2-integration",
+      "command": [
+        "bun",
+        "vitest",
+        "run",
+        "--config",
+        "apps/codex-workflows/vitest.config.ts",
+        "src/workflows/cli.spec.ts",
+        "src/workflows/direct-runner.spec.ts",
+        "src/workflows/model-policy.spec.ts",
+        "--testNamePattern=L2:INTEGRATION"
+      ],
+      "expected": "vitest-output",
+      "artifact": "nx://@orchestration/codex-workflows/test/l2-integration"
+    },
+    {
+      "heading": "--- End-to-End Tests [L2:E2E] ---",
+      "layer": "l2-e2e",
+      "command": [
+        "bun",
+        "vitest",
+        "run",
+        "--config",
+        "apps/codex-workflows/vitest.config.ts",
+        "src/workflows/cli.spec.ts",
+        "src/workflows/direct-runner.spec.ts",
+        "src/features/daily-facts/daily-facts.spec.ts",
+        "src/features/cra-red-green/cra-red-green.spec.ts",
+        "--testNamePattern=L2:E2E"
+      ],
+      "expected": "vitest-output",
+      "artifact": "nx://@orchestration/codex-workflows/test/l2-e2e"
+    },
+    {
+      "groupHeading": "=== Layer 3 Test Suite ===",
+      "heading": "--- Cucumber Behavioral Tests ---",
+      "layer": "l3",
+      "command": [
+        "bun",
+        "packages/testing/src/cli.ts",
+        "verify-cucumber",
+        "apps/codex-workflows/src/workflows/codex-workflows.feature",
+        "apps/codex-workflows/out-tsc/cucumber/workflows/index.steps.js",
+        "test-output/cucumber/codex-workflows.json"
+      ],
+      "expected": "cucumber-output",
+      "artifact": "test-output/cucumber/codex-workflows.json"
+    },
+    {
+      "heading": "--- Founder Daily Facts Cucumber Behavioral Test ---",
+      "layer": "l3",
+      "command": [
+        "bun",
+        "packages/testing/src/cli.ts",
+        "verify-cucumber",
+        "apps/codex-workflows/src/features/daily-facts/daily-facts.feature",
+        "apps/codex-workflows/out-tsc/cucumber/features/daily-facts/index.steps.js",
+        "test-output/cucumber/codex-workflows-daily-facts.json"
+      ],
+      "expected": "cucumber-output",
+      "artifact": "test-output/cucumber/codex-workflows-daily-facts.json"
+    },
+    {
+      "heading": "--- Founder CRA RED to GREEN Cucumber Behavioral Test ---",
+      "layer": "l3",
+      "command": [
+        "bun",
+        "packages/testing/src/cli.ts",
+        "verify-cucumber",
+        "apps/codex-workflows/src/features/cra-red-green/cra-red-green.feature",
+        "apps/codex-workflows/out-tsc/cucumber/features/cra-red-green/index.steps.js",
+        "test-output/cucumber/codex-workflows-cra-red-green.json"
+      ],
+      "expected": "cucumber-output",
+      "artifact": "test-output/cucumber/codex-workflows-cra-red-green.json"
+    }
+  ]
+}

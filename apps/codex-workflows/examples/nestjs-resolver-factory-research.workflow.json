@@ -1,0 +1,88 @@
+{
+  "schemaVersion": 1,
+  "id": "nestjs-resolver-factory-research",
+  "version": 1,
+  "description": "Research NestJS CQRS and GraphQL in parallel, then consolidate a ResolverFactory proposal.",
+  "inputSchema": {
+    "type": "object",
+    "properties": {
+      "proposalAudience": { "type": "string" },
+      "constraints": {
+        "type": "array",
+        "items": { "type": "string" }
+      }
+    },
+    "required": ["proposalAudience", "constraints"],
+    "additionalProperties": false
+  },
+  "outputSchema": {
+    "type": "object",
+    "properties": {
+      "proposal": { "type": "string" }
+    },
+    "required": ["proposal"],
+    "additionalProperties": false
+  },
+  "policy": {
+    "maxConcurrentSteps": 2,
+    "maxAttempts": 1,
+    "sandbox": "read-only",
+    "approval": "never",
+    "network": "enabled",
+    "allowedRoots": ["."],
+    "allowedModels": ["gpt-5.6-luna"]
+  },
+  "steps": [
+    {
+      "id": "research-cqrs",
+      "kind": "task",
+      "handler": {
+        "type": "codex",
+        "model": "gpt-5.6-luna",
+        "prompt": "Use medium reasoning. Research the current official @nestjs/cqrs package and NestJS CQRS architecture. Produce a source-grounded technical brief covering command, query, event, saga, handler, bus, module, testing, typing, lifecycle, error, and integration patterns relevant to designing a reusable GraphQL ResolverFactory. Prefer official NestJS and package sources. Clearly separate verified facts, design implications, risks, and open questions. Do not implement code."
+      }
+    },
+    {
+      "id": "research-graphql",
+      "kind": "task",
+      "handler": {
+        "type": "codex",
+        "model": "gpt-5.6-luna",
+        "prompt": "Use medium reasoning. Research the current official @nestjs/graphql package and NestJS GraphQL architecture. Produce a source-grounded technical brief covering code-first and schema-first resolvers, generics and mixin factories, decorators and metadata, DI, request context, guards/interceptors, subscriptions, federation, testing, typing, lifecycle, errors, and integration patterns relevant to a reusable ResolverFactory backed by CQRS. Prefer official NestJS and package sources. Clearly separate verified facts, design implications, risks, and open questions. Do not implement code."
+      }
+    },
+    {
+      "id": "research-join",
+      "kind": "join",
+      "dependsOn": ["research-cqrs", "research-graphql"],
+      "mode": "all"
+    },
+    {
+      "id": "consolidate-resolver-factory",
+      "kind": "task",
+      "dependsOn": ["research-join"],
+      "handler": {
+        "type": "codex",
+        "model": "gpt-5.6-luna",
+        "prompt": "Use medium reasoning. Consolidate the two completed research briefs into a rigorous proposal for a NestJS ResolverFactory that composes @nestjs/graphql with @nestjs/cqrs. Include goals and non-goals, API shape, generic typing strategy, decorator/metadata handling, dependency injection, command/query routing, context and authorization boundaries, errors, pagination, subscriptions and federation considerations, testing strategy, migration path, alternatives, risks, and phased implementation plan. Resolve disagreements by citing the stronger primary evidence. Output a decision-ready proposal, not implementation code."
+      },
+      "outputSchema": {
+        "type": "object",
+        "properties": {
+          "proposal": { "type": "string" }
+        },
+        "required": ["proposal"],
+        "additionalProperties": false
+      }
+    },
+    {
+      "id": "resolver-factory-proposal",
+      "kind": "artifact",
+      "dependsOn": ["consolidate-resolver-factory"],
+      "sourceStep": "consolidate-resolver-factory",
+      "mediaType": "application/json",
+      "redaction": "internal",
+      "retention": "campaign"
+    }
+  ]
+}

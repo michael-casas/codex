@@ -1,0 +1,27 @@
+{
+  "schemaVersion": 1,
+  "artifactType": "codex-workflows-proof-recovery-count-successor",
+  "status": "append-only-successor",
+  "epoch": "founder-recovery-1",
+  "capturedAt": "2026-08-12T19:24:37Z",
+  "nativeExecuted": 57,
+  "nativePassed": 57,
+  "derivation": {
+    "l1Executed": 39,
+    "l1Passed": 39,
+    "l2Executed": 18,
+    "l2Passed": 18,
+    "formula": "39 + 18 = 57"
+  },
+  "predecessor": {
+    "path": "packages/testing/evidence/codex-workflows-cra-red-green-reproof.json",
+    "sha256": "sha256:971c03d67f09cb95b3ad33de696f200994058a64b244a7b8a41dcdcd73da0d62",
+    "recordedNativeExecuted": 56,
+    "disposition": "preserved-historical-record-superseded-for-current-count-only"
+  },
+  "meaningfulRed": {
+    "path": "packages/testing/evidence/codex-workflows-proof-recovery-red.json",
+    "sha256": "sha256:f980693601aae3f4bed4f24c24c67a16383773d81bc64d152c52ae5c335925c0"
+  },
+  "independentAcceptanceClaimed": false
+}

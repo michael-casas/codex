@@ -1,0 +1,7 @@
+{
+  "includeOptional": false,
+  "records": [
+    { "id": "record-b", "text": "Second stable item." },
+    { "id": "record-a", "text": "First stable item." }
+  ]
+}

@@ -1,0 +1,79 @@
+{
+  "schemaVersion": 1,
+  "artifactType": "codex-workflows-cra-red-green-red-evidence",
+  "assignmentId": "CDX.CRA-RED-GREEN.W1",
+  "contractId": "CDX-WF-CRA-RG-GC-1",
+  "contractDigest": "sha256:d37dfc97af525c1b64daf99abae7c0411bcc343f20d5801d0aab30966f11d704",
+  "founderAmendmentRed": {
+    "id": "FOUNDER-20260810-CUCUMBER-TSC-PREBUILD",
+    "amendedContractDigest": "sha256:f0551f4117af35c58c970aad77941f17fa19fa466f772da9f116dd53db8ba549",
+    "command": "bun nx run codex-workflows:test-l3-cra-red-green --skip-nx-cache --outputStyle=static",
+    "exitCode": 1,
+    "scenariosSelected": 1,
+    "agentLaunches": 0,
+    "meaningfulFailure": "ERR_MODULE_NOT_FOUND for the Cucumber support driver proved that no tsc test pre-build produced a runnable step graph.",
+    "greenCommand": "bun nx run codex-workflows:test-pre-build --skip-nx-cache --outputStyle=static",
+    "greenResult": "tsc regenerated the complete Cucumber step and support graph under out-tsc/cucumber from a clean missing-output state; no CRA source-tree driver.js remained."
+  },
+  "capturedAt": "2026-08-10T22:41:33Z",
+  "candidateBaseRevision": "28c4650c676644bdfac11aa25c46d5be9b15f833",
+  "allRowsMeaningfullyRed": true,
+  "harnessValid": true,
+  "zeroSelection": false,
+  "contractFreeze": {
+    "assignmentDigest": "sha256:81c88bdc7247138edf26df86ef16987c0906c064bf5ff9931f2faeb6da422130",
+    "featureDigest": "sha256:78ef3afe2e1e5c885fbc03fea5feda211582098f32237e0e509aa0715d0e0e44",
+    "stepDigest": "sha256:a6a9bca35e2ec4161bcc1c24f3819327b79b319d064989cc261496ee370eb161",
+    "l1TestDigest": "sha256:9c569e637244dc1e5921925b38524212e5be07a65189526fecd6033d8a845809",
+    "l2TestDigest": "sha256:3f20388c587336d0fb1698d4a4427e0cba1e76efd1a9af785d59806851f19271"
+  },
+  "rows": [
+    {
+      "id": "CRA-RG-GC1-001-FIXED-AUDIT-POLICY",
+      "command": "bun nx run codex-workflows:test-l1-cra-red-green --skip-nx-cache --outputStyle=static",
+      "exitCode": 1,
+      "executed": 1,
+      "failed": 1,
+      "meaningfulFailure": "The bound L1 identity executed and found that the canonical deterministic audit policy product file did not exist.",
+      "invalidRed": []
+    },
+    {
+      "id": "CRA-RG-GC1-002-CONTROLLED-THREE-STAGE",
+      "command": "bun nx run codex-workflows:test-l2-cra-red-green --skip-nx-cache --outputStyle=static",
+      "exitCode": 1,
+      "executed": 1,
+      "failed": 1,
+      "meaningfulFailure": "The bound L2 identity executed through the resolved Nx target and found that the canonical executable three-stage workflow did not exist.",
+      "invalidRed": []
+    },
+    {
+      "id": "CRA-RG-GC1-003-CANONICAL-LIVE-L3",
+      "command": "bun nx run codex-workflows:test-l3-cra-red-green --skip-nx-cache --outputStyle=static",
+      "exitCode": 1,
+      "scenarios": 1,
+      "steps": 6,
+      "undefinedSteps": 0,
+      "meaningfulFailure": "The physical Cucumber scenario and all six bindings loaded; admission failed closed because the canonical executable workflow source was absent.",
+      "invalidRed": []
+    }
+  ],
+  "attempt10ProvenanceRed": {
+    "finding": "PREFLIGHT-A9-D001",
+    "capturedAt": "2026-08-11T06:18:35Z",
+    "command": "bun nx run codex-workflows:test-l2-cra-red-green --skip-nx-cache --outputStyle=static",
+    "exitCode": 1,
+    "executed": 3,
+    "passed": 1,
+    "failed": 2,
+    "harnessValid": true,
+    "zeroSelection": false,
+    "meaningfulFailures": [
+      "The successful controlled chain had no digest-bound commandEvidence in the builder journal node.",
+      "A controlled builder transcript containing a second direct npx create-react-app command incorrectly completed with exit 0 instead of failing closed with WORKFLOW_AGENT_FAILED.",
+      "The real controlled Codex SDK boundary omitted command and exitCode from a completed command_execution item, while correctly excluding aggregated command output."
+    ],
+    "lockedGreen": "The pre-existing provider-failure cleanup row remained green.",
+    "productWriteAuthorized": true
+  },
+  "disposition": "PRODUCT-GREEN-AUTHORIZED"
+}

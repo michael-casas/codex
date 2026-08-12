@@ -1,0 +1,107 @@
+#!/usr/bin/env -S codex-workflows
+import { agent, artifact, defineWorkflow, parallel, phase } from '@orchestration/workflows';
+
+interface Input {
+  mode: 'success' | 'failure' | 'schema' | 'cancel';
+  topic: string;
+}
+
+export default defineWorkflow<Input, unknown>({
+  id: 'controlled-direct-typescript',
+  version: 1,
+  description: 'Controlled real-SDK direct TypeScript acceptance workflow.',
+  maxConcurrency: 2,
+  inputSchema: {
+    type: 'object',
+    additionalProperties: false,
+    required: ['mode', 'topic'],
+    properties: {
+      mode: { enum: ['success', 'failure', 'schema', 'cancel'] },
+      topic: { type: 'string' }
+    }
+  },
+  async run(input) {
+    if (input.mode === 'failure') {
+      return parallel([
+        () => agent({
+          label: 'controlled-failure',
+          model: 'gpt-5.6-luna',
+          reasoning: 'medium',
+          prompt: '__FAIL__ __DELAY_1000__ private failure prompt',
+          input
+        }),
+        () => agent({
+          label: 'controlled-running-sibling',
+          model: 'gpt-5.6-luna',
+          reasoning: 'medium',
+          prompt: '__HANG__ private running prompt',
+          input
+        }),
+        () => agent({
+          label: 'controlled-queued-sibling',
+          model: 'gpt-5.6-luna',
+          reasoning: 'medium',
+          prompt: '__QUEUED__ private queued prompt',
+          input
+        })
+      ]);
+    }
+
+    if (input.mode === 'schema') {
+      return agent<{ accepted: boolean }, Input>({
+        label: 'controlled-schema',
+        model: 'gpt-5.6-luna',
+        reasoning: 'medium',
+        prompt: '__INVALID_SCHEMA__ private schema prompt',
+        input,
+        outputSchema: {
+          type: 'object',
+          additionalProperties: false,
+          required: ['accepted'],
+          properties: { accepted: { type: 'boolean' } }
+        }
+      });
+    }
+
+    if (input.mode === 'cancel') {
+      return agent({
+        label: 'controlled-cancel',
+        model: 'gpt-5.6-luna',
+        reasoning: 'medium',
+        prompt: '__HANG__ private cancellation prompt',
+        input
+      });
+    }
+
+    const research = await phase('Official NestJS research', () =>
+      parallel({
+        cqrs: () => agent<string, Input>({
+          label: 'cqrs-research',
+          model: 'gpt-5.6-terra',
+          reasoning: 'medium',
+          prompt: '__CQRS__ __DELAY_150__ private cqrs prompt',
+          input
+        }),
+        graphql: () => agent<string, Input>({
+          label: 'graphql-research',
+          model: 'gpt-5.6-sol',
+          reasoning: 'medium',
+          prompt: '__GRAPHQL__ __DELAY_150__ private graphql prompt',
+          input
+        })
+      })
+    );
+    const proposal = await agent<string, typeof research>({
+      label: 'consolidate-proposal',
+      model: 'gpt-5.1-codex',
+      reasoning: 'medium',
+      prompt: '__CONSOLIDATE__ private consolidator prompt',
+      input: research
+    });
+    const saved = await artifact('controlled-proposal.md', {
+      value: proposal,
+      mediaType: 'text/markdown'
+    });
+    return { research, proposal, artifact: saved };
+  }
+});

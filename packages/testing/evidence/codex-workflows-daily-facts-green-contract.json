@@ -1,0 +1,378 @@
+{
+  "schemaVersion": 1,
+  "artifactType": "codex-workflows-founder-daily-facts-green-contract",
+  "contractId": "CDX-WF-DF-GC-1",
+  "contractDigest": "sha256:6bbddd18a683a70d7fc692a20edaef7e218635a0411fc8ff22b9bc743a0e3f63",
+  "digestScope": "/contract",
+  "digestAlgorithm": "SHA-256 over UTF-8 recursively key-sorted compact JSON for /contract followed by exactly one LF byte (the exact output of jq -cS '.contract')",
+  "authority": {
+    "humanRuling": "Founder GOAL.md requires IMPLEMENT -> PREFLIGHT -> AUDIT -> SCORE -> REPEAT until independently eligible 4/5 APPROVED, with the canonical daily-facts self-L3 active before READY-FOR-AUDIT. On 2026-08-10 the Founder explicitly relaxed qualifying topic/article material to within seven days of the workflow timestamp so the L3 test does not depend on same-day publishing volume.",
+    "assignment": ".agents/batdd/assignments/CDX.DAILY-FACTS.W1.json",
+    "assignmentDigest": "sha256:4eaa25749951c3c1d9f7c2f0c1e45447f70251ea7bb86e3abe06db45fe652a06",
+    "priorVerdict": ".agent/audit/workflows/1/AUDIT.md",
+    "priorVerdictDigest": "sha256:b548caa1a91f753ebd3d303ca9ca6e00bc8a4eebb285c1d22af8b580fcea6a78",
+    "candidateIntakeDigest": "sha256:3cc59190a29277049c88d9c3e05a7cdd4387a66c205196eabd8ef9e9524b3c4a",
+    "existingContract": "CDX-WF-GC-2",
+    "existingContractFileDigest": "sha256:d5e2266f7e8ceecb1a1d598ffd75dc1ff4160d5805ebec3333691d1d77e6f839",
+    "independentAcceptanceClaimed": false,
+    "stopBoundary": "READY-FOR-AUDIT"
+  },
+  "founderAmendments": [
+    {
+      "id": "FOUNDER-20260810-SEVEN-DAY-NEWS-WINDOW",
+      "authorizedAt": "2026-08-10T18:55:00Z",
+      "authority": "Direct Founder ruling in the active task",
+      "ruling": "Topic/article candidates may be within a seven-day range of the workflow timestamp so the canonical L3 test does not depend on same-day publishing volume.",
+      "interpretation": "A qualifying publication date has an integer UTC age from zero through seven days inclusive relative to the run date. The report asOfDate remains the run date; future dates and dates more than seven days old fail closed.",
+      "previousContractDigest": "sha256:8af755f0cfe592b9035f09636d9cd10255926019d2185a71ed2afff2a2811b6c",
+      "amendedContractDigest": "sha256:6bbddd18a683a70d7fc692a20edaef7e218635a0411fc8ff22b9bc743a0e3f63",
+      "affectedRows": [
+        "DF-GC1-011-DAILY-FACTS-SHAPE",
+        "DF-GC1-012-CANONICAL-L3"
+      ],
+      "redCommand": "bun nx run codex-workflows:test-l1-unit --skip-nx-cache",
+      "redResult": "Six focused uncached RED passes each had exactly one meaningful failure: the prior same-day validator rejected the initial seven-day relaxation, the date-evidence parser rejected a valid abbreviated month, the initial calendar-window interpretation rejected an article exactly seven days old, the content validator admitted an off-topic headline, the first relevance hardening rejected a valid acronym-linked headline, and the visible-date check rejected a valid locale-formatted date",
+      "greenResult": "19 executed, 19 passed after product implementation"
+    }
+  ],
+  "redFreeze": {
+    "status": "all-row-red-plus-founder-amendment-red-frozen",
+    "semanticContractMayChange": false,
+    "evidenceArtifact": "packages/testing/evidence/codex-workflows-daily-facts-red.json",
+    "evidenceDigest": "sha256:12caf7dfbe276540554233521e95706f4eff6155da3a8557ebfad25e4825b4df",
+    "capturedAt": "2026-08-10T19:16:45Z",
+    "disposition": "PRODUCT-GREEN-AUTHORIZED"
+  },
+  "contract": {
+    "completionScope": "vertical-slice",
+    "strategy": "basic-then-adversarial",
+    "redPolicy": "all-new-or-changed-contract-rows",
+    "contractFreezeRule": "The /contract object, row identities, assertions, values, negative guarantees, target vocabulary, and cleanup obligations are immutable after this digest is published. RED evidence is recorded outside /contract.",
+    "lockedGreenRule": "Preserve literal shebang/public interpreter admission, JSON compatibility, SDK import exclusivity and singleton lifecycle, .pi byte identity, accepted non-daily workflow behavior, immutable audit history, and all prior contract evidence.",
+    "acceptanceLimitation": "Worker evidence stops at READY-FOR-AUDIT. Only fresh exact-candidate Preflight and an independent external Judge may establish eligibility or approval.",
+    "dag": [
+      "C0 -> {R1,R2,R4,R5}",
+      "R1 -> R3",
+      "{R1,R2,R3,R4} -> R6",
+      "{R1,R2,R3,R4,R5,R6} -> J1",
+      "J1 -> P1 -> A2"
+    ],
+    "rows": [
+      {
+        "id": "DF-GC1-001-LIFECYCLE-DRAIN",
+        "authority": ["EXT3-001", "EXT3-004", "KICK1 Attempt 1 R1"],
+        "form": "basic-and-adversarial-regression",
+        "layer": "L1 in-process integration",
+        "runtime": "Vitest with controlled abort-aware and abort-ignoring adapters",
+        "file": "packages/workflows/src/authoring/authoring.test.ts",
+        "testIdentity": "[L1:INTEGRATION] DF-GC1-001 drains every started agent and artifact operation before one terminal event and promise settlement",
+        "target": "workflows:test-l1-integration",
+        "required": true,
+        "expectedMeaningfulRed": "A failing sibling rejects while another remains active and later emits node.completed after workflow.failed; an artifact operation may also settle after terminal state.",
+        "observableGreen": "Failure aborts queued work, awaits all started agent/artifact operations including abort-ignoring work, classifies each node once, then emits exactly one terminal event last and settles the public promise with active work zero.",
+        "negativeGuarantees": [
+          "no node/artifact event after terminal",
+          "no queued launch after abort",
+          "no duplicate node outcome"
+        ],
+        "countExpectation": "At least two selected adversarial cases and one success-order case; zero selection fails.",
+        "isolationAndCleanup": "Controlled promises always release; active count and pending artifact count return to zero."
+      },
+      {
+        "id": "DF-GC1-002-EXPLICIT-PROVENANCE",
+        "authority": ["EXT3-002", "KICK1 Attempt 1 R2"],
+        "form": "basic-and-adversarial-regression",
+        "layer": "L1 in-process integration",
+        "runtime": "Vitest",
+        "file": "packages/workflows/src/authoring/authoring.test.ts",
+        "testIdentity": "[L1:INTEGRATION] DF-GC1-002 records only identity-bearing consumed provenance and fails closed on ambiguous equal primitive outputs",
+        "target": "workflows:test-l1-integration",
+        "required": true,
+        "expectedMeaningfulRed": "Two independent equal-valued roots cause a join consuming one root to record both root IDs.",
+        "observableGreen": "Object identity and explicitly carried provenance record only actually consumed roots across nested and aliased inputs; ambiguous equal primitive lineage fails closed instead of manufacturing dependencies.",
+        "negativeGuarantees": [
+          "never infer two producers solely from equal value digests",
+          "never silently understate a detected ambiguous primitive dependency"
+        ],
+        "countExpectation": "Equal primitive, distinct object identity, nested alias, copied literal, and ordinary unique-output rows all execute.",
+        "isolationAndCleanup": "Pure in-process values; no external state."
+      },
+      {
+        "id": "DF-GC1-003-JOURNAL-REDACTION",
+        "authority": ["EXT3-003", "KICK1 Attempt 1 R3"],
+        "form": "adversarial-regression",
+        "layer": "L1 in-process integration",
+        "runtime": "Vitest plus isolated filesystem",
+        "file": "apps/codex-workflows/src/runtime/journal.test.ts",
+        "testIdentity": "[L1:INTEGRATION] DF-GC1-003 redacts secret-bearing keys case-insensitively at every nesting depth",
+        "target": "codex-workflows:test-l1-integration",
+        "required": true,
+        "expectedMeaningfulRed": "token, apiKey, password, Authorization, credentials, cookie aliases, and mixed-case nested variants persist in journal JSON.",
+        "observableGreen": "A reviewed case-normalized structural policy redacts all sensitive-key variants while retaining bounded safe diagnostics and stable event shape.",
+        "negativeGuarantees": [
+          "no seeded secret bytes in journal",
+          "no raw prompt/input/environment/stack/provider error"
+        ],
+        "countExpectation": "Every declared sensitive alias and mixed-case/nested variant is asserted; zero aliases is invalid.",
+        "isolationAndCleanup": "Unique temporary root removed in finally; zero journal temp residue."
+      },
+      {
+        "id": "DF-GC1-004-ARTIFACT-ATOMICITY",
+        "authority": ["EXT3-004", "KICK1 Attempt 1 R3"],
+        "form": "basic-and-adversarial-regression",
+        "layer": "L1 in-process integration",
+        "runtime": "Vitest plus isolated filesystem",
+        "file": "apps/codex-workflows/src/runtime/journal.test.ts",
+        "testIdentity": "[L1:INTEGRATION] DF-GC1-004 serializes or rejects duplicate artifact names deterministically with unique atomic temporary files",
+        "target": "codex-workflows:test-l1-integration",
+        "required": true,
+        "expectedMeaningfulRed": "Concurrent same-name writes share a PID-only temporary path and yield one rejected/one fulfilled result with nondeterministic terminal ordering.",
+        "observableGreen": "Every write owns a unique temporary path, duplicate-name semantics fail closed deterministically before bytes are published, artifact errors retain storage attribution, final bytes/digest agree, and finalization prevents later writes.",
+        "negativeGuarantees": [
+          "no partial artifact",
+          "no post-finalize write",
+          "no storage failure classified as agent failure",
+          "no temp residue"
+        ],
+        "countExpectation": "Success, concurrent collision, injected write failure, post-finalize attempt, and byte/digest rows execute.",
+        "isolationAndCleanup": "Unique temporary root removed; artifact and journal temp counts return to zero."
+      },
+      {
+        "id": "DF-GC1-005-RUNTIME-MODEL-POLICY",
+        "authority": [
+          "EXT3-005",
+          "Founder exact-model ruling",
+          "KICK1 Attempt 1 R4"
+        ],
+        "form": "basic-and-adversarial-regression",
+        "layer": "L1 unit and in-process integration",
+        "runtime": "Vitest",
+        "file": "packages/workflows/src/authoring/authoring.test.ts",
+        "testIdentity": "[L1:INTEGRATION] DF-GC1-005 admits only exact gpt-5.6-luna with medium reasoning before adapter launch",
+        "target": "workflows:test-l1-integration",
+        "required": true,
+        "expectedMeaningfulRed": "Trusted transpiled source passes an arbitrary runtime reasoning string through to the adapter and completes.",
+        "observableGreen": "Every executable workflow agent request is runtime-validated as exact gpt-5.6-luna and exact medium before node launch; invalid model/reasoning produces deterministic definition/admission failure and zero adapter calls.",
+        "negativeGuarantees": [
+          "no silent model substitution",
+          "no type-only enforcement",
+          "no SDK call on invalid policy"
+        ],
+        "countExpectation": "Valid pair plus invalid model, invalid reasoning, empty values, and cast/bypass rows execute.",
+        "isolationAndCleanup": "Controlled adapter call count remains zero for every rejected row."
+      },
+      {
+        "id": "DF-GC1-006-HOST-SCHEMA-ADMISSION",
+        "authority": ["EXT3-006", "KICK1 Attempt 1 R4"],
+        "form": "basic-and-adversarial-regression",
+        "layer": "L1 integration plus L2 real-boundary integration",
+        "runtime": "Vitest, built CLI, pinned Codex adapter, controlled/live bounded host check",
+        "files": [
+          "packages/workflows/src/authoring/authoring.test.ts",
+          "packages/codex/src/runtime/sdk.spec.ts",
+          "apps/codex-workflows/src/workflows/direct-runner.spec.ts"
+        ],
+        "testIdentity": "DF-GC1-006 rejects host-incompatible structured-output schemas before launch and preserves response-validation exit 68",
+        "targets": [
+          "workflows:test-l1-integration",
+          "codex:test-l2-integration",
+          "codex-workflows:test-l2-integration"
+        ],
+        "required": true,
+        "expectedMeaningfulRed": "A locally valid schema with host-invalid const shape starts a live turn, receives HTTP 400, and maps to WORKFLOW_AGENT_FAILED exit 67.",
+        "observableGreen": "The pinned host-compatible schema subset is validated before agent launch as definition/admission failure exit 65 with zero SDK calls; malformed output against an admitted schema remains exit 68.",
+        "negativeGuarantees": [
+          "no remote launch for locally detectable host-invalid schema",
+          "no conflation of schema admission with agent failure",
+          "no weakening of valid daily-facts schema"
+        ],
+        "countExpectation": "Supported object/array/string schema and unsupported/host-invalid keyword-shape matrix are nonzero at native layers.",
+        "isolationAndCleanup": "Controlled child/turn count zero on admission failure; live probe bounded and host drains."
+      },
+      {
+        "id": "DF-GC1-007-PUBLIC-FAILURE-ORDER",
+        "authority": ["EXT3-001", "EXT3-004", "KICK1 Attempt 1 R1/R3"],
+        "form": "adversarial-regression",
+        "layer": "L2 real-boundary integration",
+        "runtime": "Built public CLI, controlled executable SDK, real filesystem/process boundary",
+        "file": "apps/codex-workflows/src/workflows/direct-runner.spec.ts",
+        "testIdentity": "[L2:INTEGRATION] DF-GC1-007 returns only after children, journal events, artifacts, SDK host, and temporary files are terminally quiet",
+        "target": "codex-workflows:test-l2-integration",
+        "required": true,
+        "expectedMeaningfulRed": "CLI rejects/exits while a controlled sibling remains active and the journal appends a node or artifact event after workflow.failed.",
+        "observableGreen": "Failure/cancellation drains all started operations, writes one terminal journal state last, releases the SDK host, returns the deterministic exit, and leaves zero descendants/temp files.",
+        "negativeGuarantees": [
+          "no event after terminal",
+          "no descendant after CLI return",
+          "no artifact after CLI return"
+        ],
+        "countExpectation": "Agent failure, abort-ignoring sibling, artifact failure, and SIGINT cases execute uncached.",
+        "isolationAndCleanup": "Every observed PID/process group and temporary root is absent afterward."
+      },
+      {
+        "id": "DF-GC1-008-DETERMINISTIC-CANCELLATION-PROOF",
+        "authority": ["EXT3-007", "KICK1 Attempt 1 R5"],
+        "form": "adversarial-regression",
+        "layer": "L2 real-boundary integration",
+        "runtime": "Vitest with controlled readiness/barrier protocol and built CLI",
+        "file": "apps/codex-workflows/src/workflows/direct-runner.spec.ts",
+        "testIdentity": "[L2:INTEGRATION] DF-GC1-008 proves cancellation cleanup with deterministic started-process readiness rather than wall-clock hope",
+        "target": "codex-workflows:test-l2-integration",
+        "required": true,
+        "expectedMeaningfulRed": "Under parallel aggregate load the test sometimes asserts termination for a process that had not reached the intended started state.",
+        "observableGreen": "A bounded readiness handshake identifies every actually started process before cancellation; queued work never starts and every observed PID/group is reaped across repeated uncached aggregate runs.",
+        "negativeGuarantees": [
+          "no timing-only readiness",
+          "no weakened cleanup assertion",
+          "no assertion about an unobserved PID"
+        ],
+        "countExpectation": "Focused case plus at least three repeated aggregate executions in final evidence.",
+        "isolationAndCleanup": "All handshakes close and every controlled process exits."
+      },
+      {
+        "id": "DF-GC1-009-GROUND-ZERO-CLOSURE",
+        "authority": ["KICK1-010", "KICK1-011", "KICK1 Attempt 1 R5"],
+        "form": "adversarial-workspace-integration",
+        "layer": "L2 real-boundary integration",
+        "runtime": "Nx affected graph plus Python project Nx gates",
+        "files": [
+          "packages/testing/src/ground-zero/harness.spec.ts",
+          "apps/codex-monitor/project.json",
+          "apps/codex-monitor/.gitignore"
+        ],
+        "testIdentity": "[L2:INTEGRATION] DF-GC1-009 keeps exact seven-project affected closure and produces no Git-visible Python bytecode",
+        "targets": ["@orchestration/testing:test-l2", "codex-monitor:test"],
+        "required": true,
+        "expectedMeaningfulRed": "Five affected-closure rows omit codex-monitor and six __pycache__/*.pyc files are Git-visible after its tests/build.",
+        "observableGreen": "Every shared-input row expects the exact resolved seven-project closure, codex-monitor commands disable bytecode emission, generated bytecode is ignored/absent, and the uncached candidate aggregate is green.",
+        "negativeGuarantees": [
+          "no blanket weakening of exact affected assertions",
+          "no Git-visible __pycache__ or .pyc after tests"
+        ],
+        "countExpectation": "All 26 Ground-0 L2 rows execute and pass; codex-monitor L1/L2 selections are nonzero.",
+        "isolationAndCleanup": "No generated bytecode or unexpected workspace delta."
+      },
+      {
+        "id": "DF-GC1-010-PUBLIC-REPORT-BRIDGE",
+        "authority": [
+          "Founder exact output path",
+          "KICK1-009",
+          "KICK1 Attempt 1 R6"
+        ],
+        "form": "basic-and-adversarial",
+        "layer": "L1 integration plus L2 real-boundary integration",
+        "runtime": "Vitest, built public CLI, real filesystem",
+        "files": [
+          "packages/workflows/src/authoring/authoring.test.ts",
+          "apps/codex-workflows/src/runtime/journal.test.ts",
+          "apps/codex-workflows/src/workflows/direct-runner.spec.ts"
+        ],
+        "testIdentity": "DF-GC1-010 atomically publishes a declared daily-facts artifact to the exact root-contained public UTC path while retaining journal digest continuity",
+        "targets": [
+          "workflows:test-l1-integration",
+          "codex-workflows:test-l1-integration",
+          "codex-workflows:test-l2-integration"
+        ],
+        "required": true,
+        "expectedMeaningfulRed": "The artifact API accepts only a safe basename and can write only runs/<run-id>/artifacts, so the exact Founder path cannot be produced through the standardized runner.",
+        "observableGreen": "The standardized artifact contract permits only .agent/testing/workflows/<UTC_TIMESTAMP>/DAILY_FACTS.md publication under the admitted working root, writes atomically, records private/public paths and one digest, and returns only after bytes settle.",
+        "negativeGuarantees": [
+          "no absolute/traversal/symlink escape",
+          "no arbitrary public filename",
+          "no partial/public temp residue",
+          "no digest mismatch"
+        ],
+        "countExpectation": "Valid path, invalid timestamp, traversal, absolute path, duplicate publication, write failure, and exact byte/digest rows execute.",
+        "isolationAndCleanup": "Native tests remove roots; live L3 retains only the Founder-authorized report and declared run evidence."
+      },
+      {
+        "id": "DF-GC1-011-DAILY-FACTS-SHAPE",
+        "authority": [
+          "Founder daily-facts content contract",
+          "KICK1-009",
+          "KICK1 Attempt 1 R6"
+        ],
+        "form": "basic-and-adversarial",
+        "layer": "L1 unit and L2 end-to-end",
+        "runtime": "Vitest content validator plus built literal-shebang workflow with controlled agents",
+        "files": [
+          "apps/codex-workflows/src/features/daily-facts/support/contract.ts",
+          "apps/codex-workflows/src/features/daily-facts/daily-facts.spec.ts"
+        ],
+        "testIdentity": "DF-GC1-011 accepts exactly three distinct current-UTC industry/topic reports with substantive summaries and direct article links from the Founder-approved seven-day UTC window",
+        "targets": [
+          "codex-workflows:test-l1-unit",
+          "codex-workflows:test-l2-e2e"
+        ],
+        "required": true,
+        "expectedMeaningfulRed": "No daily-facts schema, validator, renderer, workflow source, or exact public report exists.",
+        "observableGreen": "Exactly three schema-bound results have distinct normalized industry/topic pairs, current UTC research date, bounded substantive summaries, at least two titled https article links each published no more than seven UTC days before the workflow timestamp, the required heading text, and a deterministic rendered Markdown report.",
+        "negativeGuarantees": [
+          "reject 2 or 4 results",
+          "reject duplicate pair",
+          "reject stale report date, future article date, and article older than the seven-day UTC window",
+          "reject missing/non-https links",
+          "reject an article whose headline is not visibly relevant to its brief",
+          "reject empty/boilerplate summary"
+        ],
+        "countExpectation": "Happy path and every negative guarantee execute at the lowest faithful native layer; controlled E2E runs exactly three nodes.",
+        "isolationAndCleanup": "Controlled test output root removed; zero process/temp delta."
+      },
+      {
+        "id": "DF-GC1-012-CANONICAL-L3",
+        "authority": [
+          "Founder self-L3 ruling",
+          "KICK1-009",
+          "GOAL.md non-negotiable outcome"
+        ],
+        "form": "canonical-live-dogfood",
+        "layer": "L3 canonical behavior and direct public-surface dogfood",
+        "runtime": "Physical Gherkin, literal #!/usr/bin/env -S codex-workflows execution, live Codex backend and web search",
+        "featureFile": "apps/codex-workflows/src/features/daily-facts/daily-facts.feature",
+        "stepFile": "apps/codex-workflows/src/features/daily-facts/index.steps.ts",
+        "scenarioIdentity": "DAILY-FACTS-L3-001 Publish three current-news industry briefs through the public workflow runner",
+        "target": "codex-workflows:test-l3-daily-facts",
+        "required": true,
+        "expectedMeaningfulRed": "The physical scenario and bindings select and assert the required behavior, but the trusted workflow/public report bridge is absent so execution fails on the missing product outcome rather than harness failure.",
+        "observableGreen": "Literal public execution launches exactly three genuinely overlapping gpt-5.6-luna/medium research nodes and no other node; each returns a distinct current industry/topic result with substantive summary and titled direct https article links published no more than seven UTC days before the run timestamp; the journal and exact .agent/testing/workflows/<UTC_TIMESTAMP>/DAILY_FACTS.md bytes/digest/order agree; the workflow terminal event and CLI return occur after the report is settled.",
+        "negativeGuarantees": [
+          "no mocks",
+          "no fourth consolidator",
+          "no wrong model/reasoning",
+          "no duplicate pair",
+          "no future source or source older than the seven-day UTC window",
+          "no runner-private-only artifact",
+          "no generated-Markdown-only proof",
+          "no unexpected retained resource"
+        ],
+        "countExpectation": "One physical scenario selected and passed; every step defined and asserted; journal has exactly three completed nodes; report has exactly three required sections and at least six direct links.",
+        "evidenceArtifacts": [
+          "test-output/cucumber/codex-workflows-daily-facts.json",
+          ".agent/testing/workflows/<UTC_TIMESTAMP>/DAILY_FACTS.md",
+          "local run journal",
+          "resource inventory",
+          "candidate and artifact digests"
+        ],
+        "isolationAndCleanup": "Live report and declared run evidence are authorized retained proof; all processes, tmux sessions, temp files, and undeclared workspace paths have zero delta."
+      },
+      {
+        "id": "DF-GC1-013-STANDING-AND-PREFLIGHT-HANDOFF",
+        "authority": ["EXT3-008", "KICK1 Attempt 1 J1/P1"],
+        "form": "cross-cutting-proof-gate",
+        "layer": "L1/L2/L3 affected closure and independent proof",
+        "runtime": "Bun Nx, machine-readable native reports, scoped orchestration evidence",
+        "required": true,
+        "expectedMeaningfulRed": "The current candidate has red Ground-0 L2, no daily-facts rows, and no independent reducer-approved exact-candidate Preflight.",
+        "observableGreen": "The joined candidate passes uncached affected and explicit lint/typecheck/build/L1/L2/L3/aggregate/policy/import/sync/format gates with nonzero counts and zero unexpected resource delta, then a fresh non-implementer Preflight registers immutable exact-candidate evidence for reducer validation.",
+        "negativeGuarantees": [
+          "no cache-only live proof",
+          "no zero selection",
+          "no worker-authored Preflight",
+          "no candidate drift after proof"
+        ],
+        "countExpectation": "Every required selected project/layer has a nonzero machine result or explicit profile-backed N/A; daily-facts L3 is nonzero.",
+        "isolationAndCleanup": "Before/after process, tmux, temp, run, public-report, and workspace inventories are recorded with only declared retained evidence."
+      }
+    ]
+  }
+}

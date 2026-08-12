@@ -1,0 +1,67 @@
+{
+  "project": "@orchestration/codex",
+  "result": "test-output/codex-workflows/codex.json",
+  "temporaryDirectory": "tmp/codex-workflows-codex",
+  "suites": [
+    {
+      "groupHeading": "=== Layer 1 Test Suite ===",
+      "heading": "--- Unit Tests [L1:UNIT] ---",
+      "layer": "l1-unit",
+      "command": [
+        "bun",
+        "vitest",
+        "run",
+        "--config",
+        "packages/codex/vitest.config.ts",
+        "src/runtime/singleton.test.ts",
+        "src/policy/sdk-imports.test.ts",
+        "--testNamePattern=L1:UNIT"
+      ],
+      "expected": "vitest-output",
+      "artifact": "nx://@orchestration/codex/test/l1-unit"
+    },
+    {
+      "heading": "--- In-Process Integration Tests [L1:INTEGRATION] ---",
+      "layer": "l1-integration",
+      "command": [
+        "bun",
+        "vitest",
+        "run",
+        "--config",
+        "packages/codex/vitest.config.ts",
+        "src/runtime/facade.test.ts",
+        "src/runtime/observability.test.ts",
+        "--testNamePattern=L1:INTEGRATION"
+      ],
+      "expected": "vitest-output",
+      "artifact": "nx://@orchestration/codex/test/l1-integration"
+    },
+    {
+      "groupHeading": "=== Layer 2 Test Suite ===",
+      "heading": "--- Real-Boundary Integration Tests [L2:INTEGRATION] ---",
+      "layer": "l2-integration",
+      "command": [
+        "bun",
+        "vitest",
+        "run",
+        "--config",
+        "packages/codex/vitest.config.ts",
+        "src/runtime/sdk.spec.ts",
+        "--testNamePattern=L2:INTEGRATION"
+      ],
+      "expected": "vitest-output",
+      "artifact": "nx://@orchestration/codex/test/l2-integration"
+    },
+    {
+      "heading": "--- End-to-End Tests [L2:E2E] ---",
+      "layer": "l2-e2e",
+      "reason": "N/A: the SDK boundary is a library integration; public CLI process behavior belongs to @orchestration/codex-workflows"
+    },
+    {
+      "groupHeading": "=== Layer 3 Test Suite ===",
+      "heading": "--- Cucumber Behavioral Tests ---",
+      "layer": "l3",
+      "reason": "N/A: the Codex adapter is not a direct user behavior surface"
+    }
+  ]
+}

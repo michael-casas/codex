@@ -1,0 +1,9 @@
+{
+  "proposalAudience": "NestJS platform and application architects",
+  "constraints": [
+    "Use primary documentation and package sources where possible",
+    "Keep GraphQL transport concerns separate from CQRS application concerns",
+    "Preserve NestJS dependency injection, metadata, and authorization behavior",
+    "Produce a proposal rather than implementation code"
+  ]
+}

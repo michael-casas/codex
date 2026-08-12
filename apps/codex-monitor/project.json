@@ -1,0 +1,41 @@
+{
+  "name": "codex-monitor",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/codex-monitor/src",
+  "projectType": "application",
+  "tags": ["scope:monitor", "type:application"],
+  "targets": {
+    "lint": {
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "apps/codex-monitor",
+        "command": "PYTHONDONTWRITEBYTECODE=1 uv run ruff check ."
+      }
+    },
+    "build": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=apps/codex-monitor/src python3 -c \"import codex_monitor.cli, codex_monitor.protocol, codex_monitor.state\""
+      }
+    },
+    "test-l1": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=apps/codex-monitor/src python3 -m unittest discover -s apps/codex-monitor/tests -p '*_test.py' -v"
+      }
+    },
+    "test-l2": {
+      "executor": "nx:run-commands",
+      "cache": false,
+      "options": {
+        "command": "PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=apps/codex-monitor/src python3 -m unittest discover -s apps/codex-monitor/tests -p '*_spec.py' -v"
+      }
+    },
+    "test": {
+      "executor": "nx:run-commands",
+      "cache": false,
+      "dependsOn": ["lint", "build", "test-l1", "test-l2"],
+      "options": { "command": "echo codex-monitor spike checks complete" }
+    }
+  }
+}

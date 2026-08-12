@@ -1,0 +1,72 @@
+{
+  "schemaVersion": 1,
+  "greenContract": "CDX-WF-PROOF-RECOVERY-GC-1",
+  "assignment": "CDX.PROOF-RECOVERY.F1",
+  "capturedAt": "2026-08-12T19:09:52Z",
+  "baseRevision": "28c4650c676644bdfac11aa25c46d5be9b15f833",
+  "status": "MEANINGFUL_RED",
+  "rows": [
+    {
+      "ids": ["PR1-L1-001", "PR1-L1-002", "PR1-L1-004"],
+      "command": "bun nx run @orchestration/process:test-l1 --skip-nx-cache --outputStyle=static",
+      "exitCode": 1,
+      "selected": 3,
+      "failed": 3,
+      "decisiveFailure": "The runnable reducer returned PROCESS_CONTROL_UNAVAILABLE and the role policy denied every authorized operation."
+    },
+    {
+      "ids": ["PR1-L1-003"],
+      "command": "bun nx run workflows:test-l1-integration --skip-nx-cache --outputStyle=static",
+      "exitCode": 1,
+      "selected": 44,
+      "passed": 42,
+      "failed": 2,
+      "decisiveFailure": "The public executeWorkflow boundary accepted both an empty digest set with a forged 1/1 projection and one fabricated all-zero digest."
+    },
+    {
+      "ids": ["PR1-L2-001", "PR1-L2-002"],
+      "command": "source the canonical local service environment, then bun nx run @orchestration/process:test-l2 --skip-nx-cache --outputStyle=static",
+      "exitCode": 1,
+      "selected": 2,
+      "failed": 2,
+      "decisiveFailure": "The real isolated PostgreSQL database contained no process tables after the placeholder migration, and the real public CLI returned exit 69 PROCESS_CONTROL_UNAVAILABLE."
+    },
+    {
+      "ids": ["PR1-CLOSE-001"],
+      "command": "source the canonical local service environment, then bun nx run @orchestration/process:test-l2-integration --skip-nx-cache --outputStyle=static",
+      "exitCode": 1,
+      "selected": 2,
+      "failed": 2,
+      "decisiveFailure": "The append-only count successor and reference addendum remained explicit not-implemented placeholders."
+    },
+    {
+      "ids": ["PR1-L2-004"],
+      "command": "bun nx run codex-workflows:test-l2-cra-red-green --skip-nx-cache --outputStyle=static",
+      "exitCode": 1,
+      "selected": 3,
+      "passed": 2,
+      "failed": 1,
+      "decisiveFailure": "The controlled public CRA report exposed Scaffold executable, argv, npm user config, npm cache, npx, and create-react-app metadata."
+    },
+    {
+      "ids": ["PR1-L3-001", "PR1-L3-002"],
+      "command": "source the canonical local service environment, set PROCESS_DATABASE_URL, then bun nx run @orchestration/process:test-l3 --skip-nx-cache --outputStyle=static",
+      "exitCode": 1,
+      "scenarios": 2,
+      "steps": 7,
+      "passedScenarios": 1,
+      "failedScenarios": 1,
+      "passedSteps": 6,
+      "failedSteps": 1,
+      "decisiveFailure": "The complete-proof scenario reached its final observable assertion and found CLI exit 69 instead of reducer-approved judgment readiness; the worker self-approval rejection scenario passed."
+    }
+  ],
+  "harness": {
+    "syntaxOrModuleFailure": false,
+    "zeroSelection": false,
+    "pendingOrUndefinedBindings": false,
+    "realPostgresReached": true,
+    "temporaryDatabaseResidue": 0
+  },
+  "contractFrozenAfterRed": true
+}

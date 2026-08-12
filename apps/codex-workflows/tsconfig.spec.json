@@ -1,0 +1,19 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "outDir": "./out-tsc/vitest",
+    "types": ["vitest/globals", "node"]
+  },
+  "include": [
+    "vitest.config.ts",
+    "src/**/*.test.ts",
+    "src/**/*.spec.ts",
+    "src/**/*.steps.ts",
+    "src/**/*.d.ts"
+  ],
+  "references": [
+    { "path": "./tsconfig.app.json" },
+    { "path": "../../packages/workflows/tsconfig.lib.json" },
+    { "path": "../../packages/codex/tsconfig.lib.json" }
+  ]
+}

@@ -1,4 +1,6 @@
 import { mkdtemp, readFile, readdir, rm, writeFile } from 'node:fs/promises';
+import { createHash } from 'node:crypto';
+import { existsSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join, resolve } from 'node:path';
 import { spawnSync } from 'node:child_process';
@@ -7,6 +9,19 @@ import { afterEach, describe, expect, it } from 'vitest';
 
 const cli = resolve('packages/testing/src/cli.ts');
 const temporaryRoots = new Set<string>();
+const repairEvidence = resolve(
+  'packages/testing/evidence/codex-workflows-repair-attempt-1-reproof.json',
+);
+
+function canonical(value: unknown): string {
+  if (Array.isArray(value)) return `[${value.map(canonical).join(',')}]`;
+  if (typeof value !== 'object' || value === null) return JSON.stringify(value);
+  const record = value as Record<string, unknown>;
+  return `{${Object.keys(record)
+    .sort()
+    .map((key) => `${JSON.stringify(key)}:${canonical(record[key])}`)
+    .join(',')}}`;
+}
 
 async function temporaryRoot(): Promise<string> {
   const root = await mkdtemp(join(tmpdir(), 'orchestration-ground-zero-'));
@@ -25,6 +40,62 @@ afterEach(async () => {
 
 // === L2: REAL-BOUNDARY INTEGRATION TESTS ===
 describe('[L2:INTEGRATION] Ground-0 process and filesystem boundaries', () => {
+  it('[L2:INTEGRATION] CWF-AUD-004 requires content-addressed recovery re-proof without claiming historical RED', async () => {
+    expect(existsSync(repairEvidence)).toBe(true);
+    const artifact = JSON.parse(await readFile(repairEvidence, 'utf8')) as {
+      artifactDigest: string;
+      artifactType: string;
+      authority: { historicalRedClaimed: boolean };
+      candidate: { preRepairAggregateDigest: string };
+      checks: Array<{
+        cleanup: { processDelta: number; temporaryPathDelta: number };
+        executed: number;
+        exitCode: number;
+        findingId: string;
+        selected: number;
+      }>;
+      frozenContract: { digest: string; id: string };
+      limitation: string;
+      schemaVersion: number;
+    };
+    const { artifactDigest, ...payload } = artifact;
+    const computed = `sha256:${createHash('sha256')
+      .update(canonical(payload))
+      .digest('hex')}`;
+
+    expect(artifact).toMatchObject({
+      artifactType: 'codex-workflows-recovery-reproof',
+      authority: { historicalRedClaimed: false },
+      candidate: {
+        preRepairAggregateDigest:
+          'e2d7cba72fb07323850a15e8c47f33873b2aa038400c00018e1a1fb736d2022d',
+      },
+      limitation: 'recovery-evidence-not-historical-red-proof',
+      schemaVersion: 1,
+    });
+    expect(artifact.frozenContract.id).toBe('CDX-WF-AUD1-REPAIR-GC1');
+    expect(artifact.frozenContract.digest).toMatch(/^sha256:[a-f0-9]{64}$/);
+    expect(artifactDigest).toBe(computed);
+    expect(artifact.checks.map((check) => check.findingId).sort()).toEqual([
+      'CWF-AUD-001',
+      'CWF-AUD-002',
+      'CWF-AUD-003',
+      'CWF-AUD-004',
+      'CWF-AUD-005',
+      'CWF-AUD-006',
+    ]);
+    expect(
+      artifact.checks.every(
+        (check) =>
+          check.selected > 0 &&
+          check.executed > 0 &&
+          Number.isInteger(check.exitCode) &&
+          check.cleanup.processDelta === 0 &&
+          check.cleanup.temporaryPathDelta === 0,
+      ),
+    ).toBe(true);
+  });
+
   it('propagates a nonzero child exit and records failed evidence', async () => {
     const root = await temporaryRoot();
     const manifest = join(root, 'manifest.json');
@@ -81,6 +152,129 @@ describe('[L2:INTEGRATION] Ground-0 process and filesystem boundaries', () => {
     });
     expect(run.status).not.toBe(0);
     expect(run.stderr).toContain('selected zero tests');
+  });
+
+  it('[L2:INTEGRATION] CWF2-AUD-003 preserves actual zero selection in failed aggregate evidence', async () => {
+    const root = await temporaryRoot();
+    const manifest = join(root, 'manifest.json');
+    const result = join(root, 'result.json');
+    await writeFile(
+      manifest,
+      JSON.stringify({
+        project: 'fixture',
+        result,
+        suites: [
+          {
+            layer: 'l1-unit',
+            heading: '--- Unit Tests [L1:UNIT] ---',
+            command: [
+              process.execPath,
+              '-e',
+              "process.stdout.write('Tests 0 passed')",
+            ],
+            expected: 'vitest-output',
+          },
+        ],
+      }),
+    );
+
+    const run = spawnSync('bun', [cli, 'aggregate', manifest], {
+      encoding: 'utf8',
+    });
+    expect(run.status).toBe(1);
+    expect(JSON.parse(await readFile(result, 'utf8'))).toMatchObject({
+      status: 'failed',
+      children: [
+        {
+          executed: 0,
+          exitCode: 1,
+          selected: 0,
+          status: 'failed',
+        },
+      ],
+    });
+  });
+
+  it('[L2:INTEGRATION] CWF2-AUD-003 preserves malformed collector counts without inventing execution', async () => {
+    const root = await temporaryRoot();
+    const manifest = join(root, 'manifest.json');
+    const result = join(root, 'result.json');
+    await writeFile(
+      manifest,
+      JSON.stringify({
+        project: 'fixture',
+        result,
+        suites: [
+          {
+            layer: 'l2-integration',
+            heading: '--- Real-Boundary Integration Tests [L2:INTEGRATION] ---',
+            command: [
+              process.execPath,
+              '-e',
+              "process.stdout.write('malformed collector output')",
+            ],
+            expected: 'vitest-output',
+          },
+        ],
+      }),
+    );
+
+    const run = spawnSync('bun', [cli, 'aggregate', manifest], {
+      encoding: 'utf8',
+    });
+    expect(run.status).toBe(1);
+    expect(JSON.parse(await readFile(result, 'utf8'))).toMatchObject({
+      status: 'failed',
+      children: [
+        {
+          executed: null,
+          exitCode: 1,
+          selected: 0,
+          status: 'failed',
+        },
+      ],
+    });
+  });
+
+  it('[L2:INTEGRATION] CWF2-AUD-003 preserves valid nonzero selected and executed counts', async () => {
+    const root = await temporaryRoot();
+    const manifest = join(root, 'manifest.json');
+    const result = join(root, 'result.json');
+    await writeFile(
+      manifest,
+      JSON.stringify({
+        project: 'fixture',
+        result,
+        suites: [
+          {
+            layer: 'l1-unit',
+            heading: '--- Unit Tests [L1:UNIT] ---',
+            command: [
+              process.execPath,
+              '-e',
+              "process.stdout.write('Tests 3 passed')",
+            ],
+            expected: 'vitest-output',
+          },
+        ],
+      }),
+    );
+
+    const run = spawnSync('bun', [cli, 'aggregate', manifest], {
+      encoding: 'utf8',
+    });
+    expect(run.status).toBe(0);
+    expect(JSON.parse(await readFile(result, 'utf8'))).toMatchObject({
+      status: 'passed',
+      children: [
+        {
+          executed: 3,
+          exitCode: 0,
+          selected: 3,
+          status: 'passed',
+        },
+      ],
+    });
   });
 
   it.each(['success', 'failure'] as const)(
@@ -192,7 +386,12 @@ describe('[L2:INTEGRATION] Ground-0 process and filesystem boundaries', () => {
       [
         '@orchestration/daemon',
         '@orchestration/daemon-e2e',
+        '@orchestration/process',
         '@orchestration/testing',
+        'codex',
+        'codex-monitor',
+        'codex-workflows',
+        'workflows',
       ],
     ],
     [
@@ -201,7 +400,12 @@ describe('[L2:INTEGRATION] Ground-0 process and filesystem boundaries', () => {
       [
         '@orchestration/daemon',
         '@orchestration/daemon-e2e',
+        '@orchestration/process',
         '@orchestration/testing',
+        'codex',
+        'codex-monitor',
+        'codex-workflows',
+        'workflows',
       ],
     ],
     [
@@ -215,7 +419,12 @@ describe('[L2:INTEGRATION] Ground-0 process and filesystem boundaries', () => {
       [
         '@orchestration/daemon',
         '@orchestration/daemon-e2e',
+        '@orchestration/process',
         '@orchestration/testing',
+        'codex',
+        'codex-monitor',
+        'codex-workflows',
+        'workflows',
       ],
     ],
     [
@@ -224,7 +433,12 @@ describe('[L2:INTEGRATION] Ground-0 process and filesystem boundaries', () => {
       [
         '@orchestration/daemon',
         '@orchestration/daemon-e2e',
+        '@orchestration/process',
         '@orchestration/testing',
+        'codex',
+        'codex-monitor',
+        'codex-workflows',
+        'workflows',
       ],
     ],
     [
@@ -233,12 +447,37 @@ describe('[L2:INTEGRATION] Ground-0 process and filesystem boundaries', () => {
       [
         '@orchestration/daemon',
         '@orchestration/daemon-e2e',
+        '@orchestration/process',
         '@orchestration/testing',
+        'codex',
+        'codex-monitor',
+        'codex-workflows',
+        'workflows',
       ],
     ],
   ] as const)(
-    'selects the exact Nx affected closure for %s changes',
+    '[L2:INTEGRATION] DF-GC1-009 keeps the exact expected affected closure and produces no Git-visible Python bytecode for %s changes',
     (_kind, file, expected) => {
+      if (_kind === 'shared configuration') {
+        const visibleBytecode = spawnSync(
+          'git',
+          [
+            'ls-files',
+            '--others',
+            '--exclude-standard',
+            '--',
+            'apps/codex-monitor',
+          ],
+          { cwd: resolve('.'), encoding: 'utf8' },
+        );
+        expect(visibleBytecode.status).toBe(0);
+        expect(
+          visibleBytecode.stdout
+            .trim()
+            .split('\n')
+            .filter((path) => /(?:^|\/)__pycache__\/|\.pyc$/.test(path)),
+        ).toEqual([]);
+      }
       const run = spawnSync(
         'bun',
         ['nx', 'show', 'projects', '--affected', '--files', file, '--json'],

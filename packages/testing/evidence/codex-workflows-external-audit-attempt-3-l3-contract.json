@@ -1,0 +1,69 @@
+{
+  "schemaVersion": 1,
+  "artifactType": "codex-workflows-external-audit-attempt-3-l3-contract",
+  "authority": {
+    "role": "independent-external-auditor-wave-judge",
+    "attempt": 3,
+    "source": "User-mandated end-of-AUDIT L3 dogfood contract",
+    "postImplementationCharacterization": true,
+    "historicalRedClaimed": false,
+    "existingAcceptanceModified": false
+  },
+  "candidate": {
+    "baseRevision": "28c4650c676644bdfac11aa25c46d5be9b15f833",
+    "preAuditIncludedPaths": 92,
+    "preAuditDigest": "sha256:1d4c09fd9657bb4aa9c020b785deb6a9bfb4c097bcdffea4559000daa1c436ef"
+  },
+  "contract": {
+    "id": "CDX-WF-EXT-AUDIT-3-L3",
+    "layer": "L3",
+    "physicalFeature": "apps/codex-workflows/src/features/external-audit-dogfood/external-audit-dogfood.feature",
+    "stepDefinitions": "apps/codex-workflows/src/features/external-audit-dogfood/index.steps.ts",
+    "workflow": "apps/codex-workflows/examples/external-audit-attempt-3.workflow.ts",
+    "input": "apps/codex-workflows/examples/external-audit-attempt-3.input.json",
+    "exactNxTarget": "codex-workflows:test-l3",
+    "exactNxCommand": "bun nx run codex-workflows:test-l3 --skipNxCache --outputStyle=static --command=\"bun packages/testing/src/cli.ts verify-cucumber apps/codex-workflows/src/features/external-audit-dogfood/external-audit-dogfood.feature apps/codex-workflows/src/features/external-audit-dogfood/index.steps.ts test-output/cucumber/codex-workflows-external-audit-attempt-3.json\"",
+    "rows": [
+      {
+        "id": "A3-L3-001-LITERAL-SHEBANG-LUNA-DATAFLOW",
+        "sourceAuthority": "User-mandated end-of-AUDIT L3 dogfood contract",
+        "classification": ["basic", "adversarial"],
+        "layer": "L3",
+        "publicSurface": "Executable workflow dispatched by the exact #!/usr/bin/env -S codex-workflows shebang through the installed PATH binary",
+        "exactNxTarget": "codex-workflows:test-l3",
+        "observableGreen": [
+          "One real direct-shebang run completes with exactly three gpt-5.6-luna medium nodes",
+          "Two sibling research/audit roots overlap and one strict-schema join starts after both",
+          "The join output copies both actual typed upstream findings and both distinct nonces",
+          "The completed operational journal and declared JSON artifact have valid matching digests and content",
+          "The detached runner process group, internal TypeScript loader temporaries, journal temporaries, and unauthorized workspace-diff delta are all zero"
+        ],
+        "noFalsePassGuarantees": [
+          "source count, selected scenarios, and executed scenarios must each be nonzero",
+          "undefined, ambiguous, pending, skipped, and assertion-free bindings fail closed",
+          "wrong model or reasoning fails a load-bearing assertion",
+          "missing or exit-only journal/artifact success fails a load-bearing assertion",
+          "duplicate or missing dependencies and non-distinct dataflow digests fail a load-bearing assertion",
+          "schema omission, schema mismatch, digest mismatch, or resource leakage fails a load-bearing assertion"
+        ],
+        "cleanupResourceObligation": {
+          "processGroupDelta": 0,
+          "internalTypeScriptTempDirectoryDelta": 0,
+          "journalTemporaryFiles": 0,
+          "unauthorizedWorkspaceDiffDelta": 0
+        },
+        "expectedCounts": {
+          "source": 1,
+          "selected": 1,
+          "executed": 1
+        }
+      }
+    ]
+  },
+  "freeze": {
+    "kind": "post-implementation-adversarial-characterization",
+    "historicalRedManufactured": false,
+    "existingFilesEditedForRegistration": false,
+    "registrationMechanism": "Existing cache-false Nx test-l3 run-commands target with a command override"
+  }
+}

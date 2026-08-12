@@ -9,10 +9,11 @@ import {
   symlinkSync,
   writeFileSync,
 } from 'node:fs';
-import { dirname, join, resolve } from 'node:path';
+import { dirname, join, relative, resolve } from 'node:path';
 import { stripVTControlCharacters } from 'node:util';
 
 import {
+  analyzeStandingTargetConfig,
   analyzeTestSource,
   type AggregateResult,
   type ChildResult,
@@ -35,31 +36,66 @@ interface AggregateManifest {
   temporaryDirectory?: string;
 }
 
-function selectedFromOutput(
+interface ParsedCounts {
+  executed: number | null;
+  selected: number;
+}
+
+function countsFromOutput(
   kind: SuiteManifest['expected'],
   stdout: string,
-): number {
+): ParsedCounts {
   const plain = stripVTControlCharacters(stdout);
-  if (typeof kind === 'number') return kind;
+  if (typeof kind === 'number') return { executed: null, selected: kind };
   if (kind === 'from-output') {
     try {
-      const parsed = JSON.parse(plain) as { selected?: unknown };
-      if (typeof parsed.selected !== 'number')
-        throw new Error('selected is absent');
-      return parsed.selected;
+      const parsed = JSON.parse(plain) as {
+        executed?: unknown;
+        selected?: unknown;
+      };
+      if (
+        typeof parsed.selected !== 'number' ||
+        !Number.isInteger(parsed.selected) ||
+        parsed.selected < 0
+      ) {
+        throw new Error('selected is invalid');
+      }
+      if (
+        parsed.executed !== undefined &&
+        (typeof parsed.executed !== 'number' ||
+          !Number.isInteger(parsed.executed) ||
+          parsed.executed < 0)
+      ) {
+        throw new Error('executed is invalid');
+      }
+      return {
+        executed: typeof parsed.executed === 'number' ? parsed.executed : null,
+        selected: parsed.selected,
+      };
     } catch {
       throw new Error('malformed machine result');
     }
   }
   if (kind === 'vitest-output') {
-    const match = plain.match(/Tests\s+(\d+) passed(?:\s*\|\s*(\d+) skipped)?/);
-    if (!match) throw new Error('malformed machine result');
-    return Number(match[1]);
+    const summaries = [...plain.matchAll(/Tests\s+([^\n\r]+)/g)];
+    const summary = summaries.at(-1)?.[1];
+    if (!summary) throw new Error('malformed machine result');
+    const counts = Object.fromEntries(
+      [...summary.matchAll(/(\d+)\s+(failed|passed|skipped|todo)/g)].map(
+        (match) => [match[2], Number(match[1])],
+      ),
+    );
+    if (counts.passed === undefined && counts.failed === undefined) {
+      throw new Error('malformed machine result');
+    }
+    const executed = (counts.passed ?? 0) + (counts.failed ?? 0);
+    return { executed, selected: executed };
   }
   if (kind === 'cucumber-output') {
     const match = plain.match(/(\d+) scenario/);
     if (!match) throw new Error('malformed machine result');
-    return Number(match[1]);
+    const selected = Number(match[1]);
+    return { executed: selected, selected };
   }
   throw new Error('malformed machine result');
 }
@@ -82,6 +118,7 @@ function runAggregate(manifestPath: string): number {
           artifact: suite.artifact ?? `na://${manifest.project}/${suite.layer}`,
           command: suite.reason ?? 'N/A',
           durationMs: 0,
+          executed: 0,
           exitCode: 0,
           layer: suite.layer,
           selected: 0,
@@ -103,10 +140,13 @@ function runAggregate(manifestPath: string): number {
       if (run.stdout) process.stdout.write(run.stdout);
       if (run.stderr) process.stderr.write(run.stderr);
       let exitCode = run.status ?? 1;
-      let selected = typeof suite.expected === 'number' ? suite.expected : 0;
+      let counts: ParsedCounts = {
+        executed: null,
+        selected: typeof suite.expected === 'number' ? suite.expected : 0,
+      };
       try {
-        selected = selectedFromOutput(suite.expected, run.stdout ?? '');
-        if (selected === 0 && exitCode === 0) {
+        counts = countsFromOutput(suite.expected, run.stdout ?? '');
+        if (counts.selected === 0 && exitCode === 0) {
           console.error(`${suite.layer} selected zero tests`);
           exitCode = 1;
         }
@@ -119,9 +159,10 @@ function runAggregate(manifestPath: string): number {
         artifact: suite.artifact ?? `${manifest.result}#child-${index + 1}`,
         command: command.join(' '),
         durationMs,
+        executed: counts.executed,
         exitCode,
         layer: suite.layer,
-        selected: Math.max(selected, 1),
+        selected: counts.selected,
         status: exitCode === 0 ? 'passed' : 'failed',
       });
     }
@@ -268,6 +309,25 @@ function policyFiles(paths: string[]): string[] {
   return result;
 }
 
+function projectFiles(paths: string[]): string[] {
+  const result: string[] = [];
+  for (const path of paths) {
+    const absolute = resolve(path);
+    if (!existsSync(absolute)) continue;
+    const entries = readdirSync(absolute, { withFileTypes: true });
+    for (const entry of entries) {
+      if (
+        ['node_modules', 'dist', 'out-tsc', 'test-output'].includes(entry.name)
+      )
+        continue;
+      const child = join(absolute, entry.name);
+      if (entry.isDirectory()) result.push(...projectFiles([child]));
+      else if (entry.name === 'project.json') result.push(child);
+    }
+  }
+  return result;
+}
+
 function runPolicy(paths: string[]): number {
   const files = policyFiles(paths);
   if (files.length === 0) {
@@ -280,12 +340,41 @@ function runPolicy(paths: string[]): number {
       ...item,
     })),
   );
+  const localFiles = files.map((file) => relative(resolve('.'), file));
+  let standingTargets = 0;
+  for (const projectFile of projectFiles(paths)) {
+    const localProject = relative(resolve('.'), projectFile);
+    const inspection = analyzeStandingTargetConfig(
+      localProject,
+      readFileSync(projectFile, 'utf8'),
+      localFiles,
+      (configPath) => {
+        const absolute = resolve(configPath);
+        return existsSync(absolute)
+          ? readFileSync(absolute, 'utf8')
+          : undefined;
+      },
+    );
+    standingTargets += inspection.configured;
+    violations.push(
+      ...inspection.violations.map((item) => ({
+        file: projectFile,
+        ...item,
+      })),
+    );
+  }
   if (violations.length > 0) {
     for (const item of violations)
       console.error(`${item.file}: ${item.code}: ${item.message}`);
     return 1;
   }
-  console.log(JSON.stringify({ selected: files.length, status: 'passed' }));
+  console.log(
+    JSON.stringify({
+      selected: files.length,
+      standingTargets,
+      status: 'passed',
+    }),
+  );
   return 0;
 }
 

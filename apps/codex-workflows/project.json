@@ -1,0 +1,214 @@
+{
+  "name": "codex-workflows",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/codex-workflows/src",
+  "projectType": "application",
+  "tags": ["scope:workflows", "type:application"],
+  "targets": {
+    "build": {
+      "executor": "@nx/esbuild:esbuild",
+      "dependsOn": ["codex:build"],
+      "outputs": ["{options.outputPath}"],
+      "defaultConfiguration": "production",
+      "options": {
+        "platform": "node",
+        "outputPath": "apps/codex-workflows/dist",
+        "format": ["esm"],
+        "bundle": true,
+        "thirdParty": true,
+        "external": ["esbuild", "@orchestration/codex"],
+        "main": "apps/codex-workflows/src/main.ts",
+        "tsConfig": "apps/codex-workflows/tsconfig.build.json",
+        "assets": ["apps/codex-workflows/src/assets"],
+        "esbuildOptions": {
+          "sourcemap": true,
+          "outExtension": {
+            ".js": ".js"
+          }
+        }
+      },
+      "configurations": {
+        "development": {},
+        "production": {
+          "esbuildOptions": {
+            "sourcemap": false,
+            "outExtension": {
+              ".js": ".js"
+            }
+          }
+        }
+      }
+    },
+    "prune-lockfile": {
+      "dependsOn": ["build"],
+      "cache": true,
+      "executor": "@nx/js:prune-lockfile",
+      "outputs": [
+        "{workspaceRoot}/apps/codex-workflows/dist/package.json",
+        "{workspaceRoot}/apps/codex-workflows/dist/bun.lock"
+      ],
+      "options": {
+        "buildTarget": "build"
+      }
+    },
+    "copy-workspace-modules": {
+      "dependsOn": ["build"],
+      "cache": true,
+      "outputs": [
+        "{workspaceRoot}/apps/codex-workflows/dist/workspace_modules"
+      ],
+      "executor": "@nx/js:copy-workspace-modules",
+      "options": {
+        "buildTarget": "build"
+      }
+    },
+    "prune": {
+      "dependsOn": ["prune-lockfile", "copy-workspace-modules"],
+      "executor": "nx:noop"
+    },
+    "serve": {
+      "continuous": true,
+      "executor": "@nx/js:node",
+      "defaultConfiguration": "development",
+      "dependsOn": ["build"],
+      "options": {
+        "buildTarget": "codex-workflows:build",
+        "runBuildTargetDependencies": false
+      },
+      "configurations": {
+        "development": {
+          "buildTarget": "codex-workflows:build:development"
+        },
+        "production": {
+          "buildTarget": "codex-workflows:build:production"
+        }
+      }
+    },
+    "cli": {
+      "executor": "nx:run-commands",
+      "dependsOn": ["build"],
+      "options": {
+        "command": "node apps/codex-workflows/dist/main.js"
+      }
+    },
+    "test-pre-build": {
+      "executor": "nx:run-commands",
+      "cache": true,
+      "inputs": [
+        "{workspaceRoot}/tsconfig.base.json",
+        "{projectRoot}/tsconfig.cucumber.json",
+        "{projectRoot}/src/**/*.steps.ts",
+        "{projectRoot}/src/**/support/driver.ts"
+      ],
+      "outputs": ["{projectRoot}/out-tsc/cucumber"],
+      "options": {
+        "command": "tsc -p apps/codex-workflows/tsconfig.cucumber.json"
+      }
+    },
+    "test-l1-unit": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "vitest run --config apps/codex-workflows/vitest.config.ts src/cli/cli.test.ts src/features/daily-facts/daily-facts.test.ts src/features/cra-red-green/cra-red-green.test.ts --testNamePattern='L1:UNIT'"
+      }
+    },
+    "test-l1-cra-red-green": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "vitest run --config apps/codex-workflows/vitest.config.ts src/features/cra-red-green/cra-red-green.test.ts --testNamePattern='L1:UNIT'"
+      }
+    },
+    "test-l1-integration": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "vitest run --config apps/codex-workflows/vitest.config.ts src/runtime/journal.test.ts --testNamePattern='L1:INTEGRATION'"
+      }
+    },
+    "test-l1": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "vitest run --config apps/codex-workflows/vitest.config.ts src/cli/cli.test.ts src/runtime/journal.test.ts src/features/daily-facts/daily-facts.test.ts src/features/cra-red-green/cra-red-green.test.ts"
+      }
+    },
+    "test-l2-integration": {
+      "executor": "nx:run-commands",
+      "cache": false,
+      "dependsOn": ["build"],
+      "options": {
+        "command": "vitest run --config apps/codex-workflows/vitest.config.ts src/workflows/cli.spec.ts src/workflows/direct-runner.spec.ts src/workflows/model-policy.spec.ts --testNamePattern='L2:INTEGRATION'"
+      }
+    },
+    "test-l2-model-policy": {
+      "executor": "nx:run-commands",
+      "cache": false,
+      "options": {
+        "command": "vitest run --config apps/codex-workflows/vitest.config.ts src/workflows/model-policy.spec.ts --testNamePattern='L2:INTEGRATION'"
+      }
+    },
+    "test-l2-e2e": {
+      "executor": "nx:run-commands",
+      "cache": false,
+      "dependsOn": ["build"],
+      "options": {
+        "command": "vitest run --config apps/codex-workflows/vitest.config.ts src/workflows/cli.spec.ts src/workflows/direct-runner.spec.ts src/features/daily-facts/daily-facts.spec.ts src/features/cra-red-green/cra-red-green.spec.ts --testNamePattern='L2:E2E'"
+      }
+    },
+    "test-l2-cra-red-green": {
+      "executor": "nx:run-commands",
+      "cache": false,
+      "dependsOn": ["build"],
+      "options": {
+        "command": "vitest run --config apps/codex-workflows/vitest.config.ts src/features/cra-red-green/cra-red-green.spec.ts --testNamePattern='L2:E2E'"
+      }
+    },
+    "test-l2": {
+      "executor": "nx:run-commands",
+      "cache": false,
+      "dependsOn": ["build"],
+      "options": {
+        "command": "vitest run --config apps/codex-workflows/vitest.config.ts src/workflows/cli.spec.ts src/workflows/direct-runner.spec.ts src/workflows/model-policy.spec.ts src/features/daily-facts/daily-facts.spec.ts src/features/cra-red-green/cra-red-green.spec.ts"
+      }
+    },
+    "test-l3": {
+      "executor": "nx:run-commands",
+      "cache": false,
+      "dependsOn": ["build", "test-pre-build"],
+      "outputs": ["{workspaceRoot}/test-output/cucumber/codex-workflows.json"],
+      "options": {
+        "command": "bun packages/testing/src/cli.ts verify-cucumber apps/codex-workflows/src/workflows/codex-workflows.feature apps/codex-workflows/out-tsc/cucumber/workflows/index.steps.js test-output/cucumber/codex-workflows.json"
+      }
+    },
+    "test-l3-daily-facts": {
+      "executor": "nx:run-commands",
+      "cache": false,
+      "dependsOn": ["build", "test-pre-build"],
+      "outputs": [
+        "{workspaceRoot}/test-output/cucumber/codex-workflows-daily-facts.json"
+      ],
+      "options": {
+        "command": "bun packages/testing/src/cli.ts verify-cucumber apps/codex-workflows/src/features/daily-facts/daily-facts.feature apps/codex-workflows/out-tsc/cucumber/features/daily-facts/index.steps.js test-output/cucumber/codex-workflows-daily-facts.json"
+      }
+    },
+    "test-l3-cra-red-green": {
+      "executor": "nx:run-commands",
+      "cache": false,
+      "dependsOn": ["build", "test-pre-build"],
+      "outputs": [
+        "{workspaceRoot}/test-output/cucumber/codex-workflows-cra-red-green.json"
+      ],
+      "options": {
+        "command": "bun packages/testing/src/cli.ts verify-cucumber apps/codex-workflows/src/features/cra-red-green/cra-red-green.feature apps/codex-workflows/out-tsc/cucumber/features/cra-red-green/index.steps.js test-output/cucumber/codex-workflows-cra-red-green.json"
+      }
+    },
+    "test": {
+      "executor": "nx:run-commands",
+      "cache": false,
+      "dependsOn": ["build", "test-pre-build"],
+      "outputs": [
+        "{workspaceRoot}/test-output/codex-workflows/codex-workflows.json"
+      ],
+      "options": {
+        "command": "bun packages/testing/src/cli.ts aggregate packages/testing/manifests/codex-workflows.json"
+      }
+    }
+  }
+}

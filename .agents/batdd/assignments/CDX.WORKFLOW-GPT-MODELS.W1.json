@@ -1,0 +1,64 @@
+{
+  "$schema": "../assignment.schema.json",
+  "schemaVersion": "1.0.0",
+  "assignmentId": "CDX.WORKFLOW-GPT-MODELS.W1",
+  "status": "active",
+  "dispatchable": true,
+  "role": "worker",
+  "objective": "Replace the Luna-only Codex Workflows admission policy with exact pass-through admission for every bounded valid gpt-* model token, preserve medium reasoning and no-substitution guarantees, and re-run the Founder Terra Medium dogfood.",
+  "completionScope": "vertical-slice",
+  "mayReportFeatureComplete": true,
+  "feature": "apps/codex-workflows/src/workflows/FEATURE.md",
+  "requiredLayers": {
+    "l1": { "status": "required" },
+    "l2": { "status": "required" },
+    "l3": { "status": "required" }
+  },
+  "writeSurface": [
+    ".agents/batdd/assignments/CDX.WORKFLOW-GPT-MODELS.W1.json",
+    "packages/workflows/src/authoring/types.ts",
+    "packages/workflows/src/authoring/execution.ts",
+    "packages/workflows/src/authoring/authoring.test.ts",
+    "packages/workflows/SCHEMA.md",
+    "apps/codex-workflows/src/workflows/FEATURE.md",
+    "apps/codex-workflows/src/workflows/codex-workflows.feature",
+    "apps/codex-workflows/src/workflows/index.steps.ts",
+    "apps/codex-workflows/src/workflows/direct-runner.spec.ts",
+    "apps/codex-workflows/src/workflows/model-policy.spec.ts",
+    "apps/codex-workflows/src/workflows/support/controlled.workflow.fixture.txt",
+    "apps/codex-workflows/CLI.md",
+    "README.md",
+    "SPEC.md",
+    "ARCHITECTURE.md",
+    "PLAN.md",
+    "/Users/mcasa_atlantis/.codex/skills/workflows/SKILL.md",
+    "/Users/mcasa_atlantis/.codex/skills/workflows/references/schema.md",
+    "/Users/mcasa_atlantis/.codex/skills/workflows/references/examples.md",
+    ".agent/experiments/estimating-terra-medium-repeatability.workflow.ts",
+    ".agent/experiments/estimating-terra-medium-repeatability.RESULT.md",
+    ".agent/testing/workflows/**"
+  ],
+  "baseRevision": "28c4650c676644bdfac11aa25c46d5be9b15f833",
+  "stopBoundary": "READY-FOR-AUDIT",
+  "greenContract": {
+    "id": "CDX-WF-GPT-GC-1",
+    "strategy": "basic-then-adversarial",
+    "redPolicy": "all-new-or-changed-contract-rows",
+    "adversarialRequired": true
+  },
+  "commitAuthority": {
+    "allowed": false,
+    "maxCommits": 0
+  },
+  "dependencies": ["FOUNDER-20260812-GPT-MODEL-PASSTHROUGH"],
+  "evidence": [
+    "meaningful-public-exit-65-terra-red",
+    "all-row-meaningful-red-before-product-write",
+    "exact-gpt-model-byte-forwarding",
+    "non-gpt-and-malformed-model-zero-launch-rejection",
+    "mixed-model-controlled-sdk-l2-and-l3",
+    "two-parallel-terra-medium-live-dogfood",
+    "affected-nx-gates",
+    "zero-unexpected-resource-delta"
+  ]
+}

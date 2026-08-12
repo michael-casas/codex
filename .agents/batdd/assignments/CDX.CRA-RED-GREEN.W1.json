@@ -1,0 +1,60 @@
+{
+  "$schema": "../assignment.schema.json",
+  "schemaVersion": "1.0.0",
+  "assignmentId": "CDX.CRA-RED-GREEN.W1",
+  "status": "active",
+  "dispatchable": true,
+  "role": "worker",
+  "objective": "Implement and directly dogfood a three-stage Codex Workflow that creates a new Create React App project, obtains an independent fixed-criteria RED audit, remediates only those findings, proves deterministic GREEN, and stops at READY_FOR_EXTERNAL_AUDIT.",
+  "completionScope": "vertical-slice",
+  "mayReportFeatureComplete": true,
+  "feature": "apps/codex-workflows/src/features/cra-red-green/FEATURE.md",
+  "requiredLayers": {
+    "l1": { "status": "required" },
+    "l2": { "status": "required" },
+    "l3": { "status": "required" }
+  },
+  "writeSurface": [
+    ".agents/batdd/assignments/CDX.CRA-RED-GREEN.W1.json",
+    "apps/codex-workflows/examples/cra-red-green.workflow.ts",
+    "apps/codex-workflows/project.json",
+    "apps/codex-workflows/tsconfig.cucumber.json",
+    "apps/codex-workflows/src/features/cra-red-green/**",
+    "apps/codex-workflows/src/features/daily-facts/support/driver.ts",
+    "apps/codex-workflows/src/features/external-audit-dogfood/support/driver.ts",
+    "apps/codex-workflows/src/runtime/journal.ts",
+    "apps/codex-workflows/src/runtime/journal.test.ts",
+    "apps/codex-workflows/src/workflows/index.steps.ts",
+    "packages/testing/evidence/codex-workflows-cra-red-green-green-contract.json",
+    "packages/testing/evidence/codex-workflows-cra-red-green-red.json",
+    "packages/testing/evidence/codex-workflows-cra-red-green-reproof.json",
+    "packages/testing/manifests/codex-workflows.json",
+    ".agent/testing/workflows/**"
+  ],
+  "baseRevision": "28c4650c676644bdfac11aa25c46d5be9b15f833",
+  "stopBoundary": "READY-FOR-AUDIT",
+  "greenContract": {
+    "id": "CDX-WF-CRA-RG-GC-1",
+    "strategy": "basic-then-adversarial",
+    "redPolicy": "all-new-or-changed-contract-rows",
+    "adversarialRequired": true
+  },
+  "commitAuthority": {
+    "allowed": false,
+    "maxCommits": 0
+  },
+  "dependencies": ["CDX.DAILY-FACTS.W1"],
+  "evidence": [
+    "all-row-meaningful-red-before-product-write",
+    "contract-digest-frozen",
+    "pinned-create-react-app-5.1.0-scaffold",
+    "exact-three-sequential-luna-medium-nodes",
+    "independent-auditor-read-only-tree-digest",
+    "actual-red-audit-output-consumed-by-remediator",
+    "deterministic-final-green",
+    "literal-shebang-live-l3",
+    "ordered-l1-l2-l3-green",
+    "zero-unexpected-resource-delta",
+    "ready-for-external-audit-stop"
+  ]
+}

@@ -6,22 +6,34 @@
       "request": "launch",
       "name": "Debug @orchestration/daemon with Nx",
       "runtimeExecutable": "bun",
-      "runtimeArgs": [
-        "nx",
-        "serve",
-        "@orchestration/daemon"
-      ],
+      "runtimeArgs": ["nx", "serve", "@orchestration/daemon"],
       "env": {
         "NODE_OPTIONS": "--inspect=9229"
       },
       "console": "integratedTerminal",
       "internalConsoleOptions": "neverOpen",
-      "skipFiles": [
-        "<node_internals>/**"
-      ],
+      "skipFiles": ["<node_internals>/**"],
       "sourceMaps": true,
       "outFiles": [
         "${workspaceFolder}/apps/daemon/dist/**/*.(m|c|)js",
+        "!**/node_modules/**"
+      ]
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Debug codex-workflows with Nx",
+      "runtimeExecutable": "bun",
+      "runtimeArgs": ["nx", "serve", "codex-workflows"],
+      "env": {
+        "NODE_OPTIONS": "--inspect=9230"
+      },
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen",
+      "skipFiles": ["<node_internals>/**"],
+      "sourceMaps": true,
+      "outFiles": [
+        "${workspaceFolder}/apps/codex-workflows/dist/**/*.(m|c|)js",
         "!**/node_modules/**"
       ]
     }

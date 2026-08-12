@@ -1,0 +1,11 @@
+{
+  "extends": "./tsconfig.app.json",
+  "compilerOptions": {
+    "outDir": "out-tsc/build",
+    "tsBuildInfoFile": "out-tsc/build/tsconfig.build.tsbuildinfo"
+  },
+  "references": [
+    { "path": "../../packages/workflows/tsconfig.lib.json" },
+    { "path": "../../packages/codex/tsconfig.lib.json" }
+  ]
+}

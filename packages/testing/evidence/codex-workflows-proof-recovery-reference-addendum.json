@@ -1,0 +1,26 @@
+{
+  "schemaVersion": 1,
+  "artifactType": "codex-workflows-proof-recovery-reference-addendum",
+  "status": "append-only-reference-addendum",
+  "epoch": "founder-recovery-1",
+  "capturedAt": "2026-08-12T19:24:37Z",
+  "authority": "Founder-authorized proof-recovery amendment; historical bytes remain immutable",
+  "red": {
+    "path": "packages/testing/evidence/codex-workflows-cra-red-green-red.json",
+    "historicalDeclaredSha256": "sha256:87b203315d8435e45bafa81fcb15954a1e900e773de93d3da6449f626e252bd3",
+    "currentSha256": "sha256:11f4ca4882d1b0109cc9b363582b0525760515d01b4173bea50353cdab476bea",
+    "disposition": "current same-path bytes are the successor identity; the historical declaration remains a preserved reference"
+  },
+  "reproof": {
+    "path": "packages/testing/evidence/codex-workflows-cra-red-green-reproof.json",
+    "historicalDeclaredSha256": "sha256:2769d81f40e0a1ef9e1053716ce46bb9ba7bf0da5039428ba2c188d2715d6e71",
+    "currentSha256": "sha256:971c03d67f09cb95b3ad33de696f200994058a64b244a7b8a41dcdcd73da0d62",
+    "disposition": "current same-path bytes are the successor identity; the historical declaration remains a preserved reference"
+  },
+  "countSuccessor": {
+    "path": "packages/testing/evidence/codex-workflows-proof-recovery-count-successor.json",
+    "nativeExecuted": 57
+  },
+  "historicalArtifactsModified": false,
+  "independentAcceptanceClaimed": false
+}

@@ -1,0 +1,147 @@
+{
+  "schemaVersion": 1,
+  "artifactType": "codex-workflows-cra-red-green-green-contract",
+  "contractId": "CDX-WF-CRA-RG-GC-1",
+  "contractDigest": "sha256:f0551f4117af35c58c970aad77941f17fa19fa466f772da9f116dd53db8ba549",
+  "digestScope": "/contract",
+  "digestAlgorithm": "SHA-256 over UTF-8 RFC 8785-style recursively key-sorted compact JSON for /contract with no trailing newline",
+  "authority": {
+    "humanRuling": "On 2026-08-10 the Founder explicitly authorized a second L3 proving a three-stage workflow: an implementation agent creates the simplest new Create React App homepage, an independent fixed-criteria auditor must return RED, and an implementation/remediation agent consumes that RED, makes it GREEN, and stops at READY_FOR_EXTERNAL_AUDIT.",
+    "assignment": ".agents/batdd/assignments/CDX.CRA-RED-GREEN.W1.json",
+    "independentAcceptanceClaimed": false,
+    "stopBoundary": "READY-FOR-AUDIT"
+  },
+  "founderAmendments": [
+    {
+      "id": "FOUNDER-20260810-CUCUMBER-TSC-PREBUILD",
+      "authorizedAt": "2026-08-10T22:52:00Z",
+      "authority": "Direct Founder ruling in the active task",
+      "ruling": "Escalate the L3 requirement with a test pre-build that resolves Cucumber steps through tsc so no manually generated source-tree JavaScript shim is required.",
+      "previousContractDigest": "sha256:d37dfc97af525c1b64daf99abae7c0411bcc343f20d5801d0aab30966f11d704",
+      "amendedContractDigest": "sha256:f0551f4117af35c58c970aad77941f17fa19fa466f772da9f116dd53db8ba549",
+      "affectedRows": ["CRA-RG-GC1-003-CANONICAL-LIVE-L3"],
+      "meaningfulRed": "The first live L3 admission selected one scenario but failed before agent launch with ERR_MODULE_NOT_FOUND for support/driver.js, proving that source-only TypeScript bindings were not prebuilt.",
+      "greenRequirement": "Every L3 Nx target and the aggregate test target depend on codex-workflows:test-pre-build; tsc emits the step graph under out-tsc/cucumber; Cucumber consumes only that output; a clean regeneration succeeds without a source-tree driver.js."
+    }
+  ],
+  "redFreeze": {
+    "status": "all-row-meaningful-red-frozen",
+    "semanticContractMayChange": false,
+    "evidenceArtifact": "packages/testing/evidence/codex-workflows-cra-red-green-red.json",
+    "evidenceDigest": "sha256:87b203315d8435e45bafa81fcb15954a1e900e773de93d3da6449f626e252bd3",
+    "capturedAt": "2026-08-10T22:41:33Z",
+    "disposition": "PRODUCT-GREEN-AUTHORIZED"
+  },
+  "greenEvidence": {
+    "status": "READY-FOR-AUDIT",
+    "artifact": "packages/testing/evidence/codex-workflows-cra-red-green-reproof.json",
+    "artifactDigest": "sha256:2769d81f40e0a1ef9e1053716ce46bb9ba7bf0da5039428ba2c188d2715d6e71",
+    "independentAcceptanceClaimed": false
+  },
+  "contract": {
+    "completionScope": "vertical-slice",
+    "strategy": "basic-then-adversarial",
+    "redPolicy": "all-new-or-changed-contract-rows",
+    "contractFreezeRule": "The /contract object, row identities, assertions, fixed audit policy, phase topology, exact model/reasoning, terminal marker, and cleanup obligations are immutable after the digest is published.",
+    "lockedGreenRule": "Preserve every existing trusted TypeScript runner, model policy, daily-facts behavior, public journal guarantee, and immutable audit artifact.",
+    "acceptanceLimitation": "Worker evidence stops at READY-FOR-AUDIT. READY_FOR_EXTERNAL_AUDIT is a workflow output marker, not a self-issued gavel. Fresh independent Preflight and external audit remain required for acceptance.",
+    "fixedAuditCriteria": [
+      {
+        "id": "CRA-AUDIT-001",
+        "requirement": "package.json identifies a Create React App 5.1.0 scaffold through react-scripts 5.0.1 and the standard start, build, and test scripts."
+      },
+      {
+        "id": "CRA-AUDIT-002",
+        "requirement": "src/App.js renders one h1 whose exact text is Workflow Proof."
+      },
+      {
+        "id": "CRA-AUDIT-003",
+        "requirement": "src/App.js renders data-testid audit-remediation-status with exact text Audit findings resolved."
+      },
+      {
+        "id": "CRA-AUDIT-004",
+        "requirement": "src/App.test.js contains and executes an assertion for the audit-remediation-status text."
+      },
+      {
+        "id": "CRA-AUDIT-005",
+        "requirement": "CI=true npm test -- --watchAll=false and npm run build both exit zero after remediation."
+      }
+    ],
+    "rows": [
+      {
+        "id": "CRA-RG-GC1-001-FIXED-AUDIT-POLICY",
+        "form": "basic-and-adversarial",
+        "layer": "L1 unit",
+        "runtime": "Vitest with isolated filesystem fixtures",
+        "file": "apps/codex-workflows/src/features/cra-red-green/cra-red-green.test.ts",
+        "target": "codex-workflows:test-l1-cra-red-green",
+        "required": true,
+        "expectedMeaningfulRed": "The fixed policy implementation is absent, so a canonical minimal CRA fixture cannot produce the required deterministic RED findings or become GREEN after only the chartered remediation.",
+        "observableGreen": "The immutable five-criterion evaluator recognizes the pinned CRA scaffold, returns overall RED with exactly CRA-AUDIT-003 and CRA-AUDIT-004 failing for the intentionally minimal baseline, rejects malformed or path-escaping candidates, hashes the bounded source tree deterministically, and returns all GREEN after the exact remediation.",
+        "negativeGuarantees": [
+          "no agent-authored criteria",
+          "no audit result accepted without deterministic re-evaluation",
+          "no path escape or dependency-directory hashing",
+          "no initial false GREEN"
+        ],
+        "countExpectation": "Happy RED, remediated GREEN, malformed package, missing heading, path escape, and deterministic digest cases all execute.",
+        "isolationAndCleanup": "Every fixture root is unique and removed in finally."
+      },
+      {
+        "id": "CRA-RG-GC1-002-CONTROLLED-THREE-STAGE",
+        "form": "real-boundary-integration",
+        "layer": "L2 end-to-end",
+        "runtime": "Built literal-shebang runner, controlled Codex executable, real subprocess and filesystem",
+        "file": "apps/codex-workflows/src/features/cra-red-green/cra-red-green.spec.ts",
+        "target": "codex-workflows:test-l2-cra-red-green",
+        "required": true,
+        "expectedMeaningfulRed": "No trusted three-stage source exists, so the public runner cannot record a builder RED auditor remediation chain or READY_FOR_EXTERNAL_AUDIT output.",
+        "observableGreen": "The built public runner records exactly three sequential gpt-5.6-luna/medium nodes in implementation, audit, and remediation phases; the controlled builder creates a canonical minimal scaffold, the auditor returns the actual fixed RED without modifying the tree, the remediator consumes both upstream outputs, final deterministic evaluation is GREEN, and the terminal marker is exact.",
+        "negativeGuarantees": [
+          "no mock workflow runtime",
+          "no hidden fourth node",
+          "no auditor tree mutation",
+          "no remediator launch on fabricated or non-RED audit",
+          "no final GREEN based only on agent self-report"
+        ],
+        "countExpectation": "Exactly one controlled public execution, three completed nodes, three phases, one RED transition, one GREEN transition, and one report artifact.",
+        "isolationAndCleanup": "Detached process group, state root, generated fixture, build output, dependency tree, and temporary loader resources return to zero."
+      },
+      {
+        "id": "CRA-RG-GC1-003-CANONICAL-LIVE-L3",
+        "form": "canonical-live-dogfood",
+        "layer": "L3 canonical behavior and direct public-surface dogfood",
+        "runtime": "Physical Gherkin, Nx test-pre-build through tsc, compiled Cucumber step graph, literal #!/usr/bin/env -S codex-workflows execution, live Codex backend, npm registry, and pinned create-react-app@5.1.0",
+        "featureFile": "apps/codex-workflows/src/features/cra-red-green/cra-red-green.feature",
+        "stepFile": "apps/codex-workflows/src/features/cra-red-green/index.steps.ts",
+        "scenarioIdentity": "CRA-RED-GREEN-L3-001 Build audit remediate and stop ready for external audit",
+        "target": "codex-workflows:test-l3-cra-red-green",
+        "required": true,
+        "expectedMeaningfulRed": "The physical scenario and complete bindings fail because the canonical executable workflow and deterministic policy do not yet exist.",
+        "observableGreen": "A clean Nx test-pre-build invokes tsc and emits the Cucumber steps plus support graph under out-tsc/cucumber with no generated JavaScript in src. Literal public execution then uses three and only three sequential gpt-5.6-luna/medium nodes. The first runs pinned create-react-app@5.1.0 and creates the simplest baseline homepage; deterministic policy and a separate auditor both establish RED; the auditor leaves the tree digest unchanged; the remediator receives the actual audit output, changes only the isolated generated project, passes npm test and build, reaches deterministic GREEN, publishes a digest-bound report, and returns READY_FOR_EXTERNAL_AUDIT before terminal completion.",
+        "negativeGuarantees": [
+          "no collaboration subagent substitution",
+          "no controlled Codex executable",
+          "no manually generated source-tree JavaScript binding shim",
+          "no Cucumber execution before successful tsc test pre-build",
+          "no skipped CRA scaffold command",
+          "no wrong model or reasoning",
+          "no same-thread identity claim",
+          "no auditor mutation",
+          "no fabricated RED or GREEN",
+          "no implementation outside the isolated proof root",
+          "no unexpected retained process, tmux session, temporary, dependency, or build resource"
+        ],
+        "countExpectation": "One physical scenario selected and passed; every step defined and asserted; exactly three journal nodes and one report artifact.",
+        "evidenceArtifacts": [
+          "test-output/cucumber/codex-workflows-cra-red-green.json",
+          ".agent/testing/workflows/<UTC_TIMESTAMP>/CRA_RED_GREEN.md",
+          "local run journal",
+          "generated CRA source tree digest",
+          "resource inventory"
+        ],
+        "isolationAndCleanup": "Retain only the declared Markdown report and source-only CRA proof tree; remove node_modules, build, caches, nested Git metadata, processes, tmux sessions, and temporaries."
+      }
+    ]
+  }
+}

@@ -1,0 +1,58 @@
+{
+  "project": "@orchestration/workflows",
+  "result": "test-output/codex-workflows/workflows.json",
+  "temporaryDirectory": "tmp/codex-workflows-workflows",
+  "suites": [
+    {
+      "groupHeading": "=== Layer 1 Test Suite ===",
+      "heading": "--- Unit Tests [L1:UNIT] ---",
+      "layer": "l1-unit",
+      "command": [
+        "bun",
+        "vitest",
+        "run",
+        "--config",
+        "packages/workflows/vitest.config.ts",
+        "src/lib/fixtures.test.ts",
+        "src/authoring/authoring.test.ts",
+        "--testNamePattern=L1:UNIT"
+      ],
+      "expected": "vitest-output",
+      "artifact": "nx://@orchestration/workflows/test/l1-unit"
+    },
+    {
+      "heading": "--- In-Process Integration Tests [L1:INTEGRATION] ---",
+      "layer": "l1-integration",
+      "command": [
+        "bun",
+        "vitest",
+        "run",
+        "--config",
+        "packages/workflows/vitest.config.ts",
+        "src/lib/planning.test.ts",
+        "src/lib/repairs.test.ts",
+        "src/authoring/authoring.test.ts",
+        "--testNamePattern=L1:INTEGRATION"
+      ],
+      "expected": "vitest-output",
+      "artifact": "nx://@orchestration/workflows/test/l1-integration"
+    },
+    {
+      "groupHeading": "=== Layer 2 Test Suite ===",
+      "heading": "--- Real-Boundary Integration Tests [L2:INTEGRATION] ---",
+      "layer": "l2-integration",
+      "reason": "N/A: the workflows package is pure and owns no external boundary"
+    },
+    {
+      "heading": "--- End-to-End Tests [L2:E2E] ---",
+      "layer": "l2-e2e",
+      "reason": "N/A: end-to-end CLI behavior is owned by @orchestration/codex-workflows"
+    },
+    {
+      "groupHeading": "=== Layer 3 Test Suite ===",
+      "heading": "--- Cucumber Behavioral Tests ---",
+      "layer": "l3",
+      "reason": "N/A: canonical user behavior is owned by @orchestration/codex-workflows"
+    }
+  ]
+}

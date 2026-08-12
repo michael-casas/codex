@@ -1,0 +1,239 @@
+{
+  "schemaVersion": 1,
+  "artifactType": "codex-workflows-additive-repair-contract",
+  "contractId": "CDX-WF-AUD2-REPAIR-GC1",
+  "contractDigest": "sha256:095eed6c60da38755ad70e944e48efdfb54139fc4ecf2292156b913237bcb2df",
+  "digestScope": "/contract",
+  "candidate": {
+    "baseRevision": "28c4650c676644bdfac11aa25c46d5be9b15f833",
+    "preRepairAggregateDigest": "8b25e2c880fcdd24461860eaae45dc85d961137a589632a767efb63ed4cafefd",
+    "preRepairIncludedPathCount": 78
+  },
+  "authority": {
+    "attempt": 2,
+    "lane": "failed-only-serialized-repair",
+    "role": "Worker",
+    "sourceReport": "docs/reports/codex-workflows-external-audit-attempt-2.md",
+    "authorizedFindings": ["CWF2-AUD-001", "CWF2-AUD-002", "CWF2-AUD-003"],
+    "excludedAuthorityFinding": "CWF2-AUD-004",
+    "stopBoundary": "READY_FOR_PREFLIGHT",
+    "historicalRedClaimed": false,
+    "immutableRegistrationClaimed": false,
+    "preflightApprovalClaimed": false,
+    "verificationClaimed": false,
+    "judgmentClaimed": false,
+    "acceptanceClaimed": false
+  },
+  "redFreeze": {
+    "status": "frozen-before-product-green-write",
+    "testFileSha256": {
+      "packages/codex/src/runtime/singleton.test.ts": "08f0359df94d9415ec8d112b327035d26fe76d47e0fdbff38f2c0fa8d84ba9f6",
+      "packages/codex/src/runtime/sdk.spec.ts": "4e93338698494fb6c804c7b218ef5429df47abd598bcc907fc5eb1b2e6b73f16",
+      "packages/testing/src/ground-zero/harness.test.ts": "e9d57cede08164159742758a9ee8f1a671be8b6da02252100ffc67efcde426ed",
+      "packages/testing/src/ground-zero/harness.spec.ts": "c7eb5eee817503d9af7d4d1fc4ae792e422f3cea0b1ddf75adac364b8686c3f5"
+    },
+    "checks": [
+      {
+        "row": "CWF2-001-L1-PRIVATE-ADMISSION",
+        "targetedSelected": 2,
+        "targetedPassed": 1,
+        "targetedFailed": 1,
+        "targetedExitCode": 1,
+        "fullLayerPassed": 14,
+        "fullLayerFailed": 2,
+        "decisiveFailure": "Private admission silently accepted behavior-affecting differences; the second failure is the human-authorized correction of Repair Attempt 1's weakened credential/config/environment reuse expectation."
+      },
+      {
+        "row": "CWF2-001-L2-REAL-CHILD",
+        "targetedSelected": 1,
+        "targetedPassed": 0,
+        "targetedFailed": 1,
+        "targetedExitCode": 1,
+        "fullLayerPassed": 5,
+        "fullLayerFailed": 1,
+        "decisiveFailure": "The conflicting real-child request returned the existing host instead of throwing CODEX_HOST_CONFLICT."
+      },
+      {
+        "row": "CWF2-002-L1-STANDING-SELECTION",
+        "targetedSelected": 1,
+        "targetedPassed": 0,
+        "targetedFailed": 1,
+        "targetedExitCode": 1,
+        "decisiveFailure": "The unmatched config-only include produced zero policy violations."
+      },
+      {
+        "row": "CWF2-003-L1-CONSUMER-GUARD",
+        "targetedSelected": 1,
+        "targetedPassed": 0,
+        "targetedFailed": 1,
+        "targetedExitCode": 1,
+        "fullLayerPassed": 19,
+        "fullLayerFailed": 2,
+        "decisiveFailure": "The validator rejected honest failed-zero evidence because selected was zero."
+      },
+      {
+        "row": "CWF2-003-L2-HONEST-COUNTS",
+        "targetedSelected": 3,
+        "targetedPassed": 0,
+        "targetedFailed": 3,
+        "targetedExitCode": 1,
+        "fullLayerPassed": 21,
+        "fullLayerFailed": 3,
+        "decisiveFailure": "Zero and malformed children serialized selected 1, and no child serialized separately parsed executed counts."
+      }
+    ],
+    "lockedGreenResult": "All unrelated selected tests remained GREEN; only the additive rows and the explicitly authorized weakened assertion correction were RED."
+  },
+  "postFreezeLedger": {
+    "semanticContractDigestChanged": false,
+    "newRealChildFixtureCorrection": {
+      "file": "packages/codex/src/runtime/sdk.spec.ts",
+      "reason": "The real SDK's stable TOML rendering has no space after the nested object opening brace; only that newly added expected literal was aligned with observed admitted-child bytes.",
+      "beforeSha256": "4e93338698494fb6c804c7b218ef5429df47abd598bcc907fc5eb1b2e6b73f16",
+      "afterSha256": "7f00f426b3e2a9db295e21350d7f5766b3442e1d6eb699d6cac9bbda6b3309fd",
+      "assertedValueChanged": false,
+      "conflictSemanticsChanged": false
+    },
+    "incrementalStandingPolicyRed": [
+      {
+        "attack": "a config exclude removes one explicitly named intended file",
+        "selected": 1,
+        "failed": 1,
+        "exitCode": 1,
+        "decisiveFailure": "The policy returned no violation instead of STANDING_TARGET_FILE_OMISSION."
+      },
+      {
+        "attack": "a shell command merely echoes the words vitest run before exact file names",
+        "selected": 1,
+        "failed": 1,
+        "exitCode": 1,
+        "decisiveFailure": "The policy returned no violation instead of INVALID_STANDING_TARGET_RUNNER."
+      },
+      {
+        "attack": "a static include is combined with an imported spread whose exclude and passWithNoTests behavior cannot be proven",
+        "selected": 1,
+        "failed": 1,
+        "exitCode": 1,
+        "decisiveFailure": "The policy omitted one L2 file but did not emit STANDING_TARGET_SELECTION_UNPROVEN."
+      },
+      {
+        "attack": "a config-only target has no include, but an include-shaped decoy appears inside an unrelated JavaScript string",
+        "selected": 1,
+        "failed": 1,
+        "exitCode": 1,
+        "decisiveFailure": "The policy parsed the decoy string as an include and did not emit STANDING_TARGET_SELECTION_UNPROVEN for the config-only target."
+      }
+    ],
+    "boundedFormatting": {
+      "meaningChanged": false,
+      "finalTestFileSha256": {
+        "packages/codex/src/runtime/singleton.test.ts": "5f621e77158681a1307e4eb2fe11ebcff71a234afbf4be5dd3567e8787554040",
+        "packages/codex/src/runtime/sdk.spec.ts": "7f00f426b3e2a9db295e21350d7f5766b3442e1d6eb699d6cac9bbda6b3309fd",
+        "packages/testing/src/ground-zero/harness.test.ts": "d553413f79cb7dec53e3293852e9c63341fe326334410bf6ff7fb636cf49dbb4",
+        "packages/testing/src/ground-zero/harness.spec.ts": "d825c6f6ea15a8ff6156c7ad27ce16e12b181ce7e56d1d8305dc564bbcd0fb83"
+      }
+    }
+  },
+  "contract": {
+    "strategy": "basic-then-adversarial",
+    "redPolicy": "all-new-or-corrected-contract-rows",
+    "rows": [
+      {
+        "id": "CWF2-001-L1-PRIVATE-ADMISSION",
+        "sourceAuthority": "CWF2-AUD-001",
+        "form": "basic-and-adversarial",
+        "layer": "L1 unit",
+        "runtime": "Vitest",
+        "file": "packages/codex/src/runtime/singleton.test.ts",
+        "testIdentities": [
+          "[L1:UNIT] CWF2-AUD-001 reuses only full equivalent private admission and rejects every behavior-affecting difference",
+          "[L1:UNIT] CWF2-AUD-001 keeps public diagnostics secret-independent while private admission rejects conflicts"
+        ],
+        "target": "codex:test-l1-unit",
+        "required": true,
+        "expectedMeaningfulRed": "A full-equivalent cloned configuration is reused, but API key, nested object, nested array, environment key, environment value, path, URL, observer identity, adapter-factory identity, and combined differences are silently admitted under the public fingerprint.",
+        "observableGreen": "Only structurally equivalent immutable host fields plus the identical observer and adapter-factory identities reuse the singleton; every behavior-affecting difference throws only CODEX_HOST_CONFLICT, while public diagnostics and their fingerprint remain immutable and secret-independent.",
+        "isolationAndCleanup": "Reset the process singleton after every case; retain no observer, adapter, credential, or environment projection outside the test.",
+        "countExpectation": "At least two newly selected and executed tests, with every pre-existing selected test remaining GREEN during RED.",
+        "evidenceArtifact": "Vitest output plus the Repair Attempt 2 recovery/re-proof artifact"
+      },
+      {
+        "id": "CWF2-001-L2-REAL-CHILD",
+        "sourceAuthority": "CWF2-AUD-001",
+        "form": "adversarial",
+        "layer": "L2 real-boundary integration",
+        "runtime": "Vitest plus the pinned real Codex SDK and controlled executable",
+        "file": "packages/codex/src/runtime/sdk.spec.ts",
+        "testIdentities": [
+          "[L2:INTEGRATION] CWF2-AUD-001 rejects a conflicting real-child host without leaking or replacing admitted behavior"
+        ],
+        "target": "codex:test-l2-integration",
+        "required": true,
+        "expectedMeaningfulRed": "A second credential/config/environment request returns the already admitted host and can therefore silently run the old controlled-child configuration.",
+        "observableGreen": "The conflicting request throws CODEX_HOST_CONFLICT before a second adapter or child exists; the original host remains bound to its immutable admitted trace/config, and diagnostics contain no secrets.",
+        "isolationAndCleanup": "Guaranteed temporary-root removal, zero controlled-child delta, zero active operations, and singleton reset.",
+        "countExpectation": "One newly selected and executed real-boundary test, with all locked SDK boundary tests remaining GREEN during RED.",
+        "evidenceArtifact": "Vitest output, controlled-child trace assertions, cleanup inventory, and the Repair Attempt 2 recovery/re-proof artifact"
+      },
+      {
+        "id": "CWF2-002-L1-STANDING-SELECTION",
+        "sourceAuthority": "CWF2-AUD-002",
+        "form": "basic-and-adversarial",
+        "layer": "L1 unit",
+        "runtime": "Vitest",
+        "file": "packages/testing/src/ground-zero/harness.test.ts",
+        "testIdentities": [
+          "[L1:UNIT] CWF2-AUD-002 proves exact exhaustive standing-target selection and rejects false-green policy"
+        ],
+        "target": "@orchestration/testing:test-l1-unit",
+        "required": true,
+        "expectedMeaningfulRed": "Policy accepts unmatched config include, cross-layer include, and passWithNoTests while existing invalid-glob and omission guards remain GREEN.",
+        "observableGreen": "Policy rejects invalid positional globs, omissions, wrong runners, missing targets, unmatched/config-only includes, cross-layer includes, command/config passWithNoTests, and cached L2, and accepts only an exact exhaustive layer file list.",
+        "isolationAndCleanup": "Pure in-process fixtures; no filesystem or process delta.",
+        "countExpectation": "One newly selected fixture matrix, followed by uncached nonzero execution of every standing target.",
+        "evidenceArtifact": "Vitest output, policy JSON, resolved Nx target snapshots, and the Repair Attempt 2 recovery/re-proof artifact"
+      },
+      {
+        "id": "CWF2-003-L2-HONEST-COUNTS",
+        "sourceAuthority": "CWF2-AUD-003",
+        "form": "basic-and-adversarial",
+        "layer": "L2 real-boundary integration",
+        "runtime": "Vitest plus child processes and filesystem artifacts",
+        "file": "packages/testing/src/ground-zero/harness.spec.ts",
+        "testIdentities": [
+          "[L2:INTEGRATION] CWF2-AUD-003 preserves actual zero selection in failed aggregate evidence",
+          "[L2:INTEGRATION] CWF2-AUD-003 preserves malformed collector counts without inventing execution",
+          "[L2:INTEGRATION] CWF2-AUD-003 preserves valid nonzero selected and executed counts"
+        ],
+        "target": "@orchestration/testing:test-l2-integration",
+        "required": true,
+        "expectedMeaningfulRed": "The zero child is failed at aggregate level but serialized as selected 1, and separately parsed executed evidence is absent.",
+        "observableGreen": "A valid zero child serializes selected 0 and executed 0 with failed child/aggregate status and nonzero aggregate exit; malformed output serializes selected 0 and executed null; valid nonzero output preserves exact selected and executed counts.",
+        "isolationAndCleanup": "Every fixture uses a unique temporary root removed in afterEach/finally; child-process and temporary-path delta is zero.",
+        "countExpectation": "Three newly selected and executed L2 tests, with all locked harness boundaries remaining GREEN during RED.",
+        "evidenceArtifact": "Exact generated aggregate JSON assertions plus the Repair Attempt 2 recovery/re-proof artifact"
+      },
+      {
+        "id": "CWF2-003-L1-CONSUMER-GUARD",
+        "sourceAuthority": "CWF2-AUD-003",
+        "form": "adversarial",
+        "layer": "L1 unit",
+        "runtime": "Vitest",
+        "file": "packages/testing/src/ground-zero/harness.test.ts",
+        "testIdentities": [
+          "[L1:UNIT] CWF2-AUD-003 accepts honest failed-zero evidence without treating it as a pass"
+        ],
+        "target": "@orchestration/testing:test-l1-unit",
+        "required": true,
+        "expectedMeaningfulRed": "The aggregate validator rejects honest failed evidence solely because selected is zero, encouraging downstream count clamping.",
+        "observableGreen": "The validator accepts a structurally valid failed aggregate whose child has selected 0, executed 0, nonzero exit, and failed status, while rejecting the same counts under passed status.",
+        "isolationAndCleanup": "Pure in-process object validation; no external delta.",
+        "countExpectation": "One newly selected and executed test.",
+        "evidenceArtifact": "Vitest output plus recovery/re-proof consumer assertions"
+      }
+    ],
+    "lockedGreenRule": "Preserve every Attempt 2-closed planner, SDK import, pointer, loader, CLI, cleanup, skill, and original acceptance behavior. Do not edit either external audit or .pi.",
+    "authorizedContractCorrection": "CWF2-AUD-001 and the current human charter explicitly restore the frozen CODEX_HOST_CONFLICT rule. The Repair Attempt 1 test expectation that reused the singleton across API-key/config/environment changes is lower-layer acceptance weakening and may be corrected only to require conflict; its title and all snapshot, mutation, diagnostic, and secret-nondisclosure guarantees remain locked.",
+    "reproofLimitation": "Present-day recovery/re-proof only; never historical RED, immutable registration, Preflight, reducer approval, verification, judgment, acceptance, or score."
+  }
+}

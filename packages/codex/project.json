@@ -1,0 +1,65 @@
+{
+  "name": "codex",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "packages/codex/src",
+  "projectType": "library",
+  "tags": ["scope:codex", "type:library"],
+  "// targets": "to see all targets run: nx show project codex --web",
+  "targets": {
+    "build": {
+      "executor": "nx:run-commands",
+      "cache": true,
+      "outputs": ["{projectRoot}/dist"],
+      "options": {
+        "command": "tsc --build packages/codex/tsconfig.runtime.json"
+      }
+    },
+    "test-l1-unit": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "vitest run --config packages/codex/vitest.config.ts src/runtime/singleton.test.ts src/policy/sdk-imports.test.ts --testNamePattern='L1:UNIT'"
+      }
+    },
+    "test-l1-integration": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "vitest run --config packages/codex/vitest.config.ts src/runtime/facade.test.ts src/runtime/observability.test.ts --testNamePattern='L1:INTEGRATION'"
+      }
+    },
+    "test-l1": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "vitest run --config packages/codex/vitest.config.ts src/runtime/singleton.test.ts src/runtime/facade.test.ts src/runtime/observability.test.ts src/policy/sdk-imports.test.ts"
+      }
+    },
+    "test-l2-integration": {
+      "executor": "nx:run-commands",
+      "cache": false,
+      "options": {
+        "command": "vitest run --config packages/codex/vitest.config.ts src/runtime/sdk.spec.ts --testNamePattern='L2:INTEGRATION'"
+      }
+    },
+    "test-l2": {
+      "executor": "nx:run-commands",
+      "cache": false,
+      "options": {
+        "command": "vitest run --config packages/codex/vitest.config.ts src/runtime/sdk.spec.ts"
+      }
+    },
+    "test-sdk-imports": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "bun packages/codex/tools/check-sdk-imports.ts"
+      }
+    },
+    "test": {
+      "executor": "nx:run-commands",
+      "cache": false,
+      "outputs": ["{workspaceRoot}/test-output/codex-workflows/codex.json"],
+      "dependsOn": ["test-sdk-imports"],
+      "options": {
+        "command": "bun packages/testing/src/cli.ts aggregate packages/testing/manifests/codex.json"
+      }
+    }
+  }
+}

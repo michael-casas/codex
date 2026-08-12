@@ -1,0 +1,1229 @@
+{
+  "schemaVersion": 1,
+  "artifactType": "codex-workflows-founder-daily-facts-worker-reproof",
+  "generatedAt": "2026-08-11T05:19:10Z",
+  "currentEvidence": "attempt9RepairEvidence",
+  "authority": {
+    "role": "implementation-worker",
+    "independentPreflight": false,
+    "independentVerification": false,
+    "reducerApproved": false,
+    "judgment": false,
+    "acceptance": false,
+    "score": null,
+    "stopBoundary": "READY-FOR-AUDIT"
+  },
+  "baseRevision": "2b617bcf21aeec0ec14056950efa10af58a910c4",
+  "candidateIdentity": {
+    "status": "exact-current-disk-ready-for-independent-preflight",
+    "algorithm": "Enumerate git ls-files -m --others --exclude-standard with NUL delimiters; exclude .vscode/**, .pi/**, and this self-referential reproof; byte-sort paths; append '<file-sha256>  <path>\\n' in path order; SHA-256 the exact concatenated bytes.",
+    "includedPaths": 158,
+    "digest": "sha256:586147a13d42458422979985970e16b6f31c9ab892c2538dd1adb580a3732bd1",
+    "workspaceState": {
+      "algorithm": "Same authoritative path-order content-record algorithm and exclusions as candidateIdentity.",
+      "includedPaths": 158,
+      "digest": "sha256:586147a13d42458422979985970e16b6f31c9ab892c2538dd1adb580a3732bd1",
+      "excludedUnrelatedPaths": [
+        ".vscode/launch.json",
+        ".pi/**",
+        "packages/testing/evidence/codex-workflows-daily-facts-reproof.json"
+      ]
+    }
+  },
+  "contract": {
+    "id": "CDX-WF-DF-GC-1",
+    "path": "packages/testing/evidence/codex-workflows-daily-facts-green-contract.json",
+    "semanticDigest": "sha256:6bbddd18a683a70d7fc692a20edaef7e218635a0411fc8ff22b9bc743a0e3f63",
+    "fileSha256": "c87389af73355844e58f4c98d5d7591999aa551c76fcfb6e92fd77702bdba1e0",
+    "redPath": "packages/testing/evidence/codex-workflows-daily-facts-red.json",
+    "redSha256": "12caf7dfbe276540554233521e95706f4eff6155da3a8557ebfad25e4825b4df",
+    "redCommands": 13,
+    "founderAmendment": {
+      "id": "FOUNDER-20260810-SEVEN-DAY-NEWS-WINDOW",
+      "meaning": "Qualifying publication age is zero through seven UTC days inclusive relative to the workflow timestamp; future and older sources fail closed.",
+      "meaningfulFocusedReds": 6
+    }
+  },
+  "source": {
+    "path": "apps/codex-workflows/examples/daily-facts.workflow.ts",
+    "sha256": "714fb0b80500cdf8a379caa9fff45007ad06b1011ddd7a22c63ee958da93da1c",
+    "mode": "-rwxr-xr-x",
+    "firstLine": "#!/usr/bin/env -S codex-workflows",
+    "topology": {
+      "agents": 3,
+      "consolidators": 0,
+      "maxConcurrency": 3,
+      "model": "gpt-5.6-luna",
+      "reasoning": "medium",
+      "dependencyFreeRoots": 3
+    },
+    "dynamicAdmission": [
+      "three seed-randomized disjoint industry buckets",
+      "exact per-slot industry enum",
+      "exact run-date asOfDate enum",
+      "eight allowed publication-date enum values",
+      "direct HTTPS article-path schema",
+      "ordinary-GET-compatible source set"
+    ]
+  },
+  "finalFounderL3": {
+    "command": "bun nx run codex-workflows:test --skip-nx-cache --outputStyle=static",
+    "exitCode": 0,
+    "aggregateStartedAt": "2026-08-10T20:11:02.389Z",
+    "aggregateDurationMs": 119469,
+    "timestamp": "20260810T201119Z",
+    "runId": "local-20260810t201120524z-b4a7a28d8a68",
+    "report": {
+      "path": ".agent/testing/workflows/20260810T201119Z/DAILY_FACTS.md",
+      "sha256": "82b74dd09e96156fb179f2999d675f5e0b05965515a016b48dc0eef943889730",
+      "bytes": 2800,
+      "lines": 29,
+      "briefs": 3,
+      "directHttpsLinks": 6,
+      "industries": [
+        "Artificial intelligence",
+        "Consumer applications",
+        "Streaming media"
+      ],
+      "publicationDates": [
+        "2026-08-04",
+        "2026-08-05",
+        "2026-08-07",
+        "2026-08-10"
+      ]
+    },
+    "journal": {
+      "path": ".agent/testing/workflows/20260810T201119Z/run-state/runs/local-20260810t201120524z-b4a7a28d8a68/journal.json",
+      "sha256": "5bb14f3425950db6f397a7f3bdd4dbca70ada0279fea1a3c4a05694f5051c3f9",
+      "authority": "local-operational-journal",
+      "status": "completed",
+      "nodes": 3,
+      "artifacts": 1,
+      "events": 12,
+      "artifactEventSequence": 11,
+      "terminalEventSequence": 12,
+      "terminalEvent": "workflow.completed"
+    },
+    "nodes": [
+      {
+        "id": "founder-daily-facts:001:daily-facts-research-1",
+        "model": "gpt-5.6-luna",
+        "reasoning": "medium",
+        "dependencies": [],
+        "startedAt": "2026-08-10T20:11:20.628Z",
+        "completedAt": "2026-08-10T20:12:48.736Z",
+        "outcome": "completed"
+      },
+      {
+        "id": "founder-daily-facts:002:daily-facts-research-2",
+        "model": "gpt-5.6-luna",
+        "reasoning": "medium",
+        "dependencies": [],
+        "startedAt": "2026-08-10T20:11:20.631Z",
+        "completedAt": "2026-08-10T20:12:28.433Z",
+        "outcome": "completed"
+      },
+      {
+        "id": "founder-daily-facts:003:daily-facts-research-3",
+        "model": "gpt-5.6-luna",
+        "reasoning": "medium",
+        "dependencies": [],
+        "startedAt": "2026-08-10T20:11:20.633Z",
+        "completedAt": "2026-08-10T20:13:01.366Z",
+        "outcome": "completed"
+      }
+    ],
+    "cucumber": {
+      "path": "test-output/cucumber/codex-workflows-daily-facts.json",
+      "sha256": "4dad384c82242a2288fe3c80013571b19aa5bbdfed1b20c7e414f61337b8339a",
+      "scenarios": 1,
+      "steps": 3,
+      "passedScenarios": 1,
+      "passedSteps": 3,
+      "undefined": 0,
+      "ambiguous": 0,
+      "pending": 0,
+      "skipped": 0
+    }
+  },
+  "validation": [
+    {
+      "gate": "codex-workflows-exact-candidate-aggregate",
+      "command": "bun nx run codex-workflows:test --skip-nx-cache --outputStyle=static",
+      "exitCode": 0,
+      "selected": 43,
+      "layers": {
+        "l1Unit": 19,
+        "l1Integration": 4,
+        "l2Integration": 10,
+        "l2E2E": 4,
+        "standingL3Scenarios": 5,
+        "founderL3Scenarios": 1
+      }
+    },
+    {
+      "gate": "cancellation-cleanup-repetition",
+      "command": "bun nx run codex-workflows:test-l2-integration --skip-nx-cache --outputStyle=static",
+      "executions": 3,
+      "exitCodes": [0, 0, 0],
+      "selectedEach": 10
+    },
+    {
+      "gate": "product-lint-typecheck-build",
+      "command": "bun nx run-many -t lint,typecheck,build -p workflows,codex,codex-workflows,@orchestration/testing,codex-monitor --skip-nx-cache --outputStyle=static",
+      "exitCode": 0,
+      "projects": 5
+    },
+    {
+      "gate": "transitive-aggregates",
+      "command": "bun nx run-many -t test -p workflows,codex,codex-monitor --skip-nx-cache --outputStyle=static",
+      "exitCode": 0,
+      "selected": {
+        "workflows": 31,
+        "codex": 29,
+        "codexMonitor": 4
+      }
+    },
+    {
+      "gate": "ground-zero",
+      "command": "bun nx run @orchestration/testing:test:ground-zero --skip-nx-cache --outputStyle=static",
+      "exitCode": 0,
+      "selected": 51,
+      "policyFiles": 25,
+      "standingTargets": 9,
+      "affectedClosureProjects": 7
+    },
+    {
+      "gate": "sdk-import-exclusivity",
+      "command": "bun nx run codex:test-sdk-imports",
+      "exitCode": 0,
+      "selected": 1,
+      "allowedOccurrences": 1,
+      "offenders": 0
+    },
+    {
+      "gate": "sync",
+      "command": "bun nx sync:check",
+      "exitCode": 0,
+      "status": "up-to-date"
+    },
+    {
+      "gate": "candidate-format",
+      "command": "bun nx format:check --files=<exact authorized candidate paths>",
+      "exitCode": 0,
+      "unrelatedProjectRootDriftExcluded": [
+        "apps/codex-monitor/.venv/**",
+        "apps/codex-monitor/FEATURE.md",
+        "apps/codex-monitor/README.md",
+        "apps/codex-monitor/package.json"
+      ]
+    }
+  ],
+  "aggregateArtifacts": {
+    "test-output/codex-workflows/workflows.json": {
+      "sha256": "40edb4e74a00439326b021371f1fc5bb164c0d525c80be37251913db788df29c",
+      "status": "passed",
+      "selected": 31
+    },
+    "test-output/codex-workflows/codex.json": {
+      "sha256": "4b26fee12564410b6cb0cdfc32ec5f84a1f14f1878e5d4857102a33996dd263e",
+      "status": "passed",
+      "selected": 29
+    },
+    "test-output/codex-workflows/codex-workflows.json": {
+      "sha256": "d4b694e5dcb098ed7d85b0d860ec29f19c8b6e254d147decb0c628de412e5fa3",
+      "status": "passed",
+      "selected": 43
+    },
+    "test-output/ground-zero/testing.json": {
+      "sha256": "eb8ebb5cb276c86f729be389eb9f9e3b69f5d6e5d8250334fcc66c18abe8d343",
+      "status": "passed",
+      "selected": 51
+    },
+    "test-output/cucumber/codex-workflows.json": {
+      "sha256": "e89fe907a08cd7364fc8ac1b64c6007c9db37f8b13f765e89ef716962553ee97",
+      "scenarios": 5,
+      "steps": 28,
+      "status": "passed"
+    },
+    "test-output/cucumber/ground-zero.json": {
+      "sha256": "7bc6019bed0ae761d633caaeeaad38081d7b36d3177772721255695d1b06afa5",
+      "scenarios": 1,
+      "steps": 6,
+      "status": "passed"
+    }
+  },
+  "historicalLiveAttempts": [
+    {
+      "timestamp": "20260810T192632Z",
+      "status": "failed",
+      "meaning": "All three agents completed; output rejected because a headline lacked visible brief relevance. Prompt/schema hardening followed."
+    },
+    {
+      "timestamp": "20260810T193023Z",
+      "status": "failed",
+      "meaning": "Report published; L3 rejected an Axios article that returned HTTP 403 to ordinary fetch."
+    },
+    {
+      "status": "failed",
+      "meaning": "A subsequent report cited an El Pais article returning HTTP 403; compatible-source admission followed."
+    },
+    {
+      "timestamp": "20260810T193428Z",
+      "status": "cancelled",
+      "meaning": "One provider turn exceeded the bounded scenario timeout; cancellation finalized the journal and reaped the child."
+    },
+    {
+      "timestamp": "20260810T194913Z",
+      "status": "cancelled",
+      "meaning": "Repeated provider overrun was terminated through the workflow process group after siblings settled; no semantic result accepted."
+    },
+    {
+      "status": "failed",
+      "meaning": "Two otherwise-green runs exposed unrelated global tmux session removal/addition; the L3 child was moved to a private TMUX_TMPDIR namespace without weakening zero-delta proof."
+    },
+    {
+      "timestamp": "20260810T195908Z",
+      "status": "failed",
+      "meaning": "Output rejected a non-article URL shape; direct HTTPS path constraints moved into the output schema."
+    },
+    {
+      "timestamp": "20260810T200117Z",
+      "status": "failed",
+      "meaning": "Output rejected an out-of-window date; the eight Founder-authorized dates moved into the output schema enum."
+    }
+  ],
+  "resourceDelta": {
+    "dailyFactsWorkflowProcesses": 0,
+    "dailyFactsCodexChildren": 0,
+    "workspaceDirectRunnerTempDirectories": 0,
+    "gitVisiblePythonBytecode": 0,
+    "privateTmuxNamespaceSessions": 0,
+    "publicReportTempFiles": 0,
+    "retainedAuthorizedArtifacts": [
+      ".agent/testing/workflows/20260810T201119Z/DAILY_FACTS.md",
+      ".agent/testing/workflows/20260810T201119Z/run-state/runs/local-20260810t201120524z-b4a7a28d8a68/journal.json",
+      "test-output/cucumber/codex-workflows-daily-facts.json",
+      "test-output/codex-workflows/codex-workflows.json"
+    ]
+  },
+  "attempt4RepairEvidence": {
+    "status": "READY-FOR-INDEPENDENT-PREFLIGHT",
+    "independentAcceptanceClaimed": false,
+    "repairAuthority": [
+      "GOAL.md IMPLEMENT -> PREFLIGHT -> AUDIT -> SCORE -> REPEAT loop",
+      "A2-012 bounded repair on existing assignment test surfaces",
+      "Founder 0..7 UTC-day article-window amendment",
+      "Founder test-pre-build Cucumber tsc escalation"
+    ],
+    "attempt3PreflightRed": {
+      "markdown": ".agent/audit/workflows/3/PREFLIGHT.md",
+      "markdownSha256": "0c7df18840a6cfb8f3d1857f97bf0695c4a54da9719810a0309b77f2aa1da62a",
+      "json": ".agent/audit/workflows/3/PREFLIGHT.json",
+      "jsonSha256": "04fc5d7d479349c74ba5241763de50de1a2c68d225d1276b6a3ce1bf27e94489",
+      "status": "PREFLIGHT-INVALID",
+      "completionMarker": "PREFLIGHT_COMPLETE"
+    },
+    "semanticRepairRed": {
+      "command": "bun nx run codex-workflows:test-l3-daily-facts --skip-nx-cache --outputStyle=static",
+      "timestamp": "20260810T234304Z",
+      "runId": "local-20260810t234305024z-5aec37560d99",
+      "exitCode": 1,
+      "runtimeExitCode": 68,
+      "code": "WORKFLOW_OUTPUT_SCHEMA_FAILED",
+      "decisiveFailure": "Publication date evidence must visibly name the qualifying article date.",
+      "repair": "The live output schema now requires publicationDateEvidence to begin with the exact publishedAt ISO date followed by the copied visible page date text; the prompt and controlled boundary use the same representation."
+    },
+    "liveFounderL3": {
+      "command": "bun nx run codex-workflows:test-l3-daily-facts --skip-nx-cache --outputStyle=static",
+      "exitCode": 0,
+      "timestamp": "20260810T235446Z",
+      "runId": "local-20260810t235447014z-963471cd3027",
+      "report": {
+        "path": ".agent/testing/workflows/20260810T235446Z/DAILY_FACTS.md",
+        "sha256": "840fb9cede1f83d3d75e2ff947eebaea28fcd0ec333220346de8bc8a49af8f88",
+        "bytes": 3105,
+        "lines": 29,
+        "briefs": 3,
+        "directHttpsLinks": 6,
+        "industries": [
+          "Cybersecurity",
+          "Consumer applications",
+          "Streaming media"
+        ],
+        "publicationDates": [
+          "2026-08-03",
+          "2026-08-04",
+          "2026-08-05",
+          "2026-08-07",
+          "2026-08-10"
+        ]
+      },
+      "journal": {
+        "path": ".agent/testing/workflows/20260810T235446Z/run-state/runs/local-20260810t235447014z-963471cd3027/journal.json",
+        "sha256": "ac02868625f9695c2031c788204a492d7faf4465b7f15d5375cbf5793cc04b7f",
+        "status": "completed",
+        "nodes": 3,
+        "artifacts": 1,
+        "events": 12,
+        "terminalEvent": "workflow.completed",
+        "terminalSequence": 12
+      },
+      "nodes": [
+        {
+          "id": "founder-daily-facts:001:daily-facts-research-1",
+          "model": "gpt-5.6-luna",
+          "reasoning": "medium",
+          "dependencies": [],
+          "startedAt": "2026-08-10T23:54:47.070Z",
+          "completedAt": "2026-08-10T23:55:48.823Z",
+          "durationMs": 61753,
+          "outcome": "completed"
+        },
+        {
+          "id": "founder-daily-facts:002:daily-facts-research-2",
+          "model": "gpt-5.6-luna",
+          "reasoning": "medium",
+          "dependencies": [],
+          "startedAt": "2026-08-10T23:54:47.071Z",
+          "completedAt": "2026-08-10T23:55:55.359Z",
+          "durationMs": 68288,
+          "outcome": "completed"
+        },
+        {
+          "id": "founder-daily-facts:003:daily-facts-research-3",
+          "model": "gpt-5.6-luna",
+          "reasoning": "medium",
+          "dependencies": [],
+          "startedAt": "2026-08-10T23:54:47.071Z",
+          "completedAt": "2026-08-10T23:56:35.268Z",
+          "durationMs": 108197,
+          "outcome": "completed"
+        }
+      ],
+      "cucumber": {
+        "path": "test-output/cucumber/codex-workflows-daily-facts.json",
+        "sha256": "2b7d843138ac917c39b4e68a9ca1b7fec8620334b8cf7041a184e8f667f14b87",
+        "scenarios": 1,
+        "steps": 3,
+        "passedScenarios": 1,
+        "passedSteps": 3,
+        "failed": 0,
+        "undefined": 0,
+        "pending": 0,
+        "skipped": 0
+      }
+    },
+    "a2_012NativeMatrix": {
+      "disposition": "CLOSED-BY-NATIVE-ROWS",
+      "workflowsL1Integration": {
+        "selected": 34,
+        "passed": 34,
+        "exitCode": 0
+      },
+      "journalL1Integration": {
+        "selected": 6,
+        "passed": 6,
+        "exitCode": 0
+      },
+      "codexSdkL2Integration": {
+        "selected": 9,
+        "passed": 9,
+        "exitCode": 0
+      },
+      "publicRunnerL2Integration": {
+        "selected": 11,
+        "passed": 11,
+        "exitCode": 0
+      },
+      "rowEvidence": {
+        "DF-GC1-001": "three native lifecycle cases: abort-ignoring drain, queued cancellation, and successful artifact ordering",
+        "DF-GC1-002": "five native provenance cases: equal objects, ambiguous equal primitives, nested alias, copied literal, and unique primitive",
+        "DF-GC1-004": "success/collision/post-finalize plus injected storage failure and exact byte/digest cases",
+        "DF-GC1-005": "valid pair plus invalid model, invalid reasoning, empty model, empty reasoning, empty prompt, and cast bypass",
+        "DF-GC1-006": "supported object/array/string plus nested/root/item/branch host-invalid shapes at L1 and supported real SDK forwarding at L2",
+        "DF-GC1-007": "agent/abort-ignoring failure, explicit exit-70 artifact failure, and deterministic SIGINT cleanup"
+      }
+    },
+    "standingGates": {
+      "fiveProjectLintTypecheckBuild": 0,
+      "transitiveWorkflowsCodexMonitorTests": 0,
+      "groundZero": {
+        "exitCode": 0,
+        "selected": 51,
+        "policyFiles": 28,
+        "standingTargets": 9
+      },
+      "codexWorkflowsL1": {
+        "exitCode": 0,
+        "selected": 31
+      },
+      "codexWorkflowsL2": {
+        "exitCode": 0,
+        "selected": 16
+      },
+      "sdkImportExclusivity": {
+        "exitCode": 0,
+        "selected": 1,
+        "offenders": 0
+      }
+    },
+    "resourceDelta": {
+      "unexpectedWorkflowOwnedProcesses": 0,
+      "retainedNodeModules": 0,
+      "retainedBuildDirectories": 0,
+      "retainedNestedGitRepositories": 0,
+      "publicReportTempFiles": 0,
+      "gitVisiblePythonBytecode": 0,
+      "baselineUnrelatedLongLivedProcessExcluded": "PID 7937 predates this repair run and belongs to a separate tmux worker; it was neither created nor mutated by this lane."
+    }
+  },
+  "attempt5RepairEvidence": {
+    "status": "READY-FOR-INDEPENDENT-PREFLIGHT",
+    "independentAcceptanceClaimed": false,
+    "candidate": {
+      "includedPaths": 158,
+      "digest": "sha256:8c1f22296ffa02a2d613f6c3297734480b6ff3bc23f1a9911bf0a3295680d78b",
+      "sourceSha256": "aaac4d060f9c0bf34bcb14ece71a0578bd2d5eb41d347a65ece9c82ff10c5561",
+      "contractImplementationSha256": "7bdde01c2639d41f65d0e61f06aa7fc5b334cf48d27dc3a31fc2134dde5d1050",
+      "nativeTestSha256": "dcc7e27b510d6a5d66a95e66d6c0fb61859f0736dc051091ec202ef408353690",
+      "driverSha256": "9f330fd42ad7feb113ab48d95e669f0257108e98bdaa30b4147eef38f4b72327"
+    },
+    "attempt4IndependentPreflightRed": {
+      "markdown": ".agent/audit/workflows/4/PREFLIGHT.md",
+      "markdownSha256": "f9a009edf646a913e2609dbb8a21ed012dbd0f8a9d1262bb2efb0426cf4aab0c",
+      "json": ".agent/audit/workflows/4/PREFLIGHT.json",
+      "jsonSha256": "4d72c93c78fa85fd027ae34eafa7c3d6a4ba67a1f823f90af50331988574651f",
+      "status": "PREFLIGHT-INVALID",
+      "completionMarker": "PREFLIGHT_COMPLETE",
+      "decisiveSemanticFinding": "PREFLIGHT-A4-D001: the fresh daily-facts run failed closed when one Luna report used placeholder text and category/date-index URLs rather than two qualifying current article sources.",
+      "deterministicContext": "All other exact-candidate gates, the full A2-012 matrix, and the fresh CRA builder-auditor-remediator L3 passed; reducer registration remained honestly absent."
+    },
+    "meaningfulRedGreen": [
+      {
+        "behavior": "Placeholder briefs and category/date-index URLs fail closed",
+        "red": "uncached L1 selected 33: two new rows failed and 31 passed",
+        "green": "uncached L1 selected 33: 33 passed"
+      },
+      {
+        "behavior": "Invisible Unicode URL formatting bytes are canonicalized before publication",
+        "red": "uncached L1 selected 34: one new row failed and 33 passed",
+        "green": "uncached L1 selected 34: 34 passed"
+      },
+      {
+        "behavior": "Four or five reserve citations are fetched by the host, publisher dates are corrected, and stale or broken pages are discarded before retaining exactly two",
+        "red": "uncached L1 selected 35: verifyDailyFactSources was absent and the new native row failed",
+        "green": "uncached L1 selected 35: 35 passed"
+      },
+      {
+        "behavior": "Authoritative publisher datePublished metadata qualifies even when a page omits a human-readable rendered date",
+        "red": "uncached L1 selected 35: one row failed with Every report must retain at least two ordinary-GET publisher-verified current sources; 34 passed",
+        "green": "uncached L1 selected 35: 35 passed"
+      }
+    ],
+    "historicalLiveSemanticReds": [
+      {
+        "timestamp": "20260811T005302Z",
+        "meaning": "An otherwise direct article URL carried invisible percent-encoded formatting bytes and returned 404; canonicalization was added under native RED/GREEN."
+      },
+      {
+        "timestamp": "20260811T010029Z",
+        "meaning": "A claimed 2026-08-04 publication was publisher-metadata dated 2026-08-03 and therefore outside the current Aug 11 inclusive 0..7-day window; host correction/filtering replaced trust in agent-supplied dates."
+      },
+      {
+        "timestamp": "20260811T010731Z",
+        "meaning": "The first reserve-source live run failed closed because fewer than two sources survived the initial overly strict visible-date check; no report was accepted."
+      }
+    ],
+    "liveFounderL3": {
+      "command": "bun nx run codex-workflows:test-l3-daily-facts --skip-nx-cache --outputStyle=static",
+      "exitCode": 0,
+      "timestamp": "20260811T011316Z",
+      "runId": "local-20260811t011316708z-efcf10f8580f",
+      "report": {
+        "path": ".agent/testing/workflows/20260811T011316Z/DAILY_FACTS.md",
+        "sha256": "cebce0fa328c20d031c87f83d14ba934e720215d42a3c443ceea0c400a73b5ca",
+        "bytes": 3401,
+        "lines": 29,
+        "briefs": 3,
+        "directHttpsLinks": 6,
+        "industries": [
+          "Artificial intelligence",
+          "Social media",
+          "Creative software"
+        ],
+        "publicationDates": ["2026-08-04", "2026-08-06", "2026-08-10"]
+      },
+      "journal": {
+        "path": ".agent/testing/workflows/20260811T011316Z/run-state/runs/local-20260811t011316708z-efcf10f8580f/journal.json",
+        "sha256": "87bff5e485c12f6a5a52c6802b3e5430eb41c61019e7eede8a1b3a66ed11e4dd",
+        "authority": "local-operational-journal",
+        "status": "completed",
+        "nodes": 3,
+        "artifacts": 1,
+        "events": 12,
+        "artifactEventSequence": 11,
+        "terminalEventSequence": 12,
+        "terminalEvent": "workflow.completed"
+      },
+      "nodes": [
+        {
+          "id": "founder-daily-facts:001:daily-facts-research-1",
+          "model": "gpt-5.6-luna",
+          "reasoning": "medium",
+          "dependencies": [],
+          "startedAt": "2026-08-11T01:13:16.799Z",
+          "completedAt": "2026-08-11T01:14:58.515Z",
+          "outcome": "completed"
+        },
+        {
+          "id": "founder-daily-facts:002:daily-facts-research-2",
+          "model": "gpt-5.6-luna",
+          "reasoning": "medium",
+          "dependencies": [],
+          "startedAt": "2026-08-11T01:13:16.799Z",
+          "completedAt": "2026-08-11T01:14:50.079Z",
+          "outcome": "completed"
+        },
+        {
+          "id": "founder-daily-facts:003:daily-facts-research-3",
+          "model": "gpt-5.6-luna",
+          "reasoning": "medium",
+          "dependencies": [],
+          "startedAt": "2026-08-11T01:13:16.800Z",
+          "completedAt": "2026-08-11T01:14:53.057Z",
+          "outcome": "completed"
+        }
+      ],
+      "cucumber": {
+        "path": "test-output/cucumber/codex-workflows-daily-facts.json",
+        "sha256": "918e74130c7ba7e636eb5987714172f74237bfdfd736a6206bf8121dfb90da6c",
+        "scenarios": 1,
+        "steps": 3,
+        "passedScenarios": 1,
+        "passedSteps": 3,
+        "failed": 0,
+        "undefined": 0,
+        "pending": 0,
+        "skipped": 0
+      }
+    },
+    "standingGates": {
+      "founderEscalatedCucumberTsc": {
+        "command": "bun nx run codex-workflows:test-pre-build --skip-nx-cache --outputStyle=static",
+        "exitCode": 0,
+        "compiler": "tsc -p apps/codex-workflows/tsconfig.cucumber.json"
+      },
+      "codexWorkflowsL1": {
+        "exitCode": 0,
+        "selected": 35
+      },
+      "codexWorkflowsL2Serialized": {
+        "exitCode": 0,
+        "selected": 16
+      },
+      "fiveProjectLintTypecheckBuild": 0,
+      "transitiveWorkflowsCodexMonitorTests": 0,
+      "groundZero": {
+        "exitCode": 0,
+        "policyFiles": 28,
+        "standingTargets": 9,
+        "nativeExecuted": 50,
+        "l3Scenarios": 1,
+        "l3Steps": 6
+      },
+      "sdkImportExclusivity": {
+        "exitCode": 0,
+        "selected": 1,
+        "offenders": 0
+      },
+      "sync": "up-to-date",
+      "formatFiles": 52,
+      "formatExitCode": 0,
+      "parallelHarnessObservation": "A deliberately non-authoritative local parallel invocation raced shared Nx dist outputs and produced four generic child exit-1 results; the exact L2 target immediately passed 16/16 when rerun in the required serialized form. Fresh Preflight is instructed to execute gates serially."
+    },
+    "resourceDelta": {
+      "unexpectedWorkflowOwnedProcesses": 0,
+      "retainedNodeModules": 0,
+      "retainedBuildDirectories": 0,
+      "retainedNestedGitRepositories": 0,
+      "publicReportTempFiles": 0,
+      "gitVisiblePythonBytecode": 0,
+      "baselineUnrelatedLongLivedProcessExcluded": "PID 7937 predates this repair run and belongs to a separate tmux worker; it was neither created nor mutated by this lane."
+    }
+  },
+  "attempt6RepairEvidence": {
+    "status": "READY-FOR-INDEPENDENT-PREFLIGHT",
+    "independentAcceptanceClaimed": false,
+    "candidate": {
+      "includedPaths": 158,
+      "digest": "sha256:cb391e9308bc11de7cc3913daf8f350a923908863c71820118617712ebd00e97",
+      "sourceSha256": "1353868e04506e75cda4883a02d79e89a0c921f54848fee065a0936f892c1db2",
+      "contractImplementationSha256": "fcb978c7b0de107218e748a1b9fd9315bfbfe2278eae377f754607d2237db444",
+      "nativeTestSha256": "c9465097826aa8c0563d3c9f3ab73811aeaf3614094986d86a990318314947ec",
+      "driverSha256": "9f330fd42ad7feb113ab48d95e669f0257108e98bdaa30b4147eef38f4b72327"
+    },
+    "attempt5IndependentPreflightRed": {
+      "markdown": ".agent/audit/workflows/5/PREFLIGHT.md",
+      "markdownSha256": "ea4d8bdf1dffe5e775258fd70ad871878d4c8c84138b5f66042953a585776154",
+      "json": ".agent/audit/workflows/5/PREFLIGHT.json",
+      "jsonSha256": "657dc8ea957fd5c09d6337802c7566ff24e4a9c219069cbe0ada500a0fe6c6af",
+      "status": "PREFLIGHT-INVALID",
+      "completionMarker": "PREFLIGHT_COMPLETE",
+      "decisiveSemanticFinding": "PREFLIGHT-A5-D001: an agent-claimed publication date conflicted with a URL month and was rejected before publisher metadata verification could correct or discard the reserve.",
+      "deterministicContext": "The exact candidate, assignments, frozen contract digests, Cucumber tsc pre-build, all native/standing gates, and the fresh CRA three-stage L3 otherwise passed. Reducer registration remained honestly absent."
+    },
+    "meaningfulRedGreen": [
+      {
+        "behavior": "Agent-claimed URL dates are treated as unverified until authoritative publisher metadata corrects or discards each reserve; strict claim mode remains available for controlled evidence",
+        "red": "uncached L1 selected 36: one new date-ordering row failed and 35 passed",
+        "green": "uncached L1 selected 36: 36 passed"
+      },
+      {
+        "behavior": "Off-topic reserves are discarded before ordinary GET; only the retained publisher-verified pair undergoes strict final brief-relevance validation",
+        "red": "uncached L1 selected 37: one new relevance-ordering row failed and 36 passed",
+        "green": "uncached L1 selected 37: 37 passed"
+      }
+    ],
+    "liveAttemptLedger": [
+      {
+        "timestamp": "20260811T020723Z",
+        "status": "cancelled",
+        "meaning": "Two Luna siblings completed and one exceeded the configured 14-minute driver bound; the entire process group was cancelled, the journal ended workflow.cancelled, no report was published, and residue was zero."
+      },
+      {
+        "timestamp": "20260811T022202Z",
+        "status": "agent-failed",
+        "meaning": "Luna slot 1 failed at the provider boundary after 77 seconds; both siblings were cancelled and no report was accepted."
+      },
+      {
+        "timestamp": "20260811T022350Z",
+        "status": "semantic-red",
+        "meaning": "All researchers settled, then an off-topic reserve was rejected before host filtering; the native relevance-ordering RED/GREEN repair followed."
+      },
+      {
+        "timestamp": "20260811T022805Z",
+        "status": "agent-failed",
+        "meaning": "Luna slot 2 failed at the provider boundary after 5.4 seconds; both siblings were cancelled and no report was accepted."
+      },
+      {
+        "timestamp": "20260811T022935Z",
+        "status": "passed",
+        "meaning": "All three Luna/medium researchers completed concurrently; host verification retained exactly two current brief-relevant publisher sources per report and the L3 passed all three steps."
+      }
+    ],
+    "liveFounderL3": {
+      "command": "bun nx run codex-workflows:test-l3-daily-facts --skip-nx-cache --outputStyle=static",
+      "exitCode": 0,
+      "timestamp": "20260811T022935Z",
+      "runId": "local-20260811t022935551z-69704eb9c865",
+      "report": {
+        "path": ".agent/testing/workflows/20260811T022935Z/DAILY_FACTS.md",
+        "sha256": "4724e364f82c9a230170fc38db9fa0016ee4184ccd9753336ab48cccbd02a637",
+        "bytes": 3584,
+        "lines": 29,
+        "briefs": 3,
+        "directHttpsLinks": 6,
+        "industries": [
+          "Artificial intelligence",
+          "Enterprise software",
+          "Video gaming"
+        ],
+        "publicationDates": ["2026-08-08", "2026-08-09", "2026-08-10"]
+      },
+      "journal": {
+        "path": ".agent/testing/workflows/20260811T022935Z/run-state/runs/local-20260811t022935551z-69704eb9c865/journal.json",
+        "sha256": "be014893e7c4e2f467f5cb5e773b81578b7f2758a37effb2398a6a1fcf907779",
+        "authority": "local-operational-journal",
+        "status": "completed",
+        "nodes": 3,
+        "artifacts": 1,
+        "events": 12,
+        "artifactEventSequence": 11,
+        "terminalEventSequence": 12,
+        "terminalEvent": "workflow.completed"
+      },
+      "nodes": [
+        {
+          "id": "founder-daily-facts:001:daily-facts-research-1",
+          "model": "gpt-5.6-luna",
+          "reasoning": "medium",
+          "dependencies": [],
+          "startedAt": "2026-08-11T02:29:35.621Z",
+          "completedAt": "2026-08-11T02:31:26.383Z",
+          "outcome": "completed"
+        },
+        {
+          "id": "founder-daily-facts:002:daily-facts-research-2",
+          "model": "gpt-5.6-luna",
+          "reasoning": "medium",
+          "dependencies": [],
+          "startedAt": "2026-08-11T02:29:35.623Z",
+          "completedAt": "2026-08-11T02:31:24.227Z",
+          "outcome": "completed"
+        },
+        {
+          "id": "founder-daily-facts:003:daily-facts-research-3",
+          "model": "gpt-5.6-luna",
+          "reasoning": "medium",
+          "dependencies": [],
+          "startedAt": "2026-08-11T02:29:35.624Z",
+          "completedAt": "2026-08-11T02:32:47.560Z",
+          "outcome": "completed"
+        }
+      ],
+      "cucumber": {
+        "path": "test-output/cucumber/codex-workflows-daily-facts.json",
+        "sha256": "470fcb749fa001f7bd0623165002139592a6754122b5467d8c18a24531a1f4ad",
+        "scenarios": 1,
+        "steps": 3,
+        "passedScenarios": 1,
+        "passedSteps": 3,
+        "failed": 0,
+        "undefined": 0,
+        "pending": 0,
+        "skipped": 0
+      }
+    },
+    "standingGates": {
+      "founderEscalatedCucumberTsc": {
+        "command": "bun nx run codex-workflows:test-pre-build --skip-nx-cache --outputStyle=static",
+        "exitCode": 0,
+        "compiler": "tsc -p apps/codex-workflows/tsconfig.cucumber.json"
+      },
+      "codexWorkflowsL1": {
+        "exitCode": 0,
+        "selected": 37
+      },
+      "codexWorkflowsL2Serialized": {
+        "exitCode": 0,
+        "selected": 16
+      },
+      "fiveProjectLintTypecheckBuild": 0,
+      "transitiveWorkflowsCodexMonitorTests": 0,
+      "groundZero": {
+        "exitCode": 0,
+        "policyFiles": 28,
+        "standingTargets": 9,
+        "nativeExecuted": 50,
+        "l3Scenarios": 1,
+        "l3Steps": 6
+      },
+      "sdkImportExclusivity": {
+        "exitCode": 0,
+        "selected": 1,
+        "offenders": 0
+      },
+      "sync": "up-to-date",
+      "formatFiles": 52,
+      "formatExitCode": 0
+    },
+    "resourceDelta": {
+      "unexpectedWorkflowOwnedProcesses": 0,
+      "retainedNodeModules": 0,
+      "retainedBuildDirectories": 0,
+      "retainedNestedGitRepositories": 0,
+      "publicReportTempFiles": 0,
+      "gitVisiblePythonBytecode": 0,
+      "baselineUnrelatedLongLivedProcessExcluded": "PID 7937 predates this repair run and belongs to a separate tmux worker; it was neither created nor mutated by this lane."
+    }
+  },
+  "attempt7RepairEvidence": {
+    "status": "READY-FOR-INDEPENDENT-PREFLIGHT",
+    "independentAcceptanceClaimed": false,
+    "candidate": {
+      "includedPaths": 158,
+      "digest": "sha256:3acac5fe6481f9d38b1c235885c59db05f1b241f7457dccc32114c3a103e6e62",
+      "sourceSha256": "714fb0b80500cdf8a379caa9fff45007ad06b1011ddd7a22c63ee958da93da1c",
+      "contractImplementationSha256": "6f01a9e57f165a332ca2c8381154fb056f9c7d1053745a8f47847716e9fde325",
+      "nativeTestSha256": "70c33bf64037969649358d9e25ae2c5769af4b93bd56fbfeaf61750fceb1d8ac",
+      "driverSha256": "9f330fd42ad7feb113ab48d95e669f0257108e98bdaa30b4147eef38f4b72327"
+    },
+    "attempt6IndependentPreflightRed": {
+      "markdown": ".agent/audit/workflows/6/PREFLIGHT.md",
+      "markdownSha256": "acb30d5ccc49f3f7efeb325e3d1a3ddaad3b9f65f0322b18c4e5ba79248fadb9",
+      "json": ".agent/audit/workflows/6/PREFLIGHT.json",
+      "jsonSha256": "a0e97a617c69fd997aedf0958900489bc2056d14e902bbc1c57fae66f50db803",
+      "status": "PREFLIGHT-INVALID",
+      "completionMarker": "PREFLIGHT_COMPLETE",
+      "decisiveSemanticFinding": "PREFLIGHT-A6-D001: all three fresh Luna researchers completed, but fewer than two reserves survived ordinary-GET publisher verification for at least one brief.",
+      "deterministicContext": "The exact candidate, frozen contracts, Cucumber tsc pre-build, native/standing gates, and fresh CRA three-stage L3 otherwise passed with zero unexpected resource delta. Reducer registration remained honestly absent."
+    },
+    "meaningfulRedGreen": [
+      {
+        "behavior": "An ordinary-GET publisher page may authoritatively prove the agent-claimed in-window date through a semantic time element or publication-labelled visible line when datePublished metadata is absent",
+        "red": "uncached L1 selected 32: one new publisher-visible-date row failed and 31 passed",
+        "green": "uncached L1 selected 32: 32 passed"
+      },
+      {
+        "behavior": "Source-retention failure reports bounded redacted reason counts without exposing reserve URLs, response bodies, prompts, or raw errors",
+        "red": "uncached L1 selected 33: one new redacted-diagnostic row failed and 32 passed",
+        "green": "uncached L1 selected 33: 33 passed"
+      }
+    ],
+    "liveFounderL3": {
+      "command": "bun nx run codex-workflows:test-l3-daily-facts --skip-nx-cache --outputStyle=static",
+      "exitCode": 0,
+      "timestamp": "20260811T031320Z",
+      "runId": "local-20260811t031320468z-512e144e9da2",
+      "report": {
+        "path": ".agent/testing/workflows/20260811T031320Z/DAILY_FACTS.md",
+        "sha256": "e83b3bc7943d5adca5146331e5abf8b7317cfe66966d1b8744f1dd88e6e0d4ea",
+        "bytes": 3155,
+        "lines": 29,
+        "briefs": 3,
+        "directHttpsLinks": 6,
+        "industries": [
+          "Artificial intelligence",
+          "Consumer applications",
+          "Consumer electronics"
+        ],
+        "publicationDates": [
+          "2026-08-10",
+          "2026-08-10",
+          "2026-08-07",
+          "2026-08-06",
+          "2026-08-04",
+          "2026-08-04"
+        ]
+      },
+      "journal": {
+        "path": ".agent/testing/workflows/20260811T031320Z/run-state/runs/local-20260811t031320468z-512e144e9da2/journal.json",
+        "sha256": "d11f1e306cad9e5faa395630109c69df0488675afb0ba0d6f533ff230b026e1c",
+        "authority": "local-operational-journal",
+        "status": "completed",
+        "nodes": 3,
+        "artifacts": 1,
+        "events": 12,
+        "artifactEventSequence": 11,
+        "terminalEventSequence": 12,
+        "terminalEvent": "workflow.completed"
+      },
+      "nodes": [
+        {
+          "id": "founder-daily-facts:001:daily-facts-research-1",
+          "model": "gpt-5.6-luna",
+          "reasoning": "medium",
+          "dependencies": [],
+          "startedAt": "2026-08-11T03:13:20.529Z",
+          "completedAt": "2026-08-11T03:15:06.379Z",
+          "outcome": "completed"
+        },
+        {
+          "id": "founder-daily-facts:002:daily-facts-research-2",
+          "model": "gpt-5.6-luna",
+          "reasoning": "medium",
+          "dependencies": [],
+          "startedAt": "2026-08-11T03:13:20.529Z",
+          "completedAt": "2026-08-11T03:14:40.969Z",
+          "outcome": "completed"
+        },
+        {
+          "id": "founder-daily-facts:003:daily-facts-research-3",
+          "model": "gpt-5.6-luna",
+          "reasoning": "medium",
+          "dependencies": [],
+          "startedAt": "2026-08-11T03:13:20.530Z",
+          "completedAt": "2026-08-11T03:15:00.813Z",
+          "outcome": "completed"
+        }
+      ],
+      "cucumber": {
+        "path": "test-output/cucumber/codex-workflows-daily-facts.json",
+        "sha256": "792b64bde6875eb125e0cd03e60c711a3497441a4eb643cf672722ef2afeb7ac",
+        "scenarios": 1,
+        "steps": 3,
+        "passedScenarios": 1,
+        "passedSteps": 3,
+        "failed": 0,
+        "undefined": 0,
+        "pending": 0,
+        "skipped": 0
+      }
+    },
+    "standingGates": {
+      "founderEscalatedCucumberTsc": {
+        "command": "bun nx run codex-workflows:test-pre-build --skip-nx-cache --outputStyle=static",
+        "exitCode": 0,
+        "compiler": "tsc -p apps/codex-workflows/tsconfig.cucumber.json"
+      },
+      "codexWorkflowsL1": {
+        "exitCode": 0,
+        "selected": 33
+      },
+      "codexWorkflowsL2Serialized": {
+        "exitCode": 0,
+        "selected": 16
+      },
+      "fiveProjectLintTypecheckBuild": 0,
+      "transitiveWorkflowsCodexMonitorTests": 0,
+      "groundZero": {
+        "exitCode": 0,
+        "policyFiles": 28,
+        "standingTargets": 9,
+        "nativeExecuted": 50,
+        "l3Scenarios": 1,
+        "l3Steps": 6
+      },
+      "sdkImportExclusivity": {
+        "exitCode": 0,
+        "selected": 1,
+        "offenders": 0
+      },
+      "sync": "up-to-date",
+      "formatFiles": 52,
+      "formatExitCode": 0
+    },
+    "resourceDelta": {
+      "unexpectedWorkflowOwnedProcesses": 0,
+      "retainedNodeModules": 0,
+      "retainedBuildDirectories": 0,
+      "retainedNestedGitRepositories": 0,
+      "publicReportTempFiles": 0,
+      "gitVisiblePythonBytecode": 0,
+      "baselineUnrelatedLongLivedProcessExcluded": "PID 7937 predates this repair run and belongs to a separate tmux worker; it was neither created nor mutated by this lane."
+    }
+  },
+  "attempt8RepairEvidence": {
+    "status": "READY-FOR-INDEPENDENT-PREFLIGHT",
+    "independentAcceptanceClaimed": false,
+    "liveFounderL3": {
+      "command": "bun nx run codex-workflows:test-l3-daily-facts --skip-nx-cache --outputStyle=static",
+      "exitCode": 0,
+      "durationMs": 109000,
+      "timestamp": "20260811T042108Z",
+      "runId": "local-20260811t042109064z-afa927b9aad5",
+      "sourceDigest": "sha256:714fb0b80500cdf8a379caa9fff45007ad06b1011ddd7a22c63ee958da93da1c",
+      "report": {
+        "path": ".agent/testing/workflows/20260811T042108Z/DAILY_FACTS.md",
+        "sha256": "eef8b0e5d4940370154056cd4b2b22f3df149ab6a45b30e6afa32d0db97ca524",
+        "bytes": 3442,
+        "lines": 29,
+        "briefs": 3,
+        "directHttpsLinks": 6,
+        "industries": [
+          "Artificial intelligence",
+          "Enterprise software",
+          "Streaming media"
+        ],
+        "publicationDates": [
+          "2026-08-10",
+          "2026-08-07",
+          "2026-08-09",
+          "2026-08-04",
+          "2026-08-08",
+          "2026-08-05"
+        ],
+        "founderWindow": "0..7 UTC days inclusive"
+      },
+      "journal": {
+        "path": ".agent/testing/workflows/20260811T042108Z/run-state/runs/local-20260811t042109064z-afa927b9aad5/journal.json",
+        "sha256": "73d7f0c8b783d9501dd5d08b6c687ee62c931c57d2dc098449af9c8aa19d809e",
+        "authority": "local-operational-journal",
+        "status": "completed",
+        "nodes": 3,
+        "artifacts": 1,
+        "events": 12,
+        "artifactEventSequence": 11,
+        "terminalEventSequence": 12,
+        "terminalEvent": "workflow.completed"
+      },
+      "nodes": [
+        {
+          "id": "founder-daily-facts:001:daily-facts-research-1",
+          "model": "gpt-5.6-luna",
+          "reasoning": "medium",
+          "dependencies": [],
+          "startedAt": "2026-08-11T04:21:09.113Z",
+          "completedAt": "2026-08-11T04:22:51.092Z",
+          "outcome": "completed"
+        },
+        {
+          "id": "founder-daily-facts:002:daily-facts-research-2",
+          "model": "gpt-5.6-luna",
+          "reasoning": "medium",
+          "dependencies": [],
+          "startedAt": "2026-08-11T04:21:09.113Z",
+          "completedAt": "2026-08-11T04:22:50.916Z",
+          "outcome": "completed"
+        },
+        {
+          "id": "founder-daily-facts:003:daily-facts-research-3",
+          "model": "gpt-5.6-luna",
+          "reasoning": "medium",
+          "dependencies": [],
+          "startedAt": "2026-08-11T04:21:09.114Z",
+          "completedAt": "2026-08-11T04:22:44.630Z",
+          "outcome": "completed"
+        }
+      ],
+      "cucumber": {
+        "path": "test-output/cucumber/codex-workflows-daily-facts.json",
+        "sha256": "9720946e2c2455dafdd4c3c05d8e984a42fbe8ec5caf81679bb5efdcf97a6d27",
+        "scenarios": 1,
+        "passedScenarios": 1,
+        "steps": 3,
+        "passedSteps": 3,
+        "failed": 0,
+        "undefined": 0,
+        "pending": 0,
+        "skipped": 0
+      }
+    },
+    "prebuild": {
+      "target": "codex-workflows:test-pre-build",
+      "command": "tsc -p apps/codex-workflows/tsconfig.cucumber.json",
+      "exitCode": 0
+    },
+    "standingGates": {
+      "codexWorkflowsAggregate": {
+        "nativeExecuted": 56,
+        "standingL3Scenarios": 5,
+        "standingL3Steps": 28,
+        "dailyL3Scenarios": 1,
+        "dailyL3Steps": 3,
+        "craL3Scenarios": 1,
+        "craL3Steps": 6,
+        "exitCode": 0
+      },
+      "fiveProjectLintTypecheckBuild": 0,
+      "transitiveWorkflowsCodexMonitorTests": 0,
+      "groundZero": {
+        "policyFiles": 28,
+        "nativeExecuted": 50,
+        "l3Scenarios": 1,
+        "l3Steps": 6,
+        "exitCode": 0
+      },
+      "sdkImportExclusivity": { "selected": 1, "offenders": 0, "exitCode": 0 },
+      "sync": "up-to-date",
+      "formatFiles": 53,
+      "formatExitCode": 0
+    },
+    "resourceDelta": {
+      "workflowOwnedProcesses": 0,
+      "retainedNodeModules": 0,
+      "retainedBuildDirectories": 0,
+      "retainedNestedGitRepositories": 0,
+      "retainedNpmCaches": 0,
+      "artifactTemporaryFiles": 0,
+      "baselineUnrelatedLongLivedProcessExcluded": "PID 7937 predates this run and belongs to a separate tmux worker; it was neither created nor mutated."
+    }
+  },
+  "attempt9RepairEvidence": {
+    "status": "READY-FOR-INDEPENDENT-PREFLIGHT",
+    "independentAcceptanceClaimed": false,
+    "liveFounderL3": {
+      "command": "bun nx run codex-workflows:test-l3-daily-facts --skip-nx-cache",
+      "exitCode": 0,
+      "durationMs": 106269,
+      "timestamp": "20260811T052135Z",
+      "runId": "local-20260811t052135324z-37aed14f8f53",
+      "sourceDigest": "sha256:714fb0b80500cdf8a379caa9fff45007ad06b1011ddd7a22c63ee958da93da1c",
+      "report": {
+        "path": ".agent/testing/workflows/20260811T052135Z/DAILY_FACTS.md",
+        "sha256": "6896683ce890f0d573adeb32723707255d666d06d6ab7e16be6db8b1f3cf16b1",
+        "bytes": 3917,
+        "briefs": 3,
+        "directHttpsLinks": 6,
+        "industries": [
+          "Data centers",
+          "Consumer applications",
+          "Media and entertainment"
+        ],
+        "publicationDates": [
+          "2026-08-04",
+          "2026-08-06",
+          "2026-08-05",
+          "2026-08-05",
+          "2026-08-10",
+          "2026-08-08"
+        ],
+        "founderWindow": "0..7 UTC calendar days inclusive"
+      },
+      "journal": {
+        "path": ".agent/testing/workflows/20260811T052135Z/run-state/runs/local-20260811t052135324z-37aed14f8f53/journal.json",
+        "sha256": "bbf0b7590d76e6fe8e97432a086ced1715a4ab4522b6b61a3bd476425a4ad45b",
+        "authority": "local-operational-journal",
+        "status": "completed",
+        "nodes": 3,
+        "artifacts": 1,
+        "events": 12,
+        "artifactEventSequence": 11,
+        "terminalEventSequence": 12,
+        "terminalEvent": "workflow.completed"
+      },
+      "nodes": [
+        {
+          "id": "founder-daily-facts:001:daily-facts-research-1",
+          "model": "gpt-5.6-luna",
+          "reasoning": "medium",
+          "dependencies": [],
+          "startedAt": "2026-08-11T05:21:35.384Z",
+          "completedAt": "2026-08-11T05:23:19.005Z",
+          "outcome": "completed"
+        },
+        {
+          "id": "founder-daily-facts:002:daily-facts-research-2",
+          "model": "gpt-5.6-luna",
+          "reasoning": "medium",
+          "dependencies": [],
+          "startedAt": "2026-08-11T05:21:35.385Z",
+          "completedAt": "2026-08-11T05:23:00.265Z",
+          "outcome": "completed"
+        },
+        {
+          "id": "founder-daily-facts:003:daily-facts-research-3",
+          "model": "gpt-5.6-luna",
+          "reasoning": "medium",
+          "dependencies": [],
+          "startedAt": "2026-08-11T05:21:35.386Z",
+          "completedAt": "2026-08-11T05:22:49.484Z",
+          "outcome": "completed"
+        }
+      ],
+      "cucumber": {
+        "path": "test-output/cucumber/codex-workflows-daily-facts.json",
+        "sha256": "063d37a794c37bcb10f3cba485fcc2724a502d30873be95c57010538f4200014",
+        "scenarios": 1,
+        "passedScenarios": 1,
+        "steps": 3,
+        "passedSteps": 3,
+        "failed": 0,
+        "undefined": 0,
+        "pending": 0,
+        "skipped": 0
+      }
+    },
+    "prebuild": {
+      "target": "codex-workflows:test-pre-build",
+      "command": "tsc -p apps/codex-workflows/tsconfig.cucumber.json",
+      "exitCode": 0
+    },
+    "resourceDelta": {
+      "workflowOwnedProcesses": 0,
+      "retainedNodeModules": 0,
+      "retainedBuildDirectories": 0,
+      "retainedNestedGitRepositories": 0,
+      "retainedNpmCaches": 0,
+      "artifactTemporaryFiles": 0
+    }
+  },
+  "auditInfrastructure": {
+    "template": {
+      "path": ".agent/audit/AUDIT_TEMPLATE.md",
+      "sha256": "a171b3400e6b15280dedc802b056dc5b8d5e26096de41208387d3b8c2a935460"
+    },
+    "auditSkill": {
+      "path": ".agents/skills/audit/SKILL.md",
+      "sha256": "4ddff68e682b8a999367da629c161e6602d47862081b2830b93b0b290f5ffb12"
+    },
+    "monitorSkill": {
+      "path": "/Users/mcasa_atlantis/.codex/skills/monitor/SKILL.md",
+      "sha256": "b273c4375dfdf366e025e95b5fda2bd5b681a129f46c91dc69dc7ee63061f7af",
+      "synchronousReferenceSha256": "78793d0b71eb89d5edff99bda40348addf1fb0ea549c53ba21e6b3344002a2b0",
+      "synchronousShimSha256": "1db80b576d27a234b52616c4eedc995aa5134957dc0165a0c3ec653dcd842453"
+    }
+  },
+  "handoffDisposition": "WORKER-REPROOF-COMPLETE / READY-FOR-INDEPENDENT-PREFLIGHT / NOT-ACCEPTED"
+}

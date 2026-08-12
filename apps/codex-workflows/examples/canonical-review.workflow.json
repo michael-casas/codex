@@ -1,0 +1,115 @@
+{
+  "schemaVersion": 1,
+  "id": "canonical-review",
+  "version": 1,
+  "description": "Deterministically prepare a bounded review workflow.",
+  "inputSchema": {
+    "type": "object",
+    "properties": {
+      "includeOptional": { "type": "boolean" },
+      "records": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "id": { "type": "string" },
+            "text": { "type": "string" }
+          },
+          "required": ["id", "text"],
+          "additionalProperties": false
+        }
+      }
+    },
+    "required": ["includeOptional", "records"],
+    "additionalProperties": false
+  },
+  "outputSchema": {
+    "type": "object",
+    "properties": { "artifactId": { "type": "string" } },
+    "required": ["artifactId"],
+    "additionalProperties": false
+  },
+  "policy": {
+    "maxConcurrentSteps": 4,
+    "maxAttempts": 2,
+    "sandbox": "read-only",
+    "approval": "never",
+    "network": "disabled",
+    "allowedRoots": ["."],
+    "allowedModels": ["gpt-5.1-codex"]
+  },
+  "steps": [
+    {
+      "id": "prepare",
+      "kind": "task",
+      "handler": { "type": "registered", "name": "identity" }
+    },
+    {
+      "id": "optional",
+      "kind": "task",
+      "dependsOn": ["prepare"],
+      "condition": {
+        "pointer": "/includeOptional",
+        "operator": "equals",
+        "value": true
+      },
+      "handler": { "type": "registered", "name": "identity" }
+    },
+    {
+      "id": "review",
+      "kind": "fan-out",
+      "dependsOn": ["prepare"],
+      "from": "/records",
+      "itemKey": "/id",
+      "maxItems": 8,
+      "concurrency": 2,
+      "handler": {
+        "type": "codex",
+        "model": "gpt-5.1-codex",
+        "prompt": "Review the supplied record without executing arbitrary code."
+      }
+    },
+    {
+      "id": "consolidate",
+      "kind": "join",
+      "dependsOn": ["optional", "review"],
+      "mode": "all"
+    },
+    {
+      "id": "enrich",
+      "kind": "subworkflow",
+      "dependsOn": ["consolidate"],
+      "workflow": {
+        "schemaVersion": 1,
+        "id": "canonical-enrichment",
+        "version": 1,
+        "inputSchema": { "type": "object" },
+        "policy": {
+          "maxConcurrentSteps": 1,
+          "maxAttempts": 1,
+          "sandbox": "read-only",
+          "approval": "never",
+          "network": "disabled",
+          "allowedRoots": ["."],
+          "allowedModels": ["gpt-5.1-codex"]
+        },
+        "steps": [
+          {
+            "id": "identity",
+            "kind": "task",
+            "handler": { "type": "registered", "name": "identity" }
+          }
+        ]
+      }
+    },
+    {
+      "id": "report",
+      "kind": "artifact",
+      "dependsOn": ["enrich"],
+      "sourceStep": "enrich",
+      "mediaType": "application/json",
+      "redaction": "internal",
+      "retention": "campaign"
+    }
+  ]
+}

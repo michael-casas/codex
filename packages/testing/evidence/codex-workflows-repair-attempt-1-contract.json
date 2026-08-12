@@ -1,0 +1,98 @@
+{
+  "schemaVersion": 1,
+  "artifactType": "codex-workflows-additive-repair-contract",
+  "contractId": "CDX-WF-AUD1-REPAIR-GC1",
+  "contractDigest": "sha256:602046d227f89f21768397535cffc616ab9db9db4fe56503ef5e6d6f8ce5a3ae",
+  "digestScope": "/contract",
+  "supersededDraft": {
+    "digest": "sha256:3a340b29bf3b681e84ac18e7f24a0ef712ab7d55b2a5ca9e522f72289228fc38",
+    "reason": "The pre-implementation draft overreached by excluding environment key names despite the locked acceptance requiring copy-safe envKeys diagnostics. It was corrected before any GREEN implementation write."
+  },
+  "candidate": {
+    "baseRevision": "28c4650c676644bdfac11aa25c46d5be9b15f833",
+    "preRepairAggregateDigest": "e2d7cba72fb07323850a15e8c47f33873b2aa038400c00018e1a1fb736d2022d"
+  },
+  "authority": {
+    "attempt": 1,
+    "lane": "failed-only-serialized-repair",
+    "role": "Worker",
+    "historicalRedClaimed": false,
+    "originalAcceptanceMutable": false,
+    "wikiMutable": false
+  },
+  "contract": {
+    "findings": [
+      {
+        "id": "CWF-AUD-001",
+        "obligations": [
+          "snapshot and deeply freeze admitted SDK host configuration before fingerprinting and adapter construction",
+          "keep the conflict fingerprint in private immutable host state",
+          "expose only deeply immutable copy-safe diagnostics",
+          "fingerprint only codexPathOverride and baseUrl as explicit non-secret host identity fields",
+          "exclude apiKey, environment values, and arbitrary config names and values from diagnostics and identity; preserve only the sorted copy-safe environment key names required by locked acceptance and exclude those names from identity",
+          "prove original and nested config mutation, environment mutation, diagnostics mutation, and secret changes cannot alter real controlled-child behavior or bypass a host conflict",
+          "prove controlled child and temporary path cleanup"
+        ],
+        "tests": [
+          "packages/codex/src/runtime/singleton.test.ts",
+          "packages/codex/src/runtime/sdk.spec.ts"
+        ]
+      },
+      {
+        "id": "CWF-AUD-002",
+        "obligations": [
+          "eliminate shared mutable references between normalized workflow state and every returned plan",
+          "deeply freeze normalized workflow state and plan projections including policy, capabilities, nodes, dependencies, fan-out data, join data, conditions, and artifacts",
+          "prove mutation attempts cannot alter canonical bytes, digest-bound state, or a second plan"
+        ],
+        "tests": ["packages/workflows/src/lib/repairs.test.ts"]
+      },
+      {
+        "id": "CWF-AUD-003",
+        "obligations": [
+          "make codex:test-l1, codex:test-l2, codex-workflows:test-l1, and codex-workflows:test-l2 select the complete intended layer with nonzero execution",
+          "use verified package-root file paths or exclusive runner configuration",
+          "keep live L2 standing targets uncached",
+          "reject zero-selection-prone globs and incomplete standing target coverage through testing policy"
+        ],
+        "tests": [
+          "packages/testing/src/ground-zero/harness.test.ts",
+          "packages/testing/src/cli.ts"
+        ]
+      },
+      {
+        "id": "CWF-AUD-004",
+        "obligations": [
+          "create content-addressed machine-readable recovery re-proof bound to this frozen contract and exact candidates",
+          "record commands, sensitivity proof, nonzero selected and executed counts, exits, and zero cleanup deltas",
+          "state that recovery evidence is not historical RED proof and does not claim registration, Preflight approval, verification, judgment, or acceptance"
+        ],
+        "tests": ["packages/testing/src/ground-zero/harness.spec.ts"]
+      },
+      {
+        "id": "CWF-AUD-005",
+        "obligations": [
+          "use syntax-aware TypeScript and JavaScript parsing for static value and type imports, side-effect imports, re-exports, dynamic imports, and supported CommonJS require",
+          "avoid comment and string literal false positives",
+          "require exactly one SDK occurrence in the allowed adapter and zero elsewhere",
+          "report actual scanned files and actual SDK occurrences"
+        ],
+        "tests": [
+          "packages/codex/src/policy/sdk-imports.test.ts",
+          "packages/codex/tools/check-sdk-imports.ts"
+        ]
+      },
+      {
+        "id": "CWF-AUD-006",
+        "obligations": [
+          "reject every tilde not immediately followed by zero or one before decoding each RFC 6901 segment",
+          "retain decoded prototype-pollution segment denial",
+          "emit stable UNSAFE_JSON_POINTER issues for malformed condition, fan-out source, and item-key pointers"
+        ],
+        "tests": ["packages/workflows/src/lib/fixtures.test.ts"]
+      }
+    ],
+    "lockedGreenRule": "Original test titles, assertions, scenarios, values, and negative guarantees remain unchanged.",
+    "stopBoundary": "Write the bounded repair report and stop without self-verification, judgment, acceptance, or score."
+  }
+}

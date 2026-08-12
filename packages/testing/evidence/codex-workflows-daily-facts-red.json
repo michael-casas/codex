@@ -1,0 +1,431 @@
+{
+  "schemaVersion": 1,
+  "artifactType": "codex-workflows-founder-daily-facts-all-row-red",
+  "contractId": "CDX-WF-DF-GC-1",
+  "contractDigest": "sha256:6bbddd18a683a70d7fc692a20edaef7e218635a0411fc8ff22b9bc743a0e3f63",
+  "initialContractDigest": "sha256:8af755f0cfe592b9035f09636d9cd10255926019d2185a71ed2afff2a2811b6c",
+  "assignmentId": "CDX.DAILY-FACTS.W1",
+  "assignmentDigest": "sha256:4eaa25749951c3c1d9f7c2f0c1e45447f70251ea7bb86e3abe06db45fe652a06",
+  "candidateIntakeDigest": "sha256:3cc59190a29277049c88d9c3e05a7cdd4387a66c205196eabd8ef9e9524b3c4a",
+  "capturedAt": "2026-08-10T17:57:45Z",
+  "meaningfulRed": true,
+  "harnessValidation": {
+    "typecheckCommand": "bun nx run codex-workflows:typecheck --skipNxCache --outputStyle=static",
+    "typecheckExitCode": 0,
+    "cucumberMachineArtifact": "test-output/cucumber/codex-workflows-daily-facts.json",
+    "cucumberMachineArtifactDigest": "sha256:415f64eb83104887df5f2383aba7569941ac197411746e03636b4da322eecaf9",
+    "cucumberScenarios": 1,
+    "cucumberSteps": 3,
+    "cucumberStatuses": ["passed", "passed", "failed"],
+    "undefinedSteps": 0,
+    "ambiguousSteps": 0,
+    "pendingSteps": 0,
+    "skippedSteps": 0,
+    "syntaxOrHarnessFailuresCountedAsRed": false
+  },
+  "commands": [
+    {
+      "id": "RED-CMD-001",
+      "command": "bun nx run workflows:test-l1-integration --skipNxCache --outputStyle=static",
+      "exitCode": 1,
+      "executed": 16,
+      "passed": 11,
+      "failed": 5,
+      "layerFiltered": 2,
+      "decisiveFailures": [
+        "DF-GC1-001 observed activeAtRejection=1 instead of 0",
+        "DF-GC1-002 attributed both equal-valued roots instead of only the consumed identity",
+        "DF-GC1-005 completed an invalid runtime reasoning request and called the adapter",
+        "DF-GC1-006 completed a host-incompatible const schema and called the adapter",
+        "DF-GC1-010 omitted publishPath at the artifact writer boundary"
+      ]
+    },
+    {
+      "id": "RED-CMD-002",
+      "command": "bun nx run codex-workflows:test-l1-integration --skipNxCache --outputStyle=static",
+      "exitCode": 1,
+      "executed": 4,
+      "passed": 1,
+      "failed": 3,
+      "decisiveFailures": [
+        "DF-GC1-003 persisted token and every other seeded sensitive alias",
+        "DF-GC1-004 surfaced an ENOENT PID-temp collision instead of deterministic ARTIFACT_ALREADY_EXISTS",
+        "DF-GC1-010 returned no publishedPath and produced no public report"
+      ]
+    },
+    {
+      "id": "RED-CMD-003",
+      "command": "bun nx run codex-workflows:test-l1-unit --skipNxCache --outputStyle=static",
+      "exitCode": 1,
+      "executed": 16,
+      "passed": 8,
+      "failed": 8,
+      "decisiveFailures": [
+        "DF-GC1-011 contract module, validator, and renderer are absent",
+        "Every positive and negative daily-facts content row selected and failed at the missing product contract"
+      ]
+    },
+    {
+      "id": "RED-CMD-004",
+      "command": "bun nx run codex-workflows:test-l2-integration --skipNxCache --outputStyle=static",
+      "exitCode": 1,
+      "executed": 10,
+      "passed": 7,
+      "failed": 3,
+      "layerFiltered": 3,
+      "decisiveFailures": [
+        "DF-GC1-006 host-invalid schema exited 0 instead of admission exit 65",
+        "DF-GC1-007 journal ended with node.failed after workflow.failed",
+        "DF-GC1-008 deterministic two-child readiness completed with node.cancelled after workflow.cancelled"
+      ]
+    },
+    {
+      "id": "RED-CMD-005",
+      "command": "bun nx run codex-workflows:test-l2-e2e --skipNxCache --outputStyle=static",
+      "exitCode": 1,
+      "executed": 4,
+      "passed": 3,
+      "failed": 1,
+      "layerFiltered": 9,
+      "decisiveFailures": [
+        "DF-GC1-011 canonical examples/daily-facts.workflow.ts is absent"
+      ]
+    },
+    {
+      "id": "RED-CMD-006",
+      "command": "bun nx run codex-workflows:test-l3-daily-facts --skipNxCache --outputStyle=static",
+      "exitCode": 1,
+      "executedScenarios": 1,
+      "passedSteps": 2,
+      "failedSteps": 1,
+      "decisiveFailures": [
+        "DAILY-FACTS-L3-001 final behavioral assertion reports the canonical workflow absent",
+        "The physical scenario and all bindings are valid, non-pending, non-skipped, and nonzero"
+      ]
+    },
+    {
+      "id": "RED-CMD-007",
+      "command": "bun nx run @orchestration/testing:test-l2 --skipNxCache --outputStyle=static",
+      "exitCode": 1,
+      "executed": 26,
+      "passed": 21,
+      "failed": 5,
+      "decisiveFailures": [
+        "DF-GC1-009 found six Git-visible Python bytecode files",
+        "Four additional shared-input rows expected six projects while Nx resolved codex-monitor as the seventh"
+      ]
+    },
+    {
+      "id": "RED-CMD-008",
+      "command": "bun nx run codex-workflows:test-l1-unit --skip-nx-cache",
+      "authorizedAmendment": "FOUNDER-20260810-SEVEN-DAY-NEWS-WINDOW",
+      "executedAt": "2026-08-10T18:58:11Z",
+      "exitCode": 1,
+      "executed": 18,
+      "passed": 17,
+      "failed": 1,
+      "decisiveFailures": [
+        "DF-GC1-011 newly accepted oldest boundary date 2026-08-04 for a 2026-08-10 run was rejected by the prior same-day validator",
+        "The future-date and older-than-window negative rows already rejected, proving the harness and failure direction were meaningful"
+      ]
+    },
+    {
+      "id": "RED-CMD-009",
+      "command": "bun nx run codex-workflows:test-l1-unit --skip-nx-cache",
+      "authorizedAmendment": "FOUNDER-20260810-SEVEN-DAY-NEWS-WINDOW",
+      "executedAt": "2026-08-10T19:02:39Z",
+      "exitCode": 1,
+      "executed": 18,
+      "passed": 17,
+      "failed": 1,
+      "decisiveFailures": [
+        "DF-GC1-011 rejected the legitimate abbreviated publication date evidence Aug 4, 2026 before the parser amendment"
+      ]
+    },
+    {
+      "id": "RED-CMD-010",
+      "command": "bun nx run codex-workflows:test-l1-unit --skip-nx-cache",
+      "authorizedAmendment": "FOUNDER-20260810-SEVEN-DAY-NEWS-WINDOW",
+      "executedAt": "2026-08-10T19:07:57Z",
+      "exitCode": 1,
+      "executed": 18,
+      "passed": 17,
+      "failed": 1,
+      "decisiveFailures": [
+        "DF-GC1-011 rejected 2026-08-03 for a 2026-08-10 run even though its age is exactly seven UTC days; the 2026-08-02 negative boundary still rejected"
+      ]
+    },
+    {
+      "id": "RED-CMD-011",
+      "command": "bun nx run codex-workflows:test-l1-unit --skip-nx-cache",
+      "authorizedAmendment": "FOUNDER-20260810-SEVEN-DAY-NEWS-WINDOW",
+      "executedAt": "2026-08-10T19:10:55Z",
+      "exitCode": 1,
+      "executed": 19,
+      "passed": 18,
+      "failed": 1,
+      "decisiveFailures": [
+        "DF-GC1-011 admitted a weather headline with no significant token overlap with its media-and-entertainment brief"
+      ]
+    },
+    {
+      "id": "RED-CMD-012",
+      "command": "bun nx run codex-workflows:test-l1-unit --skip-nx-cache",
+      "authorizedAmendment": "FOUNDER-20260810-SEVEN-DAY-NEWS-WINDOW",
+      "executedAt": "2026-08-10T19:14:41Z",
+      "exitCode": 1,
+      "executed": 19,
+      "passed": 18,
+      "failed": 1,
+      "decisiveFailures": [
+        "DF-GC1-011 rejected the relevant headline AI's chip era even though its explicit AI acronym occurs in the semiconductor brief context; the unrelated weather headline still rejected"
+      ]
+    },
+    {
+      "id": "RED-CMD-013",
+      "command": "bun nx run codex-workflows:test-l1-unit --skip-nx-cache",
+      "authorizedAmendment": "FOUNDER-20260810-SEVEN-DAY-NEWS-WINDOW",
+      "executedAt": "2026-08-10T19:16:45Z",
+      "exitCode": 1,
+      "executed": 19,
+      "passed": 18,
+      "failed": 1,
+      "decisiveFailures": [
+        "DF-GC1-011 rejected visible locale-formatted publication evidence 03 ago 2026 for the exact 2026-08-03 boundary date"
+      ]
+    }
+  ],
+  "rows": [
+    {
+      "id": "DF-GC1-001-LIFECYCLE-DRAIN",
+      "red": true,
+      "evidence": ["RED-CMD-001"]
+    },
+    {
+      "id": "DF-GC1-002-EXPLICIT-PROVENANCE",
+      "red": true,
+      "evidence": ["RED-CMD-001"]
+    },
+    {
+      "id": "DF-GC1-003-JOURNAL-REDACTION",
+      "red": true,
+      "evidence": ["RED-CMD-002"]
+    },
+    {
+      "id": "DF-GC1-004-ARTIFACT-ATOMICITY",
+      "red": true,
+      "evidence": ["RED-CMD-002"]
+    },
+    {
+      "id": "DF-GC1-005-RUNTIME-MODEL-POLICY",
+      "red": true,
+      "evidence": ["RED-CMD-001"]
+    },
+    {
+      "id": "DF-GC1-006-HOST-SCHEMA-ADMISSION",
+      "red": true,
+      "evidence": ["RED-CMD-001", "RED-CMD-004"]
+    },
+    {
+      "id": "DF-GC1-007-PUBLIC-FAILURE-ORDER",
+      "red": true,
+      "evidence": ["RED-CMD-004"]
+    },
+    {
+      "id": "DF-GC1-008-DETERMINISTIC-CANCELLATION-PROOF",
+      "red": true,
+      "evidence": ["RED-CMD-004"]
+    },
+    {
+      "id": "DF-GC1-009-GROUND-ZERO-CLOSURE",
+      "red": true,
+      "evidence": ["RED-CMD-007"]
+    },
+    {
+      "id": "DF-GC1-010-PUBLIC-REPORT-BRIDGE",
+      "red": true,
+      "evidence": ["RED-CMD-001", "RED-CMD-002"]
+    },
+    {
+      "id": "DF-GC1-011-DAILY-FACTS-SHAPE",
+      "red": true,
+      "evidence": [
+        "RED-CMD-003",
+        "RED-CMD-005",
+        "RED-CMD-008",
+        "RED-CMD-009",
+        "RED-CMD-010",
+        "RED-CMD-011",
+        "RED-CMD-012",
+        "RED-CMD-013"
+      ]
+    },
+    {
+      "id": "DF-GC1-012-CANONICAL-L3",
+      "red": true,
+      "evidence": ["RED-CMD-006"]
+    },
+    {
+      "id": "DF-GC1-013-STANDING-AND-PREFLIGHT-HANDOFF",
+      "red": true,
+      "evidence": [
+        "RED-CMD-006",
+        "RED-CMD-007",
+        "AUDIT-ATTEMPT-1-PREFLIGHT-INVALID"
+      ],
+      "observed": {
+        "dailyFactsReport": "absent",
+        "preflightArtifacts": "absent",
+        "attempt1Preflight": "PREFLIGHT-INVALID"
+      }
+    }
+  ],
+  "frozenAcceptanceFiles": [
+    {
+      "path": "packages/workflows/src/authoring/authoring.test.ts",
+      "sha256": "696a111e094dc6548acd8f1f9d35531c99c74b92b11034ceca1b37edcec9adfc"
+    },
+    {
+      "path": "apps/codex-workflows/src/runtime/journal.test.ts",
+      "sha256": "762f0ba85e2d48a19e9b6b6b7522fc78880cd56203168e5b81c1ca974ac0517e"
+    },
+    {
+      "path": "apps/codex-workflows/src/workflows/direct-runner.spec.ts",
+      "sha256": "f44b2f20d94e8d1fc472db0515c45bfb5e868bc14ab14e7381116c62e34a2f39"
+    },
+    {
+      "path": "apps/codex-workflows/src/features/daily-facts/daily-facts.test.ts",
+      "sha256": "93863fda46c5bc58072e0febfdba42693c263c0cf2d90b1a4b3d2f1a9f8b9871"
+    },
+    {
+      "path": "apps/codex-workflows/src/features/daily-facts/daily-facts.spec.ts",
+      "sha256": "6362b084dfb5cd67aa0522e3b15d624b8a1f924c5d70555b5d6615276f942d61"
+    },
+    {
+      "path": "apps/codex-workflows/src/features/daily-facts/daily-facts.feature",
+      "sha256": "2feb11ae5c6cb1b666ab996545016ffc80ae2ebb8f1bfdb71f4723ccc74d5d34"
+    },
+    {
+      "path": "apps/codex-workflows/src/features/daily-facts/index.steps.ts",
+      "sha256": "36dce76eeb8d7aa8616ff97a6efd50da6542fea1a99aa4a15f744683c20296f8"
+    },
+    {
+      "path": "apps/codex-workflows/src/features/daily-facts/support/driver.ts",
+      "sha256": "57c33b94a58bbeceaa33aff13d006660fcb27118faf390b1e68075e76b4a80af"
+    },
+    {
+      "path": "apps/codex-workflows/src/features/daily-facts/support/controlled-codex.mjs",
+      "sha256": "6d10d3340c7b043426118a3b4d654fbf05c15bdc8b610a3e79bacb3eea810d6f"
+    },
+    {
+      "path": "packages/testing/src/ground-zero/harness.spec.ts",
+      "sha256": "59e7d135047fa22c47dc9590c73b641348c875427d6d6b60de3bdbd6a09022eb"
+    },
+    {
+      "path": "apps/codex-workflows/project.json",
+      "sha256": "fb1ca626b2acc2adf2aaac24783eb7079d936c461db8f1bec0886539e77f7049"
+    },
+    {
+      "path": "packages/testing/manifests/codex-workflows.json",
+      "sha256": "c4f7342d0e7a5153f676bc866ff679700bff3065ca03ab9b3d094807bb92de3e"
+    }
+  ],
+  "acceptanceAmendments": [
+    {
+      "id": "FOUNDER-20260810-SEVEN-DAY-NEWS-WINDOW",
+      "authority": "Direct Founder ruling in the active task",
+      "previousContractDigest": "sha256:8af755f0cfe592b9035f09636d9cd10255926019d2185a71ed2afff2a2811b6c",
+      "amendedContractDigest": "sha256:6bbddd18a683a70d7fc692a20edaef7e218635a0411fc8ff22b9bc743a0e3f63",
+      "meaningfulRedEvidence": [
+        "RED-CMD-008",
+        "RED-CMD-009",
+        "RED-CMD-010",
+        "RED-CMD-011",
+        "RED-CMD-012",
+        "RED-CMD-013"
+      ],
+      "amendedAcceptanceFiles": [
+        {
+          "path": "apps/codex-workflows/src/features/daily-facts/daily-facts.test.ts",
+          "sha256": "bb1a7cb239974aea9afdd0c25843e11dfa5de542251fbf27ba52502ba678ea78",
+          "reason": "Founder amendment cases plus repository-owned L1 marker; semantic assertions are frozen"
+        },
+        {
+          "path": "apps/codex-workflows/src/features/daily-facts/daily-facts.spec.ts",
+          "sha256": "995579a25266b399c32ee0fc797d5b47aca3dd6917751921e8eecaa0f661a526",
+          "reason": "repository-owned L2 marker only; behavior and assertions are unchanged"
+        },
+        {
+          "path": "apps/codex-workflows/src/features/daily-facts/index.steps.ts",
+          "sha256": "d5c505739b01b954d5d7d3440cd694ea8eda7204e227fbb4af67f2757d73adea"
+        },
+        {
+          "path": "apps/codex-workflows/src/features/daily-facts/support/driver.ts",
+          "sha256": "b98205e589f1ffde0a2e86a593e6e2ec3b8560bf4dd500d088d1a47d1e953b7d"
+        },
+        {
+          "path": "apps/codex-workflows/src/features/daily-facts/support/controlled-codex.mjs",
+          "sha256": "8b256bbf8838b1f30066b2f5149af4701414f6b6589956a307a5ee7493a4c56b",
+          "reason": "deterministic controlled three-process overlap under aggregate load and exact current slot-one industry admission"
+        }
+      ]
+    }
+  ],
+  "frozenAcceptanceFilesRole": "Historical byte identities at the all-row RED freeze. Authorized Founder amendments and non-semantic policy/format/fixture plumbing are separately recorded; currentAcceptanceFiles is the exact candidate handoff.",
+  "currentAcceptanceFiles": [
+    {
+      "path": "packages/workflows/src/authoring/authoring.test.ts",
+      "sha256": "346f9b2cba50c9553564fca808686e2d33fb79f4599cbfff8f450148b2937776"
+    },
+    {
+      "path": "apps/codex-workflows/src/runtime/journal.test.ts",
+      "sha256": "fb51b7f55ecd03999a8c617b2963e5f8b5cb59b385d415f560f72fe8ee4598bd"
+    },
+    {
+      "path": "apps/codex-workflows/src/workflows/direct-runner.spec.ts",
+      "sha256": "f44b2f20d94e8d1fc472db0515c45bfb5e868bc14ab14e7381116c62e34a2f39"
+    },
+    {
+      "path": "apps/codex-workflows/src/features/daily-facts/daily-facts.test.ts",
+      "sha256": "bb1a7cb239974aea9afdd0c25843e11dfa5de542251fbf27ba52502ba678ea78"
+    },
+    {
+      "path": "apps/codex-workflows/src/features/daily-facts/daily-facts.spec.ts",
+      "sha256": "995579a25266b399c32ee0fc797d5b47aca3dd6917751921e8eecaa0f661a526"
+    },
+    {
+      "path": "apps/codex-workflows/src/features/daily-facts/daily-facts.feature",
+      "sha256": "2feb11ae5c6cb1b666ab996545016ffc80ae2ebb8f1bfdb71f4723ccc74d5d34"
+    },
+    {
+      "path": "apps/codex-workflows/src/features/daily-facts/index.steps.ts",
+      "sha256": "d5c505739b01b954d5d7d3440cd694ea8eda7204e227fbb4af67f2757d73adea"
+    },
+    {
+      "path": "apps/codex-workflows/src/features/daily-facts/support/driver.ts",
+      "sha256": "b98205e589f1ffde0a2e86a593e6e2ec3b8560bf4dd500d088d1a47d1e953b7d"
+    },
+    {
+      "path": "apps/codex-workflows/src/features/daily-facts/support/controlled-codex.mjs",
+      "sha256": "8b256bbf8838b1f30066b2f5149af4701414f6b6589956a307a5ee7493a4c56b"
+    },
+    {
+      "path": "packages/testing/src/ground-zero/harness.spec.ts",
+      "sha256": "76a3ab276b852064b93318fc79161a4569674823f3feaaa2a98968aaa7a7cd67"
+    },
+    {
+      "path": "apps/codex-workflows/project.json",
+      "sha256": "fb1ca626b2acc2adf2aaac24783eb7079d936c461db8f1bec0886539e77f7049"
+    },
+    {
+      "path": "packages/testing/manifests/codex-workflows.json",
+      "sha256": "c4f7342d0e7a5153f676bc866ff679700bff3065ca03ab9b3d094807bb92de3e"
+    }
+  ],
+  "authorityEvidence": {
+    "attempt1Audit": ".agent/audit/workflows/1/AUDIT.md",
+    "attempt1AuditDigest": "sha256:b548caa1a91f753ebd3d303ca9ca6e00bc8a4eebb285c1d22af8b580fcea6a78",
+    "attempt1PreflightDisposition": "PREFLIGHT-INVALID"
+  },
+  "freezeDisposition": "ALL-ROW-RED-CAPTURED / PRODUCT-GREEN-AUTHORIZED"
+}

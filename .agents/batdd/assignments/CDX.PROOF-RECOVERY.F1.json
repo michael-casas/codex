@@ -1,0 +1,69 @@
+{
+  "$schema": "../assignment.schema.json",
+  "schemaVersion": "1.0.0",
+  "assignmentId": "CDX.PROOF-RECOVERY.F1",
+  "status": "active",
+  "dispatchable": true,
+  "role": "worker",
+  "objective": "Implement the Founder-authorized repository-scoped candidate, artifact, Preflight, verdict, and deterministic reducer control plane; close the four Attempt 11 evidence-integrity findings; preserve prior attempts and proof bytes as append-only history; and stop at READY-FOR-AUDIT for reset-epoch Attempt 1.",
+  "completionScope": "vertical-slice",
+  "mayReportFeatureComplete": true,
+  "feature": "Founder proof recovery and scoped process control",
+  "requiredLayers": {
+    "l1": { "status": "required" },
+    "l2": { "status": "required" },
+    "l3": { "status": "required" }
+  },
+  "writeSurface": [
+    ".agents/batdd/assignments/CDX.PROOF-RECOVERY.F1.json",
+    "packages/process/**",
+    "migrations/process/**",
+    "packages/testing/manifests/process.json",
+    "packages/testing/evidence/codex-workflows-proof-recovery-*.json",
+    "packages/workflows/src/authoring/**",
+    "packages/workflows/src/authoring/execution.test.ts",
+    "apps/codex-workflows/examples/cra-red-green.workflow.ts",
+    "apps/codex-workflows/src/features/cra-red-green/**",
+    "apps/codex-workflows/src/runtime/**",
+    "apps/codex-workflows/src/workflows/FEATURE.md",
+    "README.md",
+    "SPEC.md",
+    "ARCHITECTURE.md",
+    "PLAN.md",
+    "DOMAINS.md",
+    "package.json",
+    "bun.lock",
+    "tsconfig.json",
+    ".agent/audit/workflows/founder-recovery-1/**",
+    ".agent/testing/workflows/**"
+  ],
+  "baseRevision": "28c4650c676644bdfac11aa25c46d5be9b15f833",
+  "stopBoundary": "READY-FOR-AUDIT",
+  "greenContract": {
+    "id": "CDX-WF-PROOF-RECOVERY-GC-1",
+    "strategy": "basic-then-adversarial",
+    "redPolicy": "all-new-or-changed-contract-rows",
+    "adversarialRequired": true
+  },
+  "commitAuthority": {
+    "allowed": false,
+    "maxCommits": 0,
+    "message": "Founder authorization does not grant commit, stage, push, merge, or historical rewrite authority."
+  },
+  "dependencies": [
+    "Attempt 11 ESCALATED verdict",
+    "Founder authorization dated 2026-08-12"
+  ],
+  "evidence": [
+    "Meaningful L1 RED/GREEN for reducer replay, idempotency, role authorization, immutable artifacts, and invalid Preflight rejection",
+    "Meaningful L2 RED/GREEN through real PostgreSQL and the public scoped CLI using isolated role credentials",
+    "Meaningful L3 RED/GREEN through the public registration-to-judgment-readiness surface",
+    "Non-destructive idempotent migration and database privilege proof",
+    "Command-evidence empty, zero, fabricated, mismatched, and runtime-attested positive matrix",
+    "Fresh redacted CRA public report and digest-only journal proof",
+    "Append-only 57-count successor projection and stale-pointer addendum",
+    "Fresh Daily Facts and CRA L3 locked-green reproof",
+    "Exact candidate registration, immutable Preflight artifacts, reducer projection, cleanup, and resource delta",
+    "Fresh independent reset-epoch Attempt 1 Preflight and external audit"
+  ]
+}

@@ -1,0 +1,426 @@
+{
+  "schemaVersion": 1,
+  "artifactType": "codex-workflows-recovery-reproof",
+  "artifactDigest": "sha256:9205215fc1e8ab105c1ffc19e072d508bc0946ca18b944c4c26d3254f546eff4",
+  "digestScope": "/evidence",
+  "evidence": {
+    "limitation": "present-day-worker-authored-recovery-evidence-not-historical-red-or-preflight-proof",
+    "authority": {
+      "role": "failed-only-repair-worker",
+      "attempt": 2,
+      "authorizedFindings": ["CWF2-AUD-001", "CWF2-AUD-002", "CWF2-AUD-003"],
+      "excludedAuthorityFinding": "CWF2-AUD-004",
+      "historicalRedClaimed": false,
+      "immutableRegistrationClaimed": false,
+      "preflightApprovalClaimed": false,
+      "reducerApprovalClaimed": false,
+      "verificationClaimed": false,
+      "judgmentClaimed": false,
+      "acceptanceClaimed": false,
+      "scoreClaimed": false
+    },
+    "candidate": {
+      "baseRevision": "28c4650c676644bdfac11aa25c46d5be9b15f833",
+      "preRepairAggregateDigest": "8b25e2c880fcdd24461860eaae45dc85d961137a589632a767efb63ed4cafefd",
+      "preRepairIncludedPathCount": 78,
+      "postRepairAggregateDigest": "3ab8274f61ad91f8843d979c6b7df86d40ffaf0df57fbac398135a3da05da0d5",
+      "postRepairIncludedPathCount": 79,
+      "aggregateAlgorithm": "Sort git ls-files -m --others --exclude-standard after excluding .pi/**, both immutable external audits, this re-proof artifact, and the Repair Attempt 2 report; SHA-256 each included file, sort '<hash>  <path>\\n' records bytewise, then SHA-256 their concatenation.",
+      "excludedPaths": [
+        ".pi/**",
+        "docs/reports/codex-workflows-external-audit-attempt-1.md",
+        "docs/reports/codex-workflows-external-audit-attempt-2.md",
+        "docs/reports/codex-workflows-repair-attempt-2.md",
+        "packages/testing/evidence/codex-workflows-repair-attempt-2-reproof.json"
+      ]
+    },
+    "frozenContract": {
+      "id": "CDX-WF-AUD2-REPAIR-GC1",
+      "digest": "sha256:095eed6c60da38755ad70e944e48efdfb54139fc4ecf2292156b913237bcb2df",
+      "digestScope": "/contract",
+      "path": "packages/testing/evidence/codex-workflows-repair-attempt-2-contract.json",
+      "fileSha256": "d97fbacf181f755b050803b586763c381dfb615f0dff09a80374f8b1c94327f8",
+      "postFreezeLedgerPresent": true
+    },
+    "pathMap": {
+      "product": [
+        "packages/codex/src/runtime/singleton.ts",
+        "packages/testing/src/lib/testing.ts",
+        "packages/testing/src/cli.ts"
+      ],
+      "regressions": [
+        "packages/codex/src/runtime/singleton.test.ts",
+        "packages/codex/src/runtime/sdk.spec.ts",
+        "packages/testing/src/ground-zero/harness.test.ts",
+        "packages/testing/src/ground-zero/harness.spec.ts"
+      ],
+      "evidenceAndReconciliation": [
+        "packages/testing/evidence/codex-workflows-repair-attempt-2-contract.json",
+        "packages/testing/evidence/codex-workflows-repair-attempt-2-reproof.json",
+        "PLAN.md",
+        "docs/reports/codex-workflows-implementation-report.md",
+        "docs/reports/codex-workflows-self-audit-report.md",
+        "docs/reports/codex-workflows-reimplementation-report.md",
+        "docs/reports/codex-workflows-external-audit-handoff.md",
+        "docs/reports/codex-workflows-repair-attempt-1.md",
+        "docs/reports/codex-workflows-repair-attempt-2.md"
+      ],
+      "projectOrManifestChanges": []
+    },
+    "checks": [
+      {
+        "findingId": "CWF2-AUD-001",
+        "selected": 3,
+        "executed": 3,
+        "exitCode": 0,
+        "red": [
+          {
+            "target": "codex:test-l1-unit",
+            "filter": "CWF2-AUD-001",
+            "selected": 2,
+            "passed": 1,
+            "failed": 1,
+            "exitCode": 1,
+            "nxRunDurationSeconds": 0.423,
+            "fullLayerLockedGreen": 14,
+            "fullLayerFailed": 2
+          },
+          {
+            "target": "codex:test-l2-integration",
+            "filter": "CWF2-AUD-001",
+            "selected": 1,
+            "passed": 0,
+            "failed": 1,
+            "exitCode": 1,
+            "nxRunDurationSeconds": 0.311,
+            "fullLayerLockedGreen": 5,
+            "fullLayerFailed": 1
+          }
+        ],
+        "green": [
+          {
+            "command": "bun nx run codex:test-l1 --skip-nx-cache -- --testNamePattern=CWF2-AUD-001",
+            "selected": 2,
+            "executed": 2,
+            "exitCode": 0,
+            "wallDurationSeconds": 0.802,
+            "nxRunDurationSeconds": 0.48
+          },
+          {
+            "command": "bun nx run codex:test-l2 --skip-nx-cache -- --testNamePattern=CWF2-AUD-001",
+            "selected": 1,
+            "executed": 1,
+            "exitCode": 0,
+            "wallDurationSeconds": 0.776,
+            "nxRunDurationSeconds": 0.434
+          }
+        ],
+        "sensitivity": "Independent path, base URL, API key, nested primitive/object/array config, environment key/value, observer identity, factory identity, combined differences, caller mutation, diagnostics mutation, real admitted-child behavior, conflict bypass, non-disclosure, and cleanup attacks are selected."
+      },
+      {
+        "findingId": "CWF2-AUD-002",
+        "selected": 1,
+        "executed": 1,
+        "exitCode": 0,
+        "red": [
+          {
+            "attack": "initial unmatched config-only include",
+            "selected": 1,
+            "failed": 1,
+            "exitCode": 1,
+            "nxRunDurationSeconds": 0.306
+          },
+          {
+            "attack": "config exclude omits one explicitly named intended file",
+            "selected": 1,
+            "failed": 1,
+            "exitCode": 1,
+            "wallDurationSeconds": 0.731,
+            "nxRunDurationSeconds": 0.341
+          },
+          {
+            "attack": "echo-spoofed Vitest runner",
+            "selected": 1,
+            "failed": 1,
+            "exitCode": 1,
+            "wallDurationSeconds": 0.697,
+            "nxRunDurationSeconds": 0.359
+          },
+          {
+            "attack": "imported dynamic config spread",
+            "selected": 1,
+            "failed": 1,
+            "exitCode": 1,
+            "wallDurationSeconds": 1.379,
+            "nxRunDurationSeconds": 0.667
+          },
+          {
+            "attack": "include-shaped text inside an unrelated JavaScript string for a config-only target",
+            "selected": 1,
+            "failed": 1,
+            "exitCode": 1,
+            "wallDurationSeconds": 0.641,
+            "nxRunDurationSeconds": 0.344
+          }
+        ],
+        "green": {
+          "command": "bun nx run @orchestration/testing:test-l1 --skip-nx-cache -- --testNamePattern=CWF2-AUD-002",
+          "selected": 1,
+          "executed": 1,
+          "exitCode": 0,
+          "wallDurationSeconds": 0.701,
+          "nxRunDurationSeconds": 0.377
+        },
+        "sensitivity": "The fixture matrix covers exact exhaustive success, invalid glob, explicit and exclude-driven omission, executor and executable runner spoofing, missing target, unmatched include, config-only actual include/exclude resolution, cross-layer include, command/config passWithNoTests, dynamic unprovable config, include-shaped string decoys, and cached L2."
+      },
+      {
+        "findingId": "CWF2-AUD-003",
+        "selected": 4,
+        "executed": 4,
+        "exitCode": 0,
+        "red": [
+          {
+            "target": "@orchestration/testing:test-l1-unit",
+            "selected": 1,
+            "failed": 1,
+            "exitCode": 1,
+            "nxRunDurationSeconds": 0.306
+          },
+          {
+            "target": "@orchestration/testing:test-l2-integration",
+            "selected": 3,
+            "failed": 3,
+            "exitCode": 1,
+            "nxRunDurationSeconds": 0.483,
+            "fullLayerLockedGreen": 21,
+            "fullLayerFailed": 3
+          }
+        ],
+        "green": [
+          {
+            "command": "bun nx run @orchestration/testing:test-l1 --skip-nx-cache -- --testNamePattern=CWF2-AUD-00",
+            "selected": 2,
+            "executed": 2,
+            "exitCode": 0,
+            "wallDurationSeconds": 0.576,
+            "nxRunDurationSeconds": 0.329
+          },
+          {
+            "command": "bun nx run @orchestration/testing:test-l2 --skip-nx-cache -- --testNamePattern=CWF2-AUD-003",
+            "selected": 3,
+            "executed": 3,
+            "exitCode": 0,
+            "wallDurationSeconds": 0.684,
+            "nxRunDurationSeconds": 0.441
+          }
+        ],
+        "machineAssertions": {
+          "validZeroExitZero": {
+            "aggregateExitCode": 1,
+            "aggregateStatus": "failed",
+            "childStatus": "failed",
+            "selected": 0,
+            "executed": 0,
+            "childExitCode": 1
+          },
+          "malformedCollector": {
+            "aggregateExitCode": 1,
+            "aggregateStatus": "failed",
+            "childStatus": "failed",
+            "selected": 0,
+            "executed": null,
+            "childExitCode": 1
+          },
+          "validNonzero": {
+            "aggregateExitCode": 0,
+            "aggregateStatus": "passed",
+            "childStatus": "passed",
+            "selected": 3,
+            "executed": 3,
+            "childExitCode": 0
+          },
+          "failedZeroConsumerValidated": true,
+          "failedZeroReclassifiedAsPassed": false
+        }
+      }
+    ],
+    "validation": {
+      "standingTargets": {
+        "command": "bun nx run-many -t test-l1-unit,test-l1-integration,test-l1,test-l2-integration,test-l2-e2e,test-l2,test-l3 --projects=workflows,codex,@orchestration/testing --skip-nx-cache --parallel=1; plus the applicable codex-workflows matrix",
+        "exitCode": 0,
+        "durationSeconds": 24.2,
+        "counts": {
+          "workflows": {
+            "l1Unit": 13,
+            "l1Integration": 8,
+            "l1All": 21
+          },
+          "codex": {
+            "l1Unit": 16,
+            "l1Integration": 7,
+            "l1All": 23,
+            "l2Integration": 6,
+            "l2All": 6
+          },
+          "codex-workflows": {
+            "l1Unit": 6,
+            "l1All": 6,
+            "l2Integration": 2,
+            "l2E2e": 2,
+            "l2All": 4,
+            "l3Scenarios": 3,
+            "l3Steps": 13
+          },
+          "testing": {
+            "l1Unit": 21,
+            "l1Integration": 3,
+            "l1All": 24,
+            "l2Integration": 24,
+            "l2E2e": 2,
+            "l2All": 26,
+            "l3Scenarios": 1,
+            "l3Steps": 6
+          }
+        }
+      },
+      "aggregates": [
+        {
+          "target": "workflows:test",
+          "status": "passed",
+          "l1Unit": 13,
+          "l1Integration": 8,
+          "artifactSha256": "3d70d979a2d6f253bac0012c3e28e0a8a4dcab16605be0187df77b8a6cce6812",
+          "exitCode": 0
+        },
+        {
+          "target": "codex:test",
+          "status": "passed",
+          "l1Unit": 16,
+          "l1Integration": 7,
+          "l2Integration": 6,
+          "artifactSha256": "84299019c2fca5379ae55099ba6d49ff123216daccf12b9feb767cbc33d012e6",
+          "exitCode": 0
+        },
+        {
+          "target": "codex-workflows:test",
+          "status": "passed",
+          "l1Unit": 6,
+          "l2Integration": 2,
+          "l2E2e": 2,
+          "l3Scenarios": 3,
+          "artifactSha256": "7366c3e4d537b6c43b0f6bd22fe545e3983b3ecc199ed4d13d2faa38861528ac",
+          "exitCode": 0
+        },
+        {
+          "target": "@orchestration/testing:test:ground-zero",
+          "status": "passed",
+          "l1Unit": 21,
+          "l1Integration": 3,
+          "l2Integration": 24,
+          "l2E2e": 2,
+          "l3Scenarios": 1,
+          "artifactSha256": "0978fa5c0d90d008c837963be3de83c3ab8d1c43dfa3e27f734e481b39b4a89e",
+          "exitCode": 0
+        }
+      ],
+      "policies": {
+        "testing": {
+          "selectedFiles": 17,
+          "standingTargets": 7,
+          "exitCode": 0,
+          "nxRunDurationSeconds": 0.113
+        },
+        "sdkImports": {
+          "scannedFiles": 49,
+          "occurrences": 1,
+          "allowedOccurrences": 1,
+          "offenders": 0,
+          "exitCode": 0,
+          "nxRunDurationSeconds": 0.255
+        }
+      },
+      "affectedClosure": {
+        "command": "bun nx affected -t lint,typecheck,build,test --files=<14 exact Repair Attempt 2 paths> --skip-nx-cache --outputStyle=static --parallel=1",
+        "projects": ["codex", "@orchestration/testing"],
+        "applicableTargets": ["lint", "typecheck", "test"],
+        "dependencyTasks": [
+          "codex:test-sdk-imports",
+          "@orchestration/testing:test-policy"
+        ],
+        "exitCode": 0,
+        "durationSeconds": 10.6
+      },
+      "workspaceSync": {
+        "command": "bun nx sync:check --outputStyle=static",
+        "status": "up-to-date",
+        "exitCode": 0
+      },
+      "format": {
+        "command": "bun nx format:check --files=<exact bounded Repair Attempt 2 paths>",
+        "exitCode": 0
+      },
+      "cliDogfood": {
+        "commands": ["validate", "inspect", "plan", "dry-run"],
+        "definitionDigest": "sha256:fdc34332585f8d3ca5ebc768b2dd090997c4897bcf9ba89d2cccc190ad3bb884",
+        "planNodes": 7,
+        "dryRunSideEffects": 0,
+        "durableWrites": 0,
+        "sdkInitialized": false,
+        "exitCode": 0,
+        "durationSecondsPerCommand": 2.4
+      },
+      "cleanup": {
+        "controlledChildBefore": 0,
+        "controlledChildAfter": 0,
+        "matchingSdkTemporaryPathsBefore": 0,
+        "matchingSdkTemporaryPathsAfter": 0,
+        "workspaceTemporaryRootsBefore": 0,
+        "workspaceTemporaryRootsAfter": 0,
+        "preExistingUnrelatedTempPath": "/private/tmp/codex-workflows-old-monitor-flush.json",
+        "preExistingUnrelatedTempPathPreserved": true,
+        "processDelta": 0,
+        "temporaryPathDelta": 0
+      }
+    },
+    "immutability": {
+      "audits": [
+        {
+          "path": "docs/reports/codex-workflows-external-audit-attempt-1.md",
+          "sha256": "7e3f5753651b7887476dc562c453fb96ded8e9a7993f827a2f46e30828a4ed46"
+        },
+        {
+          "path": "docs/reports/codex-workflows-external-audit-attempt-2.md",
+          "sha256": "06f41544f043f323163f086aa92ee315114df7a3613cc4e11178fed2d89aaf7e"
+        }
+      ],
+      "pi": [
+        {
+          "path": ".pi/goals/goal_events.jsonl",
+          "sha256": "b286b4a30a1fecd9181b2931404b2995a0eb3dbd4862f75f82a17e38a439e300"
+        },
+        {
+          "path": ".pi/goals/archived/goal_2026071612024695_mrn48esr-mggbiz.md",
+          "sha256": "1a1fac4047a1795f706cf2eab13030e322f54d959f560ca20e3446b620d49b64"
+        }
+      ]
+    },
+    "remainingLimitations": [
+      "This is mutable Worker-authored present-day recovery/re-proof, not registered historical RED evidence.",
+      "No fresh independent Preflight identity has registered immutable machine artifacts or cleanup deltas over this exact candidate.",
+      "No reducer-approved Preflight state transition, verification, judgment, acceptance, or score is claimed.",
+      "The named global data-substrate skill and session scratchpad initializer were unavailable; no substitute credential or durable-state path was invented."
+    ],
+    "freshPreflightCharter": {
+      "finding": "CWF2-AUD-004",
+      "requiredIdentity": "fresh independent Preflight",
+      "exactCandidateDigest": "3ab8274f61ad91f8843d979c6b7df86d40ffaf0df57fbac398135a3da05da0d5",
+      "requiredActions": [
+        "recompute the 79-path exact candidate and contract/artifact digests",
+        "run the selected standing, policy, import, aggregate, affected, sync, format, dogfood, and cleanup gates uncached where declared",
+        "register immutable machine-readable results and resource deltas through the scoped control plane",
+        "obtain the deterministic reducer-approved Preflight transition"
+      ],
+      "forbiddenShortcut": "Do not relabel this recovery JSON or Worker report as Preflight, reducer approval, verification, judgment, acceptance, or score."
+    }
+  }
+}

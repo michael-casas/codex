@@ -1,74 +1,98 @@
 # Codex Orchestration
 
-This Nx workspace implements the event-driven, BATDD-governed Codex orchestration system. It is the implementation surface for the process control plane, pg-boss delivery, hierarchical monitor service, direct tmux agent transport, Codex lifecycle hook bridge, routing manifests, and the role-scoped interfaces used by Campaign Coordinators, Project Orchestrators, Workers, Verifiers, and Wave Judges.
+This Bun-managed Nx workspace contains the current Codex orchestration
+implementation. Its shipped `codex-workflows` product mode runs trusted local
+TypeScript workflows directly while preserving the existing deterministic JSON
+validation/planning surface.
 
-The workspace does not own the architecture constitution. Durable doctrine and architecture live in the shared Agent Wiki.
+Durable cross-process and cross-host orchestration remains a separate future
+system governed by the shared Agent Wiki. The local runner is intentionally not
+a PostgreSQL process authority, reducer, pg-boss delivery loop, daemon,
+monitor, retry authority, or tmux transport.
 
-## Canonical documentation
+## Direct TypeScript workflows
 
-Start with the [Codex Event-Driven BATDD Orchestration SPEC](obsidian://open?vault=Agent%20Wiki&file=codex%2Forchestration%2FSPEC).
+The primary source is executable TypeScript whose first line is exactly:
 
-- Vault: `Agent Wiki`
-- Note: `codex/orchestration/SPEC.md`
-- Filesystem: `/Users/mcasa_atlantis/Documents/vaults/Agent Wiki/codex/orchestration/SPEC.md`
-
-Read it from the command line with:
-
-```sh
-obsidian vault="Agent Wiki" read path="codex/orchestration/SPEC.md"
+```ts
+#!/usr/bin/env -S codex-workflows
 ```
 
-The SPEC routes to the governing BATDD, Gherkin, orchestration, audit, and role standards. Repository source is authoritative for concrete implementation; the Agent Wiki is authoritative for cross-project doctrine and architecture. Do not copy the full SPEC into this repository or create a second mutable architecture ledger.
+The CLI owns TypeScript loading internally. Authors do not invoke or name
+`tsx`, Bun, esbuild, or generated JavaScript.
 
-Agent Wiki notes are readable by agents. Editing, creating, moving, renaming, or deleting a Wiki note requires explicit user approval and the global `agent-wiki` skill.
+```sh
+chmod +x apps/codex-workflows/examples/nestjs-resolver-factory-research.workflow.ts
+./apps/codex-workflows/examples/nestjs-resolver-factory-research.workflow.ts \
+  --input apps/codex-workflows/examples/nestjs-resolver-factory-research.input.json
 
-## Architecture snapshot
+# Equivalent explicit forms
+codex-workflows apps/codex-workflows/examples/nestjs-resolver-factory-research.workflow.ts \
+  --input apps/codex-workflows/examples/nestjs-resolver-factory-research.input.json
+codex-workflows run apps/codex-workflows/examples/nestjs-resolver-factory-research.workflow.ts \
+  --input apps/codex-workflows/examples/nestjs-resolver-factory-research.input.json
+```
 
-- PostgreSQL `process` data is the durable source of campaign, DAG, execution, event, artifact, and verdict truth.
-- pg-boss is the single delivery, lease, and retry authority.
-- The canonical monitor awaits reducer-approved logical events and can aggregate frozen conditions across jobs, waves, workspaces, and campaigns before resuming the appropriate coordinator.
-- Direct, orchestration-owned tmux is the canonical worktree and Codex-process transport primitive behind the versioned `TmuxAgentTransport` adapter; dmux is not canonical.
-- Global and project-local `.codex/orchestration/manifest.json` files describe tmux target routing only; PostgreSQL remains authoritative for jobs, retries, evidence, and acceptance.
-- The Codex hook bridge binds lifecycle observations to exact process executions through execution-scoped pane environment and the scoped orchestration CLI.
-- cmux is non-canonical; Mercury transport development is suspended.
-- Codex Subagents V2 are bounded judgment fan-out, not the durable campaign DAG.
-- Runtime completion is an observation. Only executable acceptance, independent verification, and authorized verdict reduction can accept work.
+Running or inspecting a TypeScript workflow imports trusted local code. It has
+the same trust boundary as executing that file locally. `--plan` and
+`--dry-run` do not call the SDK or launch agents, but they still load the
+module; do not use them on untrusted source.
 
-The canonical details and exceptions remain in the Wiki SPEC.
+The public authoring package exports `defineWorkflow`, `phase`, `parallel`,
+`agent`, `artifact`, and `executeWorkflow`. Local runs use bounded concurrency,
+pass actual upstream values into downstream prompts, journal redacted node
+state before launch, persist bounded artifacts, and drain the process-local
+Codex SDK host during success, failure, schema rejection, or cancellation.
+
+The current Founder model policy admits any bounded, non-whitespace `gpt-*`
+model token with `medium` reasoning. The exact model is forwarded unchanged to
+the Codex SDK, which remains authoritative for model availability. No model
+substitution is performed.
+
+## JSON compatibility
+
+JSON remains accepted for `validate`, `inspect`, `plan`, `dry-run`, and
+read-only `.pi` import compatibility. Declarative JSON `run` and run-ID
+`resume`, `status`, `events`, `logs`, and `cancel` fail closed with exit 69;
+they do not claim cross-process durability.
+
+See [the CLI contract](apps/codex-workflows/CLI.md), [the authoring and schema
+contract](packages/workflows/SCHEMA.md), [SPEC.md](SPEC.md), and
+[ARCHITECTURE.md](ARCHITECTURE.md).
 
 ## Workspace projects
 
-| Project                     | Purpose                    | Principal targets                                             |
-| --------------------------- | -------------------------- | ------------------------------------------------------------- |
-| `@orchestration/daemon`     | Node orchestration daemon  | `serve`, `build`, `test`, `lint`, `typecheck`, `docker:build` |
-| `@orchestration/daemon-e2e` | Daemon boundary acceptance | `e2e`, `lint`, `typecheck`                                    |
-| `@orchestration/testing`    | Ground-0 BATDD harness     | `test-l1`, `test-l2`, `test-l3`, `test`, `test-policy`        |
+| Project                                | Purpose                                                                                  |
+| -------------------------------------- | ---------------------------------------------------------------------------------------- |
+| `workflows`                            | Typed local authoring/runtime plus deterministic JSON validation and planning            |
+| `codex`                                | Exclusive `@openai/codex-sdk` adapter and process-local singleton                        |
+| `codex-workflows`                      | Public interpreter, internal TypeScript loader, local runner, journal, compatibility CLI |
+| `@orchestration/testing`               | Layered BATDD policy and aggregate evidence harness                                      |
+| `@orchestration/daemon` / `daemon-e2e` | Existing daemon scaffold and its separate boundary tests; not local-run authority        |
 
-Inspect the resolved Nx configuration rather than guessing from package files:
+Inspect resolved configuration rather than inferring it from filenames:
 
 ```sh
 bun nx show projects
-bun nx show project @orchestration/daemon
-bun nx show project @orchestration/daemon-e2e
+bun nx show project workflows --json
+bun nx show project codex --json
+bun nx show project codex-workflows --json
 ```
 
-## Common commands
+Run workspace tasks through Nx:
 
 ```sh
-# Develop and build the daemon
-bun nx serve @orchestration/daemon
-bun nx build @orchestration/daemon
-
-# Run project gates
-bun nx test @orchestration/daemon
-bun nx lint @orchestration/daemon
-bun nx typecheck @orchestration/daemon
-
-# Run real daemon boundary acceptance
-bun nx e2e @orchestration/daemon-e2e
-
-# Run the complete uncached Ground-0 closure
-bun run ground-zero
+bun nx run codex-workflows:build
+bun nx run codex-workflows:cli -- --help
+bun nx run workflows:test-l1
+bun nx run codex:test
+bun nx run codex-workflows:test
 ```
 
-Read [AGENTS.md](./AGENTS.md) before changing the workspace. It defines the operating rules and required authority boundaries for every Codex agent working here.
+## Governing authority
+
+Cross-project durable doctrine lives in the read-only Agent Wiki note
+`codex/orchestration/SPEC.md`. Repository source and tests define the concrete
+local runner. Runtime completion and implementation reports are evidence, not
+independent verification or acceptance. Read [AGENTS.md](AGENTS.md) and
+[TESTING.md](TESTING.md) before changing the workspace.

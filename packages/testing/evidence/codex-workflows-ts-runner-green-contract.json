@@ -1,0 +1,472 @@
+{
+  "schemaVersion": 1,
+  "artifactType": "codex-workflows-founder-amendment-green-contract",
+  "contractId": "CDX-WF-GC-2",
+  "contractDigest": "sha256:093013c0fea515676e9096692ed59f7b190456c7f9adb38c413e64c31d56eba5",
+  "historicalContractDigest": "sha256:7958f4d8eb62db53cf986dedd909fe1ca3484d4f513f626f98307e3f7a2a7d7e",
+  "digestScope": "/contract",
+  "authority": {
+    "role": "fresh-implementation-worker",
+    "source": "Founder-approved direct TypeScript workflow-runner amendment in the current user assignment",
+    "additiveTo": "CDX-WF-GC-1",
+    "supersedes": [
+      "The earlier JSON-only primary authoring decision",
+      "CONTROL_PLANE_UNAVAILABLE for trusted local run of an admitted TypeScript workflow"
+    ],
+    "doesNotSupersede": [
+      "JSON validate, inspect, plan, dry-run, and import compatibility",
+      "fail-closed cross-process run-ID status, events, logs, resume, and cancel verbs",
+      "SDK import exclusivity",
+      ".pi and prior external-audit immutability",
+      "the prohibition on claiming reducer-approved or cross-process durable authority"
+    ],
+    "stopBoundary": "READY_FOR_EXTERNAL_AUDIT",
+    "wikiMutable": false,
+    "externalAuditReportsMutable": false,
+    "independentAcceptanceClaimed": false
+  },
+  "redFreeze": {
+    "status": "frozen-before-first-product-green-write",
+    "capturedAt": "2026-08-08T12:23:45Z",
+    "testFileSha256": {
+      "packages/workflows/src/authoring/authoring.test.ts": "e2fd2f99ffc9859b710b8795571417767bf19978fd855eb6b56eb09b0722232d",
+      "apps/codex-workflows/src/runtime/journal.test.ts": "6673090ceba057fdce5a06f56dca3429e66247b8ecc64bb0fe935e89553be03a",
+      "apps/codex-workflows/src/cli/cli.test.ts": "fe1509e99d9367e1f6a6b9a88a4372a3d9d737961888c2fcaf8e8482b6e92e4c",
+      "apps/codex-workflows/src/workflows/direct-runner.spec.ts": "f4eafd96e860b5cf06f82b568ee33dc9ee22d386a7ac5d4424d19fb834b63265",
+      "apps/codex-workflows/src/workflows/codex-workflows.feature": "d69531323d5a11fc9d6000b4e5cbc48a2a84961faeb900ae4a3aed44c3a22018",
+      "apps/codex-workflows/src/workflows/index.steps.ts": "13fcc0bce1ade9c9007ff1d9ac244c84e8eee1868cdbeddda5cf0cab8d72934d",
+      "apps/codex-workflows/src/workflows/support/controlled-source.ts": "a52782033ebf23d8c15a8382b0eb1e585173b090180d0c6c8e34dbf9900317b1",
+      "apps/codex-workflows/src/workflows/support/controlled.workflow.fixture.txt": "211f1856dde05f4a017a7834cd4ebc8c7119afa55576f902aa297db84fc2d6a1",
+      "packages/codex/src/fixtures/controlled-codex.mjs": "d6597c49551fa7670a904a3ca7f1c406c5cc75f48efd39a8c6d27449e9e91387",
+      "packages/workflows/project.json": "cc5904422a19fe5db85f849c1fa19e7e27646da68664cb199a1af684b520ba09",
+      "apps/codex-workflows/project.json": "7394626e27d7703b0e27e1552e6666f585407a5cc595847dde1e4550625c85cd",
+      "packages/testing/manifests/workflows.json": "5f321a858e74ba1ff19a9ab6bdd6e8f1395afe2c5e16fe43a78f21737b78e704",
+      "packages/testing/manifests/codex-workflows.json": "a3930da1f904e645693a769f412e843eb1f503bae4a79606ee5bab5f629ccd10"
+    },
+    "checks": [
+      {
+        "target": "workflows:test-l1-unit",
+        "selected": 15,
+        "passed": 13,
+        "failed": 2,
+        "exitCode": 1,
+        "decisiveFailure": "All six required authoring/runtime exports were absent; every pre-existing selected unit test remained GREEN."
+      },
+      {
+        "target": "workflows:test-l1-integration",
+        "selected": 11,
+        "passed": 8,
+        "failed": 3,
+        "exitCode": 1,
+        "decisiveFailure": "The scheduler, output-schema, cancellation, dataflow, phase, and artifact runtime did not exist; every pre-existing selected integration test remained GREEN."
+      },
+      {
+        "target": "codex-workflows:test-l1-unit",
+        "selected": 8,
+        "passed": 6,
+        "failed": 2,
+        "exitCode": 1,
+        "decisiveFailure": "Bare TypeScript parsing returned UNKNOWN_COMMAND and new runtime error codes collapsed to INTERNAL_ERROR; all prior CLI unit rows remained GREEN."
+      },
+      {
+        "target": "codex-workflows:test-l1-integration",
+        "selected": 1,
+        "passed": 0,
+        "failed": 1,
+        "exitCode": 1,
+        "decisiveFailure": "The local journal module was absent."
+      },
+      {
+        "target": "codex-workflows:test-l2-integration",
+        "selected": 6,
+        "passed": 2,
+        "failed": 4,
+        "exitCode": 1,
+        "decisiveFailure": "Bare TypeScript returned usage exit 64, so direct run, inspection, controlled SDK failure/schema behavior, and cancellation were unavailable; both pre-existing selected legacy compatibility rows remained GREEN."
+      },
+      {
+        "target": "codex-workflows:test-l2-e2e",
+        "selected": 3,
+        "passed": 2,
+        "failed": 1,
+        "exitCode": 1,
+        "decisiveFailure": "Kernel shebang dispatch reached the built CLI but bare TypeScript returned usage exit 64; both pre-existing selected JSON E2E rows remained GREEN."
+      },
+      {
+        "target": "codex-workflows:test-l3",
+        "selectedScenarios": 5,
+        "passedScenarios": 3,
+        "failedScenarios": 2,
+        "selectedSteps": 28,
+        "passedSteps": 22,
+        "failedSteps": 2,
+        "skippedAfterFailure": 4,
+        "exitCode": 1,
+        "decisiveFailure": "The corrected Cucumber harness loaded and executed; direct shebang and no-agent TypeScript inspection scenarios failed on public exit 64 while all three preserved JSON/.pi scenarios remained GREEN."
+      },
+      {
+        "target": "@orchestration/testing:test-policy",
+        "selectedFiles": 20,
+        "standingTargets": 7,
+        "exitCode": 0,
+        "meaning": "After the pre-freeze L1 marker harness correction, the testing policy accepted the exact nonzero standing selections."
+      },
+      {
+        "target": "TS-GC2-015 static integration baseline",
+        "exitCode": 1,
+        "decisiveFailure": "No normal-PATH codex-workflows executable resolved; the app graph omitted @orchestration/codex; SPEC, ARCHITECTURE, PLAN, CLI, schema docs, and the global workflows skill still prescribed JSON-first and exit-69 run behavior."
+      }
+    ],
+    "semanticContractChangedAfterFreeze": true
+  },
+  "founderOverride": {
+    "authority": "FOUNDER OVERRIDE in the current user assignment",
+    "ruling": "All real dogfood and backend-facing codex-workflows tests may request only exact gpt-5.6-luna with medium reasoning. The researchers and consolidator use the same permitted model. Silent substitution is prohibited.",
+    "historicalEvidenceTreatment": "The original contract, RED, GREEN, and two pre-override live attempts remain historical evidence. They are not relabeled as Luna-only evidence. The interrupted second live journal contains two Luna started nodes and no consolidator node; it remains operationally marked running because its process ended outside the journal finalizer.",
+    "preAmendmentFileSha256": {
+      "packages/testing/evidence/codex-workflows-ts-runner-green-contract.json": "b316ba43c371267e479efda4f96b7ef9c594ffe6b50876150a88b8726408fda3",
+      "packages/workflows/src/authoring/authoring.test.ts": "e2fd2f99ffc9859b710b8795571417767bf19978fd855eb6b56eb09b0722232d",
+      "apps/codex-workflows/src/workflows/direct-runner.spec.ts": "f4eafd96e860b5cf06f82b568ee33dc9ee22d386a7ac5d4424d19fb834b63265",
+      "apps/codex-workflows/src/workflows/codex-workflows.feature": "d69531323d5a11fc9d6000b4e5cbc48a2a84961faeb900ae4a3aed44c3a22018",
+      "apps/codex-workflows/src/workflows/index.steps.ts": "13fcc0bce1ade9c9007ff1d9ac244c84e8eee1868cdbeddda5cf0cab8d72934d",
+      "apps/codex-workflows/src/workflows/support/controlled.workflow.fixture.txt": "211f1856dde05f4a017a7834cd4ebc8c7119afa55576f902aa297db84fc2d6a1",
+      "apps/codex-workflows/examples/nestjs-resolver-factory-research.workflow.ts": "de4fbf23bf89f30ba5fb5eb5fe170f66a34bebf6a854ac7cf9b3eed16c325cd7",
+      "apps/codex-workflows/examples/nestjs-resolver-factory-research.workflow.json": "425cdaf5bcd049c4261e63bc9c9abc9c176ac4077500ba321ad5bdbb568d49cd",
+      "/Users/mcasa_atlantis/.codex/skills/workflows/SKILL.md": "f93c8ffc539d903782c98dff51e0fe746e91c088818d6e30d4fe35f608104a5f"
+    },
+    "overrideRed": {
+      "status": "frozen-before-founder-override-product-writes",
+      "capturedAt": "2026-08-08T12:47:10Z",
+      "target": "codex-workflows:test-l2-model-policy",
+      "testFile": "apps/codex-workflows/src/workflows/model-policy.spec.ts",
+      "testIdentity": "[L2:INTEGRATION] TS-GC2-016 permits only exact gpt-5.6-luna medium agent declarations in executable workflow and backend-boundary sources",
+      "selected": 1,
+      "passed": 0,
+      "failed": 1,
+      "exitCode": 1,
+      "decisiveFailure": "The committed NestJS TypeScript source declared both gpt-5.6-luna and forbidden gpt-5.6-sol, so the exact-model-set assertion failed without launching any agent.",
+      "testFileSha256": "c1ff07e6e5656683354a8a61d9527e21fd32132bb308a1405e01ca03c09f7794",
+      "projectFileSha256": "f207c1ebd6558185510017aa4b61be501472659ea1c04034dfc3a6f4ee7fb402",
+      "manifestFileSha256": "3b9fcb5b472a2086f0270fbfd7c4bdf29eb8ee720c60d298aee14dc0b13eae03",
+      "agentLaunches": 0,
+      "contractDigest": "sha256:093013c0fea515676e9096692ed59f7b190456c7f9adb38c413e64c31d56eba5"
+    },
+    "postFreezeLedger": [
+      {
+        "kind": "non-semantic-harness-correction",
+        "beforeSha256": "c1ff07e6e5656683354a8a61d9527e21fd32132bb308a1405e01ca03c09f7794",
+        "afterSha256": "7cc54645dd81812d56c8697ecf164369f4da8d8affacf6b839bcc041c69ff8b7",
+        "reason": "The JSON compatibility example stores Codex declarations in steps[].handler, not graph.nodes; the test traversal was corrected without changing the Luna-only assertion.",
+        "replay": "The one selected test remained meaningfully RED on the same forbidden TypeScript model set with zero agent launches."
+      },
+      {
+        "kind": "non-semantic-harness-correction",
+        "beforeSha256": "7cc54645dd81812d56c8697ecf164369f4da8d8affacf6b839bcc041c69ff8b7",
+        "afterSha256": "794c4729c738c79131540f686770e548903c4a55efa01adcb0eaef25b3500edc",
+        "reason": "The TypeScript regex was narrowed to adjacent literal model/reasoning object declarations so it does not treat the public reasoning type union as a launched request.",
+        "excludedFailure": "The intermediate post-product failure on the type-only 'minimal' union member was a fixture false positive and is not claimed as RED or product failure."
+      },
+      {
+        "kind": "founder-authorized-semantic-reconciliation",
+        "meaning": "All launch-capable direct-runner examples and controlled/in-process acceptance declarations changed from the superseded Sol consolidator/schema requests to exact Luna medium.",
+        "currentFileSha256": {
+          "packages/workflows/src/authoring/authoring.test.ts": "ef72cddb094507929d479fd2d7b7a16f0ba218458b6f5a67ce4148ae015fcd9c",
+          "apps/codex-workflows/src/workflows/direct-runner.spec.ts": "dab216512ad1f8470e8d8a31e837af19d105a51260670870a0f6dbae39c788ba",
+          "apps/codex-workflows/src/workflows/codex-workflows.feature": "a9dd01341720f1c3bb4845abfd02c82fa61a9235126e27d8915ce5e923bba181",
+          "apps/codex-workflows/src/workflows/index.steps.ts": "29609f34b3f245c87bf850560efe72888aaba2ef5597ed16af415c86d4da3176",
+          "apps/codex-workflows/src/workflows/support/controlled.workflow.fixture.txt": "70414b4b9814cee29a0ed8ca4d05d2ad9251c0f8efa2e8e49492af1cf02dcb0e",
+          "apps/codex-workflows/examples/nestjs-resolver-factory-research.workflow.ts": "7dfccbbd41e509b2b11f0fdd87d2a0d5f667cf97eae9c00c910dce8ccf283fef",
+          "apps/codex-workflows/examples/nestjs-resolver-factory-research.workflow.json": "9c8d8c45f8926b32e29e94973f5c94b364590d94985fd752b117efd3d7f1eb59"
+        }
+      },
+      {
+        "kind": "amended-green",
+        "checks": [
+          "workflows:test-l1-unit selected 15 and passed 15",
+          "workflows:test-l1-integration selected 11 and passed 11",
+          "codex-workflows:test-l1-unit selected 8 and passed 8",
+          "codex-workflows:test-l1-integration selected 1 and passed 1",
+          "codex-workflows:test-l2-model-policy selected 1 and passed 1",
+          "codex-workflows:test-l2-integration selected 7 and passed 7",
+          "codex-workflows:test-l2-e2e selected 3 and passed 3",
+          "codex-workflows:test-l3 selected 5 scenarios/28 steps and passed all"
+        ],
+        "controlledTraceMeaning": "Every launched direct-runner controlled agent request used gpt-5.6-luna and medium; downstream input contained both actual upstream outputs."
+      },
+      {
+        "kind": "global-skill-reconciliation",
+        "validator": "skill-creator quick_validate",
+        "exitCode": 0,
+        "skillFileSha256": "b5441126e8cb09a96988178ad191436fb930df8c9ef5afbfe719de71202d9c0f"
+      },
+      {
+        "kind": "live-dogfood-green",
+        "command": "./apps/codex-workflows/examples/nestjs-resolver-factory-research.workflow.ts --input apps/codex-workflows/examples/nestjs-resolver-factory-research.input.json --json",
+        "exitCode": 0,
+        "runId": "local-20260808t125616824z-ddeb26e89a89",
+        "journalPath": "/Users/mcasa_atlantis/.codex/workflows/runs/local-20260808t125616824z-ddeb26e89a89/journal.json",
+        "journalSha256": "fd7cf74ef63ccd2cbab5f161938f6aabde621e103bc03be248ef299dacb4cd90",
+        "artifactPath": "/Users/mcasa_atlantis/.codex/workflows/runs/local-20260808t125616824z-ddeb26e89a89/artifacts/resolver-factory-proposal.md",
+        "artifactSha256": "4ad3fb16096eaef505de1806987864d027d598a1b09df2fa53128249dede055f",
+        "artifactBytes": 39373,
+        "artifactLines": 594,
+        "nodes": 3,
+        "models": ["gpt-5.6-luna", "gpt-5.6-luna", "gpt-5.6-luna"],
+        "reasoning": ["medium", "medium", "medium"],
+        "dataflow": "The consolidator froze after both researchers completed, recorded both exact researcher node IDs as dependencies, and carried a distinct combined actual-value input digest without exposing the values.",
+        "redactionCheck": "No prompt, input constraint, environment, secret, raw error, or stack probe string was present in the journal.",
+        "processDelta": 0
+      },
+      {
+        "kind": "non-semantic-test-hygiene",
+        "trigger": "The first full lint/typecheck/build closure",
+        "changes": [
+          {
+            "file": "packages/workflows/src/authoring/authoring.test.ts",
+            "beforeSha256": "71a6a364a01008e4bf7e43cc475b39f2fca11b2bfd4a9ad657ee642930ae3073",
+            "afterSha256": "ef72cddb094507929d479fd2d7b7a16f0ba218458b6f5a67ce4148ae015fcd9c",
+            "meaning": "Two no-op event callbacks now explicitly return undefined; assertions, selection, and behavior are unchanged."
+          },
+          {
+            "file": "apps/codex-workflows/src/workflows/model-policy.spec.ts",
+            "beforeSha256": "794c4729c738c79131540f686770e548903c4a55efa01adcb0eaef25b3500edc",
+            "afterSha256": "7c4a2c1e0d7c2304d8759d0a95ed5bac23418190ea9d495ba3a9f29fe3ae635d",
+            "meaning": "Removed an unused helper left after the frozen regex correction; the one Luna-only assertion is unchanged."
+          },
+          {
+            "file": "apps/codex-workflows/src/workflows/model-policy.spec.ts",
+            "beforeSha256": "7c4a2c1e0d7c2304d8759d0a95ed5bac23418190ea9d495ba3a9f29fe3ae635d",
+            "afterSha256": "8123834352078ed558d36b5e3bdcca5b0e5d7ffc2edf1cbc41a98ab564615fdd",
+            "meaning": "Added the repository-owned L2 classification marker required by testing policy; selection and the Luna-only assertion are unchanged."
+          },
+          {
+            "file": "apps/codex-workflows/src/workflows/model-policy.spec.ts",
+            "beforeSha256": "8123834352078ed558d36b5e3bdcca5b0e5d7ffc2edf1cbc41a98ab564615fdd",
+            "afterSha256": "ed56d807868d15f7ebf4129d908ee8b974e6ef8260c3568288701f60788866b1",
+            "meaning": "Nx/Prettier mechanical formatting only; the exact selected test replayed GREEN and testing policy remained GREEN."
+          }
+        ]
+      }
+    ]
+  },
+  "contract": {
+    "strategy": "basic-to-adversarial-vertical-slice",
+    "redPolicy": "Every additive executable behavior must produce a nonzero meaningful RED while the prior accepted rows remain GREEN; missing-product behavior is RED, while syntax failure, zero selection, broken harness, or assertion-free execution is not evidence.",
+    "rows": [
+      {
+        "id": "TS-GC2-001-AUTHORING-SURFACE",
+        "form": "basic",
+        "layer": "L1 unit",
+        "runtime": "Vitest",
+        "file": "packages/workflows/src/authoring/authoring.test.ts",
+        "testIdentity": "[L1:UNIT] TS-GC2-001 exports and freezes the ergonomic typed authoring surface",
+        "target": "workflows:test-l1-unit",
+        "required": true,
+        "expectedMeaningfulRed": "The existing package exports none of defineWorkflow, phase, parallel, agent, artifact, or executeWorkflow.",
+        "observableGreen": "The typed API is exported, workflow metadata is frozen with stable defaults, and runtime-only functions fail closed outside an active local execution.",
+        "isolationAndCleanup": "Pure in-process test with no filesystem, SDK, environment, or process delta."
+      },
+      {
+        "id": "TS-GC2-002-PARALLEL-SHAPE",
+        "form": "basic-and-adversarial",
+        "layer": "L1 unit",
+        "runtime": "Vitest",
+        "file": "packages/workflows/src/authoring/authoring.test.ts",
+        "testIdentity": "[L1:UNIT] TS-GC2-002 launches thunk and promise siblings concurrently while preserving record and array shape",
+        "target": "workflows:test-l1-unit",
+        "required": true,
+        "expectedMeaningfulRed": "parallel is absent.",
+        "observableGreen": "Both record and array inputs preserve their exact result shape, and sibling thunks are all started before the shared gate releases.",
+        "isolationAndCleanup": "Pure promises; the gate is always released within the test."
+      },
+      {
+        "id": "TS-GC2-003-SCHEDULER-DATAFLOW",
+        "form": "basic-and-adversarial",
+        "layer": "L1 in-process integration",
+        "runtime": "Vitest",
+        "file": "packages/workflows/src/authoring/authoring.test.ts",
+        "testIdentity": "[L1:INTEGRATION] TS-GC2-003 forwards actual typed outputs, model/reasoning/schema, bounded concurrency, lineage, phases, and artifacts",
+        "target": "workflows:test-l1-integration",
+        "required": true,
+        "expectedMeaningfulRed": "No runtime scheduler or authoring API exists.",
+        "observableGreen": "Two Luna medium researchers overlap under a bound of two, a Luna medium consolidator receives their actual result values, output schema decoding succeeds, lineage dependencies and stable frozen digest-only launch records exist, phases are observable, and artifact metadata is returned without public prompt/input disclosure.",
+        "isolationAndCleanup": "Controlled in-process executor and artifact writer finish with active count zero."
+      },
+      {
+        "id": "TS-GC2-004-FAILURE-PROPAGATION",
+        "form": "adversarial",
+        "layer": "L1 in-process integration",
+        "runtime": "Vitest",
+        "file": "packages/workflows/src/authoring/authoring.test.ts",
+        "testIdentity": "[L1:INTEGRATION] TS-GC2-004 propagates agent failure, aborts running and queued siblings, and drains scheduler work",
+        "target": "workflows:test-l1-integration",
+        "required": true,
+        "expectedMeaningfulRed": "No scheduler exists to classify failure, abort siblings, prevent queued launch, or redact errors.",
+        "observableGreen": "One agent failure maps to WORKFLOW_AGENT_FAILED, aborts the running sibling, prevents the queued sibling from launching, drains active work, and emits only classified redacted outcomes.",
+        "isolationAndCleanup": "No external child; controlled promises finish with active count zero."
+      },
+      {
+        "id": "TS-GC2-005-SCHEMA-CANCELLATION",
+        "form": "adversarial",
+        "layer": "L1 in-process integration",
+        "runtime": "Vitest",
+        "file": "packages/workflows/src/authoring/authoring.test.ts",
+        "testIdentity": "[L1:INTEGRATION] TS-GC2-005 enforces output schemas and external cancellation with redacted failures",
+        "target": "workflows:test-l1-integration",
+        "required": true,
+        "expectedMeaningfulRed": "No local runtime exists to validate final output or compose an external abort signal.",
+        "observableGreen": "Malformed structured output is rejected as WORKFLOW_OUTPUT_SCHEMA_FAILED, and an external abort terminates the turn as WORKFLOW_CANCELLED.",
+        "isolationAndCleanup": "Controlled executor observes abort and returns; no external state."
+      },
+      {
+        "id": "TS-GC2-006-JOURNAL-ARTIFACT",
+        "form": "basic-and-adversarial",
+        "layer": "L1 in-process integration",
+        "runtime": "Vitest plus real filesystem",
+        "file": "apps/codex-workflows/src/runtime/journal.test.ts",
+        "testIdentity": "[L1:INTEGRATION] TS-GC2-006 atomically journals stable redacted state and persists bounded artifacts",
+        "target": "codex-workflows:test-l1-integration",
+        "required": true,
+        "expectedMeaningfulRed": "The journal module does not exist.",
+        "observableGreen": "The bounded run directory contains valid atomically replaced JSON with stable identity, digest-only sensitive projections, timing/outcome/events/nodes, operational-authority labeling, and a content-addressed artifact; traversal is rejected and no temporary file remains.",
+        "isolationAndCleanup": "Unique OS temporary root is removed in finally."
+      },
+      {
+        "id": "TS-GC2-007-DIRECT-REAL-SDK",
+        "form": "basic-and-adversarial",
+        "layer": "L2 real-boundary integration",
+        "runtime": "Built CLI, internal TypeScript loader, pinned real Codex SDK, and controlled executable",
+        "file": "apps/codex-workflows/src/workflows/direct-runner.spec.ts",
+        "testIdentity": "[L2:INTEGRATION] TS-GC2-007 executes bare and explicit run forms with concurrent siblings, actual outputs, requested models/reasoning, redacted journal, and artifact",
+        "target": "codex-workflows:test-l2-model-policy",
+        "required": true,
+        "expectedMeaningfulRed": "Bare TypeScript is an unknown command and explicit run returns CONTROL_PLANE_UNAVAILABLE.",
+        "observableGreen": "Bare and explicit run execute the admitted TypeScript internally, two controlled SDK children overlap, the consolidator launches only after their actual outputs exist, Luna/Luna/Luna and medium reach real SDK argv, the result shape is retained, the journal is redacted, and the artifact bytes exist.",
+        "isolationAndCleanup": "Unique workspace temporary root is removed; all controlled child PIDs exit."
+      },
+      {
+        "id": "TS-GC2-008-SOURCE-ADMISSION-INSPECTION",
+        "form": "basic-and-adversarial",
+        "layer": "L2 real-boundary integration",
+        "runtime": "Built CLI and real filesystem/process boundary",
+        "file": "apps/codex-workflows/src/workflows/direct-runner.spec.ts",
+        "testIdentity": "[L2:INTEGRATION] TS-GC2-008 admits only trusted root-contained exact-shebang TypeScript and plans/dry-runs without SDK launch",
+        "target": "codex-workflows:test-l2-integration",
+        "required": true,
+        "expectedMeaningfulRed": "The JSON loader rejects TypeScript and no direct plan flags exist.",
+        "observableGreen": "Only a root-contained regular .ts file with the exact first line is compiled and loaded; syntax and shebang failures map to source-admission exit 65; plan and dry-run load only definition metadata, explicitly disclose the dynamic graph, and start zero SDK children.",
+        "isolationAndCleanup": "Unique temporary root removed and controlled trace remains empty."
+      },
+      {
+        "id": "TS-GC2-009-REAL-FAILURE-SCHEMA-CLEANUP",
+        "form": "adversarial",
+        "layer": "L2 real-boundary integration",
+        "runtime": "Built CLI, pinned real Codex SDK, controlled executable, filesystem",
+        "file": "apps/codex-workflows/src/workflows/direct-runner.spec.ts",
+        "testIdentity": "[L2:INTEGRATION] TS-GC2-009 maps real agent and schema failures deterministically, aborts siblings, and reaps SDK children",
+        "target": "codex-workflows:test-l2-integration",
+        "required": true,
+        "expectedMeaningfulRed": "No TypeScript agent execution exists.",
+        "observableGreen": "Agent failure exits 67, schema failure exits 68, queued work never launches, a running controlled child is terminated, all PIDs are reaped, failure journals are atomic and redacted, and run/journal identity remains available as safe diagnostics.",
+        "isolationAndCleanup": "Every temporary root is removed and every observed controlled PID is absent afterward."
+      },
+      {
+        "id": "TS-GC2-010-SIGNAL-CLEANUP",
+        "form": "adversarial",
+        "layer": "L2 real-boundary integration",
+        "runtime": "Built CLI, OS signal, pinned real Codex SDK, controlled executable",
+        "file": "apps/codex-workflows/src/workflows/direct-runner.spec.ts",
+        "testIdentity": "[L2:INTEGRATION] TS-GC2-010 converts SIGINT to cancellation, atomically journals it, and guarantees SDK host cleanup",
+        "target": "codex-workflows:test-l2-integration",
+        "required": true,
+        "expectedMeaningfulRed": "No local run exists to cancel.",
+        "observableGreen": "SIGINT becomes WORKFLOW_CANCELLED exit 130, the journal ends cancelled without raw values, the controlled SDK child is reaped, and the host drains before process exit.",
+        "isolationAndCleanup": "Unique temporary root removed; bounded PID polling proves zero child delta."
+      },
+      {
+        "id": "TS-GC2-011-SHEBANG-INTERPRETER",
+        "form": "basic",
+        "layer": "L2 end-to-end",
+        "runtime": "Kernel executable dispatch through /usr/bin/env -S and PATH",
+        "file": "apps/codex-workflows/src/workflows/direct-runner.spec.ts",
+        "testIdentity": "[L2:E2E] TS-GC2-011 runs the exact env -S codex-workflows shebang through a PATH-resolved executable",
+        "target": "codex-workflows:test-l2-e2e",
+        "required": true,
+        "expectedMeaningfulRed": "The existing CLI does not recognize a bare TypeScript source as a run command.",
+        "observableGreen": "An executable workflow is dispatched by its literal shebang to a PATH-resolved codex-workflows executable and completes the real controlled SDK workflow.",
+        "isolationAndCleanup": "PATH link exists only inside the test root, which is removed in finally."
+      },
+      {
+        "id": "TS-GC2-012-CLI-EXITS",
+        "form": "basic-and-adversarial",
+        "layer": "L1 unit",
+        "runtime": "Vitest",
+        "file": "apps/codex-workflows/src/cli/cli.test.ts",
+        "testIdentities": [
+          "[L1:UNIT] TS-GC2-012 parses bare TypeScript execution and additive inspection flags without changing explicit commands",
+          "[L1:UNIT] TS-GC2-013 preserves deterministic source, agent, schema, cancellation, unavailable, and internal exits without raw diagnostics"
+        ],
+        "target": "codex-workflows:test-l1-unit",
+        "required": true,
+        "expectedMeaningfulRed": "Bare TypeScript parsing is rejected and new runtime failures collapse to internal exit 70.",
+        "observableGreen": "Bare, explicit, plan, dry-run, usage, source admission, I/O, agent, schema, unavailable durable control, cancellation, and internal failures have stable redacted mappings.",
+        "isolationAndCleanup": "Pure parser/error mapping."
+      },
+      {
+        "id": "TS-GC2-013-CANONICAL-BEHAVIOR",
+        "form": "basic-and-adversarial",
+        "layer": "L3 canonical behavior",
+        "runtime": "Physical Gherkin plus direct built runtime and controlled real SDK",
+        "file": "apps/codex-workflows/src/workflows/codex-workflows.feature",
+        "stepFile": "apps/codex-workflows/src/workflows/index.steps.ts",
+        "scenarioIdentities": [
+          "CLI-L3-004 Execute an exact-shebang TypeScript workflow through the public interpreter",
+          "CLI-L3-005 Inspect a trusted TypeScript workflow without launching an agent"
+        ],
+        "target": "codex-workflows:test-l3",
+        "required": true,
+        "expectedMeaningfulRed": "The public interpreter cannot run or inspect the TypeScript source.",
+        "observableGreen": "Canonical public behavior proves shebang execution, concurrent dataflow, model/reasoning forwarding, artifact/journal creation and redaction, plus zero-agent inspection with nonzero assertions.",
+        "isolationAndCleanup": "Cucumber After hook removes each unique root; controlled processes exit with the command."
+      },
+      {
+        "id": "TS-GC2-014-REAL-NEST-DOGFOOD",
+        "form": "live-boundary-dogfood",
+        "layer": "L3 direct public-surface dogfood",
+        "runtime": "Literal TypeScript workflow through codex-workflows and live ChatGPT backend",
+        "required": true,
+        "expectedMeaningfulRed": "Before implementation, the public runner cannot execute any direct TypeScript workflow, so the controlled L2/L3 source proves the same launch boundary is RED without spending live model turns.",
+        "observableGreen": "The committed NestJS workflow runs two gpt-5.6-luna medium official-source researchers concurrently, passes both actual outputs to one gpt-5.6-luna medium consolidator, writes the final ResolverFactory proposal as a workflow artifact, and records only redacted public state; any backend model rejection is reported without silent substitution.",
+        "evidenceArtifact": "Exact workflow source, final proposal, local journal, redacted event/model/reasoning assertions, command transcript, and resource delta enumerated in the three closeout reports."
+      },
+      {
+        "id": "TS-GC2-015-INTEGRATION-DOCS-SKILL-BIN",
+        "form": "adversarial-static-and-live-validation",
+        "layer": "cross-cutting acceptance support",
+        "runtime": "Nx graph/policies, package manager link, docs/skill validators, filesystem hashes",
+        "required": true,
+        "expectedMeaningfulRed": "The app has no codex dependency, the global workflow skill routes TypeScript run to unavailable durable execution, current architecture/spec/plan/CLI/schema docs prescribe JSON-first behavior, and the repository executable is not correctly resolved as codex-workflows in normal PATH.",
+        "observableGreen": "The app depends on the public codex package through a Bun workspace link, esbuild is an owned internal loader dependency, only packages/codex/src/runtime/adapter.ts imports the SDK, the installed repository bin resolves in normal PATH, docs and the validated global skill describe trusted direct TypeScript accurately while separating future durable orchestration, and all prior audits plus .pi retain their hashes.",
+        "evidenceArtifact": "Resolved Nx graph/targets, package manifests/lock, SDK import scan, command -v/readlink, skill quick_validate, bounded docs diff, immutable file hashes, and reports."
+      },
+      {
+        "id": "TS-GC2-016-FOUNDER-LUNA-ONLY",
+        "form": "founder-override-adversarial-static-and-live",
+        "layer": "L2 real-boundary integration plus L3 live dogfood",
+        "runtime": "Vitest filesystem policy, controlled real SDK boundary, and live ChatGPT backend",
+        "file": "apps/codex-workflows/src/workflows/model-policy.spec.ts",
+        "testIdentity": "[L2:INTEGRATION] TS-GC2-016 permits only exact gpt-5.6-luna medium agent declarations in executable workflow and backend-boundary sources",
+        "target": "codex-workflows:test-l2-integration",
+        "required": true,
+        "expectedMeaningfulRed": "The frozen candidate names gpt-5.6-sol for the controlled schema/consolidator paths, the TypeScript and JSON NestJS consolidator, test expectations, and in-process acceptance agents.",
+        "observableGreen": "Every codex-workflows-controlled backend request and every real dogfood agent requests exact gpt-5.6-luna with medium reasoning; static acceptance, SDK traces, canonical events, and live journal agree, and no substitution occurs.",
+        "historicalEvidenceRule": "The pre-override contract digest, file hashes, RED/GREEN results, and live attempts stay explicitly historical and are never presented as Luna-only proof.",
+        "isolationAndCleanup": "The static test is read-only; controlled processes drain; live dogfood uses the bounded documented local run root."
+      }
+    ],
+    "lockedGreenRule": "Do not change prior external audit reports or .pi. Preserve every existing selected JSON normalize/validate/inspect/plan/dry-run/import behavior and all repaired SDK, testing-policy, pointer, deep-freeze, honest-count, and cleanup guarantees. JSON run and run-ID control verbs may continue to return CONTROL_PLANE_UNAVAILABLE because only trusted TypeScript local execution is settled here.",
+    "contractFreezeRule": "After meaningful all-row RED is reconciled, hash every acceptance file and the /contract subtree before the first product implementation write. Any later test edit must be recorded as a non-semantic harness correction with before/after hashes; a semantic change requires a new explicit contract ruling.",
+    "completionScope": "vertical-slice",
+    "acceptanceLimitation": "Worker-authored RED/GREEN and self-audit evidence may support external audit but never constitute independent verification, reducer-approved Preflight, judgment, acceptance, or a score."
+  }
+}

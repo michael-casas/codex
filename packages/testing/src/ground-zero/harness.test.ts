@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 
 import {
+  analyzeStandingTargetConfig,
   analyzeTestSource,
   classifyTestFile,
   createAffectedInvocation,
@@ -10,6 +11,250 @@ import {
 
 // === L1: UNIT TESTS ===
 describe('[L1:UNIT] Ground-0 layer ownership and policy', () => {
+  it('[L1:UNIT] CWF-AUD-003 rejects zero-selection standing-target globs and omitted layer files', () => {
+    const invalidGlob = analyzeStandingTargetConfig(
+      'packages/codex/project.json',
+      JSON.stringify({
+        targets: {
+          'test-l1': {
+            executor: 'nx:run-commands',
+            options: {
+              command:
+                'vitest run --config packages/codex/vitest.config.ts src/**/*.test.ts',
+            },
+          },
+        },
+      }),
+      [
+        'packages/codex/src/runtime/one.test.ts',
+        'packages/codex/src/runtime/two.test.ts',
+      ],
+      () => undefined,
+    );
+    const omitted = analyzeStandingTargetConfig(
+      'packages/codex/project.json',
+      JSON.stringify({
+        targets: {
+          'test-l1': {
+            executor: 'nx:run-commands',
+            options: {
+              command:
+                'vitest run --config packages/codex/vitest.config.ts src/runtime/one.test.ts',
+            },
+          },
+        },
+      }),
+      [
+        'packages/codex/src/runtime/one.test.ts',
+        'packages/codex/src/runtime/two.test.ts',
+      ],
+      () => undefined,
+    );
+
+    expect(invalidGlob.violations).toContainEqual(
+      expect.objectContaining({ code: 'INVALID_STANDING_TARGET_FILTER' }),
+    );
+    expect(omitted.violations).toContainEqual(
+      expect.objectContaining({ code: 'STANDING_TARGET_FILE_OMISSION' }),
+    );
+  });
+
+  it('[L1:UNIT] CWF2-AUD-002 proves exact exhaustive standing-target selection and rejects false-green policy', () => {
+    const projectPath = 'packages/fixture/project.json';
+    const files = [
+      'packages/fixture/src/one.test.ts',
+      'packages/fixture/src/two.test.ts',
+      'packages/fixture/src/one.spec.ts',
+    ];
+    const inspect = (
+      targets: Record<string, unknown>,
+      config = 'export default { test: { passWithNoTests: false } }',
+    ) =>
+      analyzeStandingTargetConfig(
+        projectPath,
+        JSON.stringify({ targets }),
+        files,
+        () => config,
+      );
+    const exactTargets = {
+      'test-l1': {
+        executor: 'nx:run-commands',
+        options: {
+          command:
+            'vitest run --config packages/fixture/vitest.config.ts src/one.test.ts src/two.test.ts',
+        },
+      },
+      'test-l2': {
+        cache: false,
+        executor: 'nx:run-commands',
+        options: {
+          command:
+            'vitest run --config packages/fixture/vitest.config.ts src/one.spec.ts',
+        },
+      },
+    };
+
+    expect(inspect(exactTargets).violations).toEqual([]);
+
+    const cases: Array<{
+      code: string;
+      config?: string;
+      targets: Record<string, unknown>;
+    }> = [
+      {
+        code: 'INVALID_STANDING_TARGET_FILTER',
+        targets: {
+          ...exactTargets,
+          'test-l1': {
+            executor: 'nx:run-commands',
+            options: {
+              command:
+                'vitest run --config packages/fixture/vitest.config.ts src/**/*.test.ts',
+            },
+          },
+        },
+      },
+      {
+        code: 'STANDING_TARGET_FILE_OMISSION',
+        targets: {
+          ...exactTargets,
+          'test-l1': {
+            executor: 'nx:run-commands',
+            options: {
+              command:
+                'vitest run --config packages/fixture/vitest.config.ts src/one.test.ts',
+            },
+          },
+        },
+      },
+      {
+        code: 'STANDING_TARGET_FILE_OMISSION',
+        config:
+          "export default { test: { include: ['src/**/*.test.ts'], exclude: ['src/two.test.ts'], passWithNoTests: false } }",
+        targets: {
+          ...exactTargets,
+          'test-l1': {
+            executor: 'nx:run-commands',
+            options: {
+              command:
+                'vitest run --config packages/fixture/vitest.config.ts src/one.test.ts src/two.test.ts',
+            },
+          },
+        },
+      },
+      {
+        code: 'INVALID_STANDING_TARGET_RUNNER',
+        targets: {
+          ...exactTargets,
+          'test-l1': {
+            executor: '@nx/vite:test',
+            options: { command: 'vitest run src/one.test.ts src/two.test.ts' },
+          },
+        },
+      },
+      {
+        code: 'INVALID_STANDING_TARGET_RUNNER',
+        targets: {
+          ...exactTargets,
+          'test-l1': {
+            executor: 'nx:run-commands',
+            options: {
+              command: 'echo vitest run src/one.test.ts src/two.test.ts',
+            },
+          },
+        },
+      },
+      {
+        code: 'MISSING_STANDING_TARGET',
+        targets: { 'test-l2': exactTargets['test-l2'] },
+      },
+      {
+        code: 'STANDING_TARGET_SELECTION_UNPROVEN',
+        config:
+          "export default { test: { include: ['src/does-not-exist/**/*.test.ts'] } }",
+        targets: {
+          ...exactTargets,
+          'test-l1': {
+            executor: 'nx:run-commands',
+            options: {
+              command: 'vitest run --config packages/fixture/vitest.config.ts',
+            },
+          },
+        },
+      },
+      {
+        code: 'STANDING_TARGET_SELECTION_UNPROVEN',
+        config:
+          "import shared from './shared.js'; export default { test: { include: ['src/**/*.test.ts'], ...shared } }",
+        targets: exactTargets,
+      },
+      {
+        code: 'STANDING_TARGET_SELECTION_UNPROVEN',
+        config:
+          'const decoy = "include: [\'src/**/*.test.ts\']"; export default { test: { passWithNoTests: false } }',
+        targets: {
+          ...exactTargets,
+          'test-l1': {
+            executor: 'nx:run-commands',
+            options: {
+              command: 'vitest run --config packages/fixture/vitest.config.ts',
+            },
+          },
+        },
+      },
+      {
+        code: 'STANDING_TARGET_CROSS_LAYER_SELECTION',
+        config:
+          "export default { test: { include: ['src/**/*.test.ts', 'src/**/*.spec.ts'] } }",
+        targets: {
+          ...exactTargets,
+          'test-l1': {
+            executor: 'nx:run-commands',
+            options: {
+              command:
+                'vitest run --config packages/fixture/vitest.config.ts src/one.test.ts src/two.test.ts src/one.spec.ts',
+            },
+          },
+        },
+      },
+      {
+        code: 'PASS_WITH_NO_TESTS_ENABLED',
+        targets: {
+          ...exactTargets,
+          'test-l1': {
+            executor: 'nx:run-commands',
+            options: {
+              command:
+                'vitest run --config packages/fixture/vitest.config.ts src/one.test.ts src/two.test.ts --passWithNoTests',
+            },
+          },
+        },
+      },
+      {
+        code: 'PASS_WITH_NO_TESTS_ENABLED',
+        config: 'export default { test: { passWithNoTests: true } }',
+        targets: exactTargets,
+      },
+      {
+        code: 'LIVE_TARGET_CACHE_ENABLED',
+        targets: {
+          ...exactTargets,
+          'test-l2': {
+            ...exactTargets['test-l2'],
+            cache: true,
+          },
+        },
+      },
+    ];
+
+    for (const fixture of cases) {
+      expect(
+        inspect(fixture.targets, fixture.config).violations,
+        fixture.code,
+      ).toContainEqual(expect.objectContaining({ code: fixture.code }));
+    }
+  });
+
   it.each([
     ['src/math.test.ts', "describe('[L1:UNIT] math', () => {})", 'l1-unit'],
     [
@@ -170,6 +415,45 @@ describe('[L1:UNIT] Ground-0 layer ownership and policy', () => {
         ],
       }),
     ).toBe(true);
+  });
+
+  it('[L1:UNIT] CWF2-AUD-003 accepts honest failed-zero evidence without treating it as a pass', () => {
+    const failedZero = {
+      schemaVersion: 1,
+      project: '@orchestration/testing',
+      status: 'failed',
+      startedAt: '2026-08-08T12:00:00.000Z',
+      durationMs: 5,
+      children: [
+        {
+          artifact: 'unit.json',
+          command: 'vitest run',
+          durationMs: 5,
+          executed: 0,
+          exitCode: 1,
+          layer: 'l1-unit',
+          selected: 0,
+          status: 'failed',
+        },
+      ],
+    };
+
+    expect(validateAggregateResult(failedZero)).toBe(true);
+    expect(
+      validateAggregateResult({
+        ...failedZero,
+        status: 'passed',
+        children: [
+          {
+            ...failedZero.children[0],
+            exitCode: 0,
+            status: 'passed',
+          },
+        ],
+      }),
+    ).toBe(false);
+    expect(failedZero.children[0]?.selected).toBe(0);
+    expect(failedZero.children[0]?.executed).toBe(0);
   });
 });
 

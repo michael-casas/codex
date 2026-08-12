@@ -1,0 +1,382 @@
+{
+  "schemaVersion": 1,
+  "artifactType": "codex-workflows-direct-typescript-runner-implementation-reproof",
+  "generatedAt": "2026-08-08T13:18:00Z",
+  "authority": {
+    "role": "fresh-implementation-worker",
+    "independentPreflight": false,
+    "independentVerification": false,
+    "reducerApproved": false,
+    "judgment": false,
+    "acceptance": false,
+    "score": null,
+    "stopBoundary": "READY_FOR_EXTERNAL_AUDIT"
+  },
+  "baseRevision": "28c4650c676644bdfac11aa25c46d5be9b15f833",
+  "candidateIdentity": {
+    "status": "final-current-disk",
+    "algorithm": "Sort git ls-files -m --others --exclude-standard after excluding .pi/**, docs/reports/**, and this machine evidence file; SHA-256 each included file; byte-sort '<hash>  <path>\\n' records; SHA-256 their concatenation.",
+    "includedPaths": 92,
+    "digest": "sha256:1d4c09fd9657bb4aa9c020b785deb6a9bfb4c097bcdffea4559000daa1c436ef"
+  },
+  "contract": {
+    "path": "packages/testing/evidence/codex-workflows-ts-runner-green-contract.json",
+    "id": "CDX-WF-GC-2",
+    "historicalDigest": "sha256:7958f4d8eb62db53cf986dedd909fe1ca3484d4f513f626f98307e3f7a2a7d7e",
+    "amendedDigest": "sha256:093013c0fea515676e9096692ed59f7b190456c7f9adb38c413e64c31d56eba5",
+    "fileSha256": "d5e2266f7e8ceecb1a1d598ffd75dc1ff4160d5805ebec3333691d1d77e6f839",
+    "founderOverride": "Every real dogfood and backend-facing codex-workflows agent requests exact gpt-5.6-luna and medium; silent substitution is forbidden."
+  },
+  "red": {
+    "original": [
+      {
+        "target": "workflows:test-l1-unit",
+        "selected": 15,
+        "passed": 13,
+        "failed": 2,
+        "exitCode": 1
+      },
+      {
+        "target": "workflows:test-l1-integration",
+        "selected": 11,
+        "passed": 8,
+        "failed": 3,
+        "exitCode": 1
+      },
+      {
+        "target": "codex-workflows:test-l1-unit",
+        "selected": 8,
+        "passed": 6,
+        "failed": 2,
+        "exitCode": 1
+      },
+      {
+        "target": "codex-workflows:test-l1-integration",
+        "selected": 1,
+        "passed": 0,
+        "failed": 1,
+        "exitCode": 1
+      },
+      {
+        "target": "codex-workflows:test-l2-integration",
+        "selected": 6,
+        "passed": 2,
+        "failed": 4,
+        "exitCode": 1
+      },
+      {
+        "target": "codex-workflows:test-l2-e2e",
+        "selected": 3,
+        "passed": 2,
+        "failed": 1,
+        "exitCode": 1
+      },
+      {
+        "target": "codex-workflows:test-l3",
+        "selectedScenarios": 5,
+        "passedScenarios": 3,
+        "failedScenarios": 2,
+        "selectedSteps": 28,
+        "passedSteps": 22,
+        "failedSteps": 2,
+        "exitCode": 1
+      }
+    ],
+    "founderOverride": {
+      "target": "codex-workflows:test-l2-model-policy",
+      "selected": 1,
+      "passed": 0,
+      "failed": 1,
+      "exitCode": 1,
+      "agentLaunches": 0,
+      "decisiveFailure": "The pre-override TypeScript dogfood source declared both Luna and forbidden Sol."
+    },
+    "limitations": "Historical RED is Worker-captured and is not reducer-registered independent proof. Non-semantic fixture corrections and their hashes are preserved in the contract ledger."
+  },
+  "source": {
+    "path": "apps/codex-workflows/examples/nestjs-resolver-factory-research.workflow.ts",
+    "sha256": "7dfccbbd41e509b2b11f0fdd87d2a0d5f667cf97eae9c00c910dce8ccf283fef",
+    "mode": "-rwxr-xr-x",
+    "firstLine": "#!/usr/bin/env -S codex-workflows",
+    "inputPath": "apps/codex-workflows/examples/nestjs-resolver-factory-research.input.json",
+    "inputSha256": "9d175c89e9aa0556b0f112b3296260cd9498b45d2e64487966fbba36cac7604c",
+    "models": ["gpt-5.6-luna", "gpt-5.6-luna", "gpt-5.6-luna"],
+    "reasoning": ["medium", "medium", "medium"]
+  },
+  "productFileSha256": {
+    "packages/workflows/src/authoring/api.ts": "9ebabc72b6c5d33a3065428fe5239559cd0c853abff250f8a8f923b0cd24e687",
+    "packages/workflows/src/authoring/execution.ts": "dad531575a84616b17ce3fcd47b31b4da5aabe6f8a39509eafa8ca1451463fb5",
+    "packages/workflows/src/authoring/types.ts": "c8df1ac3eb4323982e838f24d35a1428b78b714777bbe4adcafe80e78ed50904",
+    "apps/codex-workflows/src/source/typescript.ts": "bd24673732299f1b7e7958c51c08a94f9b4016822f08e84df1e68c584d3efd23",
+    "apps/codex-workflows/src/runtime/local-runner.ts": "4e608b91fa55ca59904ba6aabb6c20389564a97eeaa682ef1c90e2285f727f03",
+    "apps/codex-workflows/src/runtime/journal.ts": "361f418c06d16795a6fa9317a12712111c2f5b82da82dd775672e8cbce501218",
+    "apps/codex-workflows/src/cli/cli.ts": "2b76714e0c1a6489f329f48591a4cfd0ff80d7bf3dd89db026cf5b0c7e3bad6d"
+  },
+  "dogfood": {
+    "command": "./apps/codex-workflows/examples/nestjs-resolver-factory-research.workflow.ts --input apps/codex-workflows/examples/nestjs-resolver-factory-research.input.json --json",
+    "exitCode": 0,
+    "runId": "local-20260808t125616824z-ddeb26e89a89",
+    "journal": {
+      "path": "/Users/mcasa_atlantis/.codex/workflows/runs/local-20260808t125616824z-ddeb26e89a89/journal.json",
+      "sha256": "fd7cf74ef63ccd2cbab5f161938f6aabde621e103bc03be248ef299dacb4cd90",
+      "authority": "local-operational-journal",
+      "status": "completed",
+      "events": 16,
+      "nodes": 3,
+      "artifacts": 1,
+      "startedAt": "2026-08-08T12:56:16.824Z",
+      "completedAt": "2026-08-08T13:01:47.249Z"
+    },
+    "artifact": {
+      "path": "/Users/mcasa_atlantis/.codex/workflows/runs/local-20260808t125616824z-ddeb26e89a89/artifacts/resolver-factory-proposal.md",
+      "sha256": "4ad3fb16096eaef505de1806987864d027d598a1b09df2fa53128249dede055f",
+      "bytes": 39373,
+      "lines": 594,
+      "mediaType": "text/markdown"
+    },
+    "nodes": [
+      {
+        "id": "nestjs-resolver-factory-research:001:official-nestjs-cqrs-research",
+        "model": "gpt-5.6-luna",
+        "reasoning": "medium",
+        "dependencies": [],
+        "durationMs": 158720,
+        "outcome": "completed",
+        "outputDigest": "sha256:fa628ca57eea733a85d5f086645b30976eb4ed7a7ec78141aebda8bb83a4e593"
+      },
+      {
+        "id": "nestjs-resolver-factory-research:002:official-nestjs-graphql-research",
+        "model": "gpt-5.6-luna",
+        "reasoning": "medium",
+        "dependencies": [],
+        "durationMs": 181811,
+        "outcome": "completed",
+        "outputDigest": "sha256:ae8f8c36e6f58e7a6ecb0a940e60e6449b7a7ce1ddd212f862ca3aaaf8c5d9ac"
+      },
+      {
+        "id": "nestjs-resolver-factory-research:003:resolver-factory-consolidation",
+        "model": "gpt-5.6-luna",
+        "reasoning": "medium",
+        "dependencies": [
+          "nestjs-resolver-factory-research:001:official-nestjs-cqrs-research",
+          "nestjs-resolver-factory-research:002:official-nestjs-graphql-research"
+        ],
+        "durationMs": 148592,
+        "outcome": "completed",
+        "inputDigest": "sha256:2988bd762d28ef8370ce2177bad6b2114c05ff13a8fd6aef0ca58a5b13fdb117",
+        "outputSchemaDigest": "sha256:dacd8718605a1bce061eebc21ba6d6de90e493f29733d28e62c1ad6cd4496aeb",
+        "outputDigest": "sha256:b3acd40a1e16ed1f3ab21693167e3edb3da1ca9c9766170aec65ccca618052f7"
+      }
+    ],
+    "redactionProbe": {
+      "prompt": false,
+      "inputConstraint": false,
+      "environment": false,
+      "secret": false,
+      "rawError": false,
+      "stack": false
+    },
+    "processDelta": 0
+  },
+  "historicalLiveAttempts": [
+    {
+      "runId": "local-20260808t123921188z-4ef1f17c7cb2",
+      "journalPath": "/Users/mcasa_atlantis/.codex/workflows/runs/local-20260808t123921188z-4ef1f17c7cb2/journal.json",
+      "journalSha256": "aad0ff3bf6bff33cb971b8a43e951dbb09daf9bf3709e5e9877ccf8ad8cf5a60",
+      "status": "failed",
+      "nodes": 0,
+      "meaning": "Pre-fix SDK packaging failure before any model launch."
+    },
+    {
+      "runId": "local-20260808t124143824z-cc74a742bd23",
+      "journalPath": "/Users/mcasa_atlantis/.codex/workflows/runs/local-20260808t124143824z-cc74a742bd23/journal.json",
+      "journalSha256": "95454bee06084ef43051ac9f6f5a741b6c7c8b4abb79a57f6f527a4ab27ec662",
+      "status": "running",
+      "nodes": 2,
+      "models": ["gpt-5.6-luna", "gpt-5.6-luna"],
+      "meaning": "Pre-override process ended outside journal finalization; no consolidator or forbidden model launched."
+    }
+  ],
+  "validation": [
+    {
+      "gate": "product-lint-typecheck-build",
+      "command": "bun nx run-many -t lint,typecheck,build -p workflows,codex,codex-workflows --parallel=3 --skipNxCache --outputStyle=static",
+      "exitCode": 0,
+      "projects": 3
+    },
+    {
+      "gate": "product-aggregates",
+      "command": "bun nx run-many -t test -p workflows,codex,codex-workflows --parallel=3 --skipNxCache --outputStyle=static",
+      "exitCode": 0,
+      "projects": 3
+    },
+    {
+      "gate": "testing-policy",
+      "command": "bun nx run @orchestration/testing:test-policy --skipNxCache",
+      "exitCode": 0,
+      "selected": 21,
+      "standingTargets": 7
+    },
+    {
+      "gate": "ground-zero-aggregate",
+      "command": "bun nx run @orchestration/testing:test --configuration=ground-zero --skipNxCache",
+      "exitCode": 0,
+      "selected": 51
+    },
+    {
+      "gate": "affected-closure",
+      "command": "bun nx affected -t lint,typecheck,build,test --files=<nine explicit runner/package/test files> --parallel=3 --skipNxCache --outputStyle=static",
+      "exitCode": 0,
+      "projects": [
+        "workflows",
+        "codex",
+        "codex-workflows",
+        "@orchestration/testing"
+      ]
+    },
+    {
+      "gate": "sdk-import-exclusivity",
+      "command": "bun nx run codex:test-sdk-imports",
+      "exitCode": 0,
+      "selected": 1,
+      "offenders": 0,
+      "allowed": "packages/codex/src/runtime/adapter.ts"
+    },
+    {
+      "gate": "sync",
+      "command": "bun nx sync:check",
+      "exitCode": 0,
+      "status": "up-to-date"
+    },
+    {
+      "gate": "format",
+      "command": "bun nx format:check --files=<candidate paths excluding immutable reports and .pi>",
+      "exitCode": 0
+    },
+    {
+      "gate": "global-workflows-skill",
+      "command": "python3 /Users/mcasa_atlantis/.codex/skills/.system/skill-creator/scripts/quick_validate.py /Users/mcasa_atlantis/.codex/skills/workflows",
+      "exitCode": 0,
+      "status": "Skill is valid!"
+    }
+  ],
+  "aggregateArtifacts": {
+    "test-output/codex-workflows/workflows.json": {
+      "sha256": "a103d6e086aec026765a19347583f001d8c7878bee15fffa2b325ff43288fc29",
+      "status": "passed",
+      "selected": 26
+    },
+    "test-output/codex-workflows/codex.json": {
+      "sha256": "cb7189e08d895a815834c34a7a788f0c2c0ff41d8eb1ca020c2d187c23ccf6ec",
+      "status": "passed",
+      "selected": 29
+    },
+    "test-output/codex-workflows/codex-workflows.json": {
+      "sha256": "7bc7ee7b02ddcbc625e4a24c85c3c094536dec015f64321024592300d2d34299",
+      "status": "passed",
+      "selected": 24
+    },
+    "test-output/ground-zero/testing.json": {
+      "sha256": "875de2863753c22cc2493c4089106cf59aa9476765dffb98634da4cb3ef0f28e",
+      "status": "passed",
+      "selected": 51
+    },
+    "test-output/cucumber/codex-workflows.json": {
+      "sha256": "0ec024511f60e2823d4b90a27da7de0716a9219032058520de85cbfd470aeaa5",
+      "scenarios": 5,
+      "steps": 28,
+      "status": "passed"
+    },
+    "test-output/cucumber/ground-zero.json": {
+      "sha256": "461ad890249d9ccaae05dbcc4feaae4d3848d13e6237cebea68bebcdf8b0adf3",
+      "scenarios": 1,
+      "steps": 6,
+      "status": "passed"
+    }
+  },
+  "aggregateSelections": {
+    "workflows": {
+      "l1Unit": 15,
+      "l1Integration": 11
+    },
+    "codex": {
+      "l1Unit": 16,
+      "l1Integration": 7,
+      "l2Integration": 6
+    },
+    "codexWorkflows": {
+      "l1Unit": 8,
+      "l1Integration": 1,
+      "l2Integration": 7,
+      "l2E2e": 3,
+      "l3Scenarios": 5,
+      "l3Steps": 28
+    },
+    "groundZero": {
+      "l1Unit": 21,
+      "l1Integration": 3,
+      "l2Integration": 24,
+      "l2E2e": 2,
+      "l3Scenarios": 1,
+      "l3Steps": 6
+    }
+  },
+  "projectGraph": {
+    "workflows": [],
+    "codex": [],
+    "codex-workflows": [
+      {
+        "target": "workflows",
+        "type": "static"
+      },
+      {
+        "target": "codex",
+        "type": "static"
+      }
+    ]
+  },
+  "installedExecutable": {
+    "path": "/Users/mcasa_atlantis/.bun/bin/codex-workflows",
+    "linkTarget": "../install/global/node_modules/@orchestration/codex-workflows/dist/main.js",
+    "literalShebangE2e": "passed",
+    "shellConfigurationChanged": false
+  },
+  "globalSkillSha256": {
+    "/Users/mcasa_atlantis/.codex/skills/workflows/SKILL.md": "b5441126e8cb09a96988178ad191436fb930df8c9ef5afbfe719de71202d9c0f",
+    "/Users/mcasa_atlantis/.codex/skills/workflows/references/cli.md": "1324aaa34564a58b7ec17474f7ca9ab27c616cb69f11afa8f9593a6f3237f820",
+    "/Users/mcasa_atlantis/.codex/skills/workflows/references/schema.md": "c4091b61e3592fba1920f0e5c4f53f6529731bb2af660b7aa18b3612cf7612f1",
+    "/Users/mcasa_atlantis/.codex/skills/workflows/references/examples.md": "ee6e2d130b5ba2e4b9084643e38225defc3a458857166e4ea865779ef03d5bfd",
+    "/Users/mcasa_atlantis/.codex/skills/workflows/agents/openai.yaml": "83af1ce3d72d4ef55facdafb985b28cdd214ea8f7f0a3121ec7d1876d4eacd5b"
+  },
+  "resourceDelta": {
+    "controlledCodexChildren": 0,
+    "builtWorkflowCliChildren": 0,
+    "dogfoodRunnerAlive": 0,
+    "internalTypeScriptTempDirectories": 0,
+    "workspaceDirectRunnerTempDirectories": 0,
+    "dogfoodJournalTempFiles": 0,
+    "unexpectedWorkspaceTempFiles": 0,
+    "intendedExternalState": [
+      "/Users/mcasa_atlantis/.bun/bin/codex-workflows",
+      "/Users/mcasa_atlantis/.codex/skills/workflows/",
+      "/Users/mcasa_atlantis/.codex/workflows/runs/local-20260808t123921188z-4ef1f17c7cb2/",
+      "/Users/mcasa_atlantis/.codex/workflows/runs/local-20260808t124143824z-cc74a742bd23/",
+      "/Users/mcasa_atlantis/.codex/workflows/runs/local-20260808t125616824z-ddeb26e89a89/"
+    ]
+  },
+  "immutability": {
+    ".pi/goals/goal_events.jsonl": "b286b4a30a1fecd9181b2931404b2995a0eb3dbd4862f75f82a17e38a439e300",
+    ".pi/goals/archived/goal_2026071612024695_mrn48esr-mggbiz.md": "1a1fac4047a1795f706cf2eab13030e322f54d959f560ca20e3446b620d49b64",
+    "docs/reports/codex-workflows-external-audit-attempt-1.md": "7e3f5753651b7887476dc562c453fb96ded8e9a7993f827a2f46e30828a4ed46",
+    "docs/reports/codex-workflows-external-audit-attempt-2.md": "06f41544f043f323163f086aa92ee315114df7a3613cc4e11178fed2d89aaf7e"
+  },
+  "limitations": [
+    "Trusted TypeScript import executes local module code, including during inspection.",
+    "The local agent host uses fixed approval-never, workspace-write, live network/web-search settings.",
+    "Per-run state is bounded but total retention is not automatically pruned.",
+    "Abrupt process death can leave a local journal at running; no cross-process reconciler is claimed.",
+    "Local run IDs do not provide cross-process resume/status/events/logs/cancel; those verbs fail closed.",
+    "Dynamic callback graphs are not fully enumerable by plan/dry-run without execution.",
+    "Worker evidence and live model output are not independent acceptance."
+  ]
+}

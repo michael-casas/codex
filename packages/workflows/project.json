@@ -1,0 +1,36 @@
+{
+  "name": "workflows",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "packages/workflows/src",
+  "projectType": "library",
+  "tags": ["scope:workflows", "type:library"],
+  "// targets": "to see all targets run: nx show project workflows --web",
+  "targets": {
+    "test-l1-unit": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "vitest run --config packages/workflows/vitest.config.ts src/lib/fixtures.test.ts src/authoring/authoring.test.ts --testNamePattern='L1:UNIT'"
+      }
+    },
+    "test-l1-integration": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "vitest run --config packages/workflows/vitest.config.ts src/lib/planning.test.ts src/lib/repairs.test.ts src/authoring/authoring.test.ts --testNamePattern='L1:INTEGRATION'"
+      }
+    },
+    "test-l1": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "vitest run --config packages/workflows/vitest.config.ts"
+      }
+    },
+    "test": {
+      "executor": "nx:run-commands",
+      "cache": false,
+      "outputs": ["{workspaceRoot}/test-output/codex-workflows/workflows.json"],
+      "options": {
+        "command": "bun packages/testing/src/cli.ts aggregate packages/testing/manifests/workflows.json"
+      }
+    }
+  }
+}

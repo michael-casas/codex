@@ -1,0 +1,4 @@
+interface:
+  display_name: "External Audit"
+  short_description: "Run independent workflow audits with evidence"
+  default_prompt: "Use $audit to launch and evaluate an independent Codex Workflows audit."

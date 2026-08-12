@@ -11,6 +11,18 @@
     },
     {
       "path": "./packages/testing"
+    },
+    {
+      "path": "./packages/workflows"
+    },
+    {
+      "path": "./packages/codex"
+    },
+    {
+      "path": "./apps/codex-workflows"
+    },
+    {
+      "path": "./packages/process"
     }
   ]
 }

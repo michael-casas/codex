@@ -1,0 +1,813 @@
+{
+  "schemaVersion": 1,
+  "artifactType": "codex-workflows-cra-red-green-worker-reproof",
+  "assignmentId": "CDX.CRA-RED-GREEN.W1",
+  "assignmentDigest": "sha256:f48f4956b09d651e9019b63a0557bcf8a18240c14e0b7c4684d22869f76f34f2",
+  "contractId": "CDX-WF-CRA-RG-GC-1",
+  "contractDigest": "sha256:f0551f4117af35c58c970aad77941f17fa19fa466f772da9f116dd53db8ba549",
+  "baseRevision": "28c4650c676644bdfac11aa25c46d5be9b15f833",
+  "scopedCandidateDigest": "sha256:e4a28e5cb04e25a3a4f12b0964d8aae56015061792ef7251ff990ef0214b95ae",
+  "capturedAt": "2026-08-11T06:47:36Z",
+  "currentEvidence": "attempt10CommandEvidenceRepair",
+  "attempt10CommandEvidenceRepair": {
+    "status": "READY-FOR-INDEPENDENT-PREFLIGHT",
+    "independentAcceptanceClaimed": false,
+    "attempt9IndependentPreflightRed": {
+      "markdown": ".agent/audit/workflows/9/PREFLIGHT.md",
+      "markdownSha256": "d2fda1af770fedc39172c6e18ca80aae04e3f2035049cd933c14f1366d55a7e4",
+      "json": ".agent/audit/workflows/9/PREFLIGHT.json",
+      "jsonSha256": "305e61e9ee9355a907ebabdd1ce4ced5a55269c50aef4c0d8882aeffb0312ba1",
+      "status": "PREFLIGHT-INVALID",
+      "completionMarker": "PREFLIGHT_COMPLETE",
+      "decisiveDeterministicFinding": "PREFLIGHT-A9-D001: the launcher trace did not independently exclude additional direct npx or create-react-app commands because the public journal retained no command transcript.",
+      "separateConstitutionalFinding": "PREFLIGHT-A9-D002: no scoped registration/reducer client was available; this worker reproof does not claim reducer approval."
+    },
+    "meaningfulRedGreen": {
+      "behavior": "The workflow runtime records digest-only terminal SDK command evidence and enforces an exact command-count policy without retaining raw commands.",
+      "red": "The uncached CRA L2 slice ran three rows: the existing cleanup row passed, while the successful chain lacked commandEvidence and an adversarial extra direct npx command incorrectly exited zero. Codex SDK L2 separately failed because command and exit-code metadata were omitted.",
+      "green": "CRA L2 passed 3/3, including rejection of the extra direct scaffold command; Codex SDK L2 passed 10/10; app L1 passed 39/39 and app L2 passed 18/18."
+    },
+    "redEvidence": {
+      "path": "packages/testing/evidence/codex-workflows-cra-red-green-red.json",
+      "sha256": "11f4ca4882d1b0109cc9b363582b0525760515d01b4173bea50353cdab476bea"
+    },
+    "source": {
+      "workflow": {
+        "path": "apps/codex-workflows/examples/cra-red-green.workflow.ts",
+        "sha256": "f01f64ee4c4219b015c7567943dcb35dbc3f94ee16c1f680022b8a11c4656485"
+      },
+      "craL2": {
+        "path": "apps/codex-workflows/src/features/cra-red-green/cra-red-green.spec.ts",
+        "sha256": "7b26a9ec7dc1a635fb8ba8a4702e16b88ebcd6def7795330df55610d01e4febe"
+      },
+      "controlledCodex": {
+        "path": "apps/codex-workflows/src/features/cra-red-green/support/controlled-codex.mjs",
+        "sha256": "58808cde5a69d1ecd8ea14e2c53219fb0018c754ea60d02ccd8bdac95d74ae04"
+      },
+      "liveDriver": {
+        "path": "apps/codex-workflows/src/features/cra-red-green/support/driver.ts",
+        "sha256": "3f658cb185f645ff80a858d4d9ac82aca179168e7b66f7f5c70fffcf15948d54"
+      },
+      "localRunner": {
+        "path": "apps/codex-workflows/src/runtime/local-runner.ts",
+        "sha256": "5db52b4837bbf44b868f700b343551cd65cb35e1e646ee37dee112de8784f7c1"
+      },
+      "journal": {
+        "path": "apps/codex-workflows/src/runtime/journal.ts",
+        "sha256": "76a1aa615c1744f8764b56aaecdcac26552659b141b5de672f5ef7aba7c0ad8c"
+      },
+      "codexAdapter": {
+        "path": "packages/codex/src/runtime/adapter.ts",
+        "sha256": "474c363990a995127c47507513c780299d13a44b26578188db705b8ce2afc98f"
+      },
+      "workflowExecution": {
+        "path": "packages/workflows/src/authoring/execution.ts",
+        "sha256": "13905eeb653595a3ddb2a501b50e0dd7ba768d2d2cb371e9b2ccf8d50847bc35"
+      }
+    },
+    "liveFounderL3": [
+      {
+        "kind": "focused-repair-proof",
+        "command": "bun nx run codex-workflows:test-l3-cra-red-green --skip-nx-cache --outputStyle=static",
+        "exitCode": 0,
+        "timestamp": "20260811T062451Z",
+        "journal": ".agent/testing/workflows/20260811T062451Z/run-state/runs/local-20260811t062451593z-1f0684dd1524/journal.json",
+        "journalSha256": "372e6d0d1e9d6484c3cecb0560548f58588f17176349a024ec5fcafc3aa4fdcb",
+        "report": ".agent/testing/workflows/20260811T062451Z/CRA_RED_GREEN.md",
+        "reportSha256": "7dbe1990f68413e0e75d843b502c201f5d00727643ff895e2133b3f338f69bb0",
+        "cucumberSha256AtCapture": "6d2d9f87bd88f6b4e0a2cd8ccb118c998d4121568936b3be5fdcaa54add0b1b",
+        "scenarios": { "executed": 1, "passed": 1, "failed": 0 },
+        "steps": { "executed": 6, "passed": 6, "failed": 0, "undefined": 0 },
+        "commandEvidence": {
+          "policyDigest": "sha256:939e6065b4109aea1e51af57eb3c6065c3141a5eee4e59f21db38d46b9488885",
+          "totalCompletedCommands": 12,
+          "digest": "sha256:6256c063cb29b1e2137af268c64c6295495065cc1e8aea694b84d7bf85eb0809",
+          "rules": {
+            "workflow-scaffold-launcher": {
+              "expected": 1,
+              "observed": 1,
+              "passed": true
+            },
+            "direct-npx": { "expected": 0, "observed": 0, "passed": true },
+            "direct-create-react-app": {
+              "expected": 0,
+              "observed": 0,
+              "passed": true
+            }
+          }
+        }
+      },
+      {
+        "kind": "aggregate-cra-proof",
+        "aggregateCommandExitCode": 1,
+        "aggregateFailureOutsideCra": "Daily Facts rejected all four reserve sources on publication-date verification.",
+        "timestamp": "20260811T063814Z",
+        "journal": ".agent/testing/workflows/20260811T063814Z/run-state/runs/local-20260811t063814734z-77479124e3a3/journal.json",
+        "journalSha256": "feefa4031bad02e01ecf8d50549b12cc1b17038209c3e2a7937f6888e2601ecc",
+        "report": ".agent/testing/workflows/20260811T063814Z/CRA_RED_GREEN.md",
+        "reportSha256": "2e7427ae9071426a309d7a63d0df5496af32e194fba9042f1d14b891c61de803",
+        "cucumber": "test-output/cucumber/codex-workflows-cra-red-green.json",
+        "cucumberSha256": "50dd076d8a3293a379c63f29dc50b272d08bf6e4d5656eff5da10bf74c9ca9a2",
+        "scenarios": { "executed": 1, "passed": 1, "failed": 0 },
+        "steps": { "executed": 6, "passed": 6, "failed": 0, "undefined": 0 },
+        "commandEvidence": {
+          "policyDigest": "sha256:9a5fae27912ee43477600aa52b96bb8ae2d144383084cac2e53d7e426d00df3a",
+          "totalCompletedCommands": 9,
+          "digest": "sha256:64b9bb050727a3b2555c29f91ce413047cf8643765d90c13f9e512e206990248",
+          "rules": {
+            "workflow-scaffold-launcher": {
+              "expected": 1,
+              "observed": 1,
+              "passed": true
+            },
+            "direct-npx": { "expected": 0, "observed": 0, "passed": true },
+            "direct-create-react-app": {
+              "expected": 0,
+              "observed": 0,
+              "passed": true
+            }
+          }
+        }
+      }
+    ],
+    "dailyFactsFreshAttempts": [
+      {
+        "timestamp": "20260811T063559Z",
+        "journalSha256": "647722cbcdaa0797cdbd5c631a55c3889345b84b7910d2499606fcb3d59b1713",
+        "threeLunaMediumNodesCompleted": true,
+        "exitCode": 68,
+        "contractIssue": "Verified 0 of 4 reserve sources; rejected publication-date=4."
+      },
+      {
+        "timestamp": "20260811T064425Z",
+        "journalSha256": "e1834c914cf557eecca582d607da76139fecc6701b5ec178bf78eb3565a4aab8",
+        "threeLunaMediumNodesCompleted": true,
+        "exitCode": 68,
+        "contractIssue": "Article URL must identify one article or press release."
+      }
+    ],
+    "standingGates": {
+      "codexWorkflowsAggregate": {
+        "nativeExecuted": 56,
+        "nativePassed": 56,
+        "standingL3Scenarios": 5,
+        "standingL3Steps": 28,
+        "craL3Scenarios": 1,
+        "craL3Steps": 6,
+        "dailyL3Scenarios": 1,
+        "dailyL3PassedSteps": 2,
+        "dailyL3FailedSteps": 1,
+        "exitCode": 1
+      },
+      "fiveProjectLintTypecheckBuild": {
+        "exitCode": 0,
+        "lintWarnings": 35,
+        "lintErrors": 0
+      },
+      "transitiveWorkflowsCodexMonitorTests": { "exitCode": 0 },
+      "groundZero": {
+        "policyFiles": 28,
+        "nativeExecuted": 50,
+        "l3Scenarios": 1,
+        "l3Steps": 6,
+        "exitCode": 0
+      },
+      "sdkImportExclusivity": { "selected": 1, "offenders": 0, "exitCode": 0 },
+      "sync": "up-to-date",
+      "testPreBuild": {
+        "command": "tsc -p apps/codex-workflows/tsconfig.cucumber.json",
+        "exitCode": 0
+      }
+    },
+    "resourceDelta": {
+      "successfulCraRoots": 2,
+      "workflowOwnedProcesses": 0,
+      "retainedNodeModules": 0,
+      "retainedBuildDirectories": 0,
+      "retainedNestedGitRepositories": 0,
+      "retainedNpmCaches": 0,
+      "launcherFiles": 0,
+      "lockFiles": 0,
+      "artifactTemporaryFiles": 0,
+      "baselineUnrelatedProcessExcluded": "PID 7937 predates this run and was neither created nor mutated."
+    }
+  },
+  "status": "READY-FOR-AUDIT",
+  "independentAcceptanceClaimed": false,
+  "redEvidence": {
+    "path": "packages/testing/evidence/codex-workflows-cra-red-green-red.json",
+    "digest": "sha256:87b203315d8435e45bafa81fcb15954a1e900e773de93d3da6449f626e252bd3",
+    "allOriginalRowsMeaningfullyRed": true,
+    "founderTscPrebuildAmendmentMeaningfullyRed": true
+  },
+  "canonicalLiveRun": {
+    "command": "bun nx run codex-workflows:test-l3-cra-red-green --skip-nx-cache --outputStyle=static",
+    "exitCode": 0,
+    "nxDependencies": [
+      "codex:build",
+      "codex-workflows:build",
+      "codex-workflows:test-pre-build"
+    ],
+    "cucumber": {
+      "feature": "apps/codex-workflows/src/features/cra-red-green/cra-red-green.feature",
+      "compiledSteps": "apps/codex-workflows/out-tsc/cucumber/features/cra-red-green/index.steps.js",
+      "result": "test-output/cucumber/codex-workflows-cra-red-green.json",
+      "resultDigest": "sha256:b4aabdea638c1951b153dbfa72a9acf0ee472fb8aa87b1153f390fb158dd0fe7",
+      "scenarios": { "executed": 1, "passed": 1, "failed": 0 },
+      "steps": { "executed": 6, "passed": 6, "failed": 0, "undefined": 0 }
+    },
+    "workflow": {
+      "runId": "local-20260810t230720008z-3e0a53684b22",
+      "journal": ".agent/testing/workflows/20260810T230719Z/run-state/runs/local-20260810t230720008z-3e0a53684b22/journal.json",
+      "journalDigest": "sha256:d8440c27ddc9b14353686a8c9cc470961fafa56298c2e025bac12dd2005399b8",
+      "status": "completed",
+      "terminalEvent": "workflow.completed",
+      "terminalSequence": 18,
+      "nodes": [
+        {
+          "ordinal": 1,
+          "label": "cra-builder",
+          "phase": "implementation",
+          "dependencies": [],
+          "model": "gpt-5.6-luna",
+          "reasoning": "medium",
+          "outcome": "completed",
+          "durationMs": 416528
+        },
+        {
+          "ordinal": 2,
+          "label": "cra-auditor",
+          "phase": "audit",
+          "dependencies": ["founder-cra-red-green:001:cra-builder"],
+          "model": "gpt-5.6-luna",
+          "reasoning": "medium",
+          "outcome": "completed",
+          "durationMs": 26577
+        },
+        {
+          "ordinal": 3,
+          "label": "cra-remediator",
+          "phase": "remediation",
+          "dependencies": [
+            "founder-cra-red-green:001:cra-builder",
+            "founder-cra-red-green:002:cra-auditor"
+          ],
+          "model": "gpt-5.6-luna",
+          "reasoning": "medium",
+          "outcome": "completed",
+          "durationMs": 132672
+        }
+      ]
+    },
+    "behavior": {
+      "scaffold": "npx --yes create-react-app@5.1.0 <isolated-project> --use-npm",
+      "baselineVerdict": "RED",
+      "baselineFailingCriteria": ["CRA-AUDIT-003", "CRA-AUDIT-004"],
+      "baselineTreeDigest": "sha256:738f397501dc1b24b45acc201c103555ea4cbed08c8fe8615b460d83d6a44b94",
+      "auditorVerdict": "RED",
+      "auditorTreeDigest": "sha256:738f397501dc1b24b45acc201c103555ea4cbed08c8fe8615b460d83d6a44b94",
+      "auditorMutation": false,
+      "remediationSourceChanges": ["src/App.js", "src/App.test.js"],
+      "finalVerdict": "GREEN",
+      "finalTreeDigest": "sha256:bbca5cfdd622fe6ba994b8e27a815c9bf8c3116ad913004227a3e77bff41fd3c",
+      "nativeTestsPassed": true,
+      "productionBuildPassed": true,
+      "terminalMarker": "READY_FOR_EXTERNAL_AUDIT"
+    },
+    "report": {
+      "path": ".agent/testing/workflows/20260810T230719Z/CRA_RED_GREEN.md",
+      "digest": "sha256:f82363e7f9c29fe00c19e141e9fcf4facd984bee081bb22574d57a230a76e935",
+      "completionMarker": "<!-- CRA_RED_GREEN_COMPLETE -->"
+    },
+    "resourceDelta": {
+      "unexpectedWorkspaceDiff": 0,
+      "processGroups": 0,
+      "tmuxSessions": 0,
+      "typescriptLoaderTemporaries": 0,
+      "artifactTemporaries": 0,
+      "retainedNodeModules": 0,
+      "retainedBuildDirectories": 0,
+      "retainedNestedGitRepositories": 0
+    }
+  },
+  "founderTscPrebuildProof": {
+    "target": "codex-workflows:test-pre-build",
+    "compiler": "tsc -p apps/codex-workflows/tsconfig.cucumber.json",
+    "cleanOutputRegenerated": true,
+    "sourceTreeCraDriverJsAbsent": true,
+    "allL3TargetsDependOnPrebuild": true,
+    "aggregateDependsOnPrebuild": true
+  },
+  "standingGates": [
+    { "target": "codex-workflows:lint", "exitCode": 0 },
+    { "target": "codex-workflows:typecheck", "exitCode": 0 },
+    { "target": "codex-workflows:build", "exitCode": 0 },
+    {
+      "target": "codex-workflows:test-l1",
+      "exitCode": 0,
+      "files": 4,
+      "tests": 29
+    },
+    {
+      "target": "codex-workflows:test-l2",
+      "exitCode": 0,
+      "files": 5,
+      "tests": 15
+    },
+    {
+      "target": "codex-workflows:test-l3",
+      "exitCode": 0,
+      "scenarios": 5,
+      "steps": 28
+    }
+  ],
+  "repairDispositions": [
+    {
+      "finding": "Cucumber source binding required a generated driver.js",
+      "disposition": "Founder-amended test-pre-build uses tsc and compiled out-tsc/cucumber steps; source driver.js is absent."
+    },
+    {
+      "finding": "Remediator schema used unsupported structured-output uniqueItems",
+      "disposition": "Removed the host-unsupported keyword and retained deterministic duplicate/set validation after response."
+    },
+    {
+      "finding": "Compiled bindings assumed source-relative import.meta dirname",
+      "disposition": "All affected L3 bindings resolve and assert the Git toplevel independent of compiled path and Cucumber cwd."
+    },
+    {
+      "finding": "Post-check trusted remediator self-reported exit fields in addition to parent validation",
+      "disposition": "Parent-owned native test/build and deterministic audit are sole execution authority; agent self-report cannot veto or manufacture GREEN."
+    }
+  ],
+  "attempt4RepairEvidence": {
+    "status": "READY-FOR-INDEPENDENT-PREFLIGHT",
+    "source": {
+      "path": "apps/codex-workflows/examples/cra-red-green.workflow.ts",
+      "sha256": "8794499d42c58969549f0b6b4ac751c7fe5cf355a4f82d1fff696f110c44bcff",
+      "firstLine": "#!/usr/bin/env -S codex-workflows"
+    },
+    "prebuild": {
+      "target": "codex-workflows:test-pre-build",
+      "command": "tsc -p apps/codex-workflows/tsconfig.cucumber.json",
+      "exitCode": 0,
+      "compiledSteps": "apps/codex-workflows/out-tsc/cucumber/features/cra-red-green/index.steps.js",
+      "sourceTreeDriverJsAbsent": true
+    },
+    "policyRepair": {
+      "ownedL1Marker": "// === L1: UNIT TESTS ===",
+      "ownedL2Marker": "// === L2: END-TO-END TESTS ===",
+      "policyTarget": "@orchestration/testing:test-policy",
+      "selected": 28,
+      "exitCode": 0
+    },
+    "liveFounderL3": {
+      "command": "bun nx run codex-workflows:test-l3-cra-red-green --skip-nx-cache --outputStyle=static",
+      "exitCode": 0,
+      "durationMs": 489000,
+      "timestamp": "20260810T234506Z",
+      "runId": "local-20260810t234507193z-ecac1d48fcd0",
+      "cucumber": {
+        "path": "test-output/cucumber/codex-workflows-cra-red-green.json",
+        "sha256": "799c4dd3ca86c93b6f42667611c99afb10617074ea9430403627e53d6e32c794",
+        "scenarios": 1,
+        "passedScenarios": 1,
+        "steps": 6,
+        "passedSteps": 6,
+        "failed": 0,
+        "undefined": 0,
+        "skipped": 0
+      },
+      "workflow": {
+        "journal": ".agent/testing/workflows/20260810T234506Z/run-state/runs/local-20260810t234507193z-ecac1d48fcd0/journal.json",
+        "journalSha256": "fe7c739b8eb53c6321439dbfa56f4c61b006ebdc0dad2e1e22ecb691e1f5ce53",
+        "status": "completed",
+        "terminalEvent": "workflow.completed",
+        "terminalSequence": 18,
+        "nodes": [
+          {
+            "ordinal": 1,
+            "label": "cra-builder",
+            "phase": "implementation",
+            "dependencies": [],
+            "model": "gpt-5.6-luna",
+            "reasoning": "medium",
+            "outcome": "completed",
+            "durationMs": 345409
+          },
+          {
+            "ordinal": 2,
+            "label": "cra-auditor",
+            "phase": "audit",
+            "dependencies": ["founder-cra-red-green:001:cra-builder"],
+            "model": "gpt-5.6-luna",
+            "reasoning": "medium",
+            "outcome": "completed",
+            "durationMs": 23132
+          },
+          {
+            "ordinal": 3,
+            "label": "cra-remediator",
+            "phase": "remediation",
+            "dependencies": [
+              "founder-cra-red-green:001:cra-builder",
+              "founder-cra-red-green:002:cra-auditor"
+            ],
+            "model": "gpt-5.6-luna",
+            "reasoning": "medium",
+            "outcome": "completed",
+            "durationMs": 99422
+          }
+        ]
+      },
+      "behavior": {
+        "baselineVerdict": "RED",
+        "baselineFailingCriteria": ["CRA-AUDIT-003", "CRA-AUDIT-004"],
+        "baselineTreeDigest": "sha256:5767323284afbb74a93b3f78e7a64b18bf280b1407472d9c18859495d7169fe3",
+        "auditorVerdict": "RED",
+        "auditorTreeDigest": "sha256:5767323284afbb74a93b3f78e7a64b18bf280b1407472d9c18859495d7169fe3",
+        "auditorMutation": false,
+        "remediationSourceChanges": ["src/App.js", "src/App.test.js"],
+        "finalVerdict": "GREEN",
+        "finalTreeDigest": "sha256:c7a3f0b075796f7f0a1bce50a5f63e5fe1706bb5386a4397a317e0251886f84e",
+        "nativeTestsPassed": true,
+        "productionBuildPassed": true,
+        "terminalMarker": "READY_FOR_EXTERNAL_AUDIT"
+      },
+      "report": {
+        "path": ".agent/testing/workflows/20260810T234506Z/CRA_RED_GREEN.md",
+        "sha256": "823953a248cf7b58b2f160b433ee6af9362a9a7ceacdcf5eb3bd2bfbf8c89002",
+        "bytes": 1991,
+        "completionMarker": "<!-- CRA_RED_GREEN_COMPLETE -->"
+      }
+    },
+    "standingGates": {
+      "fiveProjectLintTypecheckBuild": 0,
+      "groundZero": 0,
+      "codexWorkflowsL1": {
+        "selected": 31,
+        "passed": 31,
+        "exitCode": 0
+      },
+      "codexWorkflowsL2": {
+        "selected": 16,
+        "passed": 16,
+        "exitCode": 0
+      },
+      "a2_012NativeMatrix": "closed by the current daily-facts reproof attempt4RepairEvidence row"
+    },
+    "resourceDelta": {
+      "unexpectedWorkspaceDiff": 0,
+      "workflowOwnedProcesses": 0,
+      "tmuxSessions": 0,
+      "typescriptLoaderTemporaries": 0,
+      "artifactTemporaries": 0,
+      "retainedNodeModules": 0,
+      "retainedBuildDirectories": 0,
+      "retainedNestedGitRepositories": 0,
+      "historicalGeneratedDirectoriesMovedToTrash": 4,
+      "recoverable": true
+    }
+  },
+  "attempt8RepairEvidence": {
+    "status": "READY-FOR-INDEPENDENT-PREFLIGHT",
+    "independentAcceptanceClaimed": false,
+    "attempt7IndependentPreflightRed": {
+      "markdown": ".agent/audit/workflows/7/PREFLIGHT.md",
+      "markdownSha256": "a8a7b683580f42e31eeffebb79759dd255d575a3ca1a2102119c8dae89708d4e",
+      "json": ".agent/audit/workflows/7/PREFLIGHT.json",
+      "jsonSha256": "5b16640fc197a9a1d046f6c9c6cd36407d9ae8cc165d1d3e6c50f4787cb6f1dc",
+      "status": "PREFLIGHT-INVALID",
+      "completionMarker": "PREFLIGHT_COMPLETE",
+      "decisiveDeterministicFindings": [
+        "PREFLIGHT-A7-D001: the fresh CRA builder ended WORKFLOW_AGENT_FAILED after the provider returned a capacity failure.",
+        "PREFLIGHT-A7-D002: the failed run retained node_modules, build, and npm-cache."
+      ],
+      "separateConstitutionalFinding": "PREFLIGHT-A7-D003: no scoped registration/reducer client was available; this reproof does not claim reducer approval."
+    },
+    "meaningfulRedGreen": [
+      {
+        "behavior": "A failed workflow cleans material CRA resources even when the failure occurs after project mutation.",
+        "red": "CRA-RG-GC1-003 retained node_modules after an injected provider failure.",
+        "green": "The workflow body is enclosed in try/finally and the uncached L2 CRA slice passed 2/2, including failed-run cleanup."
+      },
+      {
+        "behavior": "Host-owned native test/build validation is authoritative and agent self-report cannot manufacture or veto the fixed audit.",
+        "red": "A live auditor consumed conflicting builder-reported exit fields and the run failed output validation despite host GREEN commands.",
+        "green": "Builder output no longer contains test/build exit fields; the unchanged fixed audit is evaluated against host-owned baseline results and the uncached L2 CRA slice passed 2/2."
+      },
+      {
+        "behavior": "Cleanup quiesces proof-root descendants before deleting generated resources.",
+        "red": "An injected detached descendant recreated node_modules after immediate deletion.",
+        "green": "Proof-root-scoped descendants are terminated and verified quiescent before removal; CRA-RG-GC1-003 remained absent after the delayed recreation window."
+      }
+    ],
+    "source": {
+      "path": "apps/codex-workflows/examples/cra-red-green.workflow.ts",
+      "sha256": "900ba83f7a7316689e940c8ecddef445fee281215710699a5ae19e631841f8cf",
+      "firstLine": "#!/usr/bin/env -S codex-workflows",
+      "l2SpecSha256": "b678638e77ecd12555c07cfc2b232c66807d55c7b8d888f6cfbaeddda01381c7",
+      "controlledBoundarySha256": "3208d123708fe0f69fbed9a55cba4c47a229b9daf7f1f9ddf0cea77cbd30547b"
+    },
+    "prebuild": {
+      "target": "codex-workflows:test-pre-build",
+      "command": "tsc -p apps/codex-workflows/tsconfig.cucumber.json",
+      "exitCode": 0
+    },
+    "liveFounderL3": {
+      "command": "bun nx run codex-workflows:test-l3-cra-red-green --skip-nx-cache --outputStyle=static",
+      "exitCode": 0,
+      "durationMs": 344000,
+      "timestamp": "20260811T041156Z",
+      "runId": "local-20260811t041156997z-7d00c065bee0",
+      "sourceDigest": "sha256:900ba83f7a7316689e940c8ecddef445fee281215710699a5ae19e631841f8cf",
+      "cucumber": {
+        "path": "test-output/cucumber/codex-workflows-cra-red-green.json",
+        "sha256": "1a8fdae82c768e43bcacdb1009c3e1c94c776e1f43857bd46f4e724b86c54129",
+        "scenarios": 1,
+        "passedScenarios": 1,
+        "steps": 6,
+        "passedSteps": 6,
+        "failed": 0,
+        "undefined": 0,
+        "skipped": 0
+      },
+      "workflow": {
+        "journal": ".agent/testing/workflows/20260811T041156Z/run-state/runs/local-20260811t041156997z-7d00c065bee0/journal.json",
+        "journalSha256": "f718f071327b5a0ad71da2dfe1d5d86092060c7b243d42707b9afd1e7033a0dc",
+        "status": "completed",
+        "terminalEvent": "workflow.completed",
+        "terminalSequence": 18,
+        "artifactSequence": 17,
+        "nodes": [
+          {
+            "ordinal": 1,
+            "label": "cra-builder",
+            "phase": "implementation",
+            "dependencies": [],
+            "model": "gpt-5.6-luna",
+            "reasoning": "medium",
+            "outcome": "completed",
+            "durationMs": 129622
+          },
+          {
+            "ordinal": 2,
+            "label": "cra-auditor",
+            "phase": "audit",
+            "dependencies": ["founder-cra-red-green:001:cra-builder"],
+            "model": "gpt-5.6-luna",
+            "reasoning": "medium",
+            "outcome": "completed",
+            "durationMs": 9085
+          },
+          {
+            "ordinal": 3,
+            "label": "cra-remediator",
+            "phase": "remediation",
+            "dependencies": [
+              "founder-cra-red-green:001:cra-builder",
+              "founder-cra-red-green:002:cra-auditor"
+            ],
+            "model": "gpt-5.6-luna",
+            "reasoning": "medium",
+            "outcome": "completed",
+            "durationMs": 182469
+          }
+        ]
+      },
+      "behavior": {
+        "scaffold": "NPM_CONFIG_USERCONFIG=/dev/null NPM_CONFIG_CACHE=<proof-root>/npm-cache npx --yes create-react-app@5.1.0 <isolated-project> --use-npm",
+        "baselineVerdict": "RED",
+        "baselineFailingCriteria": ["CRA-AUDIT-003", "CRA-AUDIT-004"],
+        "baselineTreeDigest": "sha256:d9918d2c71d460a851be3a0ce22332d3381ed6b503097c10e97f5aa2ee8e705e",
+        "auditorVerdict": "RED",
+        "auditorTreeDigest": "sha256:d9918d2c71d460a851be3a0ce22332d3381ed6b503097c10e97f5aa2ee8e705e",
+        "auditorMutation": false,
+        "remediationSourceChanges": ["src/App.js", "src/App.test.js"],
+        "finalVerdict": "GREEN",
+        "finalTreeDigest": "sha256:cbec3265ad72b0b1e7f55b04216b1620aa7ac4b1a6c240f51bbd4f647ffd3650",
+        "nativeTestsPassed": true,
+        "productionBuildPassed": true,
+        "terminalMarker": "READY_FOR_EXTERNAL_AUDIT"
+      },
+      "report": {
+        "path": ".agent/testing/workflows/20260811T041156Z/CRA_RED_GREEN.md",
+        "sha256": "13a6e9ac25619eda98e70fc8b886643cbb92e6df01826d293c3d2b0353a72e46",
+        "bytes": 1991,
+        "completionMarker": "<!-- CRA_RED_GREEN_COMPLETE -->"
+      }
+    },
+    "standingGates": {
+      "codexWorkflowsL1": { "selected": 39, "passed": 39, "exitCode": 0 },
+      "codexWorkflowsL2": { "selected": 17, "passed": 17, "exitCode": 0 },
+      "craFocusedL2": { "selected": 2, "passed": 2, "exitCode": 0 },
+      "fiveProjectLintTypecheckBuild": 0,
+      "transitiveWorkflowsCodexMonitorTests": 0,
+      "groundZero": {
+        "policyFiles": 28,
+        "nativeExecuted": 50,
+        "l3Scenarios": 1,
+        "l3Steps": 6,
+        "exitCode": 0
+      },
+      "sdkImportExclusivity": { "selected": 1, "offenders": 0, "exitCode": 0 },
+      "sync": "up-to-date",
+      "formatTouchedFiles": 3,
+      "formatExitCode": 0
+    },
+    "resourceDelta": {
+      "successfulRootWorkflowOwnedProcesses": 0,
+      "successfulRootRetainedNodeModules": 0,
+      "successfulRootRetainedBuildDirectories": 0,
+      "successfulRootRetainedNestedGitRepositories": 0,
+      "successfulRootRetainedNpmCaches": 0,
+      "successfulRootArtifactTemporaryFiles": 0,
+      "historicalFailedEvidencePreserved": [
+        ".agent/testing/workflows/20260811T033150Z",
+        ".agent/testing/workflows/20260811T040638Z"
+      ],
+      "baselineUnrelatedLongLivedProcessExcluded": "PID 7937 predates this repair run and belongs to a separate tmux worker; it was neither created nor mutated by this lane."
+    }
+  },
+  "attempt9RepairEvidence": {
+    "status": "READY-FOR-INDEPENDENT-PREFLIGHT",
+    "independentAcceptanceClaimed": false,
+    "attempt8IndependentPreflightRed": {
+      "markdown": ".agent/audit/workflows/8/PREFLIGHT.md",
+      "markdownSha256": "e54947f4c351bdca225ee60c849140947357ef79b9a50f9a5b2f58f58cf7417a",
+      "json": ".agent/audit/workflows/8/PREFLIGHT.json",
+      "jsonSha256": "9cfb6da2b98405209475506c3be4cd01187e9dfeffec77edb1671576ae9e8fa1",
+      "status": "PREFLIGHT-INVALID",
+      "completionMarker": "PREFLIGHT_COMPLETE",
+      "decisiveDeterministicFinding": "PREFLIGHT-A8-D001: the exact-once pinned CRA scaffold process, isolated npm environment, and no-retry history were not independently observable.",
+      "separateConstitutionalFinding": "PREFLIGHT-A8-D002: no scoped registration/reducer client was available; this reproof does not claim reducer approval."
+    },
+    "meaningfulRedGreen": {
+      "behavior": "The workflow host proves the pinned CRA scaffold at the real process boundary exactly once before admitting the independent audit.",
+      "red": "The uncached CRA L2 row failed 1/2 because public output had no scaffoldProof; the existing provider-failure cleanup row remained green.",
+      "green": "The frozen L2 row passed 2/2 after the workflow-owned single-use launcher recorded exact argv, npm environment, cwd, timestamps, exit status, and one attempt, while the host validated the unchanged launcher and trace digests."
+    },
+    "source": {
+      "path": "apps/codex-workflows/examples/cra-red-green.workflow.ts",
+      "sha256": "6c72f93f0acacfec12cd8b9ee2f2c1b8c41b5d4edadc92318dade5777fe8dc0d",
+      "firstLine": "#!/usr/bin/env -S codex-workflows",
+      "l2SpecSha256": "a2a0d8871d1ea1ff16f54039e6d4341c6070fd746befa68d717198ebd9c07245",
+      "controlledCodexSha256": "bfcf3ff4fd89443c2f980c2a2c58444c4ca0168e0ee5e97360d111f77805ffae",
+      "controlledNpxSha256": "3628192cfd6169861584e8e2b75ca09e9f5b8c67b60e90f59619803c1a24037e",
+      "liveDriverSha256": "fa3f3c20e295f4b85d10bb43524d168e0e5be2759b417f333afaa7b119423332"
+    },
+    "prebuild": {
+      "target": "codex-workflows:test-pre-build",
+      "command": "tsc -p apps/codex-workflows/tsconfig.cucumber.json",
+      "exitCode": 0
+    },
+    "liveFounderL3": {
+      "command": "bun nx run codex-workflows:test-l3-cra-red-green --skip-nx-cache",
+      "exitCode": 0,
+      "durationMs": 329701,
+      "timestamp": "20260811T052321Z",
+      "runId": "local-20260811t052321889z-4e7e8eba42e8",
+      "cucumber": {
+        "path": "test-output/cucumber/codex-workflows-cra-red-green.json",
+        "sha256": "a70cebaa2fc9011674eaafae4cb01d87581e238ddca441b14a667bc3ee7d1569",
+        "scenarios": 1,
+        "passedScenarios": 1,
+        "steps": 6,
+        "passedSteps": 6,
+        "failed": 0,
+        "undefined": 0,
+        "skipped": 0
+      },
+      "workflow": {
+        "journal": ".agent/testing/workflows/20260811T052321Z/run-state/runs/local-20260811t052321889z-4e7e8eba42e8/journal.json",
+        "journalSha256": "13012795c816fe150b24763513195dcf2828359cda3d10b2504690e060ee9221",
+        "status": "completed",
+        "artifactSequence": 17,
+        "terminalSequence": 18,
+        "nodes": [
+          {
+            "ordinal": 1,
+            "label": "cra-builder",
+            "phase": "implementation",
+            "dependencies": [],
+            "model": "gpt-5.6-luna",
+            "reasoning": "medium",
+            "outcome": "completed",
+            "durationMs": 156237
+          },
+          {
+            "ordinal": 2,
+            "label": "cra-auditor",
+            "phase": "audit",
+            "dependencies": ["founder-cra-red-green:001:cra-builder"],
+            "model": "gpt-5.6-luna",
+            "reasoning": "medium",
+            "outcome": "completed",
+            "durationMs": 8673
+          },
+          {
+            "ordinal": 3,
+            "label": "cra-remediator",
+            "phase": "remediation",
+            "dependencies": [
+              "founder-cra-red-green:001:cra-builder",
+              "founder-cra-red-green:002:cra-auditor"
+            ],
+            "model": "gpt-5.6-luna",
+            "reasoning": "medium",
+            "outcome": "completed",
+            "durationMs": 144807
+          }
+        ]
+      },
+      "scaffoldProof": {
+        "invocationCount": 1,
+        "executable": "/Users/mcasa_atlantis/.nvm/versions/node/v24.15.0/bin/npx",
+        "argv": [
+          "--yes",
+          "create-react-app@5.1.0",
+          "/Users/mcasa_atlantis/.codex/orchestration/.agent/testing/workflows/20260811T052321Z/cra-proof-app",
+          "--use-npm"
+        ],
+        "environment": {
+          "NPM_CONFIG_USERCONFIG": "/dev/null",
+          "NPM_CONFIG_CACHE": "/Users/mcasa_atlantis/.codex/orchestration/.agent/testing/workflows/20260811T052321Z/npm-cache"
+        },
+        "cwd": "/Users/mcasa_atlantis/.codex/orchestration",
+        "exitCode": 0,
+        "signal": null,
+        "attemptsPath": ".agent/testing/workflows/20260811T052321Z/CRA_SCAFFOLD_ATTEMPTS.jsonl",
+        "attemptsSha256": "91580264b2f0efb4e23513ee65bdd6729d9ab0858b45f48b4c89c3ffa1516a68",
+        "attemptLines": 1,
+        "tracePath": ".agent/testing/workflows/20260811T052321Z/CRA_SCAFFOLD_TRACE.json",
+        "traceSha256": "2500f0a1d20fbd0861fe553e7883ab330263d7d0ad1af517e310643498329d54",
+        "launcherSha256": "3ac6b3e2ac4a0fe9de8025647e432dc1ada20f404b555fe7f9fbaee207e4bd3f"
+      },
+      "behavior": {
+        "baselineVerdict": "RED",
+        "baselineFailingCriteria": ["CRA-AUDIT-003", "CRA-AUDIT-004"],
+        "baselineTreeDigest": "sha256:d9918d2c71d460a851be3a0ce22332d3381ed6b503097c10e97f5aa2ee8e705e",
+        "auditorVerdict": "RED",
+        "auditorTreeDigest": "sha256:d9918d2c71d460a851be3a0ce22332d3381ed6b503097c10e97f5aa2ee8e705e",
+        "auditorMutation": false,
+        "remediationSourceChanges": ["src/App.js", "src/App.test.js"],
+        "finalVerdict": "GREEN",
+        "finalTreeDigest": "sha256:b43ee9b6f45658434bac50fc8c3f7de98151ccd080274a59aa6f0d2cb63fbe5c",
+        "terminalMarker": "READY_FOR_EXTERNAL_AUDIT"
+      },
+      "report": {
+        "path": ".agent/testing/workflows/20260811T052321Z/CRA_RED_GREEN.md",
+        "sha256": "deccfed0007e571371bb40f5ce960557023a03da236cd0ef9a0640f656225efb",
+        "bytes": 2761,
+        "completionMarker": "<!-- CRA_RED_GREEN_COMPLETE -->"
+      }
+    },
+    "standingGates": {
+      "codexWorkflowsL1": { "selected": 39, "passed": 39, "exitCode": 0 },
+      "codexWorkflowsL2": { "selected": 17, "passed": 17, "exitCode": 0 },
+      "craFocusedL2": { "selected": 2, "passed": 2, "exitCode": 0 },
+      "codexWorkflowsAggregate": {
+        "nativeExecuted": 56,
+        "standingL3Scenarios": 5,
+        "standingL3Steps": 28,
+        "dailyL3Scenarios": 1,
+        "dailyL3Steps": 3,
+        "craL3Scenarios": 1,
+        "craL3Steps": 6,
+        "exitCode": 0
+      },
+      "lint": { "errors": 0, "warnings": 35, "exitCode": 0 },
+      "typecheck": { "exitCode": 0 },
+      "fiveProjectLintTypecheckBuild": 0,
+      "transitiveWorkflowsCodexMonitorTests": 0,
+      "groundZero": {
+        "policyFiles": 28,
+        "nativeExecuted": 50,
+        "l3Scenarios": 1,
+        "l3Steps": 6,
+        "exitCode": 0
+      },
+      "sdkImportExclusivity": { "selected": 1, "offenders": 0, "exitCode": 0 },
+      "sync": "up-to-date",
+      "formatFiles": 53,
+      "formatExitCode": 0
+    },
+    "resourceDelta": {
+      "workflowOwnedProcesses": 0,
+      "retainedNodeModules": 0,
+      "retainedBuildDirectories": 0,
+      "retainedNestedGitRepositories": 0,
+      "retainedNpmCaches": 0,
+      "launcherFiles": 0,
+      "lockFiles": 0,
+      "traceTemporaryFiles": 0,
+      "retainedEvidenceFiles": [
+        "CRA_RED_GREEN.md",
+        "CRA_SCAFFOLD_ATTEMPTS.jsonl",
+        "CRA_SCAFFOLD_TRACE.json",
+        "source-only cra-proof-app",
+        "run-state journal"
+      ]
+    }
+  },
+  "stopBoundary": "READY-FOR-AUDIT"
+}
