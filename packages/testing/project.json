@@ -17,6 +17,13 @@
         "command": "bun packages/testing/src/cli.ts policy apps packages"
       }
     },
+    "data-substrate-lifecycle": {
+      "executor": "nx:run-commands",
+      "cache": false,
+      "options": {
+        "command": "PYTHONDONTWRITEBYTECODE=1 python3 -m unittest skills/data-substrate/tests/test_compaction_hooks.py -v"
+      }
+    },
     "test-l1-unit": {
       "executor": "nx:run-commands",
       "options": {
@@ -66,7 +73,11 @@
       "executor": "nx:run-commands",
       "cache": false,
       "outputs": ["{workspaceRoot}/test-output/ground-zero/testing.json"],
-      "dependsOn": ["package-manager-policy", "test-policy"],
+      "dependsOn": [
+        "package-manager-policy",
+        "test-policy",
+        "data-substrate-lifecycle"
+      ],
       "options": {
         "command": "bun packages/testing/src/cli.ts aggregate packages/testing/manifests/testing.json"
       },

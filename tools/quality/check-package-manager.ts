@@ -14,10 +14,12 @@ const excludedDirectories = new Set([
   '.git',
   '.nx',
   '.pi',
+  '.tmp',
   'coverage',
   'dist',
   'node_modules',
   'out-tsc',
+  'plugins',
   'test-output',
   'tmp',
 ]);

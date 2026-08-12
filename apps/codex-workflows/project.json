@@ -91,6 +91,14 @@
         "command": "node apps/codex-workflows/dist/main.js"
       }
     },
+    "materialize-workspace-bin": {
+      "executor": "nx:run-commands",
+      "cache": false,
+      "dependsOn": ["build"],
+      "options": {
+        "command": "bun install --frozen-lockfile"
+      }
+    },
     "test-pre-build": {
       "executor": "nx:run-commands",
       "cache": true,
@@ -171,7 +179,7 @@
     "test-l3": {
       "executor": "nx:run-commands",
       "cache": false,
-      "dependsOn": ["build", "test-pre-build"],
+      "dependsOn": ["materialize-workspace-bin", "test-pre-build"],
       "outputs": ["{workspaceRoot}/test-output/cucumber/codex-workflows.json"],
       "options": {
         "command": "bun packages/testing/src/cli.ts verify-cucumber apps/codex-workflows/src/workflows/codex-workflows.feature apps/codex-workflows/out-tsc/cucumber/workflows/index.steps.js test-output/cucumber/codex-workflows.json"
@@ -180,7 +188,7 @@
     "test-l3-daily-facts": {
       "executor": "nx:run-commands",
       "cache": false,
-      "dependsOn": ["build", "test-pre-build"],
+      "dependsOn": ["materialize-workspace-bin", "test-pre-build"],
       "outputs": [
         "{workspaceRoot}/test-output/cucumber/codex-workflows-daily-facts.json"
       ],
@@ -191,7 +199,7 @@
     "test-l3-cra-red-green": {
       "executor": "nx:run-commands",
       "cache": false,
-      "dependsOn": ["build", "test-pre-build"],
+      "dependsOn": ["materialize-workspace-bin", "test-pre-build"],
       "outputs": [
         "{workspaceRoot}/test-output/cucumber/codex-workflows-cra-red-green.json"
       ],
@@ -202,7 +210,7 @@
     "test": {
       "executor": "nx:run-commands",
       "cache": false,
-      "dependsOn": ["build", "test-pre-build"],
+      "dependsOn": ["materialize-workspace-bin", "test-pre-build"],
       "outputs": [
         "{workspaceRoot}/test-output/codex-workflows/codex-workflows.json"
       ],

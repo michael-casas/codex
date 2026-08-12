@@ -236,4 +236,6 @@ This profile becomes active execution law only after all of the following are tr
 - Project manifests: `packages/testing/manifests/*.json`
 - Canonical feature: `packages/testing/src/ground-zero/ground-zero.feature`
 - Contract provenance: `packages/testing/evidence/ground-zero-contract.json`
-- Staged affected boundary: `tools/testing/staged-affected.ts`
+- Staged affected boundary: `tools/testing/staged-affected.ts` runs affected
+  lint, typecheck, and deterministic L1 tests. Networked/live L3 acceptance is
+  reserved for the explicit Ground-0 and campaign gates, not commit hooks.

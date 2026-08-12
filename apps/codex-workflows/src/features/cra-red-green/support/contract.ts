@@ -228,7 +228,7 @@ export async function validateCraCommands(
 ): Promise<CraCommandValidation> {
   const test = await runCommand(
     projectRoot,
-    ['test', '--', '--watchAll=false'],
+    ['test', '--', '--watchAll=false', '--watchman=false'],
     timeoutMs,
   );
   const build = await runCommand(projectRoot, ['run', 'build'], timeoutMs);

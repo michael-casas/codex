@@ -19,7 +19,7 @@ if (files.length === 0) {
 
 const [command, ...args] = createAffectedInvocation(files, [
   'lint',
-  'test',
+  'test-l1',
   'typecheck',
 ]);
 if (!command) throw new Error('Affected invocation did not provide a command');

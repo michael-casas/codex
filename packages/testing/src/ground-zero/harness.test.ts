@@ -479,14 +479,14 @@ describe('[L1:INTEGRATION] Ground-0 staged affected boundary', () => {
     expect(
       createAffectedInvocation(
         ['packages/testing/src/a.ts', 'apps/daemon/src/main.ts'],
-        ['lint', 'test', 'typecheck'],
+        ['lint', 'test-l1', 'typecheck'],
       ),
     ).toEqual([
       'bun',
       'nx',
       'affected',
       '-t',
-      'lint,test,typecheck',
+      'lint,test-l1,typecheck',
       '--files',
       'apps/daemon/src/main.ts,packages/testing/src/a.ts',
       '--outputStyle=static',

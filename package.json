@@ -6,7 +6,7 @@
   "scripts": {
     "prepare": "husky",
     "lint-staged": "lint-staged --config lint-staged.config.mjs",
-    "ground-zero": "bun nx run-many -t lint,typecheck,build --skipNxCache && bun nx run-many -t test --configuration=ground-zero --skipNxCache",
+    "ground-zero": "bun nx run-many -t lint,typecheck,build --skipNxCache && bun nx run-many -t test --configuration=ground-zero --skipNxCache --parallel=1",
     "affected": "bun nx affected --outputStyle=static"
   },
   "private": true,
