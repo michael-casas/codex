@@ -86,10 +86,34 @@ fi
 
 python3 - "$temporary" <<'PY'
 import pathlib
+import re
 import sys
 import tomllib
 
-tomllib.loads(pathlib.Path(sys.argv[1]).read_text(encoding="utf-8"))
+document = tomllib.loads(pathlib.Path(sys.argv[1]).read_text(encoding="utf-8"))
+forbidden_keys = {
+    "access_token",
+    "api_key",
+    "authorization",
+    "bearer_token",
+    "password",
+    "secret",
+}
+literal_secret = re.compile(r"^(?:Bearer\s+|sk-[A-Za-z0-9_-]{12,})", re.IGNORECASE)
+
+def reject_literals(value, path=()):
+    if isinstance(value, dict):
+        for key, child in value.items():
+            if key.lower() in forbidden_keys and isinstance(child, str) and child.strip():
+                raise SystemExit(f"refusing literal credential at {'.'.join((*path, key))}")
+            reject_literals(child, (*path, key))
+    elif isinstance(value, list):
+        for index, child in enumerate(value):
+            reject_literals(child, (*path, str(index)))
+    elif isinstance(value, str) and literal_secret.match(value.strip()):
+        raise SystemExit(f"refusing literal credential at {'.'.join(path)}")
+
+reject_literals(document)
 PY
 
 chmod 600 "$temporary"
