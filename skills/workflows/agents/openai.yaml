@@ -1,0 +1,4 @@
+interface:
+  display_name: "Codex Workflows"
+  short_description: "Author and run trusted TypeScript workflows"
+  default_prompt: "Use $workflows to author, inspect, or directly run this trusted local TypeScript workflow."

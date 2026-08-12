@@ -1,0 +1,96 @@
+# Portable Codex policy. Host paths, credentials, project trust records, hook
+# trust hashes, application paths, and machine-local MCP authorization belong
+# in ignored config.local fragments consumed by scripts/bootstrap-codex-home.
+
+model = "gpt-5.6-sol"
+model_reasoning_effort = "low"
+model_verbosity = "medium"
+model_context_window = 1050000
+model_auto_compact_token_limit = 900000
+model_auto_compact_token_limit_scope = "total"
+compact_prompt = """
+Produce a precise continuation summary for the same Codex session.
+
+Preserve explicit instructions, scope boundaries, completion criteria, verified
+facts and sources, epistemic status, decisions and rationale, progress and
+validation evidence, blockers, exact next actions, identifiers, paths, commands,
+errors, and referenced scratchpad entries. Discard disposable narration,
+repeated status, superseded conclusions, and already-summarized raw output.
+Never invent missing facts or upgrade an inference to a verified fact. The
+session SQLite scratchpad is restored separately after compaction.
+"""
+approval_policy = "never"
+approvals_reviewer = "user"
+sandbox_mode = "danger-full-access"
+service_tier = "priority"
+
+[shell_environment_policy]
+inherit = "core"
+include_only = ["HOME", "PATH", "USER", "SHELL", "LANG", "LC_*", "TERM", "TMPDIR", "TZ", "XDG_*", "CODEX_*", "OPENAI_API_KEY", "OPENCODE_API_KEY", "ANTHROPIC_API_KEY", "OPENROUTER_API_KEY", "MCP_OAUTH_*"]
+
+[memories]
+use_memories = false
+generate_memories = false
+
+[agents]
+max_threads = 6
+max_depth = 1
+job_max_runtime_seconds = 1800
+
+[features]
+multi_agent = true
+hooks = true
+shell_tool = true
+unified_exec = true
+memories = false
+prevent_idle_sleep = false
+undo = false
+fast_mode = true
+network_proxy = false
+personality = true
+shell_snapshot = true
+skill_mcp_dependency_install = true
+enable_request_compression = true
+apps = false
+codex_git_commit = false
+goals = true
+js_repl = false
+
+[tui]
+theme = "gruvbox-dark"
+animations = true
+alternate_screen = "auto"
+notification_method = "auto"
+notification_condition = "unfocused"
+raw_output_mode = false
+show_tooltips = false
+vim_mode_default = false
+status_line = ["model-with-reasoning", "context-used", "context-window-size", "current-dir", "git-branch", "weekly-limit"]
+status_line_use_colors = true
+terminal_title = ["spinner", "project"]
+
+[notice]
+hide_full_access_warning = true
+hide_gpt5_1_migration_prompt = true
+hide_rate_limit_model_nudge = true
+hide_world_writable_warning = true
+
+[model_providers.openai-custom]
+name = "OpenAI (custom)"
+base_url = "https://api.openai.com/v1"
+env_key = "OPENAI_API_KEY"
+wire_api = "responses"
+
+[model_providers.opencode-go]
+name = "OpenCode Go"
+base_url = "https://opencode.ai/zen/go/v1"
+env_key = "OPENCODE_API_KEY"
+wire_api = "responses"
+
+[model_providers.llm-gateway]
+name = "LLM Gateway Bridge"
+base_url = "http://localhost:4000"
+wire_api = "responses"
+
+[mcp_servers.openaiDeveloperDocs]
+url = "https://developers.openai.com/mcp"

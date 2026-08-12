@@ -1,0 +1,47 @@
+# ~/.codex/rules/floor.rules
+# Hard floor — these commands are forbidden everywhere, every project,
+# every profile, every sub-agent. Enforced by Codex execpolicy.
+#
+# Rationale: these commands either flood the context window with
+# unprocessed text (git diff, git show, cat large files) or expose
+# the agent to bypass vectors. Use the dedicated tools instead.
+#
+# Read paths:
+#   - git diff       → use `git status` + targeted `read_file`
+#   - git show       → use `read_file` on the file at the commit
+#   - git log        → use `git log --oneline -n N`
+#   - cat <file>     → use `read_file`
+#   - ls -la <dir>   → use `search_files`
+#   - grep <pat>     → use `search_files --target content`
+#   - find <path>    → use `search_files --target files`
+#   - rm -rf /       → never, full stop
+#   - git push -f    → no force-pushes, ever
+#   - git reset --hard → recoverable history only
+
+# Context-killers
+prefix_rule(pattern=["git", "diff"], decision="forbidden", justification="git diff floods context window. Use git status + targeted read_file instead.")
+prefix_rule(pattern=["git", "show"], decision="forbidden", justification="git show dumps full file contents. Use read_file instead.")
+prefix_rule(pattern=["cat"], decision="forbidden", justification="Use read_file instead. cat floods context with no pagination.")
+prefix_rule(pattern=["find"], decision="forbidden", justification="Use search_files --target files instead. find output is noisy and unbounded.")
+prefix_rule(pattern=["grep"], decision="forbidden", justification="Use search_files --target content instead. ripgrep is faster and structured.")
+
+# Force-overwrite safety
+prefix_rule(pattern=["rm", "-rf", "/"], decision="forbidden", justification="Refuse to recursively delete root. Use a scoped path.")
+prefix_rule(pattern=["git", "push", "--force"], decision="forbidden", justification="Force-push destroys collaborator history. Use --force-with-lease if absolutely required.")
+prefix_rule(pattern=["git", "push", "-f"], decision="forbidden", justification="Force-push destroys collaborator history.")
+prefix_rule(pattern=["git", "reset", "--hard"], decision="forbidden", justification="Hard reset loses uncommitted work. Stash or commit first.")
+prefix_rule(pattern=["git", "clean", "-fd"], decision="forbidden", justification="git clean -fd deletes untracked files. Use git clean -fd --dry-run first.")
+prefix_rule(pattern=["git", "clean", "-fdx"], decision="forbidden", justification="git clean -fdx deletes untracked AND ignored files. Catastrophic.")
+
+# Secret exposure
+prefix_rule(pattern=["echo", "$OPENAI_API_KEY"], decision="forbidden", justification="Don't print API keys to logs.")
+prefix_rule(pattern=["env"], decision="forbidden", justification="env dumps all secrets. Read the specific key you need.")
+prefix_rule(pattern=["printenv"], decision="forbidden", justification="printenv dumps all secrets. Read the specific key you need.")
+
+# Editor hijack
+prefix_rule(pattern=["vim"], decision="forbidden", justification="Interactive editor — use patch or write_file.")
+prefix_rule(pattern=["nano"], decision="forbidden", justification="Interactive editor — use patch or write_file.")
+prefix_rule(pattern=["emacs"], decision="forbidden", justification="Interactive editor — use patch or write_file.")
+
+# Network exfil
+prefix_rule(pattern=["curl", "-X", "POST", "--data", "@/etc/passwd"], decision="forbidden", justification="Refuse to exfiltrate system files.")

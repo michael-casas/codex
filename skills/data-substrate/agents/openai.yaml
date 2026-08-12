@@ -1,0 +1,4 @@
+interface:
+  display_name: "Data Substrate"
+  short_description: "Route Codex state across SQLite and shared services"
+  default_prompt: "Use $data-substrate to store and query task-scoped local data."

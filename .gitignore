@@ -53,3 +53,131 @@ test-output
 .nx/polygraph
 .dmux/
 .pi/
+# Secrets and machine-local credentials
+/.env
+/.env/
+/.env.*
+!/.env.example
+/.envrc
+/auth.json
+/config.toml
+/auditor.config.toml
+/incident-repair.config.toml
+/mcp-temporary.config.toml
+/config/config.local*.toml
+/codex-services/env/*
+!/codex-services/env/*.example
+/.runtime/
+*.pem
+*.key
+*.p12
+*.pfx
+
+# Local service data
+/.volume/
+
+# Private agent plans, reports, scratch databases, and compaction state
+/.agent/
+
+# Sessions, transcripts, attachments, and generated conversation artifacts
+/sessions/
+/session_index.jsonl
+/history.jsonl
+/transcription-history.jsonl
+/shell_snapshots/
+/attachments/
+/generated_images/
+/visualizations/
+/ambient-suggestions/
+/browser/sessions/
+
+# Codex runtime databases and mutable state
+/*.sqlite
+/*.sqlite-shm
+/*.sqlite-wal
+/sqlite/
+/.codex-global-state.json
+/.codex-global-state.json.bak
+/..codex-global-state.json.tmp-*
+/.app-server-state-reconciled-*
+/.personality_migration
+/installation_id
+/process_manager/
+/ipc/
+/mcp-oauth-locks/
+/node_repl/
+/pets/
+/tmp/
+/.tmp/
+/worktrees/
+/archived_sessions/
+/monitors/
+/thread-writer-locks/
+/app-server-daemon/
+/.sandbox_migration
+
+# Executed workflow journals and produced artifacts
+/workflows/runs/
+
+# Logs, caches, downloaded runtimes, and generated host metadata
+/log/
+/cache/
+/computer-use/
+/plugins/
+/vendor_imports/
+/models_cache.json
+/version.json
+/chrome-native-hosts.json
+/chrome-native-hosts-v2.json
+
+# Bun, Nx, dependencies, build output, and generated test output
+node_modules/
+.bun/
+.nx/
+dist/
+tmp/
+out-tsc/
+coverage/
+test-output/
+*.tsbuildinfo
+*.log
+
+# Independent repositories and generated memory stores
+/orchestration/
+/memories/
+/.pi/
+
+# System-managed skills are reproducible; user-authored skills live directly under /skills.
+/skills/.system/*
+
+# Skill discovery links whose targets live outside this repository
+/skills/agent-wiki
+/skills/batdd-bootstrap
+/skills/firecrawl
+
+# External, machine-specific configuration symlink
+/preflight.config.toml
+
+# Editor and operating-system state
+.DS_Store
+
+# Generated Python bytecode
+__pycache__/
+*.py[cod]
+
+# Nested workspace editor/runtime policy retained for the promoted root
+/.idea/
+/.mercury/
+/.dmux/
+/.claude/worktrees/
+/.claude/settings.local.json
+/.husky/_/
+/.vscode/*
+!/.vscode/settings.json
+!/.vscode/tasks.json
+!/.vscode/launch.json
+!/.vscode/extensions.json
+*.sublime-workspace
+npm-debug.log
+yarn-error.log
+testem.log

@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+monitor_source="${BASH_SOURCE[0]}"
+while [[ -L "$monitor_source" ]]; do
+  monitor_source_dir="$(cd -P "$(dirname "$monitor_source")" && pwd)"
+  monitor_source="$(readlink "$monitor_source")"
+  if [[ "$monitor_source" != /* ]]; then
+    monitor_source="$monitor_source_dir/$monitor_source"
+  fi
+done
+monitor_script_dir="$(cd -P "$(dirname "$monitor_source")" && pwd)"
+exec node "$monitor_script_dir/monitor.mjs" "$@"

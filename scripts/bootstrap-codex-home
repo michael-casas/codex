@@ -1,0 +1,66 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+codex_home="${CODEX_HOME:-$HOME/.codex}"
+output="$codex_home/config.toml"
+force=false
+
+while (($#)); do
+  case "$1" in
+    --output)
+      [[ $# -ge 2 ]] || { echo "--output requires a path" >&2; exit 64; }
+      output="$2"
+      shift 2
+      ;;
+    --force)
+      force=true
+      shift
+      ;;
+    *)
+      echo "unknown argument: $1" >&2
+      exit 64
+      ;;
+  esac
+done
+
+shared="$codex_home/config/config.shared.toml"
+prelude="$codex_home/config/config.local.prelude.toml"
+append="$codex_home/config/config.local.append.toml"
+
+[[ -f "$shared" ]] || { echo "missing shared config: $shared" >&2; exit 66; }
+if [[ -e "$output" && "$force" != true ]]; then
+  echo "refusing to replace existing config without --force: $output" >&2
+  exit 73
+fi
+[[ "$codex_home" != *$'\n'* && "$codex_home" != *'"'* ]] || {
+  echo "CODEX_HOME contains unsupported TOML path characters" >&2
+  exit 65
+}
+
+mkdir -p "$(dirname "$output")"
+temporary="$(mktemp "${output}.tmp.XXXXXX")"
+trap 'rm -f "$temporary"' EXIT
+
+if [[ -f "$prelude" ]]; then
+  cat "$prelude" >>"$temporary"
+  printf '\n' >>"$temporary"
+fi
+cat "$shared" >>"$temporary"
+printf '\n[projects."%s"]\ntrust_level = "trusted"\n' "$codex_home" >>"$temporary"
+if [[ -f "$append" ]]; then
+  printf '\n' >>"$temporary"
+  cat "$append" >>"$temporary"
+fi
+
+python3 - "$temporary" <<'PY'
+import pathlib
+import sys
+import tomllib
+
+tomllib.loads(pathlib.Path(sys.argv[1]).read_text(encoding="utf-8"))
+PY
+
+chmod 600 "$temporary"
+mv "$temporary" "$output"
+trap - EXIT
+printf '%s\n' "$output"
