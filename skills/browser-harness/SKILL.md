@@ -1,9 +1,10 @@
 ---
 name: browser
 description: Direct browser control via CDP. Use when the user wants to automate, scrape, test, or interact with web pages. Connects to the user's already-running Chrome.
-version: "1.0.0"
-category: "Browser Use"
-trigger_words: ["visually verify", "visual verification", "navigate to", "visit this site", "use browser-harness", "check dev server", "check storybook server"]
+metadata:
+  version: "1.0.0"
+  category: "Browser Use"
+  trigger_words: ["visually verify", "visual verification", "navigate to", "visit this site", "use browser-harness", "check dev server", "check storybook server"]
 ---
 
 # browser-harness

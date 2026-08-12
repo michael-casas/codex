@@ -18,8 +18,8 @@ repair product code.
 2. Read `/Users/mcasa_atlantis/Documents/vaults/Agent Wiki/standards/AUDIT.md`
    with the global `agent-wiki` skill when authoring or issuing a verdict.
 3. Read [references/process.md](references/process.md) completely.
-4. Use the canonical template at
-   `/Users/mcasa_atlantis/.codex/orchestration/.agent/audit/AUDIT_TEMPLATE.md`.
+4. Use the canonical bundled template at
+   [`assets/AUDIT_TEMPLATE.md`](assets/AUDIT_TEMPLATE.md).
 
 Stop if the attempt ID, candidate, write surface, scoring boundary, or auditor
 independence is ambiguous.

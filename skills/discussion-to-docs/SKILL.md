@@ -475,7 +475,7 @@ at the end of a session — the agent MUST:
 5. **Update this section** — add the new standard to the pipeline diagram
    and update the References list
 6. **Commit to source code** — write both the new reference file and the
-   updated SKILL.md to the project's `.agents/skills/` directory
+   updated SKILL.md to the canonical `${CODEX_HOME:-$HOME/.codex}/skills/` directory
 
 ## When NOT to Propose
 

@@ -4,6 +4,7 @@ set -euo pipefail
 codex_home="${CODEX_HOME:-$HOME/.codex}"
 output="$codex_home/config.toml"
 force=false
+links_only=false
 
 while (($#)); do
   case "$1" in
@@ -16,12 +17,43 @@ while (($#)); do
       force=true
       shift
       ;;
+    --links-only)
+      links_only=true
+      shift
+      ;;
     *)
       echo "unknown argument: $1" >&2
       exit 64
       ;;
   esac
 done
+
+link_external_skill() {
+  local name="$1"
+  local source="$2"
+  local target="$codex_home/skills/$name"
+  [[ -d "$source" ]] || {
+    printf 'optional external skill unavailable: %s (%s)\n' "$name" "$source" >&2
+    return 0
+  }
+  if [[ -L "$target" && "$(readlink "$target")" == "$source" ]]; then
+    return 0
+  fi
+  if [[ -e "$target" || -L "$target" ]]; then
+    printf 'refusing to replace existing external skill target: %s\n' "$target" >&2
+    return 73
+  fi
+  mkdir -p "$codex_home/skills"
+  ln -s "$source" "$target"
+}
+
+link_external_skill agent-wiki "${CODEX_AGENT_WIKI_SKILL:-$HOME/.agents/skills/agent-wiki}"
+link_external_skill batdd-bootstrap "${CODEX_BATDD_BOOTSTRAP_SKILL:-$HOME/Documents/repos/github.com/michael-casas/michael-casas/.agents/skills/batdd-bootstrap}"
+link_external_skill firecrawl "${CODEX_FIRECRAWL_SKILL:-$HOME/.dotfiles/skills/firecrawl}"
+
+if [[ "$links_only" == true ]]; then
+  exit 0
+fi
 
 shared="$codex_home/config/config.shared.toml"
 prelude="$codex_home/config/config.local.prelude.toml"
