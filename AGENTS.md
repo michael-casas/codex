@@ -1,4 +1,4 @@
-# Orchestration Workspace Rules
+# CODEX_HOME Workspace Rules
 
 These rules apply to every agent operating anywhere in this workspace. More specific `AGENTS.md` files may narrow behavior but may not weaken these rules or the canonical Agent Wiki specification.
 
@@ -87,6 +87,7 @@ For implementation or repair, BATDD invocation MUST create and maintain a runtim
 ## Workspace and validation discipline
 
 - This is a Bun-managed Nx workspace. Prefix Nx commands with `bun nx`.
+- Applications under `apps/` own composition, delivery, and executable entry points. Packages under `packages/` own reusable mechanics and MUST NOT import application code.
 - Invoke the `nx-workspace` skill before exploring projects, targets, or dependencies. Use `bun nx show project <name> --json` for resolved project configuration.
 - Run build, test, lint, typecheck, e2e, serve, and other project tasks through Nx rather than invoking underlying tools directly.
 - Invoke the `nx-generate` skill before scaffolding projects, applications, libraries, or generators.
@@ -101,30 +102,6 @@ For implementation or repair, BATDD invocation MUST create and maintain a runtim
 - Do not commit, merge, push, publish, deploy, delete runtime state, or clean worktrees unless the assignment or user explicitly authorizes that action.
 - Prefer compact, typed contracts and stable identifiers over prompt-shaped coordination state.
 - Never expose secrets, general database credentials, private chain-of-thought, or raw sensitive prompt/tool payloads in events or artifacts.
-
-<!-- nx configuration start-->
-<!-- Leave the start & end comments to automatically receive updates. -->
-
-# General Guidelines for working with Nx
-
-- For navigating/exploring the workspace, invoke the `nx-workspace` skill first - it has patterns for querying projects, targets, and dependencies
-- When running tasks (for example build, lint, test, e2e, etc.), always prefer running the task through `nx` (i.e. `nx run`, `nx run-many`, `nx affected`) instead of using the underlying tooling directly
-- Prefix nx commands with the workspace's package manager (e.g., `pnpm nx build`, `npm exec nx test`) - avoids using globally installed CLI
-- You have access to the Nx MCP server and its tools, use them to help the user
-- For Nx plugin best practices, check `node_modules/@nx/<plugin>/PLUGIN.md`. Not all plugins have this file - proceed without it if unavailable.
-- NEVER guess CLI flags - always check nx_docs or `--help` first when unsure
-
-## Scaffolding & Generators
-
-- For scaffolding tasks (creating apps, libs, project structure, setup), ALWAYS invoke the `nx-generate` skill FIRST before exploring or calling MCP tools
-
-## When to use nx_docs
-
-- USE for: advanced config options, unfamiliar flags, migration guides, plugin configuration, edge cases
-- DON'T USE for: basic generator syntax (`nx g @nx/react:app`), standard commands, things you already know
-- The `nx-generate` skill handles generator discovery internally - don't call nx_docs just to look up generator syntax
-
-<!-- nx configuration end-->
 
 # Usage semantics
 
@@ -160,3 +137,8 @@ For implementation or repair, BATDD invocation MUST create and maintain a runtim
 - Keep `survive_compaction = 1` for durable session value. Supersede outdated entries instead of silently rewriting history.
 - Apply `PRAGMA foreign_keys = ON`, `PRAGMA busy_timeout = 5000`, and `PRAGMA synchronous = FULL` on every SQLite connection; WAL mode itself persists.
 - Never commit the session database or its `-wal` and `-shm` files. The scratchpad supports working memory; it does not replace repository documentation, tests, or PostgreSQL process/event truth.
+
+## Durable instruction boundary
+
+- Keep this file limited to stable workspace, configuration, authority, and lifecycle policy.
+- Do not record mutable task status, current checklists, temporary blockers, or session-specific to-do state here; use the per-session SQLite scratchpad and repository plans instead.
