@@ -1,0 +1,9 @@
+{
+  "name": "codex-thread-wake-prototype",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "dependencies": {
+    "@openai/codex-sdk": "0.147.0"
+  }
+}

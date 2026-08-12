@@ -1,0 +1,4 @@
+interface:
+  display_name: "Monitor"
+  short_description: "Stall this turn or wake the task later"
+  default_prompt: "Use $monitor to wait for a condition in the current turn or wake this task after it resolves."

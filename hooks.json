@@ -1,4 +1,5 @@
 {
+  "description": "Codex lifecycle hooks for Herdr state and enforced per-session SQLite scratchpad compaction recovery.",
   "hooks": {
     "SessionStart": [
       {
@@ -6,6 +7,43 @@
           {
             "command": "bash '/Users/mcasa_atlantis/.codex/herdr-agent-state.sh' session",
             "timeout": 10,
+            "type": "command"
+          }
+        ]
+      },
+      {
+        "matcher": "^(startup|resume|clear|compact)$",
+        "hooks": [
+          {
+            "command": "python3 '/Users/mcasa_atlantis/.codex/skills/data-substrate/scripts/restore-session-context.py'",
+            "statusMessage": "Enforcing session scratchpad",
+            "timeout": 15,
+            "type": "command"
+          }
+        ]
+      }
+    ],
+    "PreCompact": [
+      {
+        "matcher": "^(manual|auto)$",
+        "hooks": [
+          {
+            "command": "python3 '/Users/mcasa_atlantis/.codex/skills/data-substrate/scripts/pre-compact-checkpoint.py'",
+            "statusMessage": "Checkpointing session scratchpad",
+            "timeout": 30,
+            "type": "command"
+          }
+        ]
+      }
+    ],
+    "PostCompact": [
+      {
+        "matcher": "^(manual|auto)$",
+        "hooks": [
+          {
+            "command": "python3 '/Users/mcasa_atlantis/.codex/skills/data-substrate/scripts/post-compact-checkpoint.py'",
+            "statusMessage": "Verifying session scratchpad",
+            "timeout": 15,
             "type": "command"
           }
         ]
