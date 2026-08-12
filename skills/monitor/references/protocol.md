@@ -50,8 +50,8 @@ Pi vocabulary retained but rejected before arming:
 
 ## Synchronous stall boundary
 
-The bundled `scripts/sync-monitor.mjs` is a separate foreground adapter for an
-already-active Codex turn. It polls one regular file for existence or optional
+The skill's `scripts/sync-monitor.mjs` launcher routes to the workspace-owned
+`apps/codex-monitor/scripts/sync-monitor.mjs` foreground adapter. It polls one regular file for existence or optional
 content, keeps the invoking tool call pending, and exits in that same turn. It
 does not create a monitor handle, tmux session, persisted state, wake payload,
 Desktop heartbeat, or boomerang.

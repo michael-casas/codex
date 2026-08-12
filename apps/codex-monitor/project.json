@@ -3,7 +3,7 @@
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "apps/codex-monitor/src",
   "projectType": "application",
-  "tags": ["scope:monitor", "type:application"],
+  "tags": ["type:app", "scope:monitor", "layer:delivery"],
   "targets": {
     "lint": {
       "executor": "nx:run-commands",
@@ -31,10 +31,16 @@
         "command": "PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=apps/codex-monitor/src python3 -m unittest discover -s apps/codex-monitor/tests -p '*_spec.py' -v"
       }
     },
+    "test-node": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "node --test apps/codex-monitor/scripts/*.test.mjs"
+      }
+    },
     "test": {
       "executor": "nx:run-commands",
       "cache": false,
-      "dependsOn": ["lint", "build", "test-l1", "test-l2"],
+      "dependsOn": ["lint", "build", "test-l1", "test-l2", "test-node"],
       "options": { "command": "echo codex-monitor spike checks complete" }
     }
   }

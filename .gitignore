@@ -143,7 +143,6 @@ test-output/
 *.log
 
 # Independent repositories and generated memory stores
-/orchestration/
 /memories/
 /.pi/
 

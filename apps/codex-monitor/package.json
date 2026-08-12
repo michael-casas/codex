@@ -1,6 +1,9 @@
 {
   "name": "@orchestration/codex-monitor",
   "version": "0.1.0",
-  "private": true
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test:node": "node --test scripts/*.test.mjs"
+  }
 }
-

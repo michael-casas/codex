@@ -3,7 +3,7 @@
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "apps/codex-workflows/src",
   "projectType": "application",
-  "tags": ["scope:workflows", "type:application"],
+  "tags": ["type:app", "scope:workflows", "layer:delivery"],
   "targets": {
     "build": {
       "executor": "@nx/esbuild:esbuild",

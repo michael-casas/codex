@@ -172,6 +172,10 @@ function workspaceDiffDigest(workspace: string, allowedPrefix: string): string {
   const hash = createHash('sha256');
   for (const path of paths) {
     const absolute = resolve(workspace, path);
+    if (!existsSync(absolute)) {
+      hash.update(`${path}\0deleted\0`);
+      continue;
+    }
     const metadata = statSync(absolute);
     hash.update(`${path}\0${metadata.mode & 0o777}\0`);
     hash.update(readFileSync(absolute));

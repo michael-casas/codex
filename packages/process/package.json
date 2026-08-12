@@ -20,6 +20,11 @@
     "codex-process-provision": "./dist/provision.js"
   },
   "nx": {
+    "tags": [
+      "type:lib",
+      "scope:process",
+      "layer:domain"
+    ],
     "targets": {
       "test-l1-unit": {
         "executor": "nx:run-commands",
@@ -49,7 +54,9 @@
       "test-l2-e2e": {
         "executor": "nx:run-commands",
         "cache": false,
-        "dependsOn": ["build"],
+        "dependsOn": [
+          "build"
+        ],
         "options": {
           "command": "vitest run --config packages/process/vitest.config.ts src/proof-recovery/process-control.spec.ts --testNamePattern='L2:E2E'"
         }
@@ -57,7 +64,9 @@
       "test-l2": {
         "executor": "nx:run-commands",
         "cache": false,
-        "dependsOn": ["build"],
+        "dependsOn": [
+          "build"
+        ],
         "options": {
           "command": "vitest run --config packages/process/vitest.config.ts src/proof-recovery/process-control.spec.ts"
         }
@@ -71,8 +80,13 @@
       "test-l3": {
         "executor": "nx:run-commands",
         "cache": false,
-        "dependsOn": ["build", "test-pre-build"],
-        "outputs": ["{workspaceRoot}/test-output/cucumber/process-proof-recovery.json"],
+        "dependsOn": [
+          "build",
+          "test-pre-build"
+        ],
+        "outputs": [
+          "{workspaceRoot}/test-output/cucumber/process-proof-recovery.json"
+        ],
         "options": {
           "command": "bun packages/testing/src/cli.ts verify-cucumber packages/process/src/proof-recovery/proof-recovery.feature packages/process/out-tsc/cucumber/proof-recovery/index.steps.js test-output/cucumber/process-proof-recovery.json"
         }

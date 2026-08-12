@@ -3,7 +3,7 @@
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "packages/testing/src",
   "projectType": "library",
-  "tags": ["scope:testing", "type:harness"],
+  "tags": ["type:lib", "scope:testing", "layer:testing"],
   "targets": {
     "package-manager-policy": {
       "executor": "nx:run-commands",

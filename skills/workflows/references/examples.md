@@ -4,8 +4,8 @@
 
 Canonical source and input:
 
-- `/Users/mcasa_atlantis/.codex/orchestration/apps/codex-workflows/examples/nestjs-resolver-factory-research.workflow.ts`
-- `/Users/mcasa_atlantis/.codex/orchestration/apps/codex-workflows/examples/nestjs-resolver-factory-research.input.json`
+- `$CODEX_HOME/apps/codex-workflows/examples/nestjs-resolver-factory-research.workflow.ts`
+- `$CODEX_HOME/apps/codex-workflows/examples/nestjs-resolver-factory-research.input.json`
 
 From the workspace root:
 
@@ -39,8 +39,8 @@ or SDK.
 
 Canonical pair:
 
-- `/Users/mcasa_atlantis/.codex/orchestration/apps/codex-workflows/examples/canonical-review.workflow.json`
-- `/Users/mcasa_atlantis/.codex/orchestration/apps/codex-workflows/examples/canonical-review.input.json`
+- `$CODEX_HOME/apps/codex-workflows/examples/canonical-review.workflow.json`
+- `$CODEX_HOME/apps/codex-workflows/examples/canonical-review.input.json`
 
 ```sh
 codex-workflows validate apps/codex-workflows/examples/canonical-review.workflow.json --input apps/codex-workflows/examples/canonical-review.input.json --json

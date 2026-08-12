@@ -1,6 +1,6 @@
 ---
 name: monitor
-description: "Wait for timers, files, content, process exits, or successful commands using either a foreground synchronous turn stall or a durable tmux-backed monitor with same-task wake delivery. Use the synchronous shim inside active `/goal` loops when reprompting would compete with the current turn; use the durable monitor when Codex should end the turn and wake later; also use for lifecycle inspection, cancellation, or dispatcher inputs matching `$monitor | handle: UUID`."
+description: 'Wait for timers, files, content, process exits, or successful commands using either a foreground synchronous turn stall or a durable tmux-backed monitor with same-task wake delivery. Use the synchronous shim inside active `/goal` loops when reprompting would compete with the current turn; use the durable monitor when Codex should end the turn and wake later; also use for lifecycle inspection, cancellation, or dispatcher inputs matching `$monitor | handle: UUID`.'
 ---
 
 # Monitor
@@ -60,7 +60,7 @@ Require `<HANDLE_ID>` to be a canonical UUID. Then:
 5. If message submission fails, do not acknowledge or delete the heartbeat;
    stop silently so its next run can retry.
 6. Only after message submission succeeds, run `acknowledge --handle
-   <HANDLE_ID> --delivery host-message-accepted`, delete the heartbeat, and
+<HANDLE_ID> --delivery host-message-accepted`, delete the heartbeat, and
    stop silently.
 
 Never return, print, summarize, or paraphrase `wakeText` as the dispatcher
@@ -144,22 +144,23 @@ starts and terminates that owned process group on timeout or abort.
 
 ## Implementation map
 
-Find the implementation under
-`${CODEX_HOME:-$HOME/.codex}/skills/monitor/`; on this host the canonical path
-is `/Users/mcasa_atlantis/.codex/skills/monitor/`.
+The skill contract and thin launchers live under
+`${CODEX_HOME:-$HOME/.codex}/skills/monitor/`; the owned implementation lives
+under `${CODEX_HOME:-$HOME/.codex}/apps/codex-monitor/`.
 
-- [`scripts/monitor`](scripts/monitor): executable shell entry point.
-- [`scripts/monitor.mjs`](scripts/monitor.mjs): CLI, state inspection,
+- [`scripts/monitor`](scripts/monitor): thin durable-monitor launcher.
+- [`scripts/sync-monitor.mjs`](scripts/sync-monitor.mjs): thin synchronous-stall launcher.
+- [`../../apps/codex-monitor/scripts/monitor.mjs`](../../apps/codex-monitor/scripts/monitor.mjs): CLI, state inspection,
   dispatcher-prompt generation, acknowledgement, and tmux lifecycle.
-- [`scripts/monitor-worker.mjs`](scripts/monitor-worker.mjs): detached worker
+- [`../../apps/codex-monitor/scripts/monitor-worker.mjs`](../../apps/codex-monitor/scripts/monitor-worker.mjs): detached worker
   and terminal wake persistence.
-- [`scripts/monitor-conditions.mjs`](scripts/monitor-conditions.mjs): condition
+- [`../../apps/codex-monitor/scripts/monitor-conditions.mjs`](../../apps/codex-monitor/scripts/monitor-conditions.mjs): condition
   polling implementations.
-- [`scripts/monitor-core.mjs`](scripts/monitor-core.mjs): validation, stable
+- [`../../apps/codex-monitor/scripts/monitor-core.mjs`](../../apps/codex-monitor/scripts/monitor-core.mjs): validation, stable
   keys, wake payloads, compact dispatcher prompts, and atomic persistence.
-- [`scripts/monitor.test.mjs`](scripts/monitor.test.mjs): deterministic and
+- [`../../apps/codex-monitor/scripts/monitor.test.mjs`](../../apps/codex-monitor/scripts/monitor.test.mjs): deterministic and
   tmux-backed regression coverage.
-- [`scripts/sync-monitor.mjs`](scripts/sync-monitor.mjs): foreground file
+- [`../../apps/codex-monitor/scripts/sync-monitor.mjs`](../../apps/codex-monitor/scripts/sync-monitor.mjs): foreground file
   existence/content stall for the current active turn.
 - [`references/protocol.md`](references/protocol.md): protocol, state machine,
   delivery semantics, and persistence layout.

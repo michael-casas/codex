@@ -24,6 +24,7 @@ const inputPath = resolve(
   workspace,
   'apps/codex-workflows/examples/canonical-review.input.json',
 );
+const legacyFixtureRoot = resolve(workspace, 'packages/testing/fixtures/pi-v3');
 
 function invoke(args: string[]) {
   return spawnSync(process.execPath, [executable, ...args], {
@@ -81,7 +82,7 @@ describe('[L2:E2E] built codex-workflows CLI', () => {
     const sentinel = join(root, 'sentinel.txt');
     await writeFile(sentinel, 'preserve-me');
     const piBefore = digest(
-      await readFile(resolve(workspace, '.pi/goals/goal_events.jsonl')),
+      await readFile(resolve(legacyFixtureRoot, 'goal_events.jsonl')),
     );
     try {
       const before = await readdir(root);
@@ -103,9 +104,7 @@ describe('[L2:E2E] built codex-workflows CLI', () => {
       expect(await readdir(root)).toEqual(before);
       expect(await readFile(sentinel, 'utf8')).toBe('preserve-me');
       expect(
-        digest(
-          await readFile(resolve(workspace, '.pi/goals/goal_events.jsonl')),
-        ),
+        digest(await readFile(resolve(legacyFixtureRoot, 'goal_events.jsonl'))),
       ).toBe(piBefore);
     } finally {
       await rm(root, { force: true, recursive: true });
@@ -118,11 +117,8 @@ describe('[L2:E2E] built codex-workflows CLI', () => {
 describe('[L2:INTEGRATION] read-only legacy compatibility boundary', () => {
   test('[L2:INTEGRATION] CLI-L2-003 imports observed goal-v3 and event JSONL bytes idempotently without mutation', async () => {
     const paths = [
-      resolve(
-        workspace,
-        '.pi/goals/archived/goal_2026071612024695_mrn48esr-mggbiz.md',
-      ),
-      resolve(workspace, '.pi/goals/goal_events.jsonl'),
+      resolve(legacyFixtureRoot, 'goal_2026071612024695_mrn48esr-mggbiz.md'),
+      resolve(legacyFixtureRoot, 'goal_events.jsonl'),
     ];
     for (const path of paths) {
       const before = await readFile(path);

@@ -2,10 +2,10 @@
 
 Canonical contracts:
 
-- `/Users/mcasa_atlantis/.codex/orchestration/packages/workflows/SCHEMA.md`
-- `/Users/mcasa_atlantis/.codex/orchestration/SPEC.md`
-- `/Users/mcasa_atlantis/.codex/orchestration/packages/workflows/src/index.ts`
-- `/Users/mcasa_atlantis/.codex/orchestration/packages/codex/src/index.ts`
+- `$CODEX_HOME/packages/workflows/SCHEMA.md`
+- `$CODEX_HOME/SPEC.md`
+- `$CODEX_HOME/packages/workflows/src/index.ts`
+- `$CODEX_HOME/packages/codex/src/index.ts`
 
 ## Primary TypeScript API
 
@@ -57,7 +57,7 @@ compatibility input, never a mandatory compiled artifact for TypeScript.
 ## SDK ownership
 
 Only
-`/Users/mcasa_atlantis/.codex/orchestration/packages/codex/src/runtime/adapter.ts`
+`$CODEX_HOME/packages/codex/src/runtime/adapter.ts`
 may import `@openai/codex-sdk`. The app uses owned facade types and guarantees
 host drain in `finally`. The singleton is process-local lifecycle hygiene, not
 durable scheduling.

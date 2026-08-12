@@ -18,7 +18,7 @@ monitor, or tmux path to make cross-process durable commands appear available.
 3. Read [Tested examples](references/examples.md) before executing or
    presenting a command example.
 
-Work from `/Users/mcasa_atlantis/.codex/orchestration`. Use `bun nx` for build,
+Work from `${CODEX_HOME:-$HOME/.codex}`. Use `bun nx` for build,
 test, lint, typecheck, and CLI targets. Preserve `.pi` as read-only. Running or
 inspecting a TypeScript workflow imports trusted local code; only use sources
 the user trusts.

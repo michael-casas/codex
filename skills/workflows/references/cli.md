@@ -2,11 +2,11 @@
 
 Canonical repository documentation:
 
-- `/Users/mcasa_atlantis/.codex/orchestration/apps/codex-workflows/CLI.md`
-- `/Users/mcasa_atlantis/.codex/orchestration/SPEC.md`
-- implementation: `/Users/mcasa_atlantis/.codex/orchestration/apps/codex-workflows/src/cli/cli.ts`
+- `$CODEX_HOME/apps/codex-workflows/CLI.md`
+- `$CODEX_HOME/SPEC.md`
+- implementation: `$CODEX_HOME/apps/codex-workflows/src/cli/cli.ts`
 
-Build from `/Users/mcasa_atlantis/.codex/orchestration`:
+Build from `${CODEX_HOME:-$HOME/.codex}`:
 
 ```sh
 bun nx run codex-workflows:build
@@ -60,17 +60,17 @@ control plane is not implemented.
 `--json` writes one final JSON document; errors go to stderr. Human runs write
 progress to stderr and a compact final result to stdout.
 
-| Exit | Meaning |
-| ---: | --- |
-| 0 | Success |
-| 64 | Usage |
-| 65 | Source admission or validation |
-| 66 | Path I/O or non-regular file |
-| 67 | Agent failure |
-| 68 | Output-schema failure |
-| 69 | Durable/cross-process capability unavailable |
-| 70 | Redacted internal failure |
-| 130 | Cancellation |
+| Exit | Meaning                                      |
+| ---: | -------------------------------------------- |
+|    0 | Success                                      |
+|   64 | Usage                                        |
+|   65 | Source admission or validation               |
+|   66 | Path I/O or non-regular file                 |
+|   67 | Agent failure                                |
+|   68 | Output-schema failure                        |
+|   69 | Durable/cross-process capability unavailable |
+|   70 | Redacted internal failure                    |
+|  130 | Cancellation                                 |
 
 Public events/journals contain stable identities, timings, requested
 model/reasoning, outcomes, and digests. They omit raw prompts, inputs,

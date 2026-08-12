@@ -3,7 +3,7 @@
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "packages/codex/src",
   "projectType": "library",
-  "tags": ["scope:codex", "type:library"],
+  "tags": ["type:lib", "scope:codex", "layer:foundation"],
   "// targets": "to see all targets run: nx show project codex --web",
   "targets": {
     "build": {

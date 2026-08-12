@@ -47,7 +47,7 @@ class WorkflowsWorld extends World {
   );
   readonly piGoal = resolve(
     this.workspace,
-    '.pi/goals/archived/goal_2026071612024695_mrn48esr-mggbiz.md',
+    'packages/testing/fixtures/pi-v3/goal_2026071612024695_mrn48esr-mggbiz.md',
   );
   before = new Map<string, string>();
   localRuns: SpawnSyncReturns<string>[] = [];

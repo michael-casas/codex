@@ -77,7 +77,7 @@ For implementation or repair, BATDD invocation MUST create and maintain a runtim
 - `TmuxAgentTransport` provisions and observes executions; it does not decide readiness, retries, evidence sufficiency, or verdicts.
 - Treat terminal-activity polling, idle detection, parsed options, pane text, and all similar status heuristics as operator-facing advisory state only.
 - Explicitly set model, reasoning level, permissions, hooks, base revision, worktree, assignment envelope, manifest digest, and transport incarnation. Never inherit an undeclared convenience default silently.
-- Use `~/.codex/orchestration/manifest.json` for Campaign-Coordinator routing and `<repo>/.codex/orchestration/manifest.json` for project-local target routing. These manifests MUST NOT contain job state, retry state, evidence, verdicts, pg-boss identifiers, or acceptance state.
+- Use `$CODEX_HOME/manifest.json` for Campaign-Coordinator routing and `<repo>/.codex/orchestration/manifest.json` for project-local target routing. These manifests MUST NOT contain job state, retry state, evidence, verdicts, pg-boss identifiers, or acceptance state.
 - Use one isolated worktree per implementation lane by default. Shared-worktree agents require serialized assignments under one authorized write lease.
 - Disable automatic commits, merges, rebases, branch cleanup, worktree deletion, and autopilot unless a reducer-authorized command and repository profile explicitly permit the operation.
 - Prove prompt delivery, stable pane/process identity, restart reconciliation, descendant cleanup, and clean lane diffs. Generated hook spools, prompt envelopes, scoped credentials, pane metadata, and transport state MUST be externalized, ignored, or proven absent from product changes.
@@ -125,7 +125,9 @@ For implementation or repair, BATDD invocation MUST create and maintain a runtim
 - The `nx-generate` skill handles generator discovery internally - don't call nx_docs just to look up generator syntax
 
 <!-- nx configuration end-->
+
 # Usage semantics
+
 - This file defines the shorthand vocabulary Codex uses in local instruction files.
 - Read the JSON map as an alias table: translate abbreviated tokens back to their long-form meaning when interpreting directives.
 - Prefer the expanded meaning in explanations and code unless the shorthand is already part of a local file format.
