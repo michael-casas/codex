@@ -5,6 +5,12 @@
   "projectType": "library",
   "tags": ["scope:testing", "type:harness"],
   "targets": {
+    "package-manager-policy": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "bun tools/quality/check-package-manager.ts"
+      }
+    },
     "test-policy": {
       "executor": "nx:run-commands",
       "options": {
@@ -60,7 +66,7 @@
       "executor": "nx:run-commands",
       "cache": false,
       "outputs": ["{workspaceRoot}/test-output/ground-zero/testing.json"],
-      "dependsOn": ["test-policy"],
+      "dependsOn": ["package-manager-policy", "test-policy"],
       "options": {
         "command": "bun packages/testing/src/cli.ts aggregate packages/testing/manifests/testing.json"
       },
