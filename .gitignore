@@ -84,6 +84,7 @@ test-output
 /session_index.jsonl
 /history.jsonl
 /transcription-history.jsonl
+/dictation-history/
 /shell_snapshots/
 /attachments/
 /generated_images/

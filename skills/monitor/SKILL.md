@@ -1,6 +1,6 @@
 ---
 name: monitor
-description: 'Wait for timers, files, content, process exits, or successful commands using either a foreground synchronous turn stall or a durable tmux-backed monitor with same-task wake delivery. Use the synchronous shim inside active `/goal` loops when reprompting would compete with the current turn; use the durable monitor when Codex should end the turn and wake later; also use for lifecycle inspection, cancellation, or dispatcher inputs matching `$monitor | handle: UUID`.'
+description: 'Wait for timers, files, content, process exits, successful commands, or Herdr-managed agent outcomes using either a foreground synchronous turn stall or a durable tmux-backed monitor with same-task wake delivery. Use the synchronous shim inside active `/goal` loops when reprompting would compete with the current turn; use the durable monitor when Codex should end the turn and wake later; also use for Herdr handoffs, lifecycle inspection, cancellation, or dispatcher inputs matching `$monitor | handle: UUID`.'
 ---
 
 # Monitor
@@ -101,6 +101,18 @@ soft wake; the default is `exit_nonzero`.
 The `memo` is operational context, not a vague reminder. Include the next
 action, relevant artifact or target, and what success means.
 
+## Monitor Herdr agents
+
+Herdr can currently supply agent-status and pane-output conditions through the
+supported `custom_command` monitor kind. Use this for bounded handoffs such as
+waking when another Herdr agent reaches `done` or emits a completion marker.
+Require `HERDR_ENV=1`, resolve a unique agent name or explicit pane id, and set
+a bounded monitor timeout.
+
+Read [`references/herdr.md`](references/herdr.md) before arming a Herdr-backed
+condition. It records the commands usable now, identity and lifecycle caveats,
+notification behavior, and the `## FUTURE` event-driven CODEX_HOME roadmap.
+
 After the shim returns a handle, create a one-minute heartbeat in the current
 task with the app automation tool. Its prompt must be exactly the single line
 returned by:
@@ -167,6 +179,8 @@ under `${CODEX_HOME:-$HOME/.codex}/apps/codex-monitor/`.
 - [`references/synchronous-stall.md`](references/synchronous-stall.md):
   selection, invocation, exit semantics, and `/goal`-loop rules for the
   synchronous stall.
+- [`references/herdr.md`](references/herdr.md): current Herdr-backed condition
+  patterns and future native event-driven monitor opportunities.
 
 Read only the owning file for routine maintenance. Read
 [`references/protocol.md`](references/protocol.md) before changing conditions,
