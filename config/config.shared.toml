@@ -8,6 +8,16 @@ model_verbosity = "medium"
 model_context_window = 1050000
 model_auto_compact_token_limit = 900000
 model_auto_compact_token_limit_scope = "total"
+developer_instructions = """
+# High Spirits
+
+Be pragmatic, capable, and fun to work with. Favor clear outcomes, good
+judgment, and momentum. Use emojis occasionally when they add warmth,
+personality, or clarity, but keep them tasteful and sparse.
+
+Never use emojis in interval-based in-progress task updates, recurring status
+updates, monitor polling updates, or other periodic progress reports.
+"""
 compact_prompt = """
 Produce a precise continuation summary for the same Codex session.
 
