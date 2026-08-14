@@ -16,6 +16,83 @@ Before arming, require the caller to be inside Herdr:
 test "${HERDR_ENV:-}" = 1
 ```
 
+## Capability negotiation and fallback
+
+Run the presence check before `herdr agent`, `herdr pane`, `herdr workspace`,
+or any other control command. Choose exactly one path:
+
+1. **Herdr is available**: run `herdr --skill`, follow the installed contract,
+   and continue with an explicit session, agent name, or pane id.
+2. **Herdr is required but unavailable**: do not inspect or control another
+   client's focused Herdr session. Tell the user that `HERDR_ENV` is absent,
+   provide the recovery steps below, and stop or continue only with unrelated
+   safe work.
+3. **Herdr is merely preferred for background durability**: offer or use the
+   canonical tmux-backed monitor when `tmux` is available. State that tmux can
+   keep a command or monitor alive but cannot discover, prompt, wait on, or
+   read Herdr-managed agents.
+
+Do not silently substitute tmux when the request names a Herdr session, agent,
+pane, notification, socket event, or handoff. That changes the requested
+control surface rather than providing an equivalent launcher.
+
+### Recovery prompt when Herdr is unavailable
+
+Keep the prompt short and actionable. Adapt the session name when the user
+provided one:
+
+```text
+Herdr is installed, but this Codex task does not have HERDR_ENV. Start or
+attach Herdr (for example `herdr --session aes`), invoke the detached
+codex-app-herdr guardian binding (`prefix`, then `alt+h`), let ChatGPT relaunch,
+and retry from a fresh task. If you only need a durable background command, I
+can use tmux instead.
+```
+
+Diagnose ownership without exposing environment values:
+
+```bash
+command -v herdr
+command -v codex-app-herdr
+codex-app-herdr --status
+```
+
+`codex-app-herdr --status` is safe outside Herdr. A healthy local result is
+`"status":"herdr-inherited"`. If ChatGPT is not Herdr-owned, start the
+guardian from a Herdr-managed pane with `codex-app-herdr --watch` or invoke the
+configured detached binding. Do not restart ChatGPT automatically from an
+active Codex task; warn the user because the current task may disconnect.
+
+If status is `herdr-inherited` but the task still lacks `HERDR_ENV`, verify the
+global shell policy inherits the parent environment and preserves the Herdr
+regular-expression prefix, then restart ChatGPT and test from a fresh task:
+
+```toml
+[shell_environment_policy]
+inherit = "all"
+include_only = ["HERDR_.*"] # include the workspace's other approved patterns
+```
+
+The canonical launcher source is
+`${CODEX_HOME:-$HOME/.codex}/scripts/launch-chatgpt-in-herdr`; the normal
+command is `$HOME/.local/bin/codex-app-herdr`. Workspace setup and the detached
+Herdr keybinding are documented in `${CODEX_HOME:-$HOME/.codex}/README.md`.
+
+### tmux fallback
+
+Use tmux only for the portable background-process role:
+
+```bash
+command -v tmux
+tmux new-session -d -s <bounded-name> '<authorized-command>'
+```
+
+For monitor conditions, prefer the existing `monitor arm` procedure instead
+of constructing a second ad hoc watcher; it already owns tmux lifecycle,
+cleanup, persisted state, and same-task wake delivery. If tmux is also absent,
+report both missing capabilities and ask the user to start Herdr or install an
+approved durable launcher.
+
 The current tmux launcher does not explicitly propagate Herdr variables, and a
 long-lived tmux server may have a stale environment. Capture the Herdr binary
 and socket into the condition command at arm time; do not assume the worker

@@ -1,5 +1,5 @@
 {
-  "project": "@orchestration/daemon-e2e",
+  "project": "@codex/daemon-e2e",
   "result": "test-output/ground-zero/daemon-e2e.json",
   "temporaryDirectory": "tmp/ground-zero-daemon-e2e",
   "suites": [
@@ -33,7 +33,7 @@
         "--testNamePattern=L2:E2E"
       ],
       "expected": "vitest-output",
-      "artifact": "nx://@orchestration/daemon-e2e/test/l2-e2e"
+      "artifact": "nx://@codex/daemon-e2e/test/l2-e2e"
     },
     {
       "groupHeading": "=== Layer 3 Test Suite ===",

@@ -1,5 +1,5 @@
 {
-  "name": "@orchestration/testing",
+  "name": "@codex/testing",
   "version": "0.0.1",
   "private": true,
   "type": "module",

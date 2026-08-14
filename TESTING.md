@@ -29,7 +29,7 @@ Workers load full Wiki doctrine only for contract authoring/amendment, verificat
 
 ## Ground-0 status
 
-Ground-0 is implemented through `@orchestration/testing`:
+Ground-0 is implemented through `@codex/testing`:
 
 - Vitest owns TypeScript L1 and non-UI L2 without `passWithNoTests`.
 - The strict Cucumber wrapper owns physical L3 and rejects zero, undefined, ambiguous, pending, skipped, assertion-free, and malformed evidence.

@@ -391,7 +391,7 @@ describe('[L2:INTEGRATION] direct TypeScript workflow runner', () => {
       await writeFile(
         hostInvalidSource,
         `#!/usr/bin/env -S codex-workflows
-import { agent, defineWorkflow } from '@orchestration/workflows';
+import { agent, defineWorkflow } from '@codex/workflows';
 
 export default defineWorkflow({
   id: 'host-invalid-schema-admission',
@@ -493,7 +493,7 @@ export default defineWorkflow({
       await writeFile(
         item.source,
         `#!/usr/bin/env -S codex-workflows
-import { artifact, defineWorkflow } from '@orchestration/workflows';
+import { artifact, defineWorkflow } from '@codex/workflows';
 
 export default defineWorkflow({
   id: 'controlled-artifact-failure',

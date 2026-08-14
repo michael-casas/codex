@@ -9,8 +9,8 @@ import type {
 } from './types.js';
 import { WorkflowExecutionError } from './types.js';
 
-const DEFINITION_MARKER = Symbol.for('@orchestration/workflows/definition/v1');
-const RUNTIME_KEY = Symbol.for('@orchestration/workflows/runtime/v1');
+const DEFINITION_MARKER = Symbol.for('@codex/workflows/definition/v1');
+const RUNTIME_KEY = Symbol.for('@codex/workflows/runtime/v1');
 
 type MarkedDefinition<Input, Output> = WorkflowDefinition<Input, Output> & {
   readonly [DEFINITION_MARKER]: true;

@@ -19,7 +19,7 @@ import {
   phase,
   sha256,
   WorkflowExecutionError,
-} from '@orchestration/workflows';
+} from '@codex/workflows';
 
 import {
   auditCraProject,

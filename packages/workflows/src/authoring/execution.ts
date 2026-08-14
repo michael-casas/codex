@@ -1,5 +1,5 @@
 import { Ajv2020, type ValidateFunction } from 'ajv/dist/2020.js';
-import { isAttestedCodexTurnResult } from '@orchestration/codex';
+import { isAttestedCodexTurnResult } from '@codex/codex';
 
 import type { JsonSchema, JsonValue } from '../lib/contracts.js';
 import {

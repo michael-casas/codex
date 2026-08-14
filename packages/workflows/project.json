@@ -1,10 +1,10 @@
 {
-  "name": "workflows",
+  "name": "@codex/workflows",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "packages/workflows/src",
   "projectType": "library",
   "tags": ["type:lib", "scope:workflows", "layer:domain"],
-  "// targets": "to see all targets run: nx show project workflows --web",
+  "// targets": "to see all targets run: nx show project @codex/workflows --web",
   "targets": {
     "test-l1-unit": {
       "executor": "nx:run-commands",

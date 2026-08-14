@@ -1,0 +1,287 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+readonly required_herdr_keys=(
+  HERDR_ENV
+  HERDR_SOCKET_PATH
+  HERDR_WORKSPACE_ID
+  HERDR_TAB_ID
+  HERDR_PANE_ID
+)
+
+readonly chatgpt_bin="${CODEX_HERDR_CHATGPT_BIN:-/Applications/ChatGPT.app/Contents/MacOS/ChatGPT}"
+readonly osascript_bin="${CODEX_HERDR_OSASCRIPT_BIN:-/usr/bin/osascript}"
+readonly ps_bin="${CODEX_HERDR_PS_BIN:-/bin/ps}"
+readonly codex_home="${CODEX_HOME:-$HOME/.codex}"
+readonly log_path="${CODEX_HERDR_LOG_PATH:-$codex_home/log/herdr-chatgpt-launch.log}"
+readonly lock_dir="${CODEX_HERDR_LOCK_DIR:-$codex_home/.runtime/herdr-chatgpt-launch.lock}"
+readonly wait_seconds="${CODEX_HERDR_WAIT_SECONDS:-20}"
+readonly watch_seconds="${CODEX_HERDR_WATCH_SECONDS:-10}"
+
+usage() {
+  cat <<'EOF'
+Usage: codex-app-herdr [--watch] [--dry-run]
+       codex-app-herdr --status
+
+Launch ChatGPT Desktop directly from the current Herdr-managed pane so its
+bundled Codex app-server inherits the same HERDR_* caller context.
+
+  --dry-run  Validate the Herdr context and executable without changing state.
+  --watch    Remain in the Herdr pane and reconcile later ownership drift.
+  --status   Report current ChatGPT/app-server inheritance without requiring Herdr.
+  --help     Show this help.
+
+Environment overrides for controlled testing:
+  CODEX_HERDR_CHATGPT_BIN
+  CODEX_HERDR_OSASCRIPT_BIN
+  CODEX_HERDR_PS_BIN
+  CODEX_HERDR_LOG_PATH
+  CODEX_HERDR_LOCK_DIR
+  CODEX_HERDR_WAIT_SECONDS
+  CODEX_HERDR_WATCH_SECONDS
+EOF
+}
+
+die() {
+  local code="$1"
+  shift
+  printf 'codex-app-herdr: %s\n' "$*" >&2
+  exit "$code"
+}
+
+require_supported_host() {
+  [[ "$(uname -s)" == "Darwin" ]] ||
+    die 69 'ChatGPT Desktop inheritance is supported only on macOS'
+}
+
+require_executable() {
+  [[ -x "$chatgpt_bin" ]] || die 66 "ChatGPT executable is unavailable: $chatgpt_bin"
+}
+
+herdr_context_ready() {
+  local key
+  [[ "${HERDR_ENV:-}" == "1" ]] || return 1
+  for key in "${required_herdr_keys[@]:1}"; do
+    [[ -n "${!key:-}" ]] || return 1
+  done
+}
+
+normalize_detached_herdr_context() {
+  if [[ "${HERDR_ENV:-}" != "1" &&
+    -n "${HERDR_SOCKET_PATH:-}" &&
+    -n "${HERDR_ACTIVE_WORKSPACE_ID:-}" &&
+    -n "${HERDR_ACTIVE_TAB_ID:-}" &&
+    -n "${HERDR_ACTIVE_PANE_ID:-}" ]]; then
+    export HERDR_ENV=1
+    export HERDR_WORKSPACE_ID="$HERDR_ACTIVE_WORKSPACE_ID"
+    export HERDR_TAB_ID="$HERDR_ACTIVE_TAB_ID"
+    export HERDR_PANE_ID="$HERDR_ACTIVE_PANE_ID"
+  fi
+}
+
+require_herdr_context() {
+  herdr_context_ready ||
+    die 78 'must run inside a Herdr-managed pane with the complete HERDR_* caller context'
+}
+
+list_chatgpt_pids() {
+  local pid command
+  while read -r pid command; do
+    [[ "$command" == "$chatgpt_bin" ]] && printf '%s\n' "$pid"
+  done < <("$ps_bin" -axo pid=,command=)
+}
+
+list_app_server_pids() {
+  local parent_pid="$1"
+  local pid ppid command
+  while read -r pid ppid command; do
+    if [[ "$ppid" == "$parent_pid" && "$command" == *' app-server '* ]]; then
+      printf '%s\n' "$pid"
+    fi
+  done < <("$ps_bin" -axo pid=,ppid=,command=)
+}
+
+process_has_herdr_context() {
+  local pid="$1"
+  local snapshot key
+  snapshot="$("$ps_bin" eww -p "$pid" -o command= 2>/dev/null)" || return 1
+  for key in "${required_herdr_keys[@]}"; do
+    [[ " $snapshot" == *" $key="* ]] || return 1
+  done
+}
+
+emit_json() {
+  local status="$1"
+  local mode="$2"
+  local chatgpt_pid="${3:-}"
+  local app_server_pid="${4:-}"
+  LAUNCH_STATUS="$status" \
+    LAUNCH_MODE="$mode" \
+    LAUNCH_EXECUTABLE="$chatgpt_bin" \
+    LAUNCH_CHATGPT_PID="$chatgpt_pid" \
+    LAUNCH_APP_SERVER_PID="$app_server_pid" \
+    python3 - <<'PY'
+import json
+import os
+
+def integer(name):
+    value = os.environ.get(name, "")
+    return int(value) if value.isdigit() else None
+
+print(json.dumps({
+    "status": os.environ["LAUNCH_STATUS"],
+    "mode": os.environ["LAUNCH_MODE"],
+    "launch": "direct-executable",
+    "executable": os.environ["LAUNCH_EXECUTABLE"],
+    "chatgptPid": integer("LAUNCH_CHATGPT_PID"),
+    "appServerPid": integer("LAUNCH_APP_SERVER_PID"),
+}, separators=(",", ":")))
+PY
+}
+
+status() {
+  local chatgpt_pid app_server_pid status_value
+  chatgpt_pid="$(list_chatgpt_pids | head -n 1 || true)"
+  app_server_pid=''
+  status_value='not-running'
+  if [[ -n "$chatgpt_pid" ]]; then
+    app_server_pid="$(list_app_server_pids "$chatgpt_pid" | head -n 1 || true)"
+    status_value='missing-herdr-context'
+    if process_has_herdr_context "$chatgpt_pid" &&
+      [[ -n "$app_server_pid" ]] &&
+      process_has_herdr_context "$app_server_pid"; then
+      status_value='herdr-inherited'
+    fi
+  fi
+  emit_json "$status_value" status "$chatgpt_pid" "$app_server_pid"
+}
+
+wait_for_old_processes() {
+  local old_pids="$1"
+  local deadline=$((SECONDS + wait_seconds))
+  local pid alive
+  while ((SECONDS < deadline)); do
+    alive=false
+    for pid in $old_pids; do
+      if kill -0 "$pid" 2>/dev/null; then
+        alive=true
+        break
+      fi
+    done
+    [[ "$alive" == false ]] && return 0
+    sleep 0.25
+  done
+  return 1
+}
+
+wait_for_inherited_tree() {
+  local deadline=$((SECONDS + wait_seconds))
+  local chatgpt_pid app_server_pid
+  while ((SECONDS < deadline)); do
+    chatgpt_pid="$(list_chatgpt_pids | head -n 1 || true)"
+    if [[ -n "$chatgpt_pid" ]]; then
+      app_server_pid="$(list_app_server_pids "$chatgpt_pid" | head -n 1 || true)"
+      if [[ -n "$app_server_pid" ]] &&
+        process_has_herdr_context "$chatgpt_pid" &&
+        process_has_herdr_context "$app_server_pid"; then
+        printf '%s %s\n' "$chatgpt_pid" "$app_server_pid"
+        return 0
+      fi
+    fi
+    sleep 0.25
+  done
+  return 1
+}
+
+reconcile_once() {
+  local current_status old_pids inherited_tree chatgpt_pid app_server_pid
+  current_status="$(status)"
+  if [[ "$current_status" == *'"status":"herdr-inherited"'* ]]; then
+    printf '%s\n' "$current_status"
+    return 0
+  fi
+
+  old_pids="$(list_chatgpt_pids || true)"
+  if [[ -n "$old_pids" ]]; then
+    "$osascript_bin" -e 'tell application id "com.openai.codex" to quit' >>"$log_path" 2>&1 ||
+      die 70 "graceful ChatGPT quit failed; see $log_path"
+    wait_for_old_processes "$old_pids" ||
+      die 70 'ChatGPT did not exit within the bounded wait; no signal was sent'
+  fi
+
+  printf '[%s] direct launch requested from Herdr context\n' "$(date -u +%Y-%m-%dT%H:%M:%SZ)" >>"$log_path"
+  nohup "$chatgpt_bin" >>"$log_path" 2>&1 &
+
+  if inherited_tree="$(wait_for_inherited_tree)"; then
+    read -r chatgpt_pid app_server_pid <<<"$inherited_tree"
+    emit_json launched launch "$chatgpt_pid" "$app_server_pid"
+  else
+    die 70 "ChatGPT launched but complete HERDR_* inheritance was not observed; see $log_path"
+  fi
+}
+
+dry_run=false
+status_only=false
+watch=false
+while (($#)); do
+  case "$1" in
+    --dry-run) dry_run=true ;;
+    --status) status_only=true ;;
+    --watch) watch=true ;;
+    --help|-h) usage; exit 0 ;;
+    *) usage >&2; die 64 "unknown argument: $1" ;;
+  esac
+  shift
+done
+
+if [[ "$status_only" == true && ("$dry_run" == true || "$watch" == true) ]]; then
+  die 64 '--status cannot be combined with --dry-run or --watch'
+fi
+
+require_supported_host
+if [[ "$status_only" == true ]]; then
+  status
+  exit 0
+fi
+
+normalize_detached_herdr_context
+require_herdr_context
+require_executable
+[[ "$wait_seconds" =~ ^[1-9][0-9]*$ ]] ||
+  die 64 'CODEX_HERDR_WAIT_SECONDS must be a positive integer'
+[[ "$watch_seconds" =~ ^[1-9][0-9]*$ ]] ||
+  die 64 'CODEX_HERDR_WATCH_SECONDS must be a positive integer'
+
+if [[ "$dry_run" == true ]]; then
+  if [[ "$watch" == true ]]; then
+    emit_json ready watch-dry-run
+  else
+    emit_json ready dry-run
+  fi
+  exit 0
+fi
+
+mkdir -p "$(dirname "$lock_dir")" "$(dirname "$log_path")"
+if ! mkdir "$lock_dir" 2>/dev/null; then
+  die 75 "another launch owns $lock_dir"
+fi
+trap 'rmdir "$lock_dir" 2>/dev/null || true' EXIT
+
+if [[ "$watch" == true ]]; then
+  first_cycle=true
+  while true; do
+    current_status="$(status)"
+    if [[ "$current_status" == *'"status":"herdr-inherited"'* ]]; then
+      if [[ "$first_cycle" == true ]]; then
+        printf '%s\n' "$current_status"
+      fi
+    else
+      printf '[%s] ownership drift detected; reconciling\n' "$(date -u +%Y-%m-%dT%H:%M:%SZ)" >>"$log_path"
+      reconcile_once
+    fi
+    first_cycle=false
+    sleep "$watch_seconds"
+  done
+else
+  reconcile_once
+fi

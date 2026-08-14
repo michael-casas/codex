@@ -9,7 +9,7 @@ Canonical repository documentation:
 Build from `${CODEX_HOME:-$HOME/.codex}`:
 
 ```sh
-bun nx run codex-workflows:build
+bun nx run @codex/codex-workflows:build
 codex-workflows --help
 ```
 

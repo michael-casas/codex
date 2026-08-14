@@ -2,7 +2,7 @@ import { constants } from 'node:fs';
 import { access, readFile, realpath, stat } from 'node:fs/promises';
 import { isAbsolute, relative, resolve } from 'node:path';
 
-import { sha256 } from '@orchestration/workflows';
+import { sha256 } from '@codex/workflows';
 
 import { CliError } from '../cli/cli.js';
 

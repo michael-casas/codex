@@ -10,7 +10,7 @@ import {
   sep,
 } from 'node:path';
 
-import { sha256, type WorkflowArtifact } from '@orchestration/workflows';
+import { sha256, type WorkflowArtifact } from '@codex/workflows';
 
 const MAX_EVENTS = 10_000;
 const MAX_NODES = 4_096;

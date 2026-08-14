@@ -5,7 +5,7 @@ import {
   defineWorkflow,
   parallel,
   phase,
-} from '@orchestration/workflows';
+} from '@codex/workflows';
 
 interface ResearchInput {
   proposalAudience: string;

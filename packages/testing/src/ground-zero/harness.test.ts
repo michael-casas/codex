@@ -366,7 +366,7 @@ describe('[L1:UNIT] Ground-0 layer ownership and policy', () => {
     expect(
       validateAggregateResult({
         schemaVersion: 1,
-        project: '@orchestration/testing',
+        project: '@codex/testing',
         status: 'passed',
         startedAt: '2026-07-15T12:00:00.000Z',
         durationMs: 1,
@@ -389,7 +389,7 @@ describe('[L1:UNIT] Ground-0 layer ownership and policy', () => {
     expect(
       validateAggregateResult({
         schemaVersion: 1,
-        project: '@orchestration/testing',
+        project: '@codex/testing',
         status: 'passed',
         startedAt: '2026-07-15T12:00:00.000Z',
         durationMs: 8,
@@ -420,7 +420,7 @@ describe('[L1:UNIT] Ground-0 layer ownership and policy', () => {
   it('[L1:UNIT] CWF2-AUD-003 accepts honest failed-zero evidence without treating it as a pass', () => {
     const failedZero = {
       schemaVersion: 1,
-      project: '@orchestration/testing',
+      project: '@codex/testing',
       status: 'failed',
       startedAt: '2026-08-08T12:00:00.000Z',
       durationMs: 5,
@@ -500,7 +500,7 @@ describe('[L1:INTEGRATION] Ground-0 staged affected boundary', () => {
     expect(
       validateAggregateResult({
         schemaVersion: 1,
-        project: '@orchestration/testing',
+        project: '@codex/testing',
         status: 'passed',
         startedAt: '2026-07-15T12:00:00.000Z',
         durationMs: 5,

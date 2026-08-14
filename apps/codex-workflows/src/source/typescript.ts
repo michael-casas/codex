@@ -9,7 +9,7 @@ import { build } from 'esbuild';
 import {
   isWorkflowDefinition,
   type WorkflowDefinition,
-} from '@orchestration/workflows';
+} from '@codex/workflows';
 
 import { CliError } from '../cli/cli.js';
 import { loadBytes, type LoadedBytes } from './loader.js';
@@ -17,7 +17,7 @@ import { loadBytes, type LoadedBytes } from './loader.js';
 export const TYPESCRIPT_WORKFLOW_SHEBANG = '#!/usr/bin/env -S codex-workflows';
 
 const authoringEntry = createRequire(import.meta.url).resolve(
-  '@orchestration/workflows',
+  '@codex/workflows',
 );
 
 export interface LoadedTypeScriptWorkflow {
@@ -72,7 +72,7 @@ export async function loadTypeScriptWorkflow(
         sourcemap: false,
         logLevel: 'silent',
         treeShaking: true,
-        alias: { '@orchestration/workflows': authoringEntry },
+        alias: { '@codex/workflows': authoringEntry },
       });
     } catch {
       throw new CliError(

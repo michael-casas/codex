@@ -1,5 +1,5 @@
 {
-  "name": "@orchestration/codex-monitor",
+  "name": "@codex/codex-monitor",
   "version": "0.1.0",
   "private": true,
   "type": "module",

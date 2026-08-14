@@ -1,5 +1,5 @@
 #!/usr/bin/env -S codex-workflows
-import { agent, artifact, defineWorkflow, parallel, phase } from '@orchestration/workflows';
+import { agent, artifact, defineWorkflow, parallel, phase } from '@codex/workflows';
 
 interface Input {
   mode: 'success' | 'failure' | 'schema' | 'cancel';

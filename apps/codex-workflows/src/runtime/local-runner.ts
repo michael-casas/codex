@@ -5,7 +5,7 @@ import { join } from 'node:path';
 import {
   initializeCodexHost,
   shutdownCodexHost,
-} from '@orchestration/codex';
+} from '@codex/codex';
 import {
   canonicalizeJson,
   executeWorkflow,
@@ -14,7 +14,7 @@ import {
   type JsonValue,
   type WorkflowDefinition,
   type WorkflowPublicEvent,
-} from '@orchestration/workflows';
+} from '@codex/workflows';
 
 import { createLocalRunJournal, type LocalRunJournal } from './journal.js';
 

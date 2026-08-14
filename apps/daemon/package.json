@@ -1,5 +1,5 @@
 {
-  "name": "@orchestration/daemon",
+  "name": "@codex/daemon",
   "version": "0.0.1",
   "private": true,
   "nx": {
@@ -89,15 +89,15 @@
           "build"
         ],
         "options": {
-          "buildTarget": "@orchestration/daemon:build",
+          "buildTarget": "@codex/daemon:build",
           "runBuildTargetDependencies": false
         },
         "configurations": {
           "development": {
-            "buildTarget": "@orchestration/daemon:build:development"
+            "buildTarget": "@codex/daemon:build:development"
           },
           "production": {
-            "buildTarget": "@orchestration/daemon:build:production"
+            "buildTarget": "@codex/daemon:build:production"
           }
         }
       },
@@ -136,13 +136,13 @@
       "test-l2-e2e": {
         "executor": "nx:run-commands",
         "options": {
-          "command": "bun nx test-l2-e2e @orchestration/daemon-e2e --outputStyle=static"
+          "command": "bun nx test-l2-e2e @codex/daemon-e2e --outputStyle=static"
         }
       },
       "test-l2": {
         "executor": "nx:run-commands",
         "options": {
-          "command": "bun nx test-l2-e2e @orchestration/daemon-e2e --outputStyle=static"
+          "command": "bun nx test-l2-e2e @codex/daemon-e2e --outputStyle=static"
         }
       },
       "docker:build": {

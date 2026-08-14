@@ -1,6 +1,6 @@
 # Workflow authoring and compatibility contracts
 
-`@orchestration/workflows` owns two public surfaces: the primary trusted
+`@codex/workflows` owns two public surfaces: the primary trusted
 TypeScript authoring/runtime API and the retained deterministic JSON
 normalization/planning API.
 
@@ -8,7 +8,7 @@ normalization/planning API.
 
 ```ts
 #!/usr/bin/env -S codex-workflows
-import { agent, artifact, defineWorkflow, parallel, phase } from '@orchestration/workflows';
+import { agent, artifact, defineWorkflow, parallel, phase } from '@codex/workflows';
 
 export default defineWorkflow<Input, Output>({
   id: 'example',

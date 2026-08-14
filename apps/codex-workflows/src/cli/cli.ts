@@ -13,7 +13,7 @@ import {
   type NormalizedWorkflow,
   type WorkflowPublicEvent,
   type WorkflowSource,
-} from '@orchestration/workflows';
+} from '@codex/workflows';
 
 import { runLocalWorkflow } from '../runtime/local-runner.js';
 import {

@@ -1,5 +1,5 @@
 {
-  "name": "codex-workflows",
+  "name": "@codex/codex-workflows",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "apps/codex-workflows/src",
   "projectType": "application",
@@ -7,7 +7,7 @@
   "targets": {
     "build": {
       "executor": "@nx/esbuild:esbuild",
-      "dependsOn": ["codex:build"],
+      "dependsOn": ["@codex/codex:build"],
       "outputs": ["{options.outputPath}"],
       "defaultConfiguration": "production",
       "options": {
@@ -16,7 +16,7 @@
         "format": ["esm"],
         "bundle": true,
         "thirdParty": true,
-        "external": ["esbuild", "@orchestration/codex"],
+        "external": ["esbuild", "@codex/codex"],
         "main": "apps/codex-workflows/src/main.ts",
         "tsConfig": "apps/codex-workflows/tsconfig.build.json",
         "assets": ["apps/codex-workflows/src/assets"],
@@ -72,15 +72,15 @@
       "defaultConfiguration": "development",
       "dependsOn": ["build"],
       "options": {
-        "buildTarget": "codex-workflows:build",
+        "buildTarget": "@codex/codex-workflows:build",
         "runBuildTargetDependencies": false
       },
       "configurations": {
         "development": {
-          "buildTarget": "codex-workflows:build:development"
+          "buildTarget": "@codex/codex-workflows:build:development"
         },
         "production": {
-          "buildTarget": "codex-workflows:build:production"
+          "buildTarget": "@codex/codex-workflows:build:production"
         }
       }
     },

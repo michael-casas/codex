@@ -4,9 +4,9 @@
     {
       "type": "node",
       "request": "launch",
-      "name": "Debug @orchestration/daemon with Nx",
+      "name": "Debug @codex/daemon with Nx",
       "runtimeExecutable": "bun",
-      "runtimeArgs": ["nx", "serve", "@orchestration/daemon"],
+      "runtimeArgs": ["nx", "serve", "@codex/daemon"],
       "env": {
         "NODE_OPTIONS": "--inspect=9229"
       },
@@ -24,7 +24,7 @@
       "request": "launch",
       "name": "Debug codex-workflows with Nx",
       "runtimeExecutable": "bun",
-      "runtimeArgs": ["nx", "serve", "codex-workflows"],
+      "runtimeArgs": ["nx", "serve", "@codex/codex-workflows"],
       "env": {
         "NODE_OPTIONS": "--inspect=9230"
       },
@@ -34,6 +34,24 @@
       "sourceMaps": true,
       "outFiles": [
         "${workspaceFolder}/apps/codex-workflows/dist/**/*.(m|c|)js",
+        "!**/node_modules/**"
+      ]
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Debug wiki-cli with Nx",
+      "runtimeExecutable": "bun",
+      "runtimeArgs": ["nx", "serve", "@codex/wiki-cli"],
+      "env": {
+        "NODE_OPTIONS": "--inspect=9231"
+      },
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen",
+      "skipFiles": ["<node_internals>/**"],
+      "sourceMaps": true,
+      "outFiles": [
+        "${workspaceFolder}/apps/wiki-cli/dist/**/*.(m|c|)js",
         "!**/node_modules/**"
       ]
     }

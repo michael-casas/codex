@@ -1,0 +1,160 @@
+{
+  "name": "@codex/wiki-cli",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/wiki-cli/src",
+  "projectType": "application",
+  "tags": ["type:app", "scope:wiki", "layer:delivery", "npm:private"],
+  "targets": {
+    "build": {
+      "executor": "@nx/esbuild:esbuild",
+      "outputs": ["{options.outputPath}"],
+      "defaultConfiguration": "production",
+      "options": {
+        "platform": "node",
+        "outputPath": "apps/wiki-cli/dist",
+        "format": ["esm"],
+        "bundle": true,
+        "thirdParty": true,
+        "external": ["better-sqlite3"],
+        "main": "apps/wiki-cli/src/main.ts",
+        "tsConfig": "apps/wiki-cli/tsconfig.app.json",
+        "assets": ["apps/wiki-cli/src/assets"],
+        "esbuildOptions": {
+          "sourcemap": true,
+          "outExtension": {
+            ".js": ".js"
+          }
+        }
+      },
+      "configurations": {
+        "development": {},
+        "production": {
+          "esbuildOptions": {
+            "sourcemap": false,
+            "outExtension": {
+              ".js": ".js"
+            }
+          }
+        }
+      }
+    },
+    "prune-lockfile": {
+      "dependsOn": ["build"],
+      "cache": true,
+      "executor": "@nx/js:prune-lockfile",
+      "outputs": [
+        "{workspaceRoot}/apps/wiki-cli/dist/package.json",
+        "{workspaceRoot}/apps/wiki-cli/dist/bun.lock"
+      ],
+      "options": {
+        "buildTarget": "build"
+      }
+    },
+    "copy-workspace-modules": {
+      "dependsOn": ["build"],
+      "cache": true,
+      "outputs": ["{workspaceRoot}/apps/wiki-cli/dist/workspace_modules"],
+      "executor": "@nx/js:copy-workspace-modules",
+      "options": {
+        "buildTarget": "build"
+      }
+    },
+    "prune": {
+      "dependsOn": ["prune-lockfile", "copy-workspace-modules"],
+      "executor": "nx:noop"
+    },
+    "serve": {
+      "continuous": true,
+      "executor": "@nx/js:node",
+      "defaultConfiguration": "development",
+      "dependsOn": ["build"],
+      "options": {
+        "buildTarget": "@codex/wiki-cli:build",
+        "runBuildTargetDependencies": false
+      },
+      "configurations": {
+        "development": {
+          "buildTarget": "@codex/wiki-cli:build:development"
+        },
+        "production": {
+          "buildTarget": "@codex/wiki-cli:build:production"
+        }
+      }
+    },
+    "materialize-workspace-bin": {
+      "executor": "nx:run-commands",
+      "cache": false,
+      "dependsOn": ["build"],
+      "options": {
+        "command": "bun install --frozen-lockfile"
+      }
+    },
+    "test-pre-build": {
+      "executor": "nx:run-commands",
+      "outputs": ["{projectRoot}/out-tsc/cucumber"],
+      "options": {
+        "command": "tsc -p apps/wiki-cli/tsconfig.cucumber.json"
+      }
+    },
+    "test-l1-unit": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "vitest run --config apps/wiki-cli/vitest.config.ts src/portable-vault/portable-vault.test.ts src/cli/__tests__/wiki-cli-controller.test.ts src/wiki/domain/policies/__tests__/wiki-query-policy.test.ts src/wiki/infrastructure/markdown/__tests__/markdown-note-parser.test.ts --testNamePattern='L1:UNIT'"
+      }
+    },
+    "test-l1-integration": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "vitest run --config apps/wiki-cli/vitest.config.ts src/portable-vault/portable-vault.test.ts src/cli/__tests__/wiki-cli-controller.test.ts src/wiki/domain/policies/__tests__/wiki-query-policy.test.ts src/wiki/infrastructure/markdown/__tests__/markdown-note-parser.test.ts --testNamePattern='L1:INTEGRATION'"
+      }
+    },
+    "test-l1": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "vitest run --config apps/wiki-cli/vitest.config.ts src/portable-vault/portable-vault.test.ts src/cli/__tests__/wiki-cli-controller.test.ts src/wiki/domain/policies/__tests__/wiki-query-policy.test.ts src/wiki/infrastructure/markdown/__tests__/markdown-note-parser.test.ts"
+      }
+    },
+    "test-l2-integration": {
+      "executor": "nx:run-commands",
+      "cache": false,
+      "dependsOn": ["build"],
+      "options": {
+        "command": "vitest run --config apps/wiki-cli/vitest.config.ts src/portable-vault/portable-vault.spec.ts src/cli/__specs__/wiki-cli-process.spec.ts src/wiki/infrastructure/persistence/__specs__/sqlite-wiki-index.spec.ts --testNamePattern='L2:INTEGRATION'"
+      }
+    },
+    "test-l2-e2e": {
+      "executor": "nx:run-commands",
+      "cache": false,
+      "dependsOn": ["build"],
+      "options": {
+        "command": "vitest run --config apps/wiki-cli/vitest.config.ts src/portable-vault/portable-vault.spec.ts src/cli/__specs__/wiki-cli-process.spec.ts src/wiki/infrastructure/persistence/__specs__/sqlite-wiki-index.spec.ts --testNamePattern='L2:E2E'"
+      }
+    },
+    "test-l2": {
+      "executor": "nx:run-commands",
+      "cache": false,
+      "dependsOn": ["build"],
+      "options": {
+        "command": "vitest run --config apps/wiki-cli/vitest.config.ts src/portable-vault/portable-vault.spec.ts src/cli/__specs__/wiki-cli-process.spec.ts src/wiki/infrastructure/persistence/__specs__/sqlite-wiki-index.spec.ts"
+      }
+    },
+    "test-l3": {
+      "executor": "nx:run-commands",
+      "cache": false,
+      "dependsOn": ["materialize-workspace-bin", "test-pre-build"],
+      "outputs": ["{workspaceRoot}/test-output/cucumber/wiki-cli.json"],
+      "options": {
+        "command": "bun packages/testing/src/cli.ts verify-cucumber apps/wiki-cli/src/portable-vault/portable-vault.feature apps/wiki-cli/out-tsc/cucumber/portable-vault/index.steps.js test-output/cucumber/wiki-cli.json"
+      }
+    },
+    "test": {
+      "executor": "nx:run-commands",
+      "cache": false,
+      "dependsOn": ["build", "test-pre-build"],
+      "outputs": ["{workspaceRoot}/test-output/wiki-cli/wiki-cli.json"],
+      "options": {
+        "command": "bun packages/testing/src/cli.ts aggregate packages/testing/manifests/wiki-cli.json"
+      }
+    }
+  }
+}

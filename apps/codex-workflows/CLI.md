@@ -4,7 +4,7 @@
 TypeScript workflow source. Build it with:
 
 ```sh
-bun nx run codex-workflows:build
+bun nx run @codex/codex-workflows:build
 ```
 
 The package-owned Bun link exposes `codex-workflows` in the normal user PATH.

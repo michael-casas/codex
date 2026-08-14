@@ -1,6 +1,32 @@
 {
   "description": "Codex lifecycle hooks for Herdr state and enforced per-session SQLite scratchpad compaction recovery.",
   "hooks": {
+    "PostCompact": [
+      {
+        "hooks": [
+          {
+            "command": "python3 \"${CODEX_HOME:-$HOME/.codex}/skills/data-substrate/scripts/post-compact-checkpoint.py\"",
+            "statusMessage": "Verifying session scratchpad",
+            "timeout": 15,
+            "type": "command"
+          }
+        ],
+        "matcher": "^(manual|auto)$"
+      }
+    ],
+    "PreCompact": [
+      {
+        "hooks": [
+          {
+            "command": "python3 \"${CODEX_HOME:-$HOME/.codex}/skills/data-substrate/scripts/pre-compact-checkpoint.py\"",
+            "statusMessage": "Checkpointing session scratchpad",
+            "timeout": 30,
+            "type": "command"
+          }
+        ],
+        "matcher": "^(manual|auto)$"
+      }
+    ],
     "SessionStart": [
       {
         "hooks": [
@@ -12,7 +38,6 @@
         ]
       },
       {
-        "matcher": "^(startup|resume|clear|compact)$",
         "hooks": [
           {
             "command": "python3 \"${CODEX_HOME:-$HOME/.codex}/skills/data-substrate/scripts/restore-session-context.py\"",
@@ -20,30 +45,14 @@
             "timeout": 15,
             "type": "command"
           }
-        ]
-      }
-    ],
-    "PreCompact": [
+        ],
+        "matcher": "^(startup|resume|clear|compact)$"
+      },
       {
-        "matcher": "^(manual|auto)$",
         "hooks": [
           {
-            "command": "python3 \"${CODEX_HOME:-$HOME/.codex}/skills/data-substrate/scripts/pre-compact-checkpoint.py\"",
-            "statusMessage": "Checkpointing session scratchpad",
-            "timeout": 30,
-            "type": "command"
-          }
-        ]
-      }
-    ],
-    "PostCompact": [
-      {
-        "matcher": "^(manual|auto)$",
-        "hooks": [
-          {
-            "command": "python3 \"${CODEX_HOME:-$HOME/.codex}/skills/data-substrate/scripts/post-compact-checkpoint.py\"",
-            "statusMessage": "Verifying session scratchpad",
-            "timeout": 15,
+            "command": "bash '/Users/mcasa_atlantis/.codex/herdr-agent-state.sh' session",
+            "timeout": 10,
             "type": "command"
           }
         ]

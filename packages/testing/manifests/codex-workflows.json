@@ -1,5 +1,5 @@
 {
-  "project": "@orchestration/codex-workflows",
+  "project": "@codex/codex-workflows",
   "result": "test-output/codex-workflows/codex-workflows.json",
   "temporaryDirectory": "tmp/codex-workflows-app",
   "suites": [
@@ -19,7 +19,7 @@
         "--testNamePattern=L1:UNIT"
       ],
       "expected": "vitest-output",
-      "artifact": "nx://@orchestration/codex-workflows/test/l1-unit"
+      "artifact": "nx://@codex/codex-workflows/test/l1-unit"
     },
     {
       "heading": "--- In-Process Integration Tests [L1:INTEGRATION] ---",
@@ -34,7 +34,7 @@
         "--testNamePattern=L1:INTEGRATION"
       ],
       "expected": "vitest-output",
-      "artifact": "nx://@orchestration/codex-workflows/test/l1-integration"
+      "artifact": "nx://@codex/codex-workflows/test/l1-integration"
     },
     {
       "groupHeading": "=== Layer 2 Test Suite ===",
@@ -52,7 +52,7 @@
         "--testNamePattern=L2:INTEGRATION"
       ],
       "expected": "vitest-output",
-      "artifact": "nx://@orchestration/codex-workflows/test/l2-integration"
+      "artifact": "nx://@codex/codex-workflows/test/l2-integration"
     },
     {
       "heading": "--- End-to-End Tests [L2:E2E] ---",
@@ -70,7 +70,7 @@
         "--testNamePattern=L2:E2E"
       ],
       "expected": "vitest-output",
-      "artifact": "nx://@orchestration/codex-workflows/test/l2-e2e"
+      "artifact": "nx://@codex/codex-workflows/test/l2-e2e"
     },
     {
       "groupHeading": "=== Layer 3 Test Suite ===",

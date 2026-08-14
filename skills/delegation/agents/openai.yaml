@@ -1,0 +1,4 @@
+interface:
+  display_name: "Delegation"
+  short_description: "Launch durable background Codex workers"
+  default_prompt: "Use $delegation to assign this work to a durable Herdr or tmux Codex worker and define its handoff contract."

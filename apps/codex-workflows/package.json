@@ -1,5 +1,5 @@
 {
-  "name": "@orchestration/codex-workflows",
+  "name": "@codex/codex-workflows",
   "version": "0.0.1",
   "private": true,
   "type": "module",
@@ -7,8 +7,8 @@
     "codex-workflows": "./dist/main.js"
   },
   "dependencies": {
-    "@orchestration/codex": "workspace:*",
-    "@orchestration/workflows": "workspace:*",
+    "@codex/codex": "workspace:*",
+    "@codex/workflows": "workspace:*",
     "esbuild": "0.27.7"
   }
 }

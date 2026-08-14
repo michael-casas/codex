@@ -1,5 +1,5 @@
 {
-  "project": "@orchestration/daemon",
+  "project": "@codex/daemon",
   "result": "test-output/ground-zero/daemon.json",
   "temporaryDirectory": "tmp/ground-zero-daemon",
   "suites": [
@@ -17,7 +17,7 @@
         "--testNamePattern=L1:UNIT"
       ],
       "expected": "vitest-output",
-      "artifact": "nx://@orchestration/daemon/test/l1-unit"
+      "artifact": "nx://@codex/daemon/test/l1-unit"
     },
     {
       "heading": "--- In-Process Integration Tests [L1:INTEGRATION] ---",
@@ -43,7 +43,7 @@
         "--testNamePattern=L2:E2E"
       ],
       "expected": "vitest-output",
-      "artifact": "nx://@orchestration/daemon/test/l2-e2e"
+      "artifact": "nx://@codex/daemon/test/l2-e2e"
     },
     {
       "groupHeading": "=== Layer 3 Test Suite ===",

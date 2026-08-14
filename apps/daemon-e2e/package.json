@@ -1,5 +1,5 @@
 {
-  "name": "@orchestration/daemon-e2e",
+  "name": "@codex/daemon-e2e",
   "version": "0.0.1",
   "private": true,
   "nx": {
@@ -9,13 +9,13 @@
       "layer:testing"
     ],
     "implicitDependencies": [
-      "@orchestration/daemon"
+      "@codex/daemon"
     ],
     "targets": {
       "test-l2-e2e": {
         "executor": "nx:run-commands",
         "dependsOn": [
-          "@orchestration/daemon:build"
+          "@codex/daemon:build"
         ],
         "options": {
           "command": "vitest run --config apps/daemon-e2e/vitest.config.ts src/daemon/daemon.spec.ts --testNamePattern='L2:E2E'"
@@ -24,7 +24,7 @@
       "test-l2": {
         "executor": "nx:run-commands",
         "dependsOn": [
-          "@orchestration/daemon:build"
+          "@codex/daemon:build"
         ],
         "options": {
           "command": "vitest run --config apps/daemon-e2e/vitest.config.ts src/daemon/daemon.spec.ts"
@@ -33,7 +33,7 @@
       "e2e": {
         "executor": "nx:run-commands",
         "dependsOn": [
-          "@orchestration/daemon:build"
+          "@codex/daemon:build"
         ],
         "options": {
           "command": "vitest run --config apps/daemon-e2e/vitest.config.ts src/daemon/daemon.spec.ts"
@@ -43,7 +43,7 @@
         "executor": "nx:run-commands",
         "cache": false,
         "dependsOn": [
-          "@orchestration/daemon:build"
+          "@codex/daemon:build"
         ],
         "outputs": [
           "{workspaceRoot}/test-output/ground-zero/daemon-e2e.json"

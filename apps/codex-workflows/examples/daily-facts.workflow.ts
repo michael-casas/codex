@@ -7,7 +7,7 @@ import {
   defineWorkflow,
   parallel,
   WorkflowExecutionError,
-} from '@orchestration/workflows';
+} from '@codex/workflows';
 
 import {
   renderDailyFacts,

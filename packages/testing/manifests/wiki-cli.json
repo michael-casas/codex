@@ -1,0 +1,45 @@
+{
+  "project": "@codex/wiki-cli",
+  "result": "test-output/wiki-cli/wiki-cli.json",
+  "temporaryDirectory": "tmp/wiki-cli-app",
+  "suites": [
+    {
+      "groupHeading": "=== Layer 1 Test Suite ===",
+      "heading": "--- Unit Tests [L1:UNIT] ---",
+      "layer": "l1-unit",
+      "command": ["bun", "nx", "run", "@codex/wiki-cli:test-l1-unit"],
+      "expected": "vitest-output",
+      "artifact": "nx://wiki-cli/test/l1-unit"
+    },
+    {
+      "heading": "--- In-Process Integration Tests [L1:INTEGRATION] ---",
+      "layer": "l1-integration",
+      "command": ["bun", "nx", "run", "@codex/wiki-cli:test-l1-integration"],
+      "expected": "vitest-output",
+      "artifact": "nx://wiki-cli/test/l1-integration"
+    },
+    {
+      "groupHeading": "=== Layer 2 Test Suite ===",
+      "heading": "--- Real-Boundary Integration Tests [L2:INTEGRATION] ---",
+      "layer": "l2-integration",
+      "command": ["bun", "nx", "run", "@codex/wiki-cli:test-l2-integration", "--skipNxCache"],
+      "expected": "vitest-output",
+      "artifact": "nx://wiki-cli/test/l2-integration"
+    },
+    {
+      "heading": "--- End-to-End Tests [L2:E2E] ---",
+      "layer": "l2-e2e",
+      "command": ["bun", "nx", "run", "@codex/wiki-cli:test-l2-e2e", "--skipNxCache"],
+      "expected": "vitest-output",
+      "artifact": "nx://wiki-cli/test/l2-e2e"
+    },
+    {
+      "groupHeading": "=== Layer 3 Test Suite ===",
+      "heading": "--- Cucumber Behavioral Tests ---",
+      "layer": "l3",
+      "command": ["bun", "nx", "run", "@codex/wiki-cli:test-l3", "--skipNxCache"],
+      "expected": "cucumber-output",
+      "artifact": "test-output/cucumber/wiki-cli.json"
+    }
+  ]
+}

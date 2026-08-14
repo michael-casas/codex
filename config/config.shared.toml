@@ -35,8 +35,8 @@ sandbox_mode = "danger-full-access"
 service_tier = "priority"
 
 [shell_environment_policy]
-inherit = "core"
-include_only = ["HOME", "PATH", "USER", "SHELL", "LANG", "LC_*", "TERM", "TMPDIR", "TZ", "XDG_*", "CODEX_*", "OPENAI_API_KEY", "OPENCODE_API_KEY", "ANTHROPIC_API_KEY", "OPENROUTER_API_KEY", "MCP_OAUTH_*"]
+inherit = "all"
+include_only = ["HOME", "PATH", "USER", "SHELL", "LANG", "LC_.*", "TERM", "TMPDIR", "TZ", "XDG_.*", "CODEX_.*", "HERDR_.*", "AGENT_WIKI_HOME", "WIKI_.*", "OPENAI_API_KEY", "OPENCODE_API_KEY", "ANTHROPIC_API_KEY", "OPENROUTER_API_KEY", "MCP_OAUTH_.*"]
 
 [memories]
 use_memories = false

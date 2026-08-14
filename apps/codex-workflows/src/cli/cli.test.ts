@@ -1,6 +1,6 @@
 import { describe, expect, test } from 'vitest';
 
-import { WorkflowValidationError } from '@orchestration/workflows';
+import { WorkflowValidationError } from '@codex/workflows';
 
 import { CliError, mapCliError, parseCliArgs } from './cli.js';
 

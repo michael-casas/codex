@@ -5,11 +5,11 @@ This Nx project owns the repository-local BATDD execution machinery. It classifi
 ## Commands
 
 ```sh
-bun nx test-l1 @orchestration/testing
-bun nx test-l2 @orchestration/testing --skipNxCache
-bun nx test-l3 @orchestration/testing --skipNxCache
-bun nx test @orchestration/testing --configuration=ground-zero --skipNxCache
-bun nx test-policy @orchestration/testing
+bun nx test-l1 @codex/testing
+bun nx test-l2 @codex/testing --skipNxCache
+bun nx test-l3 @codex/testing --skipNxCache
+bun nx test @codex/testing --configuration=ground-zero --skipNxCache
+bun nx test-policy @codex/testing
 ```
 
 Read the workspace `AGENTS.md` and root `TESTING.md` before changing tests or harness behavior. The physical feature in `src/ground-zero/ground-zero.feature` is canonical; `FEATURE.md` links to it without duplicating Gherkin.

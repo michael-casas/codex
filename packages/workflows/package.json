@@ -1,5 +1,5 @@
 {
-  "name": "@orchestration/workflows",
+  "name": "@codex/workflows",
   "version": "0.0.1",
   "private": true,
   "type": "module",
@@ -14,7 +14,7 @@
     "./package.json": "./package.json"
   },
   "dependencies": {
-    "@orchestration/codex": "workspace:*",
+    "@codex/codex": "workspace:*",
     "ajv": "8.20.0"
   }
 }

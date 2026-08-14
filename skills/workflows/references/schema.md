@@ -9,7 +9,7 @@ Canonical contracts:
 
 ## Primary TypeScript API
 
-`@orchestration/workflows` exports:
+`@codex/workflows` exports:
 
 ```ts
 defineWorkflow<Input, Output>(options);

@@ -1,5 +1,5 @@
 {
-  "project": "@orchestration/workflows",
+  "project": "@codex/workflows",
   "result": "test-output/codex-workflows/workflows.json",
   "temporaryDirectory": "tmp/codex-workflows-workflows",
   "suites": [
@@ -18,7 +18,7 @@
         "--testNamePattern=L1:UNIT"
       ],
       "expected": "vitest-output",
-      "artifact": "nx://@orchestration/workflows/test/l1-unit"
+      "artifact": "nx://@codex/workflows/test/l1-unit"
     },
     {
       "heading": "--- In-Process Integration Tests [L1:INTEGRATION] ---",
@@ -35,7 +35,7 @@
         "--testNamePattern=L1:INTEGRATION"
       ],
       "expected": "vitest-output",
-      "artifact": "nx://@orchestration/workflows/test/l1-integration"
+      "artifact": "nx://@codex/workflows/test/l1-integration"
     },
     {
       "groupHeading": "=== Layer 2 Test Suite ===",
@@ -46,13 +46,13 @@
     {
       "heading": "--- End-to-End Tests [L2:E2E] ---",
       "layer": "l2-e2e",
-      "reason": "N/A: end-to-end CLI behavior is owned by @orchestration/codex-workflows"
+      "reason": "N/A: end-to-end CLI behavior is owned by @codex/codex-workflows"
     },
     {
       "groupHeading": "=== Layer 3 Test Suite ===",
       "heading": "--- Cucumber Behavioral Tests ---",
       "layer": "l3",
-      "reason": "N/A: canonical user behavior is owned by @orchestration/codex-workflows"
+      "reason": "N/A: canonical user behavior is owned by @codex/codex-workflows"
     }
   ]
 }

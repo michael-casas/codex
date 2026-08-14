@@ -106,8 +106,12 @@ action, relevant artifact or target, and what success means.
 Herdr can currently supply agent-status and pane-output conditions through the
 supported `custom_command` monitor kind. Use this for bounded handoffs such as
 waking when another Herdr agent reaches `done` or emits a completion marker.
-Require `HERDR_ENV=1`, resolve a unique agent name or explicit pane id, and set
-a bounded monitor timeout.
+Negotiate the runtime before control operations: when `HERDR_ENV=1`, resolve a
+unique agent name or explicit pane id and set a bounded timeout. When Herdr is
+required but unavailable, stop before any Herdr control command and give the
+user the recovery instructions from the reference. When Herdr is only a
+durability preference, offer or use the existing tmux-backed monitor instead;
+do not pretend tmux can address Herdr agents or panes.
 
 Read [`references/herdr.md`](references/herdr.md) before arming a Herdr-backed
 condition. It records the commands usable now, identity and lifecycle caveats,
