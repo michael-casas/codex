@@ -1,0 +1,7 @@
+interface:
+  display_name: "Argent"
+  short_description: "Route mobile development through curated guidance"
+  default_prompt: "Use $argent to route this mobile development, React Native, Expo, iOS, Android, testing, debugging, or profiling task to the appropriate curated reference."
+
+policy:
+  allow_implicit_invocation: true
