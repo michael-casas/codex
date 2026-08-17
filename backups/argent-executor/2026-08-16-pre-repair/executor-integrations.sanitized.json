@@ -1,0 +1,43 @@
+{
+  "schema": "casona.executor-integrations-sanitized.v1",
+  "connections": [
+    {
+      "slug": "argent_global",
+      "transport": "stdio",
+      "command": "/Users/mcasa_atlantis/.nvm/versions/node/v24.15.0/bin/node",
+      "args": [
+        "/Users/mcasa_atlantis/.codex/node_modules/@swmansion/argent/dist/cli.js",
+        "mcp"
+      ],
+      "cwd": "/Users/mcasa_atlantis/.codex",
+      "toolCount": 73,
+      "healthBeforeRepair": "degraded"
+    },
+    {
+      "slug": "argent_global_exec",
+      "transport": "stdio",
+      "command": "/bin/bash",
+      "args": [
+        "--noprofile",
+        "--norc",
+        "-c",
+        "exec /Users/mcasa_atlantis/.nvm/versions/node/v24.15.0/bin/node /Users/mcasa_atlantis/.codex/node_modules/@swmansion/argent/dist/cli.js mcp"
+      ],
+      "cwd": "/Users/mcasa_atlantis/.codex",
+      "toolCount": 73,
+      "healthBeforeRepair": "degraded"
+    },
+    {
+      "slug": "argent_global_probe",
+      "transport": "stdio",
+      "command": "/Users/mcasa_atlantis/.nvm/versions/node/v24.15.0/bin/node",
+      "args": [
+        "/Users/mcasa_atlantis/.codex/node_modules/@swmansion/argent/dist/cli.js",
+        "mcp"
+      ],
+      "cwd": "/Users/mcasa_atlantis/.codex",
+      "toolCount": 73,
+      "healthBeforeRepair": "degraded"
+    }
+  ]
+}

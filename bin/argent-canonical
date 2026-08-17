@@ -1,0 +1,13 @@
+#!/bin/bash
+set -euo pipefail
+
+argent_bin="/Users/mcasa_atlantis/.codex/node_modules/.bin/argent"
+node_bin="/Users/mcasa_atlantis/.nvm/versions/node/v24.15.0/bin/node"
+
+if [[ ! -x "$argent_bin" ]]; then
+  echo "Argent is not installed at $argent_bin" >&2
+  exit 127
+fi
+
+argent_entry="$(/bin/realpath "$argent_bin")"
+exec "$node_bin" "$argent_entry" "$@"

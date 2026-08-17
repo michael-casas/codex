@@ -1,0 +1,8 @@
+[mcp_servers.executor]
+url = "http://127.0.0.1:4789/mcp"
+
+# Resolved before repair:
+# transport = streamable_http
+# bearer_token_env_var = unset
+# http_headers = unset
+# env_http_headers = unset

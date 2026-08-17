@@ -1,0 +1,20 @@
+#!/bin/bash
+set -euo pipefail
+
+argent_bin="/Users/mcasa_atlantis/.codex/node_modules/.bin/argent"
+node_bin="/Users/mcasa_atlantis/.nvm/versions/node/v24.15.0/bin/node"
+
+if [[ ! -x "$argent_bin" ]]; then
+  echo "Argent is not installed at $argent_bin" >&2
+  exit 127
+fi
+
+argent_entry="$(/bin/realpath "$argent_bin")"
+tool_server="$(/usr/bin/dirname "$argent_entry")/tool-server.cjs"
+
+if [[ ! -f "$tool_server" ]]; then
+  echo "Argent tool server is missing at $tool_server" >&2
+  exit 127
+fi
+
+exec "$node_bin" "$tool_server" start

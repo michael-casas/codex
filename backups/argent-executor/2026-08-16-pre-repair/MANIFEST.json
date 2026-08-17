@@ -1,0 +1,21 @@
+{
+  "schema": "casona.argent-executor-backup.v1",
+  "createdLocalDate": "2026-08-16",
+  "purpose": "Secret-free cold backup before Executor/Argent control-plane repair",
+  "versions": {
+    "codexCli": "0.147.0",
+    "executor": "1.5.40",
+    "argent": "0.20.0"
+  },
+  "archives": {
+    "argent-skill.tgz": "sha256:6b1ad32d3f2c36d21ae570a1822ea914687f9b7ed0bb71b0c8be33231135843c",
+    "argent-package-state.tgz": "sha256:faed7d647e69d19ecb2922b192bde4bc91aa565b153568de28e66fca757a080a"
+  },
+  "excluded": [
+    "Executor bearer tokens",
+    "~/.executor/auth.json",
+    "~/.executor/data.db",
+    "Executor daemon state",
+    "device and application artifacts"
+  ]
+}

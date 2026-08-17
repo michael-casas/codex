@@ -27,6 +27,7 @@
     "@nx/node": "23.1.0",
     "@nx/workspace": "23.1.0",
     "@swc/helpers": "~0.5.18",
+    "@swmansion/argent": "0.20.0",
     "@types/node": "^22.0.0",
     "@vitest/coverage-v8": "^4.1.10",
     "esbuild": "^0.27.0",
