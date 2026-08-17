@@ -1,0 +1,4 @@
+interface:
+  display_name: "Agent Device"
+  short_description: "Primary CLI for mobile app verification"
+  default_prompt: "Use $agent-device to verify this mobile or React Native app on a real simulator or emulator."
