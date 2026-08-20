@@ -2,6 +2,14 @@
 
 These rules apply to every agent operating anywhere in this workspace. More specific `AGENTS.md` files may narrow behavior but may not weaken these rules or the canonical Agent Wiki specification.
 
+## Subagents
+
+- Before spawning a subagent, write a durable prompt charter that the child can
+  access. Define its role, objective, required context and reading, authorized
+  scope, constraints, deliverables, validation, and stop or handoff conditions.
+- The initial spawn message must be a concise `Read and execute <absolute path>`
+  pointer to that charter. Do not duplicate or paraphrase the charter inline.
+
 ## Authority and required reading
 
 Before making assumptions or writing files:
