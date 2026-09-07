@@ -12,7 +12,7 @@
       "dependsOn": ["^build"],
       "outputs": ["{projectRoot}/dist"],
       "options": {
-        "command": "bun plugins/codex-control/scripts/build.ts"
+        "command": "node --experimental-strip-types plugins/codex-control/scripts/build.ts"
       }
     },
     "typecheck": {
