@@ -85,6 +85,9 @@
     "apps/codex-monitor": {
       "name": "@codex/codex-monitor",
       "version": "0.1.0",
+      "dependencies": {
+        "@codex/codex": "workspace:*",
+      },
     },
     "apps/codex-workflows": {
       "name": "@codex/codex-workflows",

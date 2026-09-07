@@ -37,6 +37,9 @@
       "path": "./apps/codex-control-ui"
     },
     {
+      "path": "./apps/codex-monitor"
+    },
+    {
       "path": "./packages/db"
     },
     {

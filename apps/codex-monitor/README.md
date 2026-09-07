@@ -1,9 +1,10 @@
-# Codex Monitor App Server Spike
+# Codex Monitor
 
-Disposable Python shim for testing same-task wake delivery through Codex App
-Server. This is not yet the production monitor and does not replace the
-tmux-backed TypeScript monitor.
+TypeScript/Bun implementations of the tmux-backed durable monitor, foreground
+synchronous wait adapter, and disposable App Server same-task wake spike.
 
-Run all checks through Nx. The real `arm` command writes an append-only trace
-and state document below `~/.codex/monitors/app-server-spike/`.
-
+Run all checks through Nx. The App Server spike's `arm` command writes an
+append-only trace and state document below
+`~/.codex/monitors/app-server-spike/`. Historical wire labels containing
+`python-spike` remain unchanged for persisted-state and marker compatibility;
+the runtime has no Python dependency.
