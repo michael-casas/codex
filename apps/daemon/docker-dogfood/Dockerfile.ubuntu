@@ -11,7 +11,9 @@ RUN case "${TARGETARCH:-$(dpkg --print-architecture)}" in arm64) arch=arm64;; am
     grep " node-v${NODE_VERSION}-linux-${arch}.tar.xz$" SHASUMS256.txt | sha256sum -c - && \
     tar -xJf "node-v${NODE_VERSION}-linux-${arch}.tar.xz" --strip-components=1 -C /usr/local && \
     rm "node-v${NODE_VERSION}-linux-${arch}.tar.xz" SHASUMS256.txt
-RUN npm install -g @openai/codex@${CODEX_VERSION} && groupadd -f -g ${CODEX_GID} cas-runtime && useradd --create-home --uid ${CODEX_UID} --gid ${CODEX_GID} --shell /bin/bash codex
+COPY --from=oven/bun:1.4.2 /usr/local/bin/bun /usr/local/bin/bun
+ENV PATH=/opt/bun/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+RUN BUN_INSTALL=/opt/bun bun add --global @openai/codex@${CODEX_VERSION} && codex --version && groupadd -f -g ${CODEX_GID} cas-runtime && useradd --create-home --uid ${CODEX_UID} --gid ${CODEX_GID} --shell /bin/bash codex
 COPY nginx.conf /etc/nginx/nginx.conf
 COPY entrypoint.sh /usr/local/bin/cas-entrypoint
 COPY AGENT.md /opt/cas/AGENT.md

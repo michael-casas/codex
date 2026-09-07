@@ -78,6 +78,7 @@ if (action === 'prepare') {
           name: 'cas-remote-lab',
           version: '0.0.0',
           private: true,
+          packageManager: 'bun@1.4.2',
           scripts: {
             build: 'next build',
             start: 'next start --hostname 0.0.0.0 --port 3000',
@@ -101,19 +102,16 @@ if (action === 'prepare') {
   );
 } else if (action === 'up') {
   await docker('up', '-d', '--build', '--wait');
-  const locked = await stat(resolve(root, 'app/package-lock.json')).catch(
-    () => null,
-  );
+  const locked = await stat(resolve(root, 'app/bun.lock')).catch(() => null);
   await docker(
     'exec',
     '-T',
     '-u',
     'codex',
     'app-server',
-    'npm',
-    locked ? 'ci' : 'install',
-    '--no-audit',
-    '--no-fund',
+    'bun',
+    'install',
+    ...(locked ? ['--frozen-lockfile'] : []),
   );
 } else if (action === 'agent') {
   const registry = createAppServerHostRegistry({

@@ -10,10 +10,10 @@ and a client-side button labeled "Run check". Clicking changes a visible status
 from "Ready" to "Check passed". Use semantic HTML, responsive CSS, and no external
 images/fonts/services. Include layout metadata and a GET /api/health route
 returning {"status":"ok","runtime":"ubuntu-codex"}.
-Run npm run build and fix errors. Then start npm run start under nohup with
-stdout/stderr in /workspace/server.log and PID in /workspace/server.pid.
-The server must listen on 0.0.0.0:3000. Verify its homepage and health with curl.
-Leave that server running for the orchestrator's Firefox inspection. Do not
+Use Bun for dependency installation and scripts: bun install and bun run build.
+Fix build errors, then report the successful build. The orchestrator starts
+the separate Compose preview service on 0.0.0.0:3000 for browser inspection;
+do not rely on a background process surviving your tool session. Do not
 commit, push, deploy, start other agents, or read authentication. Report files,
-build outcome and served URL succinctly. Stop after the successful local check;
+build outcome succinctly. Stop after the successful build;
 the orchestrator owns container/credential cleanup after browser verification.

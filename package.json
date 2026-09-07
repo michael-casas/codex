@@ -1,7 +1,7 @@
 {
   "name": "@codex/source",
   "version": "0.0.0",
-  "packageManager": "bun@1.3.14",
+  "packageManager": "bun@1.4.2",
   "license": "MIT",
   "scripts": {
     "prepare": "husky",

@@ -29,7 +29,7 @@ services:
     profiles: [preview]
     init: true
     user: '${CAS_RUNTIME_UID:-1100}:${CAS_RUNTIME_GID:-1100}'
-    entrypoint: ['npm', 'run', 'start']
+    entrypoint: ['bun', 'run', 'start']
     working_dir: /workspace
     ports:
       - '${CAS_BIND_IP:-127.0.0.1}:13000:3000'
