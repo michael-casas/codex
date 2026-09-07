@@ -1,35 +1,38 @@
-#!/usr/bin/env node
+#!/usr/bin/env bun
 
-import { waitForCondition } from './monitor-conditions.mjs';
+import { waitForCondition } from './monitor-conditions.js';
 import {
   appendEvent,
   readJson,
   targetFor,
   wakeText,
   writeJsonAtomic,
-} from './monitor-core.mjs';
+  type DurableMonitorState,
+  type WakePayload,
+} from './monitor-core.js';
 
-function statePathFromArguments(argv) {
+function statePathFromArguments(argv: string[]): string {
   const index = argv.indexOf('--state');
-  if (index === -1 || !argv[index + 1]) throw new Error('--state is required');
-  return argv[index + 1];
+  const value = argv[index + 1];
+  if (index === -1 || !value) throw new Error('--state is required');
+  return value;
 }
 
 const statePath = statePathFromArguments(process.argv.slice(2));
-let state = readJson(statePath);
+let state = readJson<DurableMonitorState>(statePath);
 const controller = new AbortController();
 let abortRequested = false;
 
-function persist(patch) {
+function persist(patch: Partial<DurableMonitorState>): void {
   state = { ...state, ...patch, updatedAt: new Date().toISOString() };
   writeJsonAtomic(statePath, state);
 }
 
-function log(event, details = {}) {
+function log(event: string, details: Record<string, unknown> = {}): void {
   appendEvent(state.logPath, event, { handleId: state.id, ...details });
 }
 
-function requestAbort(signal) {
+function requestAbort(signal: NodeJS.Signals): void {
   if (abortRequested) return;
   abortRequested = true;
   log('monitor.abort.requested', { signal });
@@ -39,9 +42,8 @@ function requestAbort(signal) {
 process.on('SIGINT', () => requestAbort('SIGINT'));
 process.on('SIGTERM', () => requestAbort('SIGTERM'));
 
-async function dispatchWake(payload) {
+async function dispatchWake(payload: WakePayload): Promise<void> {
   const content = wakeText(payload);
-
   if (state.wakeMode === 'log-only') {
     persist({
       wake: {
@@ -54,7 +56,6 @@ async function dispatchWake(payload) {
     log('monitor.wake.completed', { mode: 'log-only' });
     return;
   }
-
   if (state.modelAffinity !== 'inherit') {
     throw new Error(
       'monitor model affinity must be inherit; explicit model overrides are forbidden',
@@ -75,9 +76,10 @@ async function dispatchWake(payload) {
   });
 }
 
-async function main() {
-  if (state.state !== 'armed')
+async function main(): Promise<void> {
+  if (state.state !== 'armed') {
     throw new Error(`monitor cannot start from state ${state.state}`);
+  }
   persist({
     state: 'active',
     activatedAt: new Date().toISOString(),
@@ -90,20 +92,20 @@ async function main() {
     state.request.interval_seconds * 1_000,
     controller.signal,
     (observation) =>
-      log('monitor.condition.observed', { met: Boolean(observation?.met) }),
+      log('monitor.condition.observed', { met: observation.met }),
   );
-  let timeoutTimer;
-  const timeoutPromise = new Promise((resolveTimeout) => {
+  let timeoutTimer: NodeJS.Timeout | undefined;
+  const timeoutPromise = new Promise<{ type: 'timeout' }>((resolveTimeout) => {
     timeoutTimer = setTimeout(
       () => resolveTimeout({ type: 'timeout' }),
       state.request.timeout_seconds * 1_000,
     );
   });
 
-  let terminal;
+  let terminal: { state: string; payload: WakePayload };
   try {
     const result = await Promise.race([
-      conditionPromise.then((details) => ({ type: 'met', details })),
+      conditionPromise.then((details) => ({ type: 'met' as const, details })),
       timeoutPromise,
     ]);
     if (result.type === 'timeout') {
@@ -135,14 +137,22 @@ async function main() {
           target: targetFor(state.request.condition, result.details),
           memo: state.request.memo,
           exitCode: 0,
-          ...(result.details.stdout ? { stdout: result.details.stdout } : {}),
-          ...(result.details.stderr ? { stderr: result.details.stderr } : {}),
+          ...(typeof result.details.stdout === 'string'
+            ? { stdout: result.details.stdout }
+            : {}),
+          ...(typeof result.details.stderr === 'string'
+            ? { stderr: result.details.stderr }
+            : {}),
         },
       };
     }
   } catch (error) {
-    if (error.name === 'AbortError' && abortRequested) {
-      clearTimeout(timeoutTimer);
+    if (
+      error instanceof Error &&
+      error.name === 'AbortError' &&
+      abortRequested
+    ) {
+      if (timeoutTimer) clearTimeout(timeoutTimer);
       persist({
         state: 'aborted',
         terminalAt: new Date().toISOString(),
@@ -169,7 +179,7 @@ async function main() {
       },
     };
   } finally {
-    clearTimeout(timeoutTimer);
+    if (timeoutTimer) clearTimeout(timeoutTimer);
   }
 
   persist({
@@ -184,15 +194,16 @@ async function main() {
   try {
     await dispatchWake(terminal.payload);
   } catch (error) {
+    const message = error instanceof Error ? error.message : String(error);
     persist({
       wake: {
         ...state.wake,
         status: 'failed',
         failedAt: new Date().toISOString(),
-        error: error instanceof Error ? error.message : String(error),
+        error: message,
       },
     });
-    log('monitor.wake.failed', { error: state.wake.error });
+    log('monitor.wake.failed', { error: message });
     log('monitor.worker.exiting', {
       exitCode: 1,
       tmuxSession: state.tmuxSession,
@@ -207,7 +218,7 @@ async function main() {
   process.exitCode = terminal.payload.exitCode;
 }
 
-main().catch((error) => {
+main().catch((error: unknown) => {
   const message = error instanceof Error ? error.message : String(error);
   try {
     persist({
@@ -224,7 +235,9 @@ main().catch((error) => {
       exitCode: 1,
       tmuxSession: state.tmuxSession,
     });
-  } catch {}
-  console.error(message);
+  } catch {
+    // State may be unreadable; stderr still reports the original failure.
+  }
+  process.stderr.write(`${message}\n`);
   process.exitCode = 1;
 });

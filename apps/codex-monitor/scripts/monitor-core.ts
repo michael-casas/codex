@@ -7,6 +7,75 @@ import {
 } from 'node:fs';
 import { dirname } from 'node:path';
 
+export type Condition =
+  | { kind: 'file_exists'; path: string }
+  | {
+      kind: 'file_matches';
+      path: string;
+      pattern?: string;
+      contains?: string;
+    }
+  | { kind: 'process_exit'; pid: number }
+  | { kind: 'timed'; seconds: number }
+  | { kind: 'custom_command'; command: string };
+
+export interface MonitorRequest {
+  condition: Condition;
+  interval_seconds: number;
+  timeout_seconds: number;
+  memo: string;
+  on_timeout: 'exit_nonzero' | 'exit_zero_with_timeout_marker';
+  background: true;
+  notify_on_complete: true;
+}
+
+export interface WakePayload {
+  handleId: string;
+  outcome: 'met' | 'timed_out' | 'error';
+  status: 'completed' | 'timeout' | 'failed';
+  conditionKind: Condition['kind'];
+  target: Record<string, unknown>;
+  memo: string;
+  exitCode: number;
+  stdout?: string;
+  stderr?: string;
+  hasTimeoutMarker?: boolean;
+}
+
+export interface WakeState {
+  status: string;
+  headline?: string;
+  content?: string;
+  backend?: string;
+  transport?: string;
+  [key: string]: unknown;
+}
+
+export interface DurableMonitorState {
+  schemaVersion: number;
+  id: string;
+  state: string;
+  conditionKey: string;
+  request: MonitorRequest;
+  threadId: string;
+  workingDirectory: string;
+  statePath: string;
+  logPath: string;
+  workerOutputPath: string;
+  launcher: string;
+  tmuxSession: string;
+  createdAt: string;
+  updatedAt: string;
+  wake: WakeState;
+  deliveryBackend: string;
+  modelAffinity: string;
+  workerPid?: number;
+  wakeMode?: string;
+  activatedAt?: string;
+  terminalAt?: string;
+  payload?: WakePayload;
+}
+
 export const ACTIVE_STATES = new Set(['armed', 'active']);
 export const TERMINAL_STATES = new Set([
   'met',
@@ -29,35 +98,46 @@ const TOP_LEVEL_KEYS = new Set([
   'notify_on_complete',
 ]);
 
-function record(value, label) {
+function record(value: unknown, label: string): Record<string, unknown> {
   if (typeof value !== 'object' || value === null || Array.isArray(value)) {
     throw new Error(`${label} must be an object`);
   }
-  return value;
+  return value as Record<string, unknown>;
 }
 
-function rejectAdditional(value, allowed, label) {
+function rejectAdditional(
+  value: Record<string, unknown>,
+  allowed: Set<string>,
+  label: string,
+): void {
   const extra = Object.keys(value).find((key) => !allowed.has(key));
-  if (extra)
+  if (extra) {
     throw new Error(
       `${label} additionalProperties is false; unexpected ${extra}`,
     );
+  }
 }
 
-function requiredString(value, key, label) {
-  if (typeof value[key] !== 'string' || value[key].length === 0) {
+function requiredString(
+  value: Record<string, unknown>,
+  key: string,
+  label: string,
+): string {
+  const candidate = value[key];
+  if (typeof candidate !== 'string' || candidate.length === 0) {
     throw new Error(`${label}.${key} must be a non-empty string`);
   }
-  return value[key];
+  return candidate;
 }
 
-function positiveInteger(value, label) {
-  if (!Number.isInteger(value) || value < 1)
+function positiveInteger(value: unknown, label: string): number {
+  if (!Number.isInteger(value) || (value as number) < 1) {
     throw new Error(`${label} must be an integer >= 1`);
-  return value;
+  }
+  return value as number;
 }
 
-export function validateCondition(input) {
+export function validateCondition(input: unknown): Condition {
   const condition = record(input, 'condition');
   const kind = requiredString(condition, 'kind', 'condition');
 
@@ -72,8 +152,7 @@ export function validateCondition(input) {
         'condition',
       );
       const path = requiredString(condition, 'path', 'condition');
-      const pattern = condition.pattern;
-      const contains = condition.contains;
+      const { pattern, contains } = condition;
       if (pattern === undefined && contains === undefined) {
         throw new Error('condition.file_matches requires pattern or contains');
       }
@@ -119,11 +198,12 @@ export function validateCondition(input) {
   }
 }
 
-export function validateRequest(input) {
+export function validateRequest(input: unknown): MonitorRequest {
   const request = record(input, 'monitor request');
   rejectAdditional(request, TOP_LEVEL_KEYS, 'monitor request');
-  if (!('condition' in request))
+  if (!('condition' in request)) {
     throw new Error('required field condition is missing');
+  }
   const memo = requiredString(request, 'memo', 'monitor request');
   const condition = validateCondition(request.condition);
   const intervalSeconds =
@@ -142,7 +222,7 @@ export function validateRequest(input) {
     );
   }
   const onTimeout = request.on_timeout ?? 'exit_nonzero';
-  if (!ON_TIMEOUT.has(onTimeout)) {
+  if (!ON_TIMEOUT.has(String(onTimeout))) {
     throw new Error(
       'on_timeout must be exit_nonzero or exit_zero_with_timeout_marker',
     );
@@ -159,26 +239,30 @@ export function validateRequest(input) {
   return {
     condition,
     interval_seconds: intervalSeconds,
-    timeout_seconds: timeoutSeconds,
+    timeout_seconds: timeoutSeconds as number,
     memo,
-    on_timeout: onTimeout,
+    on_timeout: onTimeout as MonitorRequest['on_timeout'],
     background: true,
     notify_on_complete: true,
   };
 }
 
-export function stableStringify(value) {
+export function stableStringify(value: unknown): string {
   if (Array.isArray(value)) return `[${value.map(stableStringify).join(',')}]`;
   if (value && typeof value === 'object') {
-    return `{${Object.keys(value)
+    const object = value as Record<string, unknown>;
+    return `{${Object.keys(object)
       .sort()
-      .map((key) => `${JSON.stringify(key)}:${stableStringify(value[key])}`)
+      .map((key) => `${JSON.stringify(key)}:${stableStringify(object[key])}`)
       .join(',')}}`;
   }
-  return JSON.stringify(value);
+  return JSON.stringify(value) ?? 'undefined';
 }
 
-export function targetFor(condition, details = {}) {
+export function targetFor(
+  condition: Condition,
+  details: Record<string, unknown> = {},
+): Record<string, unknown> {
   switch (condition.kind) {
     case 'file_exists':
     case 'file_matches':
@@ -197,12 +281,10 @@ export function targetFor(condition, details = {}) {
           ? {}
           : { exitCode: details.exitCode }),
       };
-    default:
-      return {};
   }
 }
 
-export function wakeText(payload) {
+export function wakeText(payload: WakePayload): string {
   const lines = [
     'MONITOR EVENT',
     'boomerang: same-thread',
@@ -213,8 +295,9 @@ export function wakeText(payload) {
     `target: ${JSON.stringify(payload.target)}`,
     `memo: ${payload.memo}`,
   ];
-  if (payload.hasTimeoutMarker)
+  if (payload.hasTimeoutMarker) {
     lines.push(payload.exitCode === 0 ? 'TIMEOUT_MARKER' : 'TIMEOUT');
+  }
   if (payload.stdout) lines.push(`stdout: ${payload.stdout}`);
   if (payload.stderr) lines.push(`stderr: ${payload.stderr}`);
   lines.push(
@@ -223,15 +306,15 @@ export function wakeText(payload) {
   return lines.join('\n');
 }
 
-export function dispatcherPrompt({ handle }) {
+export function dispatcherPrompt({ handle }: { handle: string }): string {
   return `$monitor | handle: ${handle}`;
 }
 
-export function readJson(path) {
-  return JSON.parse(readFileSync(path, 'utf8'));
+export function readJson<T>(path: string): T {
+  return JSON.parse(readFileSync(path, 'utf8')) as T;
 }
 
-export function writeJsonAtomic(path, value) {
+export function writeJsonAtomic(path: string, value: unknown): void {
   mkdirSync(dirname(path), { recursive: true, mode: 0o700 });
   const temporaryPath = `${path}.${process.pid}.tmp`;
   writeFileSync(temporaryPath, `${JSON.stringify(value, null, 2)}\n`, {
@@ -240,7 +323,11 @@ export function writeJsonAtomic(path, value) {
   renameSync(temporaryPath, path);
 }
 
-export function appendEvent(path, event, details = {}) {
+export function appendEvent(
+  path: string,
+  event: string,
+  details: Record<string, unknown> = {},
+): void {
   mkdirSync(dirname(path), { recursive: true, mode: 0o700 });
   appendFileSync(
     path,
@@ -249,6 +336,6 @@ export function appendEvent(path, event, details = {}) {
   );
 }
 
-export function shellQuote(value) {
+export function shellQuote(value: unknown): string {
   return `'${String(value).replaceAll("'", `'"'"'`)}'`;
 }

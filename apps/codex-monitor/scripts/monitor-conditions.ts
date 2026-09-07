@@ -1,16 +1,42 @@
-import { spawn } from 'node:child_process';
+import { spawn, type ChildProcessWithoutNullStreams } from 'node:child_process';
 import { existsSync, readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 
+import type { Condition } from './monitor-core.js';
+
 const MAX_CAPTURE_BYTES = 65_536;
 
-export function abortError() {
+export interface CommandResult {
+  [key: string]: unknown;
+  command: string;
+  exitCode: number | null;
+  stdout: string;
+  stderr: string;
+}
+
+export type ConditionDetails = Record<string, unknown> & Partial<CommandResult>;
+
+interface Observation {
+  met: boolean;
+  details?: ConditionDetails;
+}
+
+function errorCode(error: unknown): string | undefined {
+  return typeof error === 'object' && error !== null && 'code' in error
+    ? String(error.code)
+    : undefined;
+}
+
+export function abortError(): Error {
   const error = new Error('monitor aborted');
   error.name = 'AbortError';
   return error;
 }
 
-export function delay(milliseconds, signal) {
+export function delay(
+  milliseconds: number,
+  signal: AbortSignal,
+): Promise<void> {
   return new Promise((resolveDelay, rejectDelay) => {
     if (signal.aborted) return rejectDelay(abortError());
     const timer = setTimeout(() => {
@@ -26,35 +52,41 @@ export function delay(milliseconds, signal) {
   });
 }
 
-function probeProcess(pid) {
+function probeProcess(pid: number): boolean {
   try {
     process.kill(pid, 0);
     return true;
   } catch (error) {
-    if (error.code === 'ESRCH') return false;
-    if (error.code === 'EPERM') return true;
+    if (errorCode(error) === 'ESRCH') return false;
+    if (errorCode(error) === 'EPERM') return true;
     throw error;
   }
 }
 
-function boundedAppend(current, chunk) {
+function boundedAppend(current: string, chunk: unknown): string {
   if (current.length >= MAX_CAPTURE_BYTES) return current;
   return `${current}${String(chunk)}`.slice(0, MAX_CAPTURE_BYTES);
 }
 
-function signalOwnedProcess(child, signal) {
+function signalOwnedProcess(
+  child: ChildProcessWithoutNullStreams,
+  signal: NodeJS.Signals,
+): void {
   if (process.platform !== 'win32' && child.pid) {
     try {
       process.kill(-child.pid, signal);
       return;
     } catch (error) {
-      if (error.code === 'ESRCH') return;
+      if (errorCode(error) === 'ESRCH') return;
     }
   }
   child.kill(signal);
 }
 
-export function runCommand(command, signal) {
+export function runCommand(
+  command: string,
+  signal: AbortSignal,
+): Promise<CommandResult> {
   return new Promise((resolveCommand, rejectCommand) => {
     if (signal.aborted) return rejectCommand(abortError());
     let stdout = '';
@@ -63,13 +95,14 @@ export function runCommand(command, signal) {
     const child = spawn('/bin/sh', ['-c', command], {
       detached: process.platform !== 'win32',
       shell: false,
-      stdio: ['ignore', 'pipe', 'pipe'],
+      stdio: ['pipe', 'pipe', 'pipe'],
     });
+    child.stdin.end();
 
-    child.stdout.on('data', (chunk) => {
+    child.stdout.on('data', (chunk: Buffer) => {
       stdout = boundedAppend(stdout, chunk);
     });
-    child.stderr.on('data', (chunk) => {
+    child.stderr.on('data', (chunk: Buffer) => {
       stderr = boundedAppend(stderr, chunk);
     });
 
@@ -77,8 +110,9 @@ export function runCommand(command, signal) {
       if (settled) return;
       signalOwnedProcess(child, 'SIGTERM');
       setTimeout(() => {
-        if (!settled && child.exitCode === null)
+        if (!settled && child.exitCode === null) {
           signalOwnedProcess(child, 'SIGKILL');
+        }
       }, 150).unref();
     };
     signal.addEventListener('abort', abort, { once: true });
@@ -97,22 +131,27 @@ export function runCommand(command, signal) {
   });
 }
 
-async function poll(check, intervalMilliseconds, signal, onObservation) {
+async function poll(
+  check: () => Promise<Observation>,
+  intervalMilliseconds: number,
+  signal: AbortSignal,
+  onObservation?: (observation: Observation) => void,
+): Promise<ConditionDetails> {
   while (!signal.aborted) {
     const result = await check();
     onObservation?.(result);
-    if (result?.met) return result.details;
+    if (result.met) return result.details ?? {};
     await delay(intervalMilliseconds, signal);
   }
   throw abortError();
 }
 
 export async function waitForCondition(
-  condition,
-  intervalMilliseconds,
-  signal,
-  onObservation,
-) {
+  condition: Condition,
+  intervalMilliseconds: number,
+  signal: AbortSignal,
+  onObservation?: (observation: Observation) => void,
+): Promise<ConditionDetails> {
   switch (condition.kind) {
     case 'timed':
       await delay(condition.seconds * 1_000, signal);
@@ -140,11 +179,11 @@ export async function waitForCondition(
       return poll(
         async () => {
           if (!existsSync(path)) return { met: false };
-          let content;
+          let content: string;
           try {
             content = readFileSync(path, 'utf8');
           } catch (error) {
-            if (error.code === 'ENOENT') return { met: false };
+            if (errorCode(error) === 'ENOENT') return { met: false };
             throw error;
           }
           if (pattern) {
@@ -174,7 +213,10 @@ export async function waitForCondition(
           Promise.resolve(
             probeProcess(condition.pid)
               ? { met: false }
-              : { met: true, details: { pid: condition.pid, exitCode: null } },
+              : {
+                  met: true,
+                  details: { pid: condition.pid, exitCode: null },
+                },
           ),
         intervalMilliseconds,
         signal,
@@ -192,7 +234,5 @@ export async function waitForCondition(
         signal,
         onObservation,
       );
-    default:
-      throw new Error(`unsupported condition kind: ${condition.kind}`);
   }
 }
