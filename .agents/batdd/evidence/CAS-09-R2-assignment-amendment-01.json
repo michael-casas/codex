@@ -1,0 +1,46 @@
+{
+  "schemaVersion": "1.0.0",
+  "campaignId": "CAS-APP-SERVER-20260901-01",
+  "recordId": "CAS-09-R2-ASSIGNMENT-AMENDMENT-01",
+  "status": "READY",
+  "workingDirectory": "/Users/mcasa_atlantis/.codex/worktrees/a4a6/.codex",
+  "baseRevision": "b9dc01512975a8b11bc673b5ec906c818dd708f6",
+  "assignment": {
+    "path": ".agents/batdd/assignments/CAS-09-R2.json",
+    "originalSha256": "7bcf893e64c227a3c9b8eb4914bbbb35d4e618e4c8cffad141bbe1fa56ee83a7",
+    "amendedSha256": "559afbe7b4c35128331e6e2521b83d5195cbd898610af01e64117ada42569341",
+    "schema": ".agents/batdd/assignment.schema.json",
+    "schemaValid": true
+  },
+  "authority": {
+    "dependency": "CAS-04:WORKSPACE_READY",
+    "evidencePath": "packages/testing/evidence/cas-04-workspace-ready.json",
+    "evidenceSha256": "450f5d97817b06f04aae087fc5a4f21c2a06e1da3bf64eb4bd8fb9db8cd63fe7"
+  },
+  "amendment": {
+    "field": "writeSurface",
+    "added": ["packages/transport/src/workspace-lease/**"],
+    "reason": "The accepted workspace lease service exposes acquire and release, while the accepted delegation and workflow execution compositions require resolve(workspaceRef) returning cwd.",
+    "packageLocalTestsIncluded": true
+  },
+  "unchanged": [
+    "objective",
+    "model",
+    "reasoning effort",
+    "base revision",
+    "dependencies",
+    "required layers",
+    "Green Contract",
+    "commit authority",
+    "stop boundary",
+    "all other write surfaces"
+  ],
+  "restrictions": {
+    "rootWrites": false,
+    "nextSeam": false,
+    "auditOrAcceptance": false,
+    "remoteMutation": false,
+    "commitPushPublishDeploy": false
+  },
+  "resume": "CAS-09.R2 may implement only the minimal workspace resolve behavior and package-local tests within the added surface, then continue its frozen GREEN plan."
+}

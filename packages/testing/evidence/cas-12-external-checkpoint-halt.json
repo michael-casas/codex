@@ -1,0 +1,95 @@
+{
+  "schemaVersion": "1.0.0",
+  "campaignId": "CAS-APP-SERVER-20260901-01",
+  "assignmentId": "CAS-12",
+  "writeLeaseId": "CAS-12-INTEGRATED-DOGFOOD",
+  "status": "EXTERNAL_CHECKPOINT_HALT",
+  "recordedAt": "2026-09-02T15:46:04Z",
+  "workingDirectory": "/Users/mcasa_atlantis/.codex/worktrees/a4a6/.codex",
+  "baseRevision": "b9dc01512975a8b11bc673b5ec906c818dd708f6",
+  "authority": {
+    "charterSha256": "fd21cd005b71ffa032d830eaa25d6a67980a80001ebfab64816e42122c85d41b",
+    "assignmentSha256": "def82997f1d5d256c9c3f443cd618ceb0ddaf8d86bfeac427cdc33cb8f095acf",
+    "dispatchSha256": "ef4b0aafc2ba367afed659a27da40ca8a64db92d521ccaa674d3f3bb94664ec6",
+    "containedLaunchSha256": "e24ba6fad00e38772e1257952ad5e4c30a7d26ac846cc5da9c6d9045dd821647",
+    "cas11PluginReadySha256": "92642d4263c6aaa1756b0262d23eb093f3fbedce3af6addbd8a0056c5d89bec8",
+    "assignmentSchemaValid": true,
+    "commitAuthority": false,
+    "selfCertified": false
+  },
+  "verifiedPredecessors": {
+    "CAS-02:HOST_TRANSPORT_READY": "sha256:6d9de03da07248b7a1739a9ee9ea83d532da32c752cb7e3b3ed3a22f1be9e0e8",
+    "CAS-04:WORKSPACE_READY": "sha256:450f5d97817b06f04aae087fc5a4f21c2a06e1da3bf64eb4bd8fb9db8cd63fe7",
+    "CAS-05:MESSAGING_READY": "sha256:6c43f84ca6dfe81ce99fb44e42a95e770da3c3a595d4e7d4a46c69d420ba612b",
+    "CAS-06:HANDOFF_READY": "sha256:63ac4d6fd3b3546235af02109e7e8cec6aed831029066d4db768eeb4900fc6d8",
+    "CAS-07:REMOTE_WORKFLOW_READY": "sha256:43dcec6fb6c4829ca8c69ff490eb2a188680ffc30060a29bf914a34b431e7957",
+    "CAS-08:VISIBILITY_PROJECTION_READY": "sha256:410670137e653ea97746bdacae57104fe1136cc6eafbec4df374a75996096957",
+    "CAS-11:PLUGIN_READY": "sha256:92642d4263c6aaa1756b0262d23eb093f3fbedce3af6addbd8a0056c5d89bec8"
+  },
+  "officialOpenAiAuthority": {
+    "connectAndTest": "https://developers.openai.com/plugins/deploy/connect-chatgpt",
+    "requirements": [
+      "Developer-mode MCP requires a public HTTPS endpoint, typically /mcp, or an available Secure MCP Tunnel.",
+      "Developer-mode availability depends on an authenticated account and workspace policy.",
+      "Optional UI and model-readable results must both be tested through the real connection."
+    ]
+  },
+  "missingCapabilities": [
+    {
+      "id": "CHATGPT_DEVELOPER_MODE_CONNECTION",
+      "fact": "The in-app browser reached ChatGPT Plugins without an authenticated session, and no existing Secure MCP Tunnel or public HTTPS Streamable HTTP endpoint is available to this task.",
+      "currentSurface": "apps/codex-control and plugins/codex-control expose stdio MCP only.",
+      "owner": "Founder or coordinator with an already-authorized authenticated ChatGPT connection and Secure MCP Tunnel/public test endpoint."
+    },
+    {
+      "id": "AUTHENTICATED_MOBILE_HTTPS_ORIGIN",
+      "fact": "The accepted plugin can emit a credential-free mobile URL descriptor, but no authenticated HTTPS origin currently serves that route or terminates identity before the control/visibility gateway.",
+      "currentSurface": "No Streamable HTTP control gateway, Tailscale Serve route, or Cloudflare Tunnel plus Access route exists under the CAS-12 lease.",
+      "owner": "Coordinator/Founder infrastructure authority; durable Synology deployment remains explicitly deferred."
+    }
+  ],
+  "completedLockedWork": [
+    "Repository, BATDD, Nx, seam, data, workflows, OpenAI, Wiki, frontend, and ponytail authority hydrated.",
+    "Assignment schema and every predecessor packet digest verified.",
+    "Accepted stdio MCP, exact Svelte resource, presentation descriptor, control gateway, and local/controlled-WSS test surfaces traced end to end.",
+    "Official ChatGPT developer-mode connection requirements fetched and compared with the current environment.",
+    "One read-only ChatGPT Plugins page check completed; the temporary browser tab was closed."
+  ],
+  "contract": {
+    "executionPlanPath": ".agent/testing/cas-12/execution-plan.json",
+    "executionPlanSha256": "3734f9953fd316cab9f9fb24950a020efb2dbb48c665fe6acc90d6c2712f417f",
+    "path": ".agent/testing/cas-12/green-contract.json",
+    "sha256": "de0609820a5c7a846e05da6ec7547fe61e9c7189d55507b7057cf5f4b9d2cc97",
+    "status": "DESIGNED_UNFROZEN_EXTERNAL_CHECKPOINT",
+    "meaningfulRedStarted": false,
+    "reason": "Missing mandatory external surfaces are harness/capability blockers, not product RED."
+  },
+  "resumeCondition": [
+    "Provide one explicitly authorized authenticated ChatGPT developer-mode session plus an existing Secure MCP Tunnel or public HTTPS Streamable HTTP /mcp endpoint bound to the exact CAS-11 artifact.",
+    "Provide one explicitly authorized ephemeral authenticated HTTPS mobile origin terminating identity before the same control/visibility gateway; Tailscale Serve is canonical, or Cloudflare Tunnel must include Cloudflare Access.",
+    "Keep live aes-j5-synology read-only unless a later Founder ruling explicitly authorizes deployment."
+  ],
+  "nextCheck": "Reverify the connection/tunnel identity and mobile-origin authentication without exposing credentials, then create the physical CAS-12 feature and native L2/L3 RED rows.",
+  "resourceDelta": {
+    "productFilesWritten": 0,
+    "featureFilesWritten": 0,
+    "nativeSpecsWritten": 0,
+    "processesStarted": 0,
+    "listenersCreated": 0,
+    "tunnelsCreated": 0,
+    "pluginsRegisteredInChatGpt": 0,
+    "browserTabsRemaining": 0,
+    "liveSynologyContacted": false
+  },
+  "restrictions": {
+    "CAS13Launched": false,
+    "auditLaunched": false,
+    "qaLaunched": false,
+    "verificationLaunched": false,
+    "finalPolishLaunched": false,
+    "commitCreated": false,
+    "pushPerformed": false,
+    "publicPublished": false,
+    "deployed": false
+  }
+}

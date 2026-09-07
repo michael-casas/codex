@@ -11,6 +11,13 @@ monitor, or tmux path to make cross-process durable commands appear available.
 
 ## Route the request
 
+For desktop durable execution, prefer Codex Control `run_workflow` with one
+trusted `.workflow.ts` source reference, input, and stable idempotencyKey. The
+daemon compiles and admits it under actor-bound configuration; agents run through
+App Server. No manual module registration or caller-computed digest is needed.
+Missing runtime or authority configuration fails explicitly; do not replace the
+desktop path with the direct runner and call it equivalent dogfood.
+
 1. Read [CLI and exits](references/cli.md) for invocation, source admission,
    trusted-code boundaries, journals, output, and deterministic exits.
 2. Read [Authoring, schema, and APIs](references/schema.md) before writing or
@@ -28,6 +35,18 @@ run-ID `resume`, `status`, `events`, `logs`, or `cancel`, retain the shipped
 exit-69 `CONTROL_PLANE_UNAVAILABLE` boundary. A local journal is operational
 state, not cross-process durability or acceptance.
 
-For real dogfood and backend-facing `codex-workflows` tests, use a bounded,
-non-whitespace `gpt-*` model token with `medium` reasoning. The runtime forwards
-the exact tag to the Codex SDK; never substitute a different model silently.
+For real dogfood and backend-facing tests, specify each agent's safe model
+identifier and reasoning effort explicitly. The runtime forwards both unchanged
+to Codex App Server; never substitute a model or downgrade reasoning silently.
+Provider-specific support is decided by App Server, not a medium-only policy.
+
+## Hard-locked security exclusion
+
+Every security audit assignment and every security fix/remediation assignment
+MUST use exactly `gpt-5.5` with `high` reasoning. The separate security-role
+routing requirement remains in force even though `agent()` now permits explicit
+reasoning. Do not relabel security work to bypass that authority boundary.
+Route each role to a separate authorized `codex exec --model gpt-5.5` assignment
+with `model_reasoning_effort="high"`; keep auditor and fixer identities separate.
+If the exact seat is unavailable, fail closed. Never downgrade, substitute,
+fallback, or treat a general-review node as security evidence.

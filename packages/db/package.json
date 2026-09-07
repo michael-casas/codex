@@ -1,0 +1,56 @@
+{
+  "name": "@codex/db",
+  "version": "0.0.1",
+  "private": true,
+  "type": "module",
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    "./package.json": "./package.json",
+    ".": {
+      "@codex/source": "./src/index.ts",
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "default": "./dist/index.js"
+    },
+    "./testing": {
+      "@codex/source": "./src/testing.ts",
+      "types": "./dist/testing.d.ts",
+      "import": "./dist/testing.js",
+      "default": "./dist/testing.js"
+    }
+  },
+  "nx": {
+    "name": "@codex/db",
+    "tags": [
+      "type:lib",
+      "scope:db",
+      "layer:infrastructure"
+    ],
+    "targets": {
+      "test-l2-integration": {
+        "executor": "nx:run-commands",
+        "cache": false,
+        "options": {
+          "command": "vitest run --config packages/db/vitest.config.ts src/durable-control/__specs__/postgres-control-store.spec.ts src/durable-control/__specs__/postgres-control-cursor.spec.ts src/agent-messaging/__specs__/postgres-agent-messaging.spec.ts src/agent-delegation/__specs__/postgres-agent-delegation.spec.ts src/runtime-visibility/__specs__/postgres-runtime-visibility.spec.ts src/runtime-visibility/__specs__/visible-items.spec.ts --testNamePattern='L2:INTEGRATION'"
+        }
+      },
+      "test-l2": {
+        "executor": "nx:run-commands",
+        "cache": false,
+        "options": {
+          "command": "vitest run --config packages/db/vitest.config.ts src/durable-control/__specs__/postgres-control-store.spec.ts src/durable-control/__specs__/postgres-control-cursor.spec.ts src/agent-messaging/__specs__/postgres-agent-messaging.spec.ts src/agent-delegation/__specs__/postgres-agent-delegation.spec.ts src/runtime-visibility/__specs__/postgres-runtime-visibility.spec.ts src/runtime-visibility/__specs__/visible-items.spec.ts"
+        }
+      }
+    }
+  },
+  "dependencies": {
+    "@codex/process": "workspace:*",
+    "pg": "^8.23.0",
+    "tslib": "^2.3.0"
+  },
+  "devDependencies": {
+    "@types/pg": "^8.21.0"
+  }
+}

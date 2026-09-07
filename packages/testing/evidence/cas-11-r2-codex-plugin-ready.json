@@ -1,0 +1,91 @@
+{
+  "schemaVersion": "1.0.0",
+  "campaignId": "CAS-APP-SERVER-20260901-01",
+  "assignmentId": "CAS-11.R2",
+  "writeLeaseId": "CAS-11-R2-NX-CODEX-PLUGIN",
+  "status": "CODEX_PLUGIN_READY",
+  "terminal": "READY-FOR-AUDIT",
+  "recordedAt": "2026-09-03T17:34:00Z",
+  "workingDirectory": "/Users/mcasa_atlantis/.codex/worktrees/a4a6/.codex",
+  "baseRevision": "b9dc01512975a8b11bc673b5ec906c818dd708f6",
+  "candidateSurfaceSha256": "f99b7b4570d2d19f274154a0810353004478b31ff19ca0797b74680226ed1d63",
+  "authority": {
+    "assignment": {
+      "path": ".agents/batdd/assignments/CAS-11-R2.json",
+      "sha256": "0983a23fec78218b39878eebb44e3a99120fdd7304a2932f57c1767faf8ad3b4"
+    },
+    "executionPlan": {
+      "path": ".agent/testing/cas-11-r2/execution-plan.json",
+      "sha256": "48289bb502b6d2c2983b1e97ca3422a9e2f523a7f61f0d49827a666397da4532"
+    },
+    "greenContract": {
+      "path": ".agent/testing/cas-11-r2/green-contract.json",
+      "sha256": "1b200e5935eda6f20975f4e5b1c5303081349ccf4d1902186e39dcac3fb37b47"
+    },
+    "priorHalt": {
+      "path": "packages/testing/evidence/cas-11-r2-desktop-reload-halt.json",
+      "sha256": "4fadadde9fd1233b690b7f92eda4ada053abcce54ff75a896244f331f2434f8b"
+    },
+    "commitAuthority": false,
+    "selfCertified": false
+  },
+  "freshDiscovery": {
+    "taskId": "01a068e0-b2f4-74d0-a913-21091a9cf77b",
+    "status": "CODEX_PLUGIN_DISCOVERED",
+    "skill": "codex-control:codex-control",
+    "browser": "browser:control-in-app-browser",
+    "mcpTools": [
+      "mcp__codex_control__ask_agent",
+      "mcp__codex_control__cancel_agent",
+      "mcp__codex_control__cancel_workflow",
+      "mcp__codex_control__delegate_agent",
+      "mcp__codex_control__get_control_snapshot",
+      "mcp__codex_control__reply_agent",
+      "mcp__codex_control__run_workflow",
+      "mcp__codex_control__send_agent_message",
+      "mcp__codex_control__wait_control_delta"
+    ],
+    "toolCount": 9,
+    "controlOperationsInvoked": 0,
+    "remoteOperations": 0
+  },
+  "installedArtifact": {
+    "marketplace": "codex-control-local",
+    "version": "0.1.0+codex.20260903170451",
+    "manifestSha256": "d7dae2ba7a98e47578c314ff93532cdbf2716bdee92c0df0c921e60eb698522b",
+    "mcpConfigSha256": "05722688c7bdd262ad177e6495bbcc1dc241f74319a599a8d8ae2cbaae084c93",
+    "serverSha256": "d5a3bcb863a47e4e1af92eaa0302ba89e321a4603ddbc4c69c80bb0b6881e469",
+    "installedManifestMatchesSource": true,
+    "installedServerMatchesSource": true
+  },
+  "green": {
+    "pluginL1": "4/4",
+    "pluginL2": "2/2",
+    "generatorUnit": "2/2",
+    "generatorE2E": "2 byte-identical runs",
+    "pluginValidator": "PASS",
+    "pluginLintTypecheckBuild": "PASS",
+    "isolatedInstallL3": "2/2",
+    "fullPlaywright": "20/20 across chromium and mobile-chromium",
+    "nxSync": "PASS",
+    "frozenInstall": "PASS_NO_CHANGES"
+  },
+  "resourceDelta": {
+    "expectedRepoMarketplaceRegistration": 1,
+    "expectedInstalledPluginVersion": 1,
+    "unexpectedProcesses": 0,
+    "unexpectedListeners": 0,
+    "temporaryNxWorkspaces": 0,
+    "temporaryCodexHomes": 0,
+    "remoteMutations": 0,
+    "secretValuesPrintedHashedPersistedOrSerialized": 0
+  },
+  "restrictionsPreserved": {
+    "CAS12R1OrLater": false,
+    "auditQaVerificationFinalPolish": false,
+    "ChatGPTDeveloperModeOrSecureTunnel": false,
+    "remoteMutation": false,
+    "commitMergePushPublishDeploy": false
+  },
+  "stop": "Implementation evidence only. Stop CAS-11.R2 without self-acceptance; CAS-12.R1 may be activated by the coordinator after independent predecessor handling."
+}

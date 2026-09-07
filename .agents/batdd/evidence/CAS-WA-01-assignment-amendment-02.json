@@ -1,0 +1,26 @@
+{
+  "schemaVersion": "1.0.0",
+  "assignmentId": "CAS-WA-01",
+  "status": "READY",
+  "previousAssignmentSha256": "24c3b1183af48fb48b990ad3be3827ffdf318bc13ce778af711c8c383731d54a",
+  "amendedAssignmentSha256": "f1337cbb2862a3a5f5097acd061c6d02ea427dae98d8a69d72d451c535518c77",
+  "schemaValid": true,
+  "addedWriteSurface": [
+    "packages/testing/manifests/workflows.json",
+    "apps/codex-control/package.json"
+  ],
+  "observed": {
+    "workflowsManifestSha256": "4ed90a35e46152337a82cd303e8715401230c98b09f76d663d6eed45e99e3ce2",
+    "workflowsManifest": "Explicit older L1 file collection and L2 integration N/A.",
+    "controlPackageSha256": "b59cca924f091b03257eddd11d79b4eed0dd751a377f7f5766750a0e49598df7",
+    "controlTarget": "test-l2 lists protocol/runtime specs only; direct @codex/codex devDependency is absent."
+  },
+  "authorizedChanges": [
+    "Add admission/compiler rows to workflows standing manifest while preserving unrelated coverage and layer separation.",
+    "Declare existing @codex/codex workspace devDependency and add the source-admission real MCP-to-App-Server spec to control test-l2 collection."
+  ],
+  "coordinatorOwnsLockfileAndLinks": true,
+  "newExternalDependencyAllowed": false,
+  "allOtherAssignmentFieldsUnchanged": true,
+  "auditCommitDeployAuthority": false
+}

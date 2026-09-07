@@ -1,0 +1,108 @@
+{
+  "schemaVersion": "1.0.0",
+  "campaignId": "CAS-APP-SERVER-20260901-01",
+  "assignmentId": "CAS-02",
+  "status": "HOST_TRANSPORT_READY",
+  "stopBoundary": "READY-FOR-AUDIT",
+  "recordedAt": "2026-09-01T19:30:20Z",
+  "workingDirectory": "/Users/mcasa_atlantis/.codex/worktrees/3568/.codex",
+  "baseRevision": "b9dc01512975a8b11bc673b5ec906c818dd708f6",
+  "candidateSurfaceSha256": "9e586e40b6865f59d27c8e32cd56dc3f331e40b5a3a880e265b25d7269586756",
+  "authority": {
+    "assignmentSha256": "25a10671f805f754cd3c66a6a31fb64230632d8361a0218147708398a788cfaa",
+    "campaignSha256": "592428195141a6e84a6fe5c1d439104561e5e1bea24528cb64d753b96ad928bb",
+    "greenContractSha256": "0cbbe0cfba39c8ce2e8291a60c9ef31bf693905400966a0a00bdce49ca86ad6b",
+    "baseCheckpointSha256": "7bf6ebd328f3eec5cc8df6d73069f5e1ced6886b6b86ef5043fa4df1b6bb3df3",
+    "cas01ProtocolReadySha256": "7526be019a07222c2dc0171fea77c0a84ba5f64b8a8a492ac699ab9296578568",
+    "cas01IntegrationSha256": "03d4743403a2f8fcd91eebe87a2c6cc5b4c7b9200e214507da3ac0fd1a59017e",
+    "rootTsconfigIntegrationSha256": "476bd8c8ff2296800de925135b22e504b6d73163a8d77b84acb9b05be1791db2",
+    "bunWorkspaceIntegrationSha256": "9d32cde8c4aefb7173b3fcca11723a5993c22e4eee06238e64cb28fe18ff0732",
+    "commitAuthority": false,
+    "phaseLock": "BASE"
+  },
+  "localAndControlledBoundary": {
+    "l1": "5/5 GREEN",
+    "l2": "3/3 GREEN",
+    "aggregate": "uncached GREEN with 0/3 cache hits",
+    "lint": "GREEN with 0/1 cache hits",
+    "typecheck": "GREEN",
+    "build": "GREEN",
+    "prettier": "GREEN",
+    "nxSync": "GREEN",
+    "resourceDelta": 0
+  },
+  "nonLocalRemoteDogfood": {
+    "hostId": "aes-j5-synology",
+    "transport": "remote-wss",
+    "endpoint": "wss://aes-j5-synology.taildf223c.ts.net:8443/",
+    "expectedVersion": "0.151.0",
+    "credentialRef": "CODEX_APP_SERVER_AES_J5_8443",
+    "caTrust": "public",
+    "remoteMutation": false,
+    "methods": ["initialize", "initialized", "account/read"],
+    "assertions": {
+      "registered": true,
+      "authenticated": true,
+      "exactVersion": true,
+      "capabilities": 4,
+      "accountRead": true,
+      "stableReadSubscriptionCount": 1,
+      "clientReconnectAttempts": 1,
+      "localRegistryDisabled": true,
+      "argvRedacted": true,
+      "summaryRedacted": true
+    },
+    "forbiddenOperationsObserved": 0,
+    "serviceRestartedOrReconfigured": false
+  },
+  "credentialBoundary": {
+    "ownerOnlyModeVerified": true,
+    "readOnlyInsideInjectedResolver": true,
+    "printed": false,
+    "hashed": false,
+    "copied": false,
+    "repositoryWrite": false,
+    "argvWrite": false,
+    "evidenceValueWrite": false,
+    "configWrite": false,
+    "remoteMutation": false
+  },
+  "postDogfoodResourceDelta": {
+    "bridgeProcesses": 0,
+    "establishedTcp8443Sockets": 0,
+    "cas02TempPaths": 0
+  },
+  "forbiddenFallbacks": {
+    "ssh": false,
+    "tmux": false,
+    "herdr": false,
+    "plaintextWebSocket": false,
+    "insecureTls": false,
+    "codexSdk": false
+  },
+  "writeSurface": {
+    "cas02": [
+      "packages/transport/src/app-server-host/**",
+      "packages/transport/package.json",
+      "packages/transport/tsconfig*.json",
+      "packages/transport/vitest.config.ts",
+      "packages/testing/evidence/cas-02-*.json"
+    ],
+    "coordinatorMaterialized": [
+      "packages/codex/src/app-server-client/**",
+      "packages/codex/generated/app-server/0.151.0/**",
+      "packages/codex/src/index.ts",
+      "packages/codex/project.json",
+      "tsconfig.json",
+      "bun.lock"
+    ],
+    "commitsCreated": 0
+  },
+  "handoff": {
+    "cas04": "Consume admitted host summaries and connections; do not accept caller-selected raw credentials or fallback transports.",
+    "cas06": "Use AppServerHostConnection for exact-version local/remote runtime calls and explicit reconnect; ambiguous semantic requests remain non-replayed.",
+    "cas12": "Dogfood the same host through integrated handoff/workflow flows without weakening the read-only CAS-02 evidence or credential boundary.",
+    "independentAudit": "Required separately and not started by this Base owner."
+  },
+  "terminal": "READY-FOR-AUDIT"
+}

@@ -1,0 +1,12 @@
+{
+  "name": "@codex/plugin-codex-control",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "generators": "./generators.json",
+  "dependencies": {
+    "@codex/control-gateway": "workspace:*",
+    "@modelcontextprotocol/sdk": "1.30.0",
+    "@nx/devkit": "23.1.0"
+  }
+}

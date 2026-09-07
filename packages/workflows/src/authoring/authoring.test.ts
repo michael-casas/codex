@@ -1121,7 +1121,7 @@ describe('[L1:INTEGRATION] direct TypeScript workflow scheduler', () => {
     expect(frozen[1]?.node?.dependencies).toEqual([frozen[0]?.node?.id]);
   });
 
-  test('[L1:INTEGRATION] DF-GC1-005 admits only exact gpt-5.6-luna with medium reasoning before adapter launch', async () => {
+  test('[L1:INTEGRATION] DF-GC1-005 rejects malformed reasoning before adapter launch', async () => {
     const runtime = api();
     let adapterCalls = 0;
     const definition = runtime.defineWorkflow<Record<string, never>, unknown>({
@@ -1130,7 +1130,7 @@ describe('[L1:INTEGRATION] direct TypeScript workflow scheduler', () => {
         runtime.agent({
           label: 'runtime-cast-bypass',
           model: 'gpt-5.6-luna',
-          reasoning: ['not', 'a', 'reasoning', 'level'].join('-'),
+          reasoning: ['not', 'a', 'reasoning', 'level'].join(' '),
           prompt: 'must fail before launch',
         } as unknown as AgentOptions),
     });
@@ -1212,12 +1212,12 @@ describe('[L1:INTEGRATION] direct TypeScript workflow scheduler', () => {
   );
 
   test.each([
-    ['non-gpt model', { model: 'o4-mini' }],
-    ['missing model suffix', { model: 'gpt-' }],
+    ['unsafe model', { model: '../model' }],
+    ['missing model', { model: undefined }],
     ['whitespace-bearing model', { model: 'gpt-5.6 terra' }],
     ['control-bearing model', { model: 'gpt-5.6\u0000terra' }],
     ['overlong model', { model: `gpt-${'x'.repeat(253)}` }],
-    ['invalid reasoning', { reasoning: 'high' }],
+    ['invalid reasoning', { reasoning: 'high effort' }],
     ['empty model', { model: '' }],
     ['empty reasoning', { reasoning: '' }],
     ['empty prompt', { prompt: '' }],

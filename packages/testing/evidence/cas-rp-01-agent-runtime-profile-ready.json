@@ -1,0 +1,233 @@
+{
+  "schemaVersion": "1.0.0",
+  "campaignId": "CAS-APP-SERVER-20260901-01",
+  "assignmentId": "CAS-RP-01",
+  "writeLeaseId": "CAS-RP-01-RUNTIME-PROFILE",
+  "status": "AGENT_RUNTIME_PROFILE_READY",
+  "terminal": "READY-FOR-AUDIT",
+  "workingDirectory": "/Users/mcasa_atlantis/.codex/worktrees/a4a6/.codex",
+  "baseRevision": "b9dc01512975a8b11bc673b5ec906c818dd708f6",
+  "authority": {
+    "assignmentSha256": "2807f0912f7829414e9d9f4f6dc1af2108e6011f1e943227d4784890be4abb01",
+    "greenContractSha256": "64c50640461fb6a53d00376918806a0471b94a4f2e0e2a9d070cb87890d77392",
+    "contractDispositionSha256": "0777b75f477e35905ab2cb5a2d347096187fa6253c9526ea485991f7a1af4b4c",
+    "executionPlanSha256": "6908450454ce90df7b075c0dc67641c148d69dc56cd0d4a2655516e000621c72",
+    "founderNamedProfileDeferralSha256": "912596348d9826649fdbd8c194d427a95f67898a5c7e4653ced57fda15ec823e",
+    "selfCertified": false,
+    "commitAuthority": false
+  },
+  "outcome": [
+    "Explicit safe model and effort tokens accepted and frozen per workflow node; no global medium or gpt-prefix policy.",
+    "MCP run_workflow now requires reasoningEffort and forwards it unchanged; nine tools retained.",
+    "Delegation initial and idle continuation turn/start now pass explicit stored model and effort; active steer retains the bound turn.",
+    "Provider rejection propagates without fallback; fixed unhandled result-promise rejection in executor.",
+    "Replay fingerprints distinguish changed runtime profiles; malformed values reject before provider calls.",
+    "Native named config profiles deferred by Founder after pinned native rejection; no custom loader, profile copying or protocol refresh."
+  ],
+  "candidateSurfaceSha256": "da27eb169fef62dc619e9d10382ebebdc64ec3f09193ef380be87c95957ddcb9",
+  "surface": [
+    {
+      "path": "apps/codex-control/src/control/__specs__/codex-control-postgres.spec.ts",
+      "sha256": "07f2602376899442017a34adf813370ed502358dc5994deae585a4395c865612"
+    },
+    {
+      "path": "apps/codex-control/src/control/__specs__/codex-control-protocol.spec.ts",
+      "sha256": "9ddb9fee84d1648975fa3b3eb88dd95203216df56b85de4ac147be04ef611ff2"
+    },
+    {
+      "path": "apps/codex-control/src/control/__tests__/codex-control-runtime.test.ts",
+      "sha256": "f068b86a82b693bd9007272df89e4aa4cd174ab10197f1dc698af89913094269"
+    },
+    {
+      "path": "apps/codex-workflows/CLI.md",
+      "sha256": "da813e490a452d80cc717b571f25e4e26f735a777a33430c2c012fc85da67e20"
+    },
+    {
+      "path": "apps/codex-workflows/src/workflows/FEATURE.md",
+      "sha256": "01ebf8e982df071ac9e9d9526b00244762de94b2dbc593519c554d57b62f8506"
+    },
+    {
+      "path": "packages/codex/project.json",
+      "sha256": "30cd16ae6abeaa80f474ab60d5507e475403d79db4df47f3c2208319e4df29f9"
+    },
+    {
+      "path": "packages/codex/src/app-server-workflow/__specs__/app-server-workflow-profile.spec.ts",
+      "sha256": "9d1cf12b8cef43095aa062008a3e008546abca375e0d5cb93b30fc598074d1b3"
+    },
+    {
+      "path": "packages/codex/src/app-server-workflow/app-server-workflow.executor.ts",
+      "sha256": "eae9016584c66d1ae7100c836275005618ed6a41174fcad49eed2205a048b8d2"
+    },
+    {
+      "path": "packages/codex/src/app-server-workflow/support/profile-app-server.fixture.mjs",
+      "sha256": "d846c61aa76fbc977cd939b80ad8ae5395b0815aaf298c303eed6d41b682436f"
+    },
+    {
+      "path": "packages/control-gateway/src/lib/control-gateway.ts",
+      "sha256": "146c87be4a2aa0e858026540e8fa171d667314da6220f6859961f444b611467d"
+    },
+    {
+      "path": "packages/process/src/delegation/__tests__/delegation.test.ts",
+      "sha256": "7cbd2533fa3c19eb1321248886913b02a9e0e60ae129d92ca97762ad7f53efca"
+    },
+    {
+      "path": "packages/process/src/delegation/delegation.ts",
+      "sha256": "6d5d2e09cd9ba9ee3d687f4dd6d224e8b8305cd9286d67bfd326e2d2183d9659"
+    },
+    {
+      "path": "packages/workflows/SCHEMA.md",
+      "sha256": "096e562028256ab2bc088e4417bc9d486cfc839521c2df117b728ec41d88b6ac"
+    },
+    {
+      "path": "packages/workflows/src/authoring/__tests__/agent-runtime-profile.test.ts",
+      "sha256": "39873b71ec3da83307cedc86c77e8cecfeba862dcd6dd888261a38c1c4c92e7d"
+    },
+    {
+      "path": "packages/workflows/src/authoring/authoring.test.ts",
+      "sha256": "a6175bd633c7c52f7f7d2d1e0e8b11d1b6045b786fb870f380a89945e328f96a"
+    },
+    {
+      "path": "packages/workflows/src/authoring/execution.ts",
+      "sha256": "938478f986930598495e8b8ba89f498b1eba4b8f14dac2bd493363d22a16d95a"
+    },
+    {
+      "path": "packages/workflows/src/authoring/types.ts",
+      "sha256": "96688ac42dc578556c85e95ea647a012a488d6fefefafaaa9a9dac1e3bdddd83"
+    },
+    {
+      "path": "packages/workflows/src/control/run-workflow.test.ts",
+      "sha256": "206d39c9d812a997b28217ca5c620a0963698ffb3f1687cc6cae959dce5de79b"
+    },
+    {
+      "path": "packages/workflows/src/control/run-workflow.ts",
+      "sha256": "79880ae1fe3ade3a2a354353a9f14850ea573cea6bbb87a8674a1abf815d2858"
+    },
+    {
+      "path": "packages/workflows/src/domain/value-objects/agent-runtime-profile/agent-runtime-profile.schema.ts",
+      "sha256": "8c4158d3ed5e7a21a239f19f7f4d7ff534be8720106b8f7786826ac83ff65e06"
+    },
+    {
+      "path": "plugins/codex-control/skills/codex-control/SKILL.md",
+      "sha256": "932fff403577e6216bace164e66a0992f03f730d3ffb7f93c9e8e4c205e24e36"
+    },
+    {
+      "path": "skills/workflows/SKILL.md",
+      "sha256": "e9bac03ac2301020e8a9c4c93b58f830ab0f8b8565e753a05acab9da5293408b"
+    },
+    {
+      "path": "skills/workflows/references/schema.md",
+      "sha256": "96aed0b8d6996232455d84ffb76854244ef3d921abac8617a695484300339343"
+    }
+  ],
+  "tests": {
+    "reports": [
+      {
+        "name": "workflows-l1",
+        "path": ".agent/testing/cas-rp-01/workflows-l1.json",
+        "sha256": "278c64c850ab957d26d921ce1910ba5b382a71296c3db54641fa8a0cd9962aaa",
+        "passed": 70,
+        "failed": 0,
+        "pending": 0,
+        "total": 70
+      },
+      {
+        "name": "process-l1",
+        "path": ".agent/testing/cas-rp-01/process-l1.json",
+        "sha256": "2bfe9a12f6a5f4b0bb2a77fda416da5df28f45674cc967eed64aec50b6ac7f8b",
+        "passed": 30,
+        "failed": 0,
+        "pending": 0,
+        "total": 30
+      },
+      {
+        "name": "codex-l1",
+        "path": ".agent/testing/cas-rp-01/codex-l1.json",
+        "sha256": "d585d5521806ae9eeeff7f281fe11edf61a31266d2fa2d2eb1b9a6c945beae9c",
+        "passed": 8,
+        "failed": 0,
+        "pending": 0,
+        "total": 8
+      },
+      {
+        "name": "control-l1",
+        "path": ".agent/testing/cas-rp-01/control-l1.json",
+        "sha256": "b80a348931b2d106233b4c0f14622cf2f1f31680253dc50000bd5fe59b164d90",
+        "passed": 4,
+        "failed": 0,
+        "pending": 0,
+        "total": 4
+      },
+      {
+        "name": "control-l2",
+        "path": ".agent/testing/cas-rp-01/control-l2.json",
+        "sha256": "2290832d150a015f4a02ef20998ea484f028795877b7bb99960594069b8a7223",
+        "passed": 5,
+        "failed": 0,
+        "pending": 0,
+        "total": 5
+      },
+      {
+        "name": "wire-l2",
+        "path": ".agent/testing/cas-rp-01/wire-l2.json",
+        "sha256": "f7dee85ea28217afa54b35c54f88402eed190bf905c6eab22e2451ef39a6d2b4",
+        "passed": 1,
+        "failed": 0,
+        "pending": 2,
+        "total": 3
+      }
+    ],
+    "allReportedTargetsUncached": true,
+    "l2Fidelity": "Real controlled stdio children witness workflow and direct delegation serialized requests; no live model calls. Existing credentialed real App Server tests were not selected for the RP-WIRE run (2 skipped explicitly).",
+    "pluginL1": "4/4",
+    "pluginL2": "2/2",
+    "cliL1": "39/39",
+    "controlSupplemental": "6/6",
+    "l3": "Not applicable under assignment; desktop dogfood remains CAS-12.R1, not claimed."
+  },
+  "standing": {
+    "sevenProjectCommand": "bun nx run-many -t lint,typecheck,build --projects=@codex/workflows,@codex/codex,@codex/control-gateway,@codex/codex-control,@codex/plugin-codex-control,@codex/daemon,@codex/codex-workflows --parallel=1 --skipNxCache",
+    "sevenProjectResult": "PASS, known pre-existing warnings remain",
+    "controlAfterFinalL2Addition": "Uncached typecheck and lint PASS",
+    "nxSyncCheck": "PASS",
+    "newTestAndSchemaFormatting": "PASS",
+    "processLint": {
+      "status": "BASELINE_FAILURE_RETAINED",
+      "file": "packages/process/src/delegation/index.steps.ts",
+      "line": 17,
+      "rule": "no-empty",
+      "sha256": "d2a2abd8e7c8a28869698d6a3918891128d01849158ac969258b97c4b79b662b",
+      "changedByThisWorker": false,
+      "disposition": "Coordinator directed preservation as unrelated baseline; not reported green."
+    }
+  },
+  "namedProfileProbe": {
+    "path": ".agent/testing/cas-rp-01/native-profile-probe.json",
+    "sha256": "d067ba6226ffbdc46df65baaf83b7d251109c1f27f3d7f843c2abfcc1a8ee99b",
+    "status": "NATIVE_UNSUPPORTED_FOUNDER_DEFERRED",
+    "version": "0.151.0",
+    "baseConfigRead": "PASS",
+    "topLevelProfileAppServer": "exit 1; profile restricted to runtime commands excluding app-server",
+    "appServerProfileFlag": "exit 2 unexpected argument",
+    "realHomeOrRemoteChanges": 0
+  },
+  "rollout": {
+    "builtServerPath": "plugins/codex-control/dist/server.mjs",
+    "builtServerSha256": "7b2b7867d127024230b7851f2a55566f6735e722a47d50236ca32ede526e9e31",
+    "builtDiscovery": "9 tools; run_workflow inputSchema.required includes reasoningEffort",
+    "installedServerSha256": "d5a3bcb863a47e4e1af92eaa0302ba89e321a4603ddbc4c69c80bb0b6881e469",
+    "installedCacheChanged": false,
+    "required": "Coordinator must version/reinstall/reload the rebuilt plugin and verify fresh desktop tool schema before high-effort desktop dogfood. Global installed workflows skill remains outside this write lease; tracked repo skill is updated."
+  },
+  "resourceDelta": {
+    "unexpectedOwnedChildren": 0,
+    "unexpectedListeners": 0,
+    "syntheticConfigDirectories": 0,
+    "modelTurns": 0,
+    "remoteOperations": 0,
+    "homeConfigWrites": 0,
+    "installedPluginWrites": 0,
+    "newDependencies": 0,
+    "demoAgents": 0
+  },
+  "stop": "Implementation evidence only, not audit acceptance. No daemon setup, Tailscale, demo, next seam, audit, commit, merge, push or deploy."
+}

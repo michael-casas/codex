@@ -1,0 +1,62 @@
+{
+  "$schema": "../assignment.schema.json",
+  "schemaVersion": "1.0.0",
+  "assignmentId": "CAS-11.R2",
+  "status": "ready",
+  "dispatchable": true,
+  "role": "worker",
+  "objective": "For campaign CAS-APP-SERVER-20260901-01, reconcile plugins/codex-control as a proper Nx plugin and canonical repo-marketplace Codex plugin under lease CAS-11-R2-NX-CODEX-PLUGIN on gpt-5.6-sol with medium reasoning, consuming the exact accepted CAS-09.R2 runtime.",
+  "completionScope": "vertical-slice",
+  "mayReportFeatureComplete": true,
+  "feature": "/Users/mcasa_atlantis/.codex/worktrees/a4a6/.codex/docs/goals/codex-app-server/CAS-11-R2-NX-CODEX-PLUGIN.md",
+  "requiredLayers": {
+    "l1": { "status": "required" },
+    "l2": { "status": "required" },
+    "l3": { "status": "required" }
+  },
+  "writeSurface": [
+    "plugins/codex-control/**",
+    ".agents/plugins/marketplace.json",
+    "apps/codex-control-e2e/features/cas-11-r2/**",
+    "apps/codex-control-e2e/src/cas-11-r2/**",
+    "apps/codex-control-e2e/features/cas-11/plugin-workflow-visibility.feature",
+    "apps/codex-control-e2e/src/cas-11/plugin-workflow-visibility.feature.spec.ts",
+    "package.json",
+    "bun.lock",
+    "tsconfig.json",
+    "packages/testing/evidence/cas-11-r2-*.json",
+    ".agent/testing/cas-11-r2/**"
+  ],
+  "baseRevision": "b9dc01512975a8b11bc673b5ec906c818dd708f6",
+  "stopBoundary": "READY-FOR-AUDIT",
+  "greenContract": {
+    "id": "CAS-11-R2-GC-1",
+    "strategy": "basic-then-adversarial",
+    "redPolicy": "all-new-or-changed-contract-rows",
+    "adversarialRequired": true
+  },
+  "commitAuthority": { "allowed": false, "maxCommits": 0 },
+  "dependencies": [
+    "CAS-09.R2:CONTROL_RUNTIME_READY",
+    "CAS-10:UI_READY",
+    "CAS-11:PLUGIN_READY"
+  ],
+  "evidence": [
+    "campaign-id:CAS-APP-SERVER-20260901-01",
+    "write-lease:CAS-11-R2-NX-CODEX-PLUGIN",
+    "model:gpt-5.6-sol",
+    "reasoning-effort:medium",
+    "shared-working-directory:/Users/mcasa_atlantis/.codex/worktrees/a4a6/.codex",
+    "activation-gate:exact-CAS-09.R2-CONTROL_RUNTIME_READY-evidence",
+    "predecessor:CAS-09.R2:sha256:dff03808d46d04ef97c9e4635215e1e46333747173faf0112d8c6d29e3691b95",
+    "predecessor:CAS-10:sha256:d735ea7615de0b7f00e7c90bc5ec3ef5e7a415f3ef5ed0e52e99cc02999c766e",
+    "predecessor:CAS-11:sha256:92642d4263c6aaa1756b0262d23eb093f3fbedce3af6addbd8a0056c5d89bec8",
+    "real-at-nx-plugin-generator-reference-no-wholesale-copy",
+    "one-earned-idempotent-init-generator-second-run-zero-delta",
+    "canonical-plugin-manifest-declares-skills-and-mcp-servers",
+    "repo-marketplace-only-no-home-credential-service-or-git-mutation",
+    "fresh-codex-discovery-and-tool-then-browser-skill",
+    "chatgpt-and-secure-mcp-tunnel-not-required",
+    "no-audit-commit-publish-deploy-or-next-seam"
+  ]
+}

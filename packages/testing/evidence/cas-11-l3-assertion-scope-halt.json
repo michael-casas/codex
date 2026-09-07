@@ -1,0 +1,41 @@
+{
+  "schemaVersion": "1.0.0",
+  "campaignId": "CAS-APP-SERVER-20260901-01",
+  "assignmentId": "CAS-11",
+  "status": "L3_ASSERTION_SCOPE_HALT",
+  "recordedAt": "2026-09-02T14:43:48Z",
+  "greenContractId": "CAS-11-GC-1",
+  "authority": {
+    "contractFreezeSha256": "b31b518011c7b7ca356cd72634b746dcf380643c4e6defbbc77011e52f8f3540",
+    "contractErratumReproofSha256": "2b0feda3736956452586ee9273011b2b48c2ef5fde1175a9a2b0025204e23c41",
+    "l3SpecSha256": "ea30235162ee5e8f42aa20ba8f14f3836a1eec9c5fea1f17c0d085adbd09c158"
+  },
+  "gate": {
+    "command": "bun nx e2e @codex/codex-control-e2e --grep @cas11-l3 --skipNxCache --outputStyle=static --workers=1",
+    "source": 1,
+    "selected": 1,
+    "generated": 1,
+    "executed": 2,
+    "failed": 2,
+    "projects": ["chromium", "mobile-chromium"],
+    "decisiveFailure": "The frame-wide exact-text assertion found Grace's required all-agent summary stateText while testing absence of Grace detail from Ada's selected feed."
+  },
+  "provedBeforeFailure": [
+    "real isolated Codex marketplace add and plugin install",
+    "self-contained packaged stdio MCP server initialization",
+    "versioned MCP Apps resource read",
+    "ui/initialize and initialized bridge lifecycle",
+    "rendered workflow progress",
+    "Ada selection and Ada detail rendering"
+  ],
+  "semanticConflict": "CAS-10 and CAS-11 require every agent summary to remain visible while only the selected agent's detailed feed transfers. A frame-wide absence assertion contradicts the required Grace summary.",
+  "requestedCorrection": "Within the existing Then binding only, select the complementary feed named Ada and scope both the Ada-detail visible assertion and Grace-detail absent assertion to that feed. Change no scenario, text, expected values, tool behavior, count, cleanup, or product implementation.",
+  "resourceDelta": {
+    "isolatedCodexHomesRemaining": 0,
+    "installedPluginsRemaining": 0,
+    "pluginProcessesRemaining": 0,
+    "listenersRemaining": 0,
+    "tunnelsCreated": 0,
+    "liveSynologyContacted": false
+  }
+}

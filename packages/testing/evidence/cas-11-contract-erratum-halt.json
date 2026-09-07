@@ -1,0 +1,40 @@
+{
+  "schemaVersion": "1.0.0",
+  "campaignId": "CAS-APP-SERVER-20260901-01",
+  "assignmentId": "CAS-11",
+  "status": "CONTRACT_ERRATUM_HALT",
+  "recordedAt": "2026-09-02T14:28:57Z",
+  "greenContractId": "CAS-11-GC-1",
+  "greenContractSha256": "3c3589dc1bad7a3e7549318f426cf7fef8e10609e488811dbd9557049bbfbfd8",
+  "redEvidenceSha256": "9cd7209c7f2ae2cd2910e417ae05a835522f61cc94e2b854e1d83d12cc64bc8d",
+  "frozenL1TestSha256": "bd26f2c345ebd02bf1a7ed658ccc5eb0c344a04dc57c6af8a2e69cc06d340910",
+  "error": {
+    "kind": "mechanical digest transcription",
+    "samples": [
+      {
+        "field": "htmlSha256",
+        "frozen": "e6dd67b413e7b7a72f877a987b33dd66434e3ca0f8925461c0cb31c3f1bc09c6",
+        "actual": "9d8d94e3dd85c9fff1b8273f2b377d3853c16ba275dba1daa16af8044ccd1ab5"
+      },
+      {
+        "field": "scriptSha256",
+        "frozen": "5956558587cb26d5997ce7b606163ba24c954f9159096a52f1bbaf69649c7ca3",
+        "actual": "237e2e6a5f1f47d0f4d465b80d0f556b4a1c83ccea3e32e35c54492f9b7857a9"
+      },
+      {
+        "field": "styleSha256",
+        "frozen": "488831055f46d8dfa051018e86d5e635399ff1d64d5a908cfe8693879ba097fe",
+        "actual": "f30b8135ddb9b02337b82fbd4cb0c1ae44abfbd06ef095283ca8ebca70d99ee9"
+      }
+    ]
+  },
+  "requestedCorrection": "Replace only the three frozen expected sample digest literals with the mechanically computed actual values, re-run L1 to preserve meaningful RED, and publish new test/freeze hashes. No scenario, behavior, title, assertion shape, negative guarantee, target, count, or cleanup change.",
+  "implementationStarted": false,
+  "resourceDelta": {
+    "pluginProcessesRemaining": 0,
+    "isolatedCodexHomesRemaining": 0,
+    "marketplacesRemaining": 0,
+    "tunnelsCreated": 0,
+    "liveSynologyContacted": false
+  }
+}

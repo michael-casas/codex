@@ -1,0 +1,65 @@
+{
+  "schemaVersion": "1.0.0",
+  "campaignId": "CAS-APP-SERVER-20260901-01",
+  "status": "CODEX_NATIVE_REPAIR_CAS_09_R2_DISPATCH_READY",
+  "phase": "BASE",
+  "phaseState": "PHASE_LOCKED",
+  "baseRevision": "b9dc01512975a8b11bc673b5ec906c818dd708f6",
+  "workingDirectory": "/Users/mcasa_atlantis/.codex/worktrees/a4a6/.codex",
+  "authority": {
+    "planSha256": "add7a54c0bfbd4af4e23d85c231e99995c847160d9e99d351105094a0f49825d",
+    "model": "gpt-5.6-sol",
+    "reasoningEffort": "medium",
+    "commitAuthority": false,
+    "remoteOperations": "read-only",
+    "canonicalSurface": "Codex desktop plugin plus in-app Browser",
+    "chatGptDeveloperModeRequired": false
+  },
+  "replacementChain": ["CAS-09.R2", "CAS-11.R2", "CAS-12.R1"],
+  "assignments": {
+    "CAS-09.R2": {
+      "path": ".agents/batdd/assignments/CAS-09-R2.json",
+      "sha256": "504c88687d4007cde9cbd325b449eeea532c840994157c7bf9d23b3b084e518a",
+      "dispatchable": true,
+      "terminal": "CONTROL_RUNTIME_READY",
+      "writeLeaseId": "CAS-09-R2-CONTROL-RUNTIME"
+    },
+    "CAS-11.R2": {
+      "path": ".agents/batdd/assignments/CAS-11-R2.json",
+      "sha256": "33f40af9aad25e93e03e9be4dee5a4e160901292a4ad9c55081126eb1d2c44b0",
+      "dispatchable": false,
+      "terminal": "CODEX_PLUGIN_READY",
+      "writeLeaseId": "CAS-11-R2-CODEX-PLUGIN",
+      "activationGate": "exact CAS-09.R2 CONTROL_RUNTIME_READY packet"
+    },
+    "CAS-12.R1": {
+      "path": ".agents/batdd/assignments/CAS-12-R1.json",
+      "sha256": "04ae000c04e6bca8995ce660a49b2421b5d20be6e89540afcc7a3c091a46c234",
+      "dispatchable": false,
+      "terminal": "BASE_READY",
+      "writeLeaseId": "CAS-12-R1-CODEX-DOGFOOD",
+      "activationGate": "exact CAS-11.R2 CODEX_PLUGIN_READY packet"
+    }
+  },
+  "activeBatch": {
+    "batchId": "CAS-CODEX-NATIVE-REPAIR-01",
+    "dispatchable": ["CAS-09.R2"],
+    "allocated": ["CAS-11.R2", "CAS-12.R1"],
+    "activeWorkers": 0,
+    "singleWriter": true,
+    "parallelismWaiver": "The strict repair chain has one legal ready seam and no disjoint product writer."
+  },
+  "prohibitions": [
+    "CAS-13",
+    "audit",
+    "QA",
+    "verification",
+    "Final Polish",
+    "commit",
+    "merge",
+    "push",
+    "publish",
+    "deploy",
+    "remote mutation"
+  ]
+}

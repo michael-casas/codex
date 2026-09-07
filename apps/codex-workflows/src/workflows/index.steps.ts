@@ -87,6 +87,13 @@ function controlledCodex(world: WorkflowsWorld): string {
   );
 }
 
+function controlledAppServer(world: WorkflowsWorld): string {
+  return resolve(
+    world.workspace,
+    'apps/codex-workflows/src/workflows/support/controlled-app-server-bridge.mjs',
+  );
+}
+
 function directEnvironment(
   world: WorkflowsWorld,
   extra: NodeJS.ProcessEnv = {},
@@ -95,7 +102,8 @@ function directEnvironment(
   assert.ok(world.directState);
   return {
     ...process.env,
-    CODEX_WORKFLOWS_CODEX_PATH: controlledCodex(world),
+    CODEX_WORKFLOWS_CODEX_PATH: controlledAppServer(world),
+    CODEX_WORKFLOWS_CONTROLLED_TURN_PATH: controlledCodex(world),
     CODEX_WORKFLOWS_HOME: world.directState,
     CODEX_TEST_TRACE: world.directTrace,
     ...extra,
@@ -278,6 +286,7 @@ Given(
     writeFileSync(this.directTrace, '');
     chmodSync(this.directSource, 0o755);
     chmodSync(controlledCodex(this), 0o755);
+    chmodSync(controlledAppServer(this), 0o755);
   },
 );
 
@@ -354,7 +363,7 @@ Then(
 );
 
 Then(
-  'the requested valid gpt models and medium reasoning reach the SDK boundary',
+  'the requested valid gpt models and medium reasoning reach the App Server boundary',
   function (this: WorkflowsWorld) {
     assert.ok(this.directTrace);
     const started = readFileSync(this.directTrace, 'utf8')
@@ -465,7 +474,10 @@ Then(
   },
 );
 
-Then('the controlled SDK trace remains empty', function (this: WorkflowsWorld) {
-  assert.ok(this.directTrace);
-  assert.equal(readFileSync(this.directTrace, 'utf8'), '');
-});
+Then(
+  'the controlled App Server trace remains empty',
+  function (this: WorkflowsWorld) {
+    assert.ok(this.directTrace);
+    assert.equal(readFileSync(this.directTrace, 'utf8'), '');
+  },
+);

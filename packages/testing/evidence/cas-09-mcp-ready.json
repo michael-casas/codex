@@ -1,0 +1,112 @@
+{
+  "schemaVersion": "1.0.0",
+  "campaignId": "CAS-APP-SERVER-20260901-01",
+  "assignmentId": "CAS-09",
+  "writeLeaseId": "CAS-09-MCP-GATEWAY",
+  "status": "MCP_READY",
+  "workerVerdict": "READY-FOR-AUDIT",
+  "recordedAt": "2026-09-02T12:08:24Z",
+  "baseRevision": "b9dc01512975a8b11bc673b5ec906c818dd708f6",
+  "workingDirectory": "/Users/mcasa_atlantis/.codex/worktrees/a4a6/.codex",
+  "authority": {
+    "assignmentSha256": "632d535a68b3f7c57820fb13a7d0987d0e63f9400d1a77b06a8c18975e8447d2",
+    "dispatchReadySha256": "1788d0104ce6b0c886eea850453adcc9c7a3eb3c177e8f5ec58e4f38552b2bc2",
+    "reentrySha256": "bdd4b27f00e82ae27dd7d57811d712ea4bf888652a826883b18aba31eb65cb81",
+    "predecessorRepairSha256": "6220fd797348d28eb76ce88b95822042288c027f97f9fffb511000ceb54d48c7",
+    "greenContractId": "CAS-09-GC-1",
+    "greenContractSha256": "a68d951ebe0addcae3778f1a618a5ac56c49d2464ecc5a0e3e1e580c95aeab4d",
+    "redEvidenceSha256": "adde70d6eed15e0c829910f1c2f8af775637b2b18a3221b23b02081430b116d6",
+    "greenEvidenceSha256": "e7760344af59dfb47a9be3ad6a4cde3eafaa96198eff936e18632ef0273f74bb",
+    "commitAuthority": false,
+    "selfCertified": false
+  },
+  "officialOpenAiSources": [
+    "https://developers.openai.com/plugins/build/mcp-server",
+    "https://developers.openai.com/plugins/build/chatgpt-ui"
+  ],
+  "implementation": {
+    "project": "@codex/codex-control",
+    "surfaceSha256": "9e30a403862372d7448063f7eadad8d8e1ee965c05abdc881ef28efb20ba7c28",
+    "packageSha256": "3796cab05f692ef30818ce9a2749a6c920fcdd0ff117f236f9dcb708e88b640b",
+    "bunLockSha256": "0eefa248704165ad42d0e5785a44188e08d30654b523059eac57191497b5b48e",
+    "transport": "executable stdio MCP server",
+    "toolCount": 9,
+    "composition": "createCodexControlPlane consumes @codex/process createDurableWorkflowClient and accepted messaging, delegation, visibility, and control-store seams",
+    "durableTruth": "PostgreSQL control events",
+    "deliveryAuthority": "pg-boss",
+    "newScheduler": false,
+    "newRetryLoop": false,
+    "newEventStore": false,
+    "providerChoreographyExposed": false,
+    "callerRawPathsAllowed": false
+  },
+  "tools": [
+    {"name": "delegate_agent", "readOnly": false, "destructive": false},
+    {"name": "send_agent_message", "readOnly": false, "destructive": false},
+    {"name": "ask_agent", "readOnly": false, "destructive": false},
+    {"name": "reply_agent", "readOnly": false, "destructive": false},
+    {"name": "run_workflow", "readOnly": false, "destructive": false},
+    {"name": "cancel_agent", "readOnly": false, "destructive": true, "confirmationRequired": true},
+    {"name": "cancel_workflow", "readOnly": false, "destructive": true, "confirmationRequired": true},
+    {"name": "get_control_snapshot", "readOnly": true, "destructive": false},
+    {"name": "wait_control_delta", "readOnly": true, "destructive": false}
+  ],
+  "contract": {
+    "strictUnknownFields": "rejected before handlers with no write",
+    "authorization": "handler-level scoped authorization; missing scope fails closed",
+    "cancellation": "MCP request cancellation reaches the wait handler AbortSignal",
+    "redaction": "credential, secret, token, password, prompt, reasoning, environment, and path keys are excluded from model-readable output",
+    "resultBounds": {"stringBytes": 4096, "textEnvelopeBytes": 8192, "arrayItems": 100, "objectFields": 100},
+    "modelReadableFallback": "every successful tool returns bounded structuredContent plus JSON text",
+    "uiResource": null,
+    "uiClaim": "No widget, ui:// resource, _meta.ui.resourceUri, or rendered-UI claim is present; CAS-10 owns UI."
+  },
+  "toolBudgets": {
+    "delegate_agent": {"calls": 1, "ownedOperations": 1, "resultBytes": 84},
+    "send_agent_message": {"calls": 1, "ownedOperations": 1, "resultBytes": 34},
+    "ask_agent": {"calls": 1, "ownedOperations": 1, "resultBytes": 34},
+    "reply_agent": {"calls": 1, "ownedOperations": 1, "resultBytes": 34},
+    "run_workflow": {"calls": 1, "controlStoreOperations": 1, "resultBytes": 117},
+    "get_control_snapshot": {"calls": 1, "resultBytes": 59},
+    "wait_control_delta": {"calls": 1, "unchangedResultBytes": 59}
+  },
+  "validation": {
+    "frozenL1": {"selected": 1, "passed": 1, "exitCode": 0},
+    "frozenL2": {"selected": 1, "passed": 1, "exitCode": 0},
+    "frozenL3": {"source": 1, "selected": 1, "executed": 1, "scenariosPassed": 1, "stepsPassed": 4, "exitCode": 0, "artifactSha256": "155c5b758242f244c29bde7595eed07cf23442bed9be9534f79686a998d3a4ab"},
+    "supplemental": {"selected": 6, "passed": 6, "exitCode": 0},
+    "stdioProcess": {"selected": 1, "passed": 1, "exitCode": 0},
+    "postgresPgBoss": {"selected": 1, "passed": 1, "exitCode": 0},
+    "build": "GREEN",
+    "typecheck": "GREEN",
+    "lint": "GREEN",
+    "frozenInstall": "GREEN; 1012 installs across 1095 packages; no changes",
+    "nxSync": "GREEN"
+  },
+  "resourceDelta": {
+    "testDatabases": 0,
+    "testRoles": 0,
+    "pgBossConnections": 0,
+    "stdioProcesses": 0,
+    "networkListeners": 0,
+    "unexpected": 0
+  },
+  "handoff": {
+    "CAS-10": "Use model-readable snapshot/wait structuredContent; bind a real UI resource only after the CAS-10 component exists.",
+    "CAS-11": "Package the accepted stdio MCP application and later CAS-10 resource without changing tool semantics.",
+    "CAS-12": "Exercise configured production delegation, messaging, workflow, snapshot/wait, cancellation, restart, and reconnect through these task-level tools."
+  },
+  "restrictions": {
+    "liveSynologyContacted": false,
+    "liveSynologyMutated": false,
+    "descendantsLaunched": 0,
+    "auditLaunched": false,
+    "qaLaunched": false,
+    "verificationLaunched": false,
+    "finalPolishLaunched": false,
+    "cas10OrLaterStarted": false,
+    "commitCreated": false,
+    "pushPerformed": false
+  },
+  "independence": "Worker evidence only; fresh independent verification and judgment remain required."
+}

@@ -1,0 +1,39 @@
+{
+  "schemaVersion": "1.0.0",
+  "campaignId": "CAS-APP-SERVER-20260901-01",
+  "assignmentId": "CAS-11",
+  "status": "PACKAGED_ARTIFACT_ADMISSION_HALT",
+  "recordedAt": "2026-09-02T15:12:42Z",
+  "packageBoundaryRepairSha256": "3559098b481c1bd681a6ccd2c4c9410efc68c4428bd915b172b4ce588f52c9b3",
+  "lockedGreen": {
+    "l1": "4/4",
+    "l2": "2/2",
+    "web": "16/16",
+    "buildTypecheckLint": "GREEN",
+    "pluginValidation": "GREEN",
+    "frozenInstall": "GREEN",
+    "nxSync": "GREEN"
+  },
+  "disproof": {
+    "command": "git check-ignore -v plugins/codex-control/dist/server.mjs plugins/codex-control/dist/ui/app.js plugins/codex-control/dist/ui/app.css plugins/codex-control/dist/ui/manifest.json",
+    "ignoreRule": ".gitignore:141:dist/",
+    "result": "All required self-contained plugin runtime/UI build artifacts are ignored.",
+    "impact": "The isolated install passes only because generated files exist in the current dirty tree; a committed clone would lack the .mcp.json entrypoint and exact UI resource."
+  },
+  "requiredArtifacts": {
+    "serverMjsSha256": "bf806aad9098121701a711b13882be2aa866f5bd86f7f33aee836d9309ace127",
+    "uiHtmlSha256": "990ebd63f94cd0469479c51e734cec17c688fe2465e08186bbe8a58380ee65c4",
+    "uiScriptSha256": "572b1460f695570a382452fe38c6e8ab59064bd8545adff29d164f3f77ee06aa",
+    "uiStyleSha256": "a68a79a24cc53b792ba6aa78a2e078f71e2394f1a52c6c7082193d2123d122c8",
+    "uiManifestSha256": "3d20d38416b083549a40b78d9ba3275391832461130c895898a44cf547393de3"
+  },
+  "resumeCondition": "The coordinator adds only exact .gitignore exceptions for /plugins/codex-control/dist/ and its contents, proves no unrelated dist tree is admitted, and publishes the new .gitignore hash.",
+  "resourceDelta": {
+    "pluginProcessesRemaining": 0,
+    "isolatedCodexHomesRemaining": 0,
+    "installedPluginsRemaining": 0,
+    "listenersRemaining": 0,
+    "tunnelsCreated": 0,
+    "liveSynologyContacted": false
+  }
+}

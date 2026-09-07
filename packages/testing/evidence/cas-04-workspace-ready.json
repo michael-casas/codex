@@ -1,0 +1,74 @@
+{
+  "schemaVersion": "1.0.0",
+  "assignmentId": "CAS-04",
+  "campaignId": "CAS-APP-SERVER-20260901-01",
+  "status": "WORKSPACE_READY",
+  "stopBoundary": "READY-FOR-AUDIT",
+  "workingDirectory": "/Users/mcasa_atlantis/.codex/worktrees/a4a6/.codex",
+  "baseRevision": "b9dc01512975a8b11bc673b5ec906c818dd708f6",
+  "authority": {
+    "assignmentSha256": "f28e80992ac407feee3c674d7c1cc4be7e1dd9e94ce0ff87bbfa98407f3275fd",
+    "integrationPacketSha256": "faf3da8fbe1a04126bcd2cd7be0185a331e0c3b9046bafe606c5d2a3c537e199",
+    "greenContractSha256": "d4a184061478103d9d22ebb584bfed646718751deeb130a0f9318be5444e20f6",
+    "l1ContractSha256": "5e47cb8592ede30c2cff2929a5603236d48c1d70e77da9d140e9ce9e5e409cee",
+    "l2ContractSha256": "91fcfb9a3a637659d29591199d5a50654828e9b28edd5ac740d774f8a583b81d"
+  },
+  "seam": {
+    "class": "provider/protocol",
+    "entrypoints": ["acquire", "release"],
+    "acquireInput": ["hostId", "repositoryId", "baseRevision", "assignmentId"],
+    "acquireResult": ["workspaceRef"],
+    "callerFacingPaths": false,
+    "providerChoreographyExposed": false,
+    "providerErrorsExposed": false
+  },
+  "toolCallBudget": {
+    "callerAcquireCallsPerOperation": 1,
+    "exactReplayAdditionalProviderRequests": 0,
+    "ordinaryAcquireProviderRequestsMax": 10,
+    "ambiguousAcquireProviderRequestsMax": 11,
+    "ordinaryReleaseProviderRequestsMax": 3,
+    "ambiguousReleaseProviderRequestsMax": 4
+  },
+  "mechanic": {
+    "protocolVersion": "0.151.0",
+    "methods": ["fs/getMetadata", "fs/readFile", "fs/writeFile", "command/exec"],
+    "sandbox": "workspaceWrite for mutation; readOnly for inspection; network disabled",
+    "workspace": "owned bare metadata clone and exact-revision Git worktree entirely under the configured lease root",
+    "primaryCheckout": "read-only and preserved dirty",
+    "fallbacks": []
+  },
+  "red": {
+    "testL1Unit": { "selected": 1, "exitCode": 1, "reason": "createWorkspaceLeaseService absent" },
+    "testL1Integration": { "selected": 2, "exitCode": 1, "reason": "createWorkspaceLeaseService absent" },
+    "testL2Integration": { "selected": 3, "exitCode": 1, "reason": "createWorkspaceLeaseService absent after controlled local/WSS setup" }
+  },
+  "green": {
+    "testL1": { "command": "bun nx run @codex/transport:test-l1 --skipNxCache", "selected": 8, "exitCode": 0 },
+    "testL2": { "command": "bun nx run @codex/transport:test-l2 --skipNxCache", "selected": 6, "exitCode": 0 },
+    "build": { "command": "bun nx run @codex/transport:build --skipNxCache", "exitCode": 0 },
+    "typecheck": { "command": "bun nx run @codex/transport:typecheck --skipNxCache", "exitCode": 0 },
+    "lint": { "command": "bun nx run @codex/transport:lint --skipNxCache", "exitCode": 0 },
+    "l3": { "status": "not-applicable", "reason": "Actor handoff behavior begins in CAS-06 per immutable assignment" }
+  },
+  "boundaries": {
+    "local": "real disposable Git repository through App Server stdio",
+    "nonLocal": "real authenticated TLS/WSS App Server fixture through the CAS-02 host registry",
+    "disconnect": "mutating command completed then returned an ambiguous disconnect; reconnect verified the exact revision and reused one lease",
+    "denials": ["caller path", "ambiguous revision", "conflicting replay", "symlink lease root", "wrong exact revision", "foreign ownership marker"],
+    "cleanup": "zero cas04-* temp directory and process delta"
+  },
+  "candidate": {
+    "workspaceLeaseServiceSha256": "13bb42e0aa6cc39d5f20a83a56a35ab8daed22d36aede488a98fcbc9de615328",
+    "transportIndexSha256": "455e0d6d47e1019cbef7131eb88f87cdc81028f7409e5edd5aad5d48c73b77b6",
+    "transportPackageSha256": "d9582f0f75e2abd189ff98218785990ad4ed3b72e754f489becdf7bb9e697eb6",
+    "coordinatorLockfileSha256": "b837934c1a28cc6493e8400163ed28e4b6e334f41bc876c51f0227a39f9151e5"
+  },
+  "handoff": {
+    "consumers": ["CAS-06", "CAS-12"],
+    "contract": "Pass only workspaceRef into downstream execution; release explicitly after the owned execution boundary; treat lease errors as owned stable codes",
+    "independentVerificationRequired": true,
+    "selfCertified": false
+  },
+  "officialDocumentation": "https://learn.chatgpt.com/docs/app-server"
+}

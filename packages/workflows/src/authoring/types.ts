@@ -1,7 +1,7 @@
 import type { JsonSchema, JsonValue } from '../lib/contracts.js';
 
-export type WorkflowModel = `gpt-${string}`;
-export type WorkflowReasoning = 'medium';
+export type WorkflowModel = string;
+export type WorkflowReasoning = string;
 
 export interface AgentCommandEvidenceRule {
   readonly id: string;
@@ -33,6 +33,7 @@ export interface WorkflowDefinitionOptions<Input, Output> {
   id: string;
   version?: number;
   description?: string;
+  title?: string;
   maxConcurrency?: number;
   inputSchema?: JsonSchema;
   run(input: Input): Promise<Output> | Output;
@@ -42,6 +43,7 @@ export interface WorkflowDefinition<Input = unknown, Output = unknown> {
   readonly id: string;
   readonly version: number;
   readonly description?: string;
+  readonly title?: string;
   readonly maxConcurrency: number;
   readonly inputSchema?: JsonSchema;
   readonly run: (input: Input) => Promise<Output> | Output;
@@ -74,6 +76,24 @@ export interface ArtifactOptions<Value = unknown> {
 export interface WorkflowAgentExecutionRequest<Input = unknown>
   extends AgentOptions<Input> {
   readonly signal: AbortSignal;
+  readonly node: FrozenWorkflowNode;
+  readonly onRuntimeEvent: (
+    event: WorkflowRuntimeEvent,
+  ) => void | Promise<void>;
+}
+
+export interface WorkflowRuntimeEvent {
+  readonly type:
+    | 'thread.started'
+    | 'turn.started'
+    | 'item.completed'
+    | 'turn.completed'
+    | 'turn.interrupted'
+    | 'runtime.reconnected';
+  readonly nodeId: string;
+  readonly threadId?: string;
+  readonly turnId?: string;
+  readonly itemType?: string;
 }
 
 export interface WorkflowAgentExecutionResult {
@@ -157,6 +177,11 @@ export interface ExecuteWorkflowOptions {
     publishPath?: string;
   }): Promise<WorkflowArtifact>;
   onEvent(event: WorkflowPublicEvent): void | Promise<void>;
+  onRuntimeEvent?(event: WorkflowRuntimeEvent): void | Promise<void>;
+  onAgentOutput?(result: {
+    readonly node: FrozenWorkflowNode;
+    readonly output: unknown;
+  }): void | Promise<void>;
   now?: () => Date;
 }
 

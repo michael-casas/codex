@@ -4,7 +4,7 @@ export default defineConfig({
   root: 'packages/workflows',
   test: {
     environment: 'node',
-    include: ['src/**/*.test.ts'],
+    include: ['src/**/*.test.ts', 'src/**/*.spec.ts'],
     passWithNoTests: false,
     reporters: ['default'],
   },

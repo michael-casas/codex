@@ -33,6 +33,12 @@ const canonicalContract = resolve(
 const controlledCodex = fileURLToPath(
   new URL('./support/controlled-codex.mjs', import.meta.url),
 );
+const controlledAppServer = fileURLToPath(
+  new URL(
+    '../../workflows/support/controlled-app-server-bridge.mjs',
+    import.meta.url,
+  ),
+);
 const controlledNpx = fileURLToPath(
   new URL('./support/controlled-npx.mjs', import.meta.url),
 );
@@ -74,6 +80,7 @@ describe('[L2:E2E] CRA RED to GREEN public workflow', () => {
       await writeFile(tracePath, '');
       await chmod(publicExecutable, 0o755);
       await chmod(controlledCodex, 0o755);
+      await chmod(controlledAppServer, 0o755);
       await chmod(controlledNpx, 0o755);
       await chmod(source, 0o755);
       await symlink(publicExecutable, join(bin, 'codex-workflows'));
@@ -86,7 +93,8 @@ describe('[L2:E2E] CRA RED to GREEN public workflow', () => {
         env: {
           ...process.env,
           PATH: `${bin}:${process.env.PATH ?? '/usr/bin:/bin'}`,
-          CODEX_WORKFLOWS_CODEX_PATH: controlledCodex,
+          CODEX_WORKFLOWS_CODEX_PATH: controlledAppServer,
+          CODEX_WORKFLOWS_CONTROLLED_TURN_PATH: controlledCodex,
           CODEX_WORKFLOWS_HOME: state,
           CODEX_CRA_RED_GREEN_TEST_TRACE: tracePath,
         },
@@ -347,6 +355,7 @@ describe('[L2:E2E] CRA RED to GREEN public workflow', () => {
       await writeFile(tracePath, '');
       await chmod(publicExecutable, 0o755);
       await chmod(controlledCodex, 0o755);
+      await chmod(controlledAppServer, 0o755);
       await chmod(controlledNpx, 0o755);
       await chmod(source, 0o755);
       await symlink(publicExecutable, join(bin, 'codex-workflows'));
@@ -359,7 +368,8 @@ describe('[L2:E2E] CRA RED to GREEN public workflow', () => {
         env: {
           ...process.env,
           PATH: `${bin}:${process.env.PATH ?? '/usr/bin:/bin'}`,
-          CODEX_WORKFLOWS_CODEX_PATH: controlledCodex,
+          CODEX_WORKFLOWS_CODEX_PATH: controlledAppServer,
+          CODEX_WORKFLOWS_CONTROLLED_TURN_PATH: controlledCodex,
           CODEX_WORKFLOWS_HOME: state,
           CODEX_CRA_RED_GREEN_TEST_TRACE: tracePath,
           CODEX_CRA_RED_GREEN_FAIL_STAGE: 'builder',
@@ -427,6 +437,7 @@ describe('[L2:E2E] CRA RED to GREEN public workflow', () => {
       await writeFile(tracePath, '');
       await chmod(publicExecutable, 0o755);
       await chmod(controlledCodex, 0o755);
+      await chmod(controlledAppServer, 0o755);
       await chmod(controlledNpx, 0o755);
       await chmod(source, 0o755);
       await symlink(publicExecutable, join(bin, 'codex-workflows'));
@@ -439,7 +450,8 @@ describe('[L2:E2E] CRA RED to GREEN public workflow', () => {
         env: {
           ...process.env,
           PATH: `${bin}:${process.env.PATH ?? '/usr/bin:/bin'}`,
-          CODEX_WORKFLOWS_CODEX_PATH: controlledCodex,
+          CODEX_WORKFLOWS_CODEX_PATH: controlledAppServer,
+          CODEX_WORKFLOWS_CONTROLLED_TURN_PATH: controlledCodex,
           CODEX_WORKFLOWS_HOME: state,
           CODEX_CRA_RED_GREEN_TEST_TRACE: tracePath,
           CODEX_CRA_RED_GREEN_EXTRA_SCAFFOLD: 'true',

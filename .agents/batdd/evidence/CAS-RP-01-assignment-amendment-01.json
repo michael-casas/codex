@@ -1,0 +1,15 @@
+{
+  "schemaVersion": "1.0.0",
+  "assignmentId": "CAS-RP-01",
+  "status": "READY",
+  "assignmentPath": ".agents/batdd/assignments/CAS-RP-01.json",
+  "previousSha256": "965aa9c09fb648e18f1a1c8cc9596d4da1b05176449be6600e9598d8e0fa4d7d",
+  "amendedSha256": "b8fed376836c504bbd2516bc326cb31721554af7a7da8a0e69a56e7b530d7289",
+  "schemaValid": true,
+  "addedWriteSurface": ["packages/codex/project.json"],
+  "observed": "Resolved @codex/codex:test-l2 enumerates only src/app-server-client/__specs__/app-server-client-stdio.spec.ts.",
+  "authorizedChange": "Add src/app-server-workflow/__specs__/app-server-workflow-profile.spec.ts to standing test-l2 collection without removing existing coverage.",
+  "allOtherAssignmentFieldsUnchanged": true,
+  "newDependenciesRootOrGeneratedProtocolChanges": false,
+  "commitAuditDeployAuthority": false
+}

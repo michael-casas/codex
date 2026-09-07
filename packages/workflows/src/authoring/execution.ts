@@ -1,5 +1,8 @@
 import { Ajv2020, type ValidateFunction } from 'ajv/dist/2020.js';
-import { isAttestedCodexTurnResult } from '@codex/codex';
+import {
+  isAttestedAppServerWorkflowResult,
+  readAttestedAppServerWorkflowEvents,
+} from '@codex/codex';
 
 import type { JsonSchema, JsonValue } from '../lib/contracts.js';
 import {
@@ -24,9 +27,12 @@ import type {
   WorkflowRuntimeBridge,
 } from './types.js';
 import { WorkflowExecutionError } from './types.js';
+import {
+  validAgentModel,
+  validAgentReasoning,
+} from '../domain/value-objects/agent-runtime-profile/agent-runtime-profile.schema.js';
 
 const MAX_PROMPT_LENGTH = 64_000;
-const MAX_MODEL_LENGTH = 256;
 const WORKFLOW_ERROR_CODES = new Set([
   'WORKFLOW_DEFINITION_INVALID',
   'WORKFLOW_INPUT_INVALID',
@@ -120,22 +126,6 @@ function slug(value: string): string {
     .replace(/^-|-$/g, '')
     .slice(0, 48);
   return normalized || 'agent';
-}
-
-function validWorkflowModel(value: unknown): value is `gpt-${string}` {
-  const hasUnsafeCharacter =
-    typeof value === 'string' &&
-    Array.from(value).some((character) => {
-      const codePoint = character.codePointAt(0) ?? 0;
-      return /\s/u.test(character) || codePoint <= 0x1f || codePoint === 0x7f;
-    });
-  return (
-    typeof value === 'string' &&
-    value.startsWith('gpt-') &&
-    value.length > 'gpt-'.length &&
-    value.length <= MAX_MODEL_LENGTH &&
-    !hasUnsafeCharacter
-  );
 }
 
 function abortError(): WorkflowExecutionError {
@@ -405,14 +395,15 @@ function deriveCommandEvidence(
   runtimeTurn: unknown,
   hostProjection: AgentCommandEvidence | undefined,
 ): AgentCommandEvidence {
-  if (hostProjection !== undefined || !isAttestedCodexTurnResult(runtimeTurn)) {
+  const events = readAttestedAppServerWorkflowEvents(runtimeTurn);
+  if (hostProjection !== undefined || !events) {
     throw new WorkflowExecutionError(
       'WORKFLOW_AGENT_FAILED',
-      'Agent command evidence requires an attested Codex runtime turn.',
+      'Agent command evidence requires an attested App Server runtime turn.',
     );
   }
   const policyDigest = commandEvidencePolicyDigest(policy);
-  const commands = runtimeTurn.events
+  const commands = events
     .filter(
       (event) =>
         event.type === 'item.completed' &&
@@ -598,8 +589,8 @@ export async function executeWorkflow<Input, Output>(
       try {
         if (
           !request.label.trim() ||
-          !validWorkflowModel(request.model) ||
-          request.reasoning !== 'medium' ||
+          !validAgentModel(request.model) ||
+          !validAgentReasoning(request.reasoning) ||
           !request.prompt ||
           request.prompt.length > MAX_PROMPT_LENGTH
         ) {
@@ -670,6 +661,8 @@ export async function executeWorkflow<Input, Output>(
                   ...request,
                   prompt: effectivePrompt(request.prompt, request.input),
                   signal: operationController.signal,
+                  node: frozen,
+                  onRuntimeEvent: options.onRuntimeEvent ?? (() => undefined),
                 });
               } finally {
                 controller.signal.removeEventListener('abort', relayAbort);
@@ -683,9 +676,10 @@ export async function executeWorkflow<Input, Output>(
                 : undefined;
               if (
                 request.commandEvidence &&
-                isAttestedCodexTurnResult(response.runtimeTurn) &&
+                isAttestedAppServerWorkflowResult(response.runtimeTurn) &&
                 (response.threadId !== response.runtimeTurn.threadId ||
-                  response.finalResponse !== response.runtimeTurn.finalResponse ||
+                  response.finalResponse !==
+                    response.runtimeTurn.finalResponse ||
                   digest(response.usage, 'Agent usage') !==
                     digest(response.runtimeTurn.usage, 'Runtime turn usage'))
               ) {
@@ -698,6 +692,8 @@ export async function executeWorkflow<Input, Output>(
                 response.finalResponse,
                 request.outputSchema,
               ) as Result;
+              if (request.outputSchema)
+                await options.onAgentOutput?.({ node: frozen, output });
               const outputDigest = digest(output, 'Agent output');
               registerLineage(output, nodeId, lineage);
               const completedAt = now().toISOString();

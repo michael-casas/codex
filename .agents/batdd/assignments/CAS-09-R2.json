@@ -1,0 +1,73 @@
+{
+  "$schema": "../assignment.schema.json",
+  "schemaVersion": "1.0.0",
+  "assignmentId": "CAS-09.R2",
+  "status": "ready",
+  "dispatchable": true,
+  "role": "worker",
+  "objective": "For campaign CAS-APP-SERVER-20260901-01, implement the production Codex Control runtime in shared a4a6 under lease CAS-09-R2-CONTROL-RUNTIME on gpt-5.6-sol with medium reasoning: compose accepted daemon, MCP control, loopback Browser routes, snapshot/wait streaming, authorization, and complete browserUrl presentation without a second durable or retry authority.",
+  "completionScope": "vertical-slice",
+  "mayReportFeatureComplete": true,
+  "feature": "/Users/mcasa_atlantis/.codex/worktrees/a4a6/.codex/docs/goals/codex-app-server/CAS-09-R2-CODEX-RUNTIME.md",
+  "requiredLayers": {
+    "l1": { "status": "required" },
+    "l2": { "status": "required" },
+    "l3": {
+      "status": "not-applicable",
+      "reason": "CAS-09.R2 repairs production composition and real process/browser boundaries; Codex user dogfood is owned by CAS-12.R1."
+    }
+  },
+  "writeSurface": [
+    "apps/daemon/src/**",
+    "apps/daemon/package.json",
+    "apps/daemon/tsconfig.app.json",
+    "apps/daemon-e2e/**",
+    "apps/codex-control/**",
+    "apps/codex-control-ui/src/**",
+    "apps/codex-control-e2e/features/cas-09-r2/**",
+    "apps/codex-control-e2e/src/cas-09-r2/**",
+    "apps/codex-control-e2e/src/cas-10/control.fixture.ts",
+    "packages/control-gateway/**",
+    "packages/transport/src/workspace-lease/**",
+    "packages/testing/manifests/daemon.json",
+    "packages/testing/evidence/cas-09-r2-*.json",
+    ".agent/testing/cas-09-r2/**"
+  ],
+  "baseRevision": "b9dc01512975a8b11bc673b5ec906c818dd708f6",
+  "stopBoundary": "READY-FOR-AUDIT",
+  "greenContract": {
+    "id": "CAS-09-R2-GC-1",
+    "strategy": "basic-then-adversarial",
+    "redPolicy": "all-new-or-changed-contract-rows",
+    "adversarialRequired": true
+  },
+  "commitAuthority": { "allowed": false, "maxCommits": 0 },
+  "dependencies": [
+    "CAS-03:CONTROL_FOUNDATION_READY",
+    "CAS-06:HANDOFF_READY",
+    "CAS-07:REMOTE_WORKFLOW_READY",
+    "CAS-08:VISIBILITY_PROJECTION_READY",
+    "CAS-09:MCP_READY",
+    "CAS-10:UI_READY"
+  ],
+  "evidence": [
+    "campaign-id:CAS-APP-SERVER-20260901-01",
+    "write-lease:CAS-09-R2-CONTROL-RUNTIME",
+    "model:gpt-5.6-sol",
+    "reasoning-effort:medium",
+    "shared-working-directory:/Users/mcasa_atlantis/.codex/worktrees/a4a6/.codex",
+    "predecessor:CAS-03:sha256:4e51ff75219a1704e5ef82ea81a7851ca4fd31fb7293fc7c55ec0c174d130ef2",
+    "predecessor:CAS-06:sha256:63ac4d6fd3b3546235af02109e7e8cec6aed831029066d4db768eeb4900fc6d8",
+    "predecessor:CAS-07:sha256:43dcec6fb6c4829ca8c69ff490eb2a188680ffc30060a29bf914a34b431e7957",
+    "predecessor:CAS-08:sha256:410670137e653ea97746bdacae57104fe1136cc6eafbec4df374a75996096957",
+    "predecessor:CAS-09:sha256:751e79b9c306fff80ee8ba51df598b30d557b668376a786ec1207cfea3d29cb5",
+    "predecessor:CAS-10:sha256:d735ea7615de0b7f00e7c90bc5ec3ef5e7a415f3ef5ed0e52e99cc02999c766e",
+    "meaningful-red-before-product-write",
+    "one-daemon-one-retry-authority-no-app-to-app-imports",
+    "loopback-only-mcp-http-browser-and-complete-browser-url",
+    "selected-agent-only-detail-stream",
+    "restart-cancel-stale-cursor-port-conflict-and-zero-resource-delta",
+    "remote-app-server-read-only",
+    "no-audit-commit-publish-deploy-or-next-seam"
+  ]
+}

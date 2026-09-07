@@ -1,0 +1,52 @@
+{
+  "name": "@codex/delivery",
+  "version": "0.0.1",
+  "private": true,
+  "type": "module",
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    "./package.json": "./package.json",
+    ".": {
+      "@codex/source": "./src/index.ts",
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "default": "./dist/index.js"
+    }
+  },
+  "nx": {
+    "name": "@codex/delivery",
+    "tags": [
+      "type:lib",
+      "scope:delivery",
+      "layer:infrastructure"
+    ],
+    "targets": {
+      "test-l2-integration": {
+        "executor": "nx:run-commands",
+        "cache": false,
+        "options": {
+          "command": "vitest run --config packages/delivery/vitest.config.ts src/durable-control/__specs__/pg-boss-delivery.spec.ts src/agent-messaging/__specs__/agent-message-delivery.spec.ts src/agent-delegation/__specs__/agent-delegation.spec.ts --testNamePattern='L2:INTEGRATION'"
+        }
+      },
+      "test-l2": {
+        "executor": "nx:run-commands",
+        "cache": false,
+        "options": {
+          "command": "vitest run --config packages/delivery/vitest.config.ts src/durable-control/__specs__/pg-boss-delivery.spec.ts src/agent-messaging/__specs__/agent-message-delivery.spec.ts src/agent-delegation/__specs__/agent-delegation.spec.ts"
+        }
+      }
+    }
+  },
+  "dependencies": {
+    "@codex/db": "workspace:*",
+    "pg-boss": "^12.29.0",
+    "tslib": "^2.3.0"
+  },
+  "devDependencies": {
+    "@codex/process": "workspace:*",
+    "@types/pg": "^8.21.0",
+    "pg": "^8.23.0"
+  }
+}

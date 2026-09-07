@@ -1,0 +1,67 @@
+{
+  "$schema": "../assignment.schema.json",
+  "schemaVersion": "1.0.0",
+  "assignmentId": "CAS-RP-01",
+  "status": "ready",
+  "dispatchable": true,
+  "role": "worker",
+  "objective": "Implement explicit per-agent model and reasoning profiles across workflow and direct delegation paths, including exact App Server propagation, without silent substitution. Work only in shared a4a6 on gpt-5.6-sol medium under lease CAS-RP-01-RUNTIME-PROFILE.",
+  "completionScope": "vertical-slice",
+  "mayReportFeatureComplete": true,
+  "feature": "docs/goals/codex-app-server/CAS-RP-01.md",
+  "requiredLayers": {
+    "l1": { "status": "required" },
+    "l2": { "status": "required" },
+    "l3": {
+      "status": "not-applicable",
+      "reason": "Bounded runtime-profile repair is proven at contract and real protocol process boundaries; fresh desktop user dogfood remains owned by CAS-12.R1 and the requested demo, neither claimed complete here."
+    }
+  },
+  "writeSurface": [
+    "packages/workflows/src/**",
+    "packages/workflows/SCHEMA.md",
+    "packages/codex/src/app-server-workflow/**",
+    "packages/codex/project.json",
+    "packages/process/src/delegation/**",
+    "packages/process/src/workflow-execution/**",
+    "packages/control-gateway/src/**",
+    "apps/daemon/src/workflow-execution/**",
+    "apps/daemon/src/control-runtime.ts",
+    "apps/codex-control/src/**",
+    "apps/codex-workflows/src/workflows/**",
+    "apps/codex-workflows/src/runtime/**",
+    "apps/codex-workflows/CLI.md",
+    "plugins/codex-control/src/**",
+    "plugins/codex-control/skills/codex-control/SKILL.md",
+    "skills/workflows/SKILL.md",
+    "skills/workflows/references/**",
+    ".agent/testing/cas-rp-01/**",
+    "packages/testing/evidence/cas-rp-01-*.json"
+  ],
+  "baseRevision": "b9dc01512975a8b11bc673b5ec906c818dd708f6",
+  "stopBoundary": "READY-FOR-AUDIT",
+  "greenContract": {
+    "id": "CAS-RP-01-GC-1",
+    "strategy": "basic-then-adversarial",
+    "redPolicy": "all-new-or-changed-contract-rows",
+    "adversarialRequired": true
+  },
+  "commitAuthority": { "allowed": false, "maxCommits": 0 },
+  "dependencies": [
+    "CAS-09.R2:CONTROL_RUNTIME_READY",
+    "CAS-11.R2:CODEX_PLUGIN_READY"
+  ],
+  "evidence": [
+    "model:gpt-5.6-sol",
+    "reasoning-effort:medium",
+    "write-lease:CAS-RP-01-RUNTIME-PROFILE",
+    "predecessor:CAS-09.R2:sha256:dff03808d46d04ef97c9e4635215e1e46333747173faf0112d8c6d29e3691b95",
+    "predecessor:CAS-11.R2:sha256:cd25a47dee4742cecab5572c45185ba8f1e38ae45b467ad1b4800d87767daeec",
+    "founder-supersedes-global-medium-only-policy",
+    "required-disposition:docs/goals/codex-app-server/CAS-RP-01-PROFILE-DEFERRAL.md",
+    "named-config-profiles-founder-deferred-not-a-ready-gate",
+    "explicit-model-effort-pairs-require-founder-assignment-authority-no-silent-substitution",
+    "new-code-file-system-and-clean-code-required",
+    "no-demo-launch-no-external-config-no-remote-mutation-no-audits-no-commits"
+  ]
+}

@@ -1,0 +1,63 @@
+{
+  "schemaVersion": "1.0.0",
+  "campaignId": "CAS-APP-SERVER-20260901-01",
+  "recordId": "CAS-11-R2-ASSIGNMENT-AMENDMENT-01",
+  "status": "READY",
+  "workingDirectory": "/Users/mcasa_atlantis/.codex/worktrees/a4a6/.codex",
+  "baseRevision": "b9dc01512975a8b11bc673b5ec906c818dd708f6",
+  "assignment": {
+    "path": ".agents/batdd/assignments/CAS-11-R2.json",
+    "previousSha256": "bf3339bc7dc3d5ed9d787700fd908dea9583cf5da06b4813dd2937ad7b34906d",
+    "amendedSha256": "0983a23fec78218b39878eebb44e3a99120fdd7304a2932f57c1767faf8ad3b4",
+    "schema": ".agents/batdd/assignment.schema.json",
+    "schemaValid": true
+  },
+  "supersededPair": [
+    {
+      "path": "apps/codex-control-e2e/features/cas-11/plugin-workflow-visibility.feature",
+      "sha256": "1204008ec79a515f1de149a21aa380252f543c6d963216a784e12e449e937710"
+    },
+    {
+      "path": "apps/codex-control-e2e/src/cas-11/plugin-workflow-visibility.feature.spec.ts",
+      "sha256": "701d345b13be52d2bded5c8e495e4bc85af2262c2bc5d3acbf6d32e07f2d5b64"
+    }
+  ],
+  "fullSuiteFailure": {
+    "result": "20/22",
+    "failedScenario": "@cas11-l3 Follow one selected agent through the installed plugin",
+    "failedProjects": ["chromium", "mobile-chromium"],
+    "observable": "The scenario calls removed tool render_control_plane and receives isError true.",
+    "reportPath": "apps/codex-control-e2e/test-output/playwright/report/data/dffd3f4a145290c42b0d34a38e27da773cb272d1.md",
+    "reportSha256": "d3da2c3035c4295ec0163a6597a2c10c3ffc9229e2550577c0ba30b4e10a1476"
+  },
+  "supersession": {
+    "founderRuling": "Codex desktop plugin and in-app Browser are canonical Base; ChatGPT MCP Apps iframe support is optional compatibility only.",
+    "charter": "CAS-11.R2 must expose the accepted nine-tool control runtime and must not restore a duplicate tenth ChatGPT-only tool.",
+    "classification": "Historical CAS-11 ChatGPT/MCP Apps acceptance pair is no longer collected behavior authority."
+  },
+  "amendment": {
+    "field": "writeSurface",
+    "addedForDeletionOnly": [
+      "apps/codex-control-e2e/features/cas-11/plugin-workflow-visibility.feature",
+      "apps/codex-control-e2e/src/cas-11/plugin-workflow-visibility.feature.spec.ts"
+    ]
+  },
+  "frozen": [
+    "CAS-11.R2 Green Contract",
+    "accepted nine control tools",
+    "Codex plugin behavior",
+    "all other E2E features and specs",
+    "product runtime and UI behavior"
+  ],
+  "restrictions": {
+    "replacementToolOrCompatibilityShim": false,
+    "otherE2EFiles": false,
+    "productChange": false,
+    "rootWritesBeyondExistingAssignment": false,
+    "nextSeam": false,
+    "auditOrAcceptance": false,
+    "remoteMutation": false,
+    "commitPushPublishDeploy": false
+  },
+  "resume": "CAS-11.R2 may delete only the matched historical feature/spec pair and rerun the full Playwright suite."
+}

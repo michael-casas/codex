@@ -1,0 +1,32 @@
+{
+  "name": "@codex/codex-control-e2e",
+  "version": "0.0.1",
+  "private": true,
+  "type": "module",
+  "nx": {
+    "tags": [
+      "type:e2e",
+      "scope:control-ui",
+      "layer:delivery"
+    ],
+    "implicitDependencies": [
+      "@codex/codex-control-ui"
+    ],
+    "targets": {
+      "e2e": {
+        "cache": false
+      },
+      "e2e-visibility": {
+        "executor": "nx:run-commands",
+        "cache": false,
+        "dependsOn": [
+          "@codex/codex-control-ui:build"
+        ],
+        "options": {
+          "cwd": "apps/codex-control-e2e",
+          "command": "playwright test --grep=cas-ui-r1 --workers=1"
+        }
+      }
+    }
+  }
+}

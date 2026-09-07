@@ -33,6 +33,12 @@ const canonicalContract = resolve(
 const controlledCodex = fileURLToPath(
   new URL('./support/controlled-codex.mjs', import.meta.url),
 );
+const controlledAppServer = fileURLToPath(
+  new URL(
+    '../../workflows/support/controlled-app-server-bridge.mjs',
+    import.meta.url,
+  ),
+);
 
 function processExists(pid: number): boolean {
   try {
@@ -84,6 +90,7 @@ describe('[L2:E2E] Founder daily-facts public workflow', () => {
       await writeFile(tracePath, '');
       await chmod(publicExecutable, 0o755);
       await chmod(controlledCodex, 0o755);
+      await chmod(controlledAppServer, 0o755);
       await chmod(source, 0o755);
       await symlink(publicExecutable, join(bin, 'codex-workflows'));
 
@@ -93,14 +100,15 @@ describe('[L2:E2E] Founder daily-facts public workflow', () => {
         env: {
           ...process.env,
           PATH: `${bin}:${process.env.PATH ?? '/usr/bin:/bin'}`,
-          CODEX_WORKFLOWS_CODEX_PATH: controlledCodex,
+          CODEX_WORKFLOWS_CODEX_PATH: controlledAppServer,
+          CODEX_WORKFLOWS_CONTROLLED_TURN_PATH: controlledCodex,
           CODEX_WORKFLOWS_HOME: state,
           CODEX_DAILY_FACTS_TEST_TRACE: tracePath,
           CODEX_DAILY_FACTS_ALLOW_CONTROLLED_SOURCES: '1',
         },
       });
       expect(result.error).toBeUndefined();
-      expect(result.status).toBe(0);
+      expect(result.status, result.stderr).toBe(0);
       const payload = JSON.parse(result.stdout) as {
         journalPath: string;
         nodeCount: number;

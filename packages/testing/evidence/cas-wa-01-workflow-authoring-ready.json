@@ -1,0 +1,236 @@
+{
+  "schemaVersion": "1.0.0",
+  "campaignId": "CAS-APP-SERVER-20260901-01",
+  "assignmentId": "CAS-WA-01",
+  "writeLeaseId": "CAS-WA-01-WORKFLOW-ADMISSION",
+  "status": "WORKFLOW_AUTHORING_READY",
+  "terminal": "READY-FOR-AUDIT",
+  "workingDirectory": "/Users/mcasa_atlantis/.codex/worktrees/a4a6/.codex",
+  "baseRevision": "b9dc01512975a8b11bc673b5ec906c818dd708f6",
+  "authority": {
+    "assignmentSha256": "3f578b84474bdc09665300b65532e0879091e20a269c92a6919849319999f099",
+    "charterSha256": "4ae953c77b3bde4db44591f5af5b5fcbb722427953c160d6bf52683d9b9399d8",
+    "greenContractSha256": "8669b6b0d1ac8f9332e9bce1633536108b7934bf467cfaaa4ffff7e8a7fc8c91",
+    "executionPlanSha256": "18f18aa91ee900b34ffe57884dd6f14720a3c4f0872295b7a664e0c62c1c2d4d",
+    "predecessorSha256": "e924d0e981e9f5835cc9423b4b3f64ca796d47dc4aca865843ec870f359f5a26",
+    "selfCertified": false,
+    "commitAuthority": false
+  },
+  "sourceSurfaceSha256": "6cc71f798fd2b2031e1a2ff9a2a7eddf47cad62fd96bbae7e547316de8a6c4c9",
+  "surface": [
+    {
+      "path": "apps/codex-control/package.json",
+      "sha256": "2a43eda232c7341e875544068f098604b5311d80ea3c5722120a4737693ec78c"
+    },
+    {
+      "path": "apps/codex-control/src/control/__specs__/codex-control-protocol.spec.ts",
+      "sha256": "867aad494402f159630d343c30ee004d60e1af84f94322f1d8123efd25fed632"
+    },
+    {
+      "path": "apps/daemon/src/control-runtime.ts",
+      "sha256": "8409a8b57ed3840490073abe94ba497e1c634eae9127c6be4ed4881dc3ec1999"
+    },
+    {
+      "path": "apps/daemon/src/workflow-execution/__specs__/workflow-execution-daemon.spec.ts",
+      "sha256": "40b05d20b62b04ccd4052fcaeec263ea0607d2a1edf788fd035ae946f51512af"
+    },
+    {
+      "path": "apps/daemon/src/workflow-execution/support/remote-workflow.driver.ts",
+      "sha256": "71fc3fc53a8b3f5e16f033f2b2d18c2d32d6c2d2ab1f899e7fa2c4e230bde097"
+    },
+    {
+      "path": "apps/daemon/src/workflow-execution/workflow-source.module.ts",
+      "sha256": "fd7deadd81795d91320356a5a9b25dd993d702ce6c4ce5cd7f2d26a77ef0dafc"
+    },
+    {
+      "path": "apps/daemon/vitest.config.ts",
+      "sha256": "6e50aa1749db337a69331540e61f01e303ac1c26b4a55424610332cb6c670b19"
+    },
+    {
+      "path": "packages/control-gateway/src/lib/control-gateway.ts",
+      "sha256": "6aba28972676892c09d337c64a0014eae8d4d3c9c5adbb8bbd29cd0e5d9aac7e"
+    },
+    {
+      "path": "packages/testing/manifests/workflows.json",
+      "sha256": "67769fecc639d1ac0744462a7f22712ffacd9643bd41ac77f5452d04571811dc"
+    },
+    {
+      "path": "packages/workflows/SCHEMA.md",
+      "sha256": "b790427010ffe3d86ba5379fe663713cd9d4fe495d03d48cc010f46a9b4848a5"
+    },
+    {
+      "path": "packages/workflows/package.json",
+      "sha256": "32c90541ba3edf0e43c66c4de258a7286c459b3d35a5a24a8abc61410976de44"
+    },
+    {
+      "path": "packages/workflows/project.json",
+      "sha256": "b41dbfaa88d0fa5a02ef11adfb24096b28004cd772df01939dec43985d67c181"
+    },
+    {
+      "path": "packages/workflows/src/application/commands/submit-workflow-source/__tests__/submit-workflow-source-handler.test.ts",
+      "sha256": "cf2f5f0756805bcc37788b82bd66a5196c2ec572760cc40bdb21e14bd2a2fce0"
+    },
+    {
+      "path": "packages/workflows/src/application/commands/submit-workflow-source/submit-workflow-source.command.ts",
+      "sha256": "10c144f4823e4baaabf41677e2b8a612f6b9bbb33d1dc54e54016f604dd62650"
+    },
+    {
+      "path": "packages/workflows/src/application/commands/submit-workflow-source/submit-workflow-source.handler.ts",
+      "sha256": "2ec26ce73b238b1d1eb01818a0504ecc9c8ed9a4f27591ecd5287bc5bfb46ffe"
+    },
+    {
+      "path": "packages/workflows/src/index.ts",
+      "sha256": "60cb0ffd2b8259cf4df70b4bb7889798287cbe7675f34aa040ecdeb90625f61e"
+    },
+    {
+      "path": "packages/workflows/src/infrastructure/workflow-source/__specs__/workflow-source-compiler.spec.ts",
+      "sha256": "fecb3d5f767139fbe66027635a9d08f2e85d6d0562fe6f63b27efa731b2917a1"
+    },
+    {
+      "path": "packages/workflows/src/infrastructure/workflow-source/index.ts",
+      "sha256": "9be5a24d915872e18c2f26b6e70d78bcf200d600d577675e34061b1ed872322e"
+    },
+    {
+      "path": "packages/workflows/src/infrastructure/workflow-source/workflow-source.compiler.ts",
+      "sha256": "5227fe274258f3715ce101556b9807dee28f53a8f56c1564ca7d4d0d5eeb25a4"
+    },
+    {
+      "path": "packages/workflows/vitest.config.ts",
+      "sha256": "37d88fe5d674271c31d85d1969f3fc49d49398175c526452b806f35c5f9110ae"
+    },
+    {
+      "path": "plugins/codex-control/skills/codex-control/SKILL.md",
+      "sha256": "a2017dbc01d5f8332f9869dc5e14870b8338320bd72d68fa6a6416c52ba8499c"
+    },
+    {
+      "path": "skills/workflows/SKILL.md",
+      "sha256": "5951d5a17e5e04e1f10b58ab337afc5a68ee911e681275b4f168033907b37ccf"
+    },
+    {
+      "path": "skills/workflows/references/schema.md",
+      "sha256": "3f52e85e9a0b4b53ef5a3b1dd7e4e41bebc7f456eff195899bd6385afdd6bc07"
+    }
+  ],
+  "outcome": [
+    "Existing run_workflow advertises object-shaped source/input/idempotencyKey/optional hostId input, while strict registered-envelope callers remain supported.",
+    "Actor-bound daemon workflowSources context supplies host/repository/assignment/base/runtime profile; missing or ambiguous context fails before source access.",
+    "Trusted .workflow.ts and static relative imports compile via existing esbuild into immutable content-addressed modules; dependency bytes and compiler version participate in identity.",
+    "Server-only @codex/workflows/source keeps compiler dependencies out of ordinary authoring bundles; unchanged CLI L2 passed after this boundary correction.",
+    "Existing PostgreSQL/pg-boss workflow execution resolves source artifacts after restart; App Server executes mixed-profile agents without per-workflow configuration.",
+    "Source-root containment, malformed source, unbound dynamic imports, artifact tampering, replay conflict and separate intentional run keys are covered.",
+    "Built plugin still lists nine tools and exposes source properties; no manual digest calculation, JavaScript preparation, or individual workflow registration is required by the author."
+  ],
+  "tests": {
+    "reports": [
+      {
+        "name": "workflows-l1",
+        "path": ".agent/testing/cas-wa-01/workflows-l1.json",
+        "sha256": "d21bbdf54cf1b012a84b56b6b28c424f11011d732e6c8a671edd21c82df9276e",
+        "passed": 73,
+        "failed": 0,
+        "pending": 0,
+        "total": 73
+      },
+      {
+        "name": "workflows-l2",
+        "path": ".agent/testing/cas-wa-01/workflows-l2.json",
+        "sha256": "24e2e76e7095a578a3d922bb99cd102fa72f95cda0db2bd035e8246a8275bee5",
+        "passed": 3,
+        "failed": 0,
+        "pending": 0,
+        "total": 3
+      },
+      {
+        "name": "control-l1",
+        "path": ".agent/testing/cas-wa-01/control-l1.json",
+        "sha256": "0ff4da753d7ad3810d62c48fa518288429b4edc8f02c00cb963e4790a48c6456",
+        "passed": 4,
+        "failed": 0,
+        "pending": 0,
+        "total": 4
+      },
+      {
+        "name": "control-l2",
+        "path": ".agent/testing/cas-wa-01/control-l2.json",
+        "sha256": "933382e5d6b9dcad51e7be34a49cf3750099f35e211384c4e17cf0131e834246",
+        "passed": 7,
+        "failed": 0,
+        "pending": 0,
+        "total": 7
+      },
+      {
+        "name": "cli-l2",
+        "path": ".agent/testing/cas-wa-01/cli-l2.json",
+        "sha256": "1349043db6706571920fc716177332f3d5a6d89a272be37afe2a17b5de54ff70",
+        "passed": 18,
+        "failed": 0,
+        "pending": 0,
+        "total": 18
+      },
+      {
+        "name": "daemon-source-l2",
+        "path": ".agent/testing/cas-wa-01/daemon-source-l2.json",
+        "sha256": "dbf03832a4a4c71803dee76097bd65238e7faf396610a57d6646fdbf97579d32",
+        "passed": 1,
+        "failed": 0,
+        "pending": 5,
+        "total": 6
+      }
+    ],
+    "daemonFullStanding": {
+      "passed": 9,
+      "processRestartPassed": 1,
+      "classification": "authenticated pinned local CLI/WSS; not synthetic",
+      "note": "Final focused source report selects one and skips five other file tests; full standing suite separately passed all nine before the later narrow rerun."
+    },
+    "pluginL1": "4/4",
+    "pluginL2": "2/2",
+    "cliL1": "39/39",
+    "workflowsAggregate": "18 unit + 44 in-process integration + 3 source L2 passed",
+    "l3": "Not applicable under this assignment; CAS-12.R1 owns real desktop dogfood."
+  },
+  "standing": {
+    "sixProjectLintTypecheckBuild": "PASS uncached; existing CLI warnings retained",
+    "finalFourProjectLintTypecheckBuild": "PASS uncached after MCP discovery correction",
+    "nxSync": "PASS",
+    "frozenInstall": "PASS_NO_CHANGES",
+    "formatting": "PASS",
+    "workspaceIntegration": {
+      "path": ".agents/batdd/evidence/CAS-WA-01-workspace-integration-01.json",
+      "sha256": "a2a8b1a1174e1c9f0ae01574ea9307df7aa841b9eb4e065f09f0504964c3dd71"
+    }
+  },
+  "evidenceCorrections": {
+    "localWssFixture": "Earlier shorthand 'controlled' and the initial no-live-model constraint must not be read as synthetic inference. Inherited fixture starts pinned local Codex with an authentication symlink and may perform real provider inference.",
+    "providerInferenceCalls": null,
+    "providerTokens": null,
+    "providerCost": null,
+    "unknownUsageMeaning": "Not captured/unknown, not zero.",
+    "sourceScenarioExpectedLogicalAgents": 3,
+    "syntheticStdio": "The WA-L2-REPLAY test uses a synthetic child and asserts two serialized turns with Luna-high/Sol-medium; no provider inference in that child.",
+    "liveBudget": "All provider-backed runs predate the subsequent tighter budget notice. No additional provider-backed tests were run after that notice. Future reruns must honor the new cap/effort policy and obtain contract disposition if fixture settings exceed it."
+  },
+  "resources": {
+    "cleanupPath": ".agent/testing/cas-wa-01/cleanup.json",
+    "cleanupSha256": "4784145a1d8653b538bdd0d8cd052885b2ef450859e240f97299c94cd961df45",
+    "remainingObservedOwnedTemporaryPaths": 0,
+    "remainingObservedPinnedLocalWssProcesses": 0,
+    "remainingSelectedTestDatabases": 0,
+    "demoAgents": 0,
+    "nonLocalHostOperations": 0,
+    "credentialContentsPrintedOrHashed": false,
+    "authenticationSymlinks": "Owned temporary test homes removed by inherited fixture cleanup; real auth target not deleted."
+  },
+  "handoff": {
+    "builtPluginServerSha256": "2ed5fbb161dcbfcf7a725b2a535548b75521b2769064bf02beccb2af3b1c2d99",
+    "installedPluginUpdated": false,
+    "required": [
+      "Coordinator versions/rebuilds/reinstalls plugin and verifies fresh desktop discovery of source input.",
+      "Configure a running accepted loopback daemon with trusted workflowSources entries and its token-file/origin connection; default HTTP principal is codex-control.",
+      "Configure authorized Tailscale viewer ingress separately; no route was changed here.",
+      "Global installed workflow skills outside this worktree remain coordinator synchronization work.",
+      "Retain content-addressed source artifacts while runs remain recoverable; artifacts are not evidence of run acceptance."
+    ]
+  },
+  "stop": "No remaining CAS-WA-01 worker writes. No next seam, audits, commit, merge, push, publish, deployment or user demo launched. Implementation evidence only."
+}

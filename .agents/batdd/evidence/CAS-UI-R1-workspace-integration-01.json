@@ -1,0 +1,15 @@
+{
+  "assignmentId": "CAS-UI-R1",
+  "status": "READY",
+  "beforeLockSha256": "b9e8f042e0506ca8421655bccd88638980209400f006ffa6efd4f8264fad1ab3",
+  "afterLockSha256": "d23438959ce8387e1bac2e0672b050a03ad8086cc2747eee9ae09f88526900ca",
+  "onlyChange": "apps/daemon devDependencies importer adds existing pg ^8.23.0 and @types/pg ^8.21.0",
+  "priorLockReconstructedByRemovingOnlyThatBlock": true,
+  "consumerLinksResolve": true,
+  "packageJsonUnchangedSha256": "cf142ab2e50567a4cc33b3a8c64bac776c63c3b1f4a57731f8270d3e638dac58",
+  "frozenInstall": "PASS_NO_CHANGES",
+  "nxSyncCheck": "PASS",
+  "newPackageVersion": false,
+  "productLogicChanges": false,
+  "runtimeRestartOrModelInference": false
+}

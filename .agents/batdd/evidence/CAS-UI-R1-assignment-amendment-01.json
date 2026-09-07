@@ -1,0 +1,21 @@
+{
+  "schemaVersion": "1.0.0",
+  "assignmentId": "CAS-UI-R1",
+  "status": "READY",
+  "previousAssignmentSha256": "268a5003a5d84dc7606c3677367d527ef5da5ecd1b097dba819e87c4eba13939",
+  "amendedAssignmentSha256": "122bcaff166dff931cf42e57399bce95313505ff898ddc4db4916fa60b5a154e",
+  "schemaValid": true,
+  "addedWriteSurface": ["migrations/process/006_visibility_source_reads.sql"],
+  "observed": "Existing process.read_control_events requires a known streamId; direct control_event table privileges are revoked.",
+  "authorizedChange": "Add bounded read-only source pagination functions for durable workflow visibility replay, and only demonstrated necessary bounded delegation source reads.",
+  "constraints": [
+    "Fixed safe search_path and schema-qualified objects for SECURITY DEFINER functions.",
+    "Explicit REVOKE PUBLIC and least-privilege EXECUTE grants to required existing scoped roles only.",
+    "Validate cursor/page bounds and preserve deterministic pagination; no broad table grants.",
+    "Do not replace existing functions or expose unredacted sensitive source data to browsers.",
+    "Worker may validate in isolated test databases; coordinator alone applies migration to live codex_control_a4a6 after evidence."
+  ],
+  "sharedDatabaseApplicationAllowed": false,
+  "allOtherAssignmentFieldsUnchanged": true,
+  "demoRestartAuditCommitDeployAuthority": false
+}

@@ -1,0 +1,178 @@
+{
+  "schemaVersion": "1.0.0",
+  "campaignId": "CAS-APP-SERVER-20260901-01",
+  "assignmentId": "CAS-03",
+  "writeLeaseId": "CAS-03-DURABLE-CONTROL",
+  "status": "READY-FOR-AUDIT",
+  "baseRevision": "b9dc01512975a8b11bc673b5ec906c818dd708f6",
+  "candidate": "uncommitted isolated worktree /Users/mcasa_atlantis/.codex/worktrees/7701/.codex",
+  "assignment": {
+    "path": "/Users/mcasa_atlantis/.codex/worktrees/0c2e/.codex/.agents/batdd/assignments/CAS-03.json",
+    "sha256": "80e422fda4c6901b96af0a87a990bca05821001021d1f33a1cb6540e52aa5b00"
+  },
+  "amendment": {
+    "path": "/Users/mcasa_atlantis/.codex/worktrees/0c2e/.codex/.agents/batdd/evidence/CAS-03-assignment-amendment-01.json",
+    "sha256": "e357869fda1fb92b1a8facf28c41ed82d47e2603a1ce813a372a55b53e3cc4cf",
+    "onlyWriteSurfaceDelta": "apps/daemon-e2e/**"
+  },
+  "greenContract": {
+    "path": ".agent/testing/cas-03/green-contract.json",
+    "sha256": "63b806e9907e047a6c963538872b26fec6971e0663da426841674d46340319ed",
+    "rows": 6,
+    "frozen": true
+  },
+  "red": [
+    {
+      "surface": "@codex/process:test-l1-unit",
+      "exitCode": 1,
+      "selected": 10,
+      "failed": 8,
+      "cause": "deterministic reducer and cursor behavior absent"
+    },
+    {
+      "surface": "@codex/process:test-l1-integration",
+      "exitCode": 1,
+      "selected": 2,
+      "failed": 1,
+      "cause": "exact replay behavior absent"
+    },
+    {
+      "surface": "@codex/db:test-l2-integration",
+      "exitCode": 1,
+      "selected": 3,
+      "failed": 3,
+      "cause": "real PostgreSQL control store absent"
+    },
+    {
+      "surface": "@codex/delivery:test-l2-integration",
+      "exitCode": 1,
+      "selected": 1,
+      "failed": 1,
+      "cause": "transaction-bound pg-boss delivery absent"
+    },
+    {
+      "surface": "@codex/daemon:test-l1-unit",
+      "exitCode": 1,
+      "selected": 3,
+      "failed": 2,
+      "cause": "composition lifecycle absent"
+    },
+    {
+      "surface": "@codex/daemon:test-l2",
+      "exitCode": 1,
+      "selected": 1,
+      "failed": 1,
+      "cause": "affected E2E still launched the superseded scaffold; amendment 01 authorized repair"
+    }
+  ],
+  "green": [
+    {
+      "command": "bun nx run @codex/process:test-l1 --outputStyle=static",
+      "exitCode": 0,
+      "files": 3,
+      "selected": 12,
+      "passed": 12
+    },
+    {
+      "command": "bun nx run @codex/process:test-l2 --outputStyle=static",
+      "exitCode": 0,
+      "files": 1,
+      "selected": 3,
+      "passed": 3,
+      "boundary": "real PostgreSQL"
+    },
+    {
+      "command": "bun nx run @codex/db:test-l2 --outputStyle=static",
+      "exitCode": 0,
+      "files": 2,
+      "selected": 5,
+      "passed": 5,
+      "boundary": "real PostgreSQL transaction, notification, cursor, restart"
+    },
+    {
+      "command": "bun nx run @codex/delivery:test-l2 --outputStyle=static",
+      "exitCode": 0,
+      "files": 1,
+      "selected": 2,
+      "passed": 2,
+      "boundary": "real pg-boss rollback, deduplication, retry and terminal failure"
+    },
+    {
+      "command": "bun nx run @codex/daemon:test-l1 --outputStyle=static",
+      "exitCode": 0,
+      "files": 1,
+      "selected": 4,
+      "passed": 4
+    },
+    {
+      "command": "bun nx run @codex/daemon:test-l2 --outputStyle=static",
+      "exitCode": 0,
+      "files": 1,
+      "selected": 1,
+      "passed": 1,
+      "boundary": "built daemon process starts, reports ready, SIGTERM cleans up, and starts a second incarnation"
+    },
+    {
+      "command": "bun nx run-many -t typecheck,build,lint --projects=@codex/process,@codex/db,@codex/delivery,@codex/daemon --outputStyle=static",
+      "exitCode": 0,
+      "projects": 4
+    },
+    {
+      "command": "bun nx run-many -t typecheck,lint --projects=@codex/daemon-e2e --outputStyle=static",
+      "exitCode": 0,
+      "projects": 1
+    },
+    {
+      "command": "bun nx sync:check",
+      "exitCode": 0,
+      "status": "up-to-date"
+    }
+  ],
+  "behaviorEvidence": {
+    "immutableCommandsEventsArtifacts": true,
+    "conflictingIdempotencyNoWrite": true,
+    "scopedTableMutationDenied": true,
+    "artifactDigestConstraint": true,
+    "deterministicProjectionReplay": true,
+    "transactionalPgBossJob": true,
+    "pgBossOwnsRetryTiming": true,
+    "exactReplayOneJob": true,
+    "snapshotListenRequery": true,
+    "durableMonotonicCursor": true,
+    "daemonSoleCompositionRoot": true,
+    "daemonRestart": true,
+    "multiFailureCleanup": true,
+    "scopedRuntimeDatabaseRole": true,
+    "l3": "not-applicable by amended immutable assignment"
+  },
+  "resourceDelta": {
+    "before": {
+      "controlTestDatabases": 0,
+      "controlTestRoles": 0,
+      "ownedSessions": 0
+    },
+    "after": {
+      "controlTestDatabases": 0,
+      "controlTestRoles": 0,
+      "ownedSessions": 0
+    },
+    "unexpected": 0,
+    "note": "Older codex_process_test_* resources predated this lane and were left untouched. Two CAS-03 databases leaked by an early migration-race failure were explicitly identified and removed before final evidence."
+  },
+  "selectedArtifactSha256": {
+    "migrations/process/002_durable_control.sql": "e818c0fba9e165bbf22fed6d1d281534b5f40a1a4774afef04e69d99c156313d",
+    "packages/process/src/durable-control/control-stream.ts": "80571dcc206dd370067ff5049d4aa33729972ee0f38bb891e3b5cf737c307fe7",
+    "packages/process/src/durable-control/control-cursor.ts": "79d05f1bc1c16acb71917d0ff8e071926aa61ff7e1d77acf8eb755ad3fe7d99b",
+    "packages/db/src/durable-control/postgres-control-store.ts": "a8743a77bf9f5945e72628cad1e4a93281fc488d107d5944cb9795f4048362ae",
+    "packages/delivery/src/durable-control/pg-boss-delivery.ts": "3fededc207ecd0071df78305b368cd73740b2003e841f41d9841b41ecb633acc",
+    "apps/daemon/src/main.ts": "aa9964da1d719ad78fc181eb299f059ae5bd819b700be1f8237d216c6c2aefca",
+    "apps/daemon/src/bootstrap.ts": "39a8a0891c860692e168c9cc9138747806e11787d679354ba503b1ee18e7a338",
+    "apps/daemon-e2e/src/daemon/daemon.spec.ts": "7ba495e938e09b22923e5e3413ac6a338acb08f3dd1a45b1fc4dd8fd881812fa"
+  },
+  "authority": {
+    "commitAllowed": false,
+    "commitCreated": false,
+    "selfCertified": false,
+    "next": "fresh independent verification and audit"
+  }
+}

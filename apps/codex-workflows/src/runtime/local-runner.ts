@@ -1,10 +1,13 @@
 import { randomUUID } from 'node:crypto';
+import { mkdtemp, rm } from 'node:fs/promises';
 import { homedir } from 'node:os';
 import { join } from 'node:path';
 
 import {
-  initializeCodexHost,
-  shutdownCodexHost,
+  APP_SERVER_PROTOCOL_VERSION,
+  connectAppServer,
+  createAppServerWorkflowExecutor,
+  type AppServerJson,
 } from '@codex/codex';
 import {
   canonicalizeJson,
@@ -88,37 +91,72 @@ export async function runLocalWorkflow(
     workingDirectory: request.workingDirectory,
   });
 
-  let initialized = false;
+  let client: Awaited<ReturnType<typeof connectAppServer>> | undefined;
+  let executor: ReturnType<typeof createAppServerWorkflowExecutor> | undefined;
+  let tempDirectory: string | undefined;
   try {
-    const host = initializeCodexHost({
+    tempDirectory = await mkdtemp(
+      join(request.workingDirectory, '.codex-workspace-tmp-'),
+    );
+    client = await connectAppServer({
+      expectedVersion: APP_SERVER_PROTOCOL_VERSION,
+      clientInfo: {
+        name: 'codex-workflows',
+        title: 'Codex Workflows',
+        version: APP_SERVER_PROTOCOL_VERSION,
+      },
+      cwd: request.workingDirectory,
+      env: { ...process.env },
       ...(process.env.CODEX_WORKFLOWS_CODEX_PATH
-        ? { codexPathOverride: process.env.CODEX_WORKFLOWS_CODEX_PATH }
+        ? { command: process.env.CODEX_WORKFLOWS_CODEX_PATH }
         : {}),
     });
-    initialized = true;
+    executor = createAppServerWorkflowExecutor({
+      connection: {
+        request<T = AppServerJson>(method: string, params?: AppServerJson) {
+          return client!.request(method, params) as Promise<T>;
+        },
+        messages: (options) => client!.messages(options),
+        respond: (id, response) => client!.respond(id, response),
+        async reconnect() {
+          throw new Error(
+            'Direct stdio workflow execution cannot reconnect its App Server child.',
+          );
+        },
+      },
+      cwd: request.workingDirectory,
+      sandbox: 'workspaceWrite',
+      tempDirectory,
+      approvalPolicy: 'never',
+    });
     const result = await executeWorkflow(request.definition, request.input, {
       runId,
       ...(request.signal ? { signal: request.signal } : {}),
       async executeAgent(agentRequest) {
-        const turn = await host.runTurn({
+        const turn = await executor!.executeAgent({
+          node: {
+            id: agentRequest.node.id,
+            model: agentRequest.model,
+            reasoning: agentRequest.reasoning,
+          },
           prompt: agentRequest.prompt,
           model: agentRequest.model,
-          reasoningEffort: agentRequest.reasoning,
-          outputSchema: agentRequest.outputSchema,
+          reasoning: agentRequest.reasoning,
+          ...(agentRequest.outputSchema
+            ? {
+                outputSchema: agentRequest.outputSchema as Exclude<
+                  AppServerJson,
+                  null | boolean | number | string | AppServerJson[]
+                >,
+              }
+            : {}),
           signal: agentRequest.signal,
-          approval: 'never',
-          sandbox: 'workspace-write',
-          workingDirectory: request.workingDirectory,
-          skipGitRepoCheck: false,
-          networkAccessEnabled: true,
-          webSearch: 'live',
+          onRuntimeEvent: agentRequest.onRuntimeEvent,
         });
         return {
           threadId: turn.threadId,
           finalResponse: turn.finalResponse,
-          usage: turn.usage
-            ? (JSON.parse(JSON.stringify(turn.usage)) as JsonValue)
-            : null,
+          usage: turn.usage,
           ...(agentRequest.commandEvidence ? { runtimeTurn: turn } : {}),
         };
       },
@@ -167,6 +205,15 @@ export async function runLocalWorkflow(
     });
     throw errorWithJournal(error, runId, journal);
   } finally {
-    if (initialized) await shutdownCodexHost();
+    try {
+      await executor?.close();
+    } finally {
+      try {
+        await client?.close();
+      } finally {
+        if (tempDirectory)
+          await rm(tempDirectory, { recursive: true, force: true });
+      }
+    }
   }
 }

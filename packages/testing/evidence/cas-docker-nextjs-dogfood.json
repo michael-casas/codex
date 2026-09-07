@@ -1,0 +1,71 @@
+{
+  "id": "CAS-DOCKER-NEXTJS-20260907",
+  "status": "DOGFOOD_PASSED_AND_CLOSED",
+  "accepted": false,
+  "baseReady": false,
+  "boundary": "Repository App Server host registry and WSS bridge to Ubuntu container; actual agent implementation and in-app browser inspection, not full Codex Control plugin orchestration acceptance",
+  "agent": {
+    "model": "gpt-5.6-terra",
+    "effort": "low",
+    "paidAgents": 1,
+    "status": "completed",
+    "threadId": "01a07bd8-57b1-7601-908b-ce57a721129c",
+    "turnId": "01a07bd8-57ed-7360-b4b4-dcaa9a8f86e2",
+    "result": ".agent/artifacts/cas-docker-nextjs/agent-result.json",
+    "resultSha256": "5a6934b43aa0fde17686cc479aa371e0920e9972f564055437468d77cb03e63f"
+  },
+  "runtime": {
+    "ubuntu": "24.04",
+    "architecture": "arm64",
+    "node": "22.18.0",
+    "codex": "0.151.0",
+    "next": "16.3.4",
+    "react": "19.2.8",
+    "imageId": "sha256:826d63e8d942704e420d4d28278570ef6fd4c0dbd0fa340ed0184052d5bf945a",
+    "appUrlDuringTest": "http://127.0.0.1:13000/",
+    "wssEndpointDuringTest": "wss://127.0.0.1:14501/",
+    "appServerBackend": "container loopback 127.0.0.1:4500",
+    "user": "codex uid1100 gid1100",
+    "authMode": "0600",
+    "authStorage": "copy of authorized host auth.json in private container tmpfs; no image-layer copy",
+    "hostHomeMount": "read-only /mnt/host-codex",
+    "preview": "separate nonroot Compose service, read-only app mount, no credential/home mount"
+  },
+  "checks": {
+    "initialMissingApp": true,
+    "authenticatedWssAgentExecution": true,
+    "missingBearerUpgradeHttp": 401,
+    "testCertificateVerifiedWithoutInsecureMode": true,
+    "productionBuildIdPresent": true,
+    "agentReportedBuildSuccess": true,
+    "health": { "status": "ok", "runtime": "ubuntu-codex" },
+    "browser": "Codex in-app browser; Founder explicitly allowed replacement for degraded Firefox MCP",
+    "heading": "CAS Remote Lab",
+    "interaction": "Run check: Ready -> Check passed",
+    "viewport": { "width": 1280, "height": 720 },
+    "horizontalOverflow": false,
+    "screenshot": ".agent/artifacts/cas-docker-nextjs/check-passed.png",
+    "screenshotSha256": "becb3024f51d72fd6b45c5c9e478809fdc9ed16e27d0714ea908419af6df0d30",
+    "lint": "daemon lint --quiet passed; no zero-warning claim",
+    "syntax": "node --check runner and bash -n entrypoint passed",
+    "nxSync": "passed"
+  },
+  "learning": "The agent-started nohup Next process disappeared after turn completion despite successful inside-container HTTP probes. Compose supervision of the retained production build survived agent disconnect and passed real browser interaction. Added preview healthcheck so serve waits for readiness.",
+  "cleanup": {
+    "ownedContainersRemaining": 0,
+    "ownedNetworksRemaining": 0,
+    "temporaryCapabilityAndTlsDirectoryRemoved": true,
+    "tmpfsAuthRemovedWithContainers": true,
+    "previewHttpAfterClose": "000/no listener",
+    "existingControlViewerHttp": 200,
+    "retained": ["app source", "package-lock", "node_modules and production build", "screenshots", "agent result", "Docker image cache"],
+    "browser": "successful verification tab closed; initial error-page tab could not be closed through Browser URL policy"
+  },
+  "sourceHashes": {
+    "apps/daemon/docker-dogfood/Dockerfile.ubuntu": "a806f2432cb9e61aee86c4a791a4d664301ab74bdbeab4c9f36d8abe5de02e92",
+    "apps/daemon/docker-dogfood/compose.yaml": "935143cf0c8026abe17b19d60faa59d5f60ea411325df1a2b867d789244e676b",
+    "apps/daemon/docker-dogfood/run.mjs": "24e3c7b436e0b5a50c37498928f99d6fe768599b217d2af3bcfcbafe023953da",
+    ".agent/artifacts/cas-docker-nextjs/app/package-lock.json": "20102355f31cdc52508df5bd46c7e3e0d8e86621b097eb86d29c33cb56d95008"
+  },
+  "qualification": "Dockerfile base digest was pinned after build to the exact digest observed during that build. Final runner includes lint-only cleanup and lockfile-aware npm ci for future reruns; npm ci path has not incurred another paid agent validation. This container boundary does not establish non-local network latency or Synology deployment acceptance."
+}

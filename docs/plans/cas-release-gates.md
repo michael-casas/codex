@@ -1,0 +1,58 @@
+# CAS release gates
+
+Founder authorized final-gate work and merge to main on 2026-09-07. Promotion
+still follows CAS/CAS-BASE -> CAS/integration -> development -> staging -> main.
+Jira remains waived. No new audit campaign is implied. BASE_READY and release
+acceptance remain distinct; do not rewrite immutable predecessor packets.
+
+## Current candidate
+
+CAS/CAS-BASE at b9dc01512975a8b11bc673b5ec906c818dd708f6 plus uncommitted
+implementation. The main checkout also has unrelated dirty state. Preserve
+that state; never merge into it blindly or stash ignored secrets. A scoped
+candidate inventory and final immutable checkpoint remain required.
+
+## Gate observations — 2026-09-07
+
+- Refreshed the canonical plugin with the supported CLI flow to
+  0.1.0+codex.20260907120319. Installed cached SKILL.md matches source byte for
+  byte, including skill metadata version1.1.0. Fresh-task pickup remains to be
+  observed; existing tasks retain their old loaded skill context.
+- Eight projects with test-l1 targets pass uncached. DB/delivery have L2 targets
+  instead; control-gateway exposes no direct test target and relies on consumer
+  coverage. Do not call the skipped target names tested.
+- Database L2:13/13 passed. Delivery L2:7/10 passed,3 authenticated App Server
+  tests failed under ambient codex0.153.2. Campaign pin is0.151.0. A pinned
+  rerun needs the existing paid-test budget respected: idle-message delivery
+  can start actual model turns with inherited effort, not merely synthetic I/O.
+- All selected build/typecheck targets passed. Process lint was the sole
+  blocking lint target; documented its existing parent-search catch without
+  changing behavior, then lint --quiet passed. Existing warnings remain.
+- Browser R2 desktop/mobile final rerun:16/16 passed in43.2s, with the
+  configured IPv6 loopback origin and localhost proxy exclusions. The Nx-owned
+  Vite dependency was stopped by the task runner afterward; the pre-existing
+  viewer remained available. Local/mobile endpoints both return200; Nx sync
+  passes. This is synthetic native Web evidence, not remote provider dogfood.
+
+## Remote integration blocker
+
+Current production runtime registers only local-demo/codex-demo. The intended
+Synology HTTPS endpoint responds400 with verified TLS to an unauthenticated
+health-path probe; this proves reachability only, not protocol/auth health.
+CODEX_APP_SERVER_AES_J5_8443 is absent from shell and launchd. The production
+credential resolver expects an absolute owner-only local file path. Earlier
+CAS-02 used an injected resolver; its success does not configure this daemon.
+
+Requested Founder input: approved protected local credential-file path only,
+never the token. Then resolve/admit an exact remote repository/base and perform
+the required read-only remote launch/observation/completion/recovery checks.
+Do not replace them with another local fixture or desktop SSH task.
+
+## Remaining closure
+
+Reconcile CAS-12 re-entry dependencies with current repairs and native Web
+acceptance. Finish scoped integrated recovery and evidence/resource checks.
+Separate unrelated skills, Herdr helpers, user configuration and local runtime
+state from the CAS commit. Preserve the structural polish waiver and pending
+artifact-download/preview decision. Commit and promote only after required
+gates pass; do not label this document an acceptance packet.
