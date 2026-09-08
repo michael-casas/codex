@@ -60,7 +60,7 @@ async function trace(path: string): Promise<Record<string, unknown>[]> {
 
 // === L2: END-TO-END TESTS ===
 describe('[L2:E2E] Founder daily-facts public workflow', () => {
-  test('[L2:E2E] DF-GC1-011 runs exactly three concurrent Luna medium researchers and publishes the exact validated report', async () => {
+  test('[L2:E2E] DF-GC1-011 runs exactly three concurrent Luna low researchers and publishes the exact validated report', async () => {
     const root = await mkdtemp(join(tmpdir(), 'codex-daily-facts-e2e-'));
     try {
       const bin = join(root, 'bin');
@@ -130,7 +130,7 @@ describe('[L2:E2E] Founder daily-facts public workflow', () => {
             '--model',
             'gpt-5.6-luna',
             '--config',
-            'model_reasoning_effort="medium"',
+            'model_reasoning_effort="low"',
           ]),
         );
       }

@@ -341,7 +341,7 @@ export class CraRedGreenDriver {
       this.journal.nodes.every(
         (node) =>
           node.model === 'gpt-5.6-luna' &&
-          node.reasoning === 'medium' &&
+          node.reasoning === 'low' &&
           node.status === 'completed' &&
           node.outcome === 'completed',
       ),

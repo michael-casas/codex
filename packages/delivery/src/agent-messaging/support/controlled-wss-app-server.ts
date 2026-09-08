@@ -127,7 +127,9 @@ async function controlledHome(root: string): Promise<string> {
   return home;
 }
 
-export async function createControlledWssAppServer(): Promise<{
+export async function createControlledWssAppServer(
+  options: { credential?: string } = {},
+): Promise<{
   connection: ControlledAppServerConnection;
   close(): Promise<void>;
 }> {
@@ -175,6 +177,26 @@ export async function createControlledWssAppServer(): Promise<{
     { env: childEnvironment, stdio: ['ignore', 'ignore', 'pipe'] },
   );
   child.stderr?.resume();
+  const clients = new Set<TLSSocket>();
+  let tls: ReturnType<typeof createTlsServer> | undefined;
+  async function closeResources(
+    connection?: ControlledAppServerConnection,
+  ): Promise<void> {
+    await connection?.close().catch(() => undefined);
+    for (const client of clients) client.destroy();
+    try {
+      if (tls?.listening)
+        await new Promise<void>((resolveClose, reject) =>
+          tls?.close((error) => (error ? reject(error) : resolveClose())),
+        );
+    } finally {
+      try {
+        await stopChild(child);
+      } finally {
+        await rm(root, { recursive: true, force: true });
+      }
+    }
+  }
   try {
     await waitReady(port);
     const key = join(root, 'key.pem');
@@ -196,8 +218,7 @@ export async function createControlledWssAppServer(): Promise<{
       '-addext',
       'subjectAltName=DNS:localhost',
     ]);
-    const clients = new Set<TLSSocket>();
-    const tls = createTlsServer(
+    tls = createTlsServer(
       {
         key: await readFile(key),
         cert: await readFile(cert),
@@ -226,7 +247,7 @@ export async function createControlledWssAppServer(): Promise<{
           ...options,
           capabilities: { experimentalApi: true },
         }),
-      resolveCredential: async () => token,
+      resolveCredential: async () => options.credential ?? token,
       maxReconnectAttempts: 1,
       reconnectBaseDelayMs: 10,
       reconnectMaxDelayMs: 10,
@@ -245,16 +266,11 @@ export async function createControlledWssAppServer(): Promise<{
     return {
       connection,
       async close() {
-        await connection.close().catch(() => undefined);
-        for (const client of clients) client.destroy();
-        await new Promise<void>((resolve) => tls.close(() => resolve()));
-        await stopChild(child);
-        await rm(root, { recursive: true, force: true });
+        await closeResources(connection);
       },
     };
   } catch (error) {
-    await stopChild(child).catch(() => undefined);
-    await rm(root, { recursive: true, force: true });
+    await closeResources().catch(() => undefined);
     throw error;
   }
 }

@@ -588,7 +588,7 @@ export default defineWorkflow<CraRedGreenInput, unknown>({
         agent<BuilderOutput>({
           label: 'cra-builder',
           model: 'gpt-5.6-luna',
-          reasoning: 'medium',
+          reasoning: 'low',
           commandEvidence: {
             rules: [
               {
@@ -651,7 +651,7 @@ After scaffolding, do not alter package.json, package-lock.json, public files, c
         agent<AuditorOutput>({
           label: 'cra-auditor',
           model: 'gpt-5.6-luna',
-          reasoning: 'medium',
+          reasoning: 'low',
           prompt: `__CRA_RED_GREEN_AUDITOR__
 Do not emit commentary, progress updates, or interim assistant messages. Perform the work first, then emit exactly one final schema-bound JSON response.
 Act as an independent read-only auditor. Inspect the exact project path supplied in workflow input and evaluate only the supplied immutable five-criterion audit. The supplied scaffoldProof was independently validated by the workflow host from a single-use process-boundary trace. The supplied deterministicBaseline was produced by fresh host-owned test and build commands and is authoritative for command status; copy its five IDs, statuses, and summaries exactly in order. No builder command or exit-code self-report is supplied or admissible. NEVER create, edit, delete, format, install, build, test, or otherwise mutate any file. Do not invent or relax criteria. Return all five findings in the supplied order, the exact supplied tree digest, and verdict RED. Return only schema-bound JSON.`,
@@ -674,7 +674,7 @@ Act as an independent read-only auditor. Inspect the exact project path supplied
         agent<RemediatorOutput>({
           label: 'cra-remediator',
           model: 'gpt-5.6-luna',
-          reasoning: 'medium',
+          reasoning: 'low',
           prompt: `__CRA_RED_GREEN_REMEDIATOR__
 Do not emit commentary, progress updates, or interim assistant messages. Perform the work first, then emit exactly one final schema-bound JSON response.
 Remediate only the FAIL findings in the supplied independent audit at the exact supplied project path. Do not alter package.json, package-lock.json, public files, configuration, or dependencies. Edit only src/App.js and src/App.test.js. Preserve the exact Workflow Proof h1. Add one element with data-testid="audit-remediation-status" and exact visible text Audit findings resolved, then add a native React Testing Library assertion for it. Run CI=true npm test -- --watchAll=false --watchman=false and npm run build. The explicit watchman flag is process-local and must not be persisted into package.json or other project configuration. If either command returns a running session identifier, poll that exact session until its terminal exit is observed; never infer or report an exit code from a yielded or still-running command. Return only schema-bound JSON with the exact status READY_FOR_EXTERNAL_AUDIT, the exact projectPath, addressedFindings exactly ["CRA-AUDIT-003", "CRA-AUDIT-004"] in that order, and actual terminal command exit codes.`,

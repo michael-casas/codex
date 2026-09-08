@@ -494,7 +494,7 @@ export class DailyFactsDriver {
           node.status === 'completed' &&
           node.outcome === 'completed' &&
           node.model === 'gpt-5.6-luna' &&
-          node.reasoning === 'medium' &&
+          node.reasoning === 'low' &&
           node.dependencies.length === 0,
       ),
     );

@@ -204,7 +204,7 @@ describe('[L2:E2E] CRA RED to GREEN public workflow', () => {
       expect(
         started.every((entry) =>
           JSON.stringify(entry.args).includes(
-            'model_reasoning_effort=\\"medium\\"',
+            'model_reasoning_effort=\\"low\\"',
           ),
         ),
       ).toBe(true);
@@ -258,7 +258,7 @@ describe('[L2:E2E] CRA RED to GREEN public workflow', () => {
         journal.nodes.every(
           (node) =>
             node.model === 'gpt-5.6-luna' &&
-            node.reasoning === 'medium' &&
+            node.reasoning === 'low' &&
             node.status === 'completed',
         ),
       ).toBe(true);

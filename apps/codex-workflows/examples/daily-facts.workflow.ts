@@ -252,7 +252,7 @@ export default defineWorkflow<DailyFactsInput, unknown>({
           agent<DailyFact, ResearchAssignment>({
             label: `daily-facts-research-${assignment.slot}`,
             model: 'gpt-5.6-luna',
-            reasoning: 'medium',
+            reasoning: 'low',
             prompt: promptFor(assignment),
             input: assignment,
             outputSchema: schemaFor(assignment),

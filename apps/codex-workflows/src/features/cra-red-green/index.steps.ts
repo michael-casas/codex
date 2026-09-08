@@ -41,7 +41,7 @@ When(
 );
 
 Then(
-  'exactly three sequential Luna medium stages complete as builder auditor and remediator',
+  'exactly three sequential Luna low stages complete as builder auditor and remediator',
   function (this: CraRedGreenWorld) {
     assert.ok(this.driver);
     this.driver.assertTopology();
