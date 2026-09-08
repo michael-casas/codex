@@ -1,5 +1,8 @@
-import { readFileSync } from 'node:fs';
+import { readFileSync, writeFileSync } from 'node:fs';
+import { cp, mkdtemp, rm } from 'node:fs/promises';
+import { tmpdir } from 'node:os';
 import { resolve } from 'node:path';
+import { spawnSync } from 'node:child_process';
 
 import { describe, expect, it } from 'vitest';
 
@@ -25,6 +28,66 @@ describe('[L1:DOMAIN] canonical Codex and Nx plugin', () => {
       skills: './skills/',
       mcpServers: './.mcp.json',
     });
+  });
+
+  it('validates through a repository-owned portable Bun command', () => {
+    const project = json(resolve(pluginRoot, 'project.json')) as {
+      targets?: Record<string, { options?: { command?: string } }>;
+    };
+
+    expect(project.targets?.['validate-plugin']?.options?.command).toBe(
+      'bun plugins/codex-control/scripts/validate-plugin.ts plugins/codex-control',
+    );
+  });
+
+  it('accepts the actual plugin and rejects ingestion-invalid metadata', async () => {
+    const project = json(resolve(pluginRoot, 'project.json')) as {
+      targets?: Record<string, { options?: { command?: string } }>;
+    };
+    const command = project.targets?.['validate-plugin']?.options?.command;
+    expect(command).toBeTruthy();
+    if (!command) throw new Error('VALIDATOR_COMMAND_MISSING');
+    const [executable, ...baseArguments] = command.split(' ');
+    if (!executable) throw new Error('VALIDATOR_EXECUTABLE_MISSING');
+    const root = await mkdtemp(resolve(tmpdir(), 'codex-plugin-validation-'));
+    const copyRoot = resolve(root, 'codex-control');
+    await cp(pluginRoot, copyRoot, { recursive: true });
+    const run = () =>
+      spawnSync(executable, [...baseArguments.slice(0, -1), copyRoot], {
+        cwd: workspaceRoot,
+        encoding: 'utf8',
+      });
+
+    try {
+      expect(run().status).toBe(0);
+      const manifestPath = resolve(copyRoot, '.codex-plugin/plugin.json');
+      const manifest = json(manifestPath);
+      manifest['unsupportedField'] = true;
+      writeFileSync(manifestPath, `${JSON.stringify(manifest, null, 2)}\n`);
+      const invalid = run();
+      expect(invalid.status).toBe(1);
+      expect(invalid.stdout + invalid.stderr).toContain('unsupportedField');
+
+      writeFileSync(
+        manifestPath,
+        `${JSON.stringify(json(resolve(pluginRoot, '.codex-plugin/plugin.json')), null, 2)}\n`,
+      );
+      const mcpPath = resolve(copyRoot, '.mcp.json');
+      writeFileSync(mcpPath, '{');
+      const malformedCompanion = run();
+      expect(malformedCompanion.status).toBe(1);
+      expect(malformedCompanion.stdout + malformedCompanion.stderr).toContain(
+        'valid JSON',
+      );
+
+      writeFileSync(mcpPath, readFileSync(resolve(pluginRoot, '.mcp.json')));
+      await rm(resolve(copyRoot, 'skills/codex-control/SKILL.md'));
+      const missingSkill = run();
+      expect(missingSkill.status).toBe(1);
+      expect(missingSkill.stdout + missingSkill.stderr).toContain('SKILL.md');
+    } finally {
+      await rm(root, { recursive: true, force: true });
+    }
   });
 
   it('ships the repo marketplace, thin runtime config, and two-call skill', () => {

@@ -13,6 +13,22 @@ permissions:
 jobs:
   main:
     runs-on: ubuntu-latest
+    env:
+      POSTGRES_URL: postgresql://codex_ci_owner:codex_ci_only@127.0.0.1:5432/codex_ci
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_DB: codex_ci
+          POSTGRES_PASSWORD: codex_ci_only
+          POSTGRES_USER: codex_ci_owner
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U codex_ci_owner -d codex_ci"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
     steps:
       - uses: actions/checkout@v4
         with:
@@ -31,6 +47,18 @@ jobs:
 
       - run: bun install --frozen-lockfile
 
+      - name: Install pinned Codex CLI
+        env:
+          BUN_INSTALL: ${{ runner.temp }}/codex-bun
+        run: |
+          bun install --global @openai/codex@0.151.0
+          echo "$BUN_INSTALL/bin" >> "$GITHUB_PATH"
+
+      - name: Verify portable prerequisites
+        run: |
+          test "$(bun --version)" = "1.4.2"
+          test "$(codex --version)" = "codex-cli 0.151.0"
+
       - name: Resolve immutable affected boundary
         id: affected
         env:
@@ -41,12 +69,27 @@ jobs:
           fi
           echo "base=$EVENT_BASE" >> "$GITHUB_OUTPUT"
 
+      # Founder-approved boundary: hosted CI never receives Codex credentials.
+      # Authenticated App Server/workflow/transport acceptance remains a required
+      # local release gate; see docs/plans/cas-release-gates.md.
       - name: Validate changed projects and transitive dependents
         run: >-
-          bun nx affected -t lint,typecheck,build,test
+          bun nx affected -t lint,typecheck,build,test-l1
           --base=${{ steps.affected.outputs.base }}
           --head=${{ github.sha }}
+          --parallel=2
           --outputStyle=static
+
+      - name: Credential-free integration and behavior suites
+        run: >-
+          bun nx run-many -t test
+          --projects=@codex/plugin-codex-control,@codex/codex-control,@codex/codex-monitor,@codex/workflows,@codex/testing,@codex/daemon-e2e,@codex/wiki-cli,@codex/daemon
+          --parallel=1 --skipNxCache --outputStyle=static
+
+      - name: Credential-free persistence and process boundaries
+        run: |
+          bun nx run-many -t test-l2 --projects=@codex/db,@codex/delivery --parallel=1 --skipNxCache --outputStyle=static
+          bun nx run @codex/process:test-l3 --skipNxCache --outputStyle=static
       # Nx Cloud recommends fixes for failures to help you get CI green faster. Learn more: https://nx.dev/ci/features/self-healing-ci
       - run: bun nx fix-ci
         if: always()

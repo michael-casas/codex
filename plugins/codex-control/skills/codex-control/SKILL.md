@@ -10,8 +10,8 @@ metadata:
 Codex tasks are the orchestrators. Codex App Server executes the agents;
 the Svelte web application displays their activity. This is the Codex plugin
 workflow, not ChatGPT website app registration. Keep execution through the
-installed control tools; do not substitute the TypeScript SDK, SSH/tmux, or
-Herdr when a control operation fails.
+installed control tools; do not substitute the TypeScript SDK or alternate
+harness transports when a control operation fails.
 
 Discover the installed tool schemas before calling unfamiliar operations.
 Use returned handles rather than reconstructing IDs or reading raw database

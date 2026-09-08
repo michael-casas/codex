@@ -1,5 +1,30 @@
 # CAS release gates
 
+## Founder scope amendment — 2026-09-08
+
+Founder approved the release-test boundary: never upload Codex credentials to
+GitHub. Hosted CI owns affected lint/typecheck/build/L1 plus credential-free
+integration and behavior suites. Authenticated `@codex/codex`,
+`@codex/transport`, and `@codex/codex-workflows` aggregates, native-plugin live
+proof, and desktop/mobile acceptance remain mandatory local release gates.
+They are not waived or claimed satisfied by hosted CI. Preserve their local
+evidence against the candidate; rerun affected live behavior when its source changes.
+PR #1 may merge to CAS/integration after repaired CI passes. PR #2 remains open,
+targets CAS/integration, and is not a prerequisite for PR #1.
+
+Herdr compatibility is deferred, including the existing-thread handoff's live
+Herdr-origin proof. Herdr launchers, hooks, environment passthrough, and six
+integration tests belong to `herdr/integration`, preserved at
+`63e6e2f64bca05d3883d2b485af057e15ee88c1f` in
+`/Users/mcasa_atlantis/.codex/worktrees/herdr-integration/.codex`.
+Only the delegation skill retains active Herdr guidance in CAS. Historical
+campaign records and immutable evidence remain unchanged.
+
+Current promotion stops at `CAS/integration` checked out in canonical
+`/Users/mcasa_atlantis/.codex` for Founder dogfood. Do not promote to
+`development` until the Founder requests it after that dogfood. This supersedes
+earlier checkout/promotion instructions below, not the remaining CAS release gates.
+
 ## Validated local checkpoint — 2026-09-08
 
 Candidate `85b810c070bb18ec4374303bb0b30fc3f81dbaa0` passed the full uncached

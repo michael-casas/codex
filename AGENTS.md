@@ -19,8 +19,8 @@ specific.
 
 For Codex agent handoffs and workflows in this repository, use the installed
 Codex Control plugin and its live viewer. Do not silently fall back to native
-subagents, Herdr, SSH, or tmux. Herdr sources are retained for future explicitly
-authorized cross-harness integration; they are not a CAS runtime dependency.
+subagents or alternate harness transports. Cross-harness integrations are deferred
+and are not a CAS runtime dependency.
 Return the actual viewer link for every handoff and the verified mobile link
 when available. Missing Codex Control capability is an explicit blocker.
 

@@ -38,7 +38,7 @@
     "validate-plugin": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "python3 /Users/mcasa_atlantis/.codex/skills/.system/plugin-creator/scripts/validate_plugin.py plugins/codex-control"
+        "command": "bun plugins/codex-control/scripts/validate-plugin.ts plugins/codex-control"
       }
     },
     "test-l1": {
