@@ -1,0 +1,50 @@
+{
+  "$schema": "../assignment.schema.json",
+  "schemaVersion": "1.0.0",
+  "assignmentId": "CAS-HOST-R1",
+  "status": "active",
+  "dispatchable": true,
+  "role": "worker",
+  "objective": "Repair HD01–03 finite transport budgets, sanitized error provenance, bounded recovery and cessation obligations; no live model or runtime operations.",
+  "completionScope": "vertical-slice",
+  "mayReportFeatureComplete": true,
+  "feature": "docs/goals/codex-app-server/CAS-HOST-R1.md",
+  "requiredLayers": {
+    "l1": { "status": "required" },
+    "l2": { "status": "required" },
+    "l3": {
+      "status": "not-applicable",
+      "reason": "This bounded provider/protocol repair uses real synthetic-process L2; live rendered/user validation remains CAS-UI-R1/CAS-12 and is not claimed here."
+    }
+  },
+  "writeSurface": [
+    "packages/transport/src/app-server-host/**",
+    "packages/codex/src/app-server-client/**",
+    "packages/codex/src/index.ts",
+    "packages/codex/src/app-server-workflow/app-server-workflow.executor.ts",
+    "packages/codex/src/app-server-workflow/__tests__/app-server-workflow-executor.test.ts",
+    ".agent/testing/cas-host-r1/**",
+    "packages/testing/evidence/cas-host-r1-*.json"
+  ],
+  "baseRevision": "b9dc01512975a8b11bc673b5ec906c818dd708f6",
+  "stopBoundary": "READY-FOR-AUDIT",
+  "greenContract": {
+    "id": "CAS-HOST-R1-GC-1",
+    "strategy": "basic-then-adversarial",
+    "redPolicy": "all-new-or-changed-contract-rows",
+    "adversarialRequired": true
+  },
+  "commitAuthority": { "allowed": false, "maxCommits": 0 },
+  "dependencies": [
+    "CAS-HOST-DIAG-01:INVESTIGATION_COMPLETE",
+    "CAS-UI-R1:executor-handoff-or-cessation-evidence"
+  ],
+  "evidence": [
+    "immutable-diagnosis:aa5f29cd9878ab01a430aa1b81075ebc12944f135e630ad6dcaeb1a0a5c53e98",
+    "coordinator-approved-codex-root-facade-named-message-policy-exports-only",
+    "UI-owner-exclusive-app-server-workflow-until-explicit-handoff",
+    "one-bounded-child-at-a-time-no-recursion",
+    "zero-live-runtime-and-paid-inference",
+    "completion-requires-stop-obligation-evidence"
+  ]
+}

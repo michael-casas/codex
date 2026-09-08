@@ -1,0 +1,42 @@
+{
+  "schemaVersion": "1.0.0",
+  "campaignId": "CAS-APP-SERVER-20260901-01",
+  "recordId": "CAS-11-R2-DISPATCH-READY-01",
+  "status": "DISPATCH_READY",
+  "workingDirectory": "/Users/mcasa_atlantis/.codex/worktrees/a4a6/.codex",
+  "baseRevision": "b9dc01512975a8b11bc673b5ec906c818dd708f6",
+  "predecessor": {
+    "assignmentId": "CAS-09.R2",
+    "terminal": "CONTROL_RUNTIME_READY",
+    "path": "packages/testing/evidence/cas-09-r2-control-runtime-ready.json",
+    "sha256": "dff03808d46d04ef97c9e4635215e1e46333747173faf0112d8c6d29e3691b95",
+    "candidateSurfaceSha256": "c947800a791249f6dcb94a4aa7360a73a2cb040929400f01a1427818e67961f3",
+    "greenContractSha256": "32d757364d95ef303b6a2fc03ee39ec51e2eddec322b70549e45aad359cb200c",
+    "assignmentSha256": "23ef01e9e1817749601cda997533bc519deb0dbd0be3c41c090ebaded93ee498",
+    "artifactReferencesVerified": 7,
+    "acceptedAsAudit": false
+  },
+  "assignment": {
+    "path": ".agents/batdd/assignments/CAS-11-R2.json",
+    "allocatedSha256": "ded5933bc7c5e9627dc04c63b0ec5cc963268ec85b6c8960d784d82c5920f8ff",
+    "dispatchSha256": "bf3339bc7dc3d5ed9d787700fd908dea9583cf5da06b4813dd2937ad7b34906d",
+    "schema": ".agents/batdd/assignment.schema.json",
+    "schemaValid": true,
+    "dispatchable": true,
+    "model": "gpt-5.6-sol",
+    "reasoningEffort": "medium",
+    "terminal": "CODEX_PLUGIN_READY"
+  },
+  "concurrency": {
+    "exactTitleMatchesBeforeLaunch": 0,
+    "activeImplementationWritersBeforeLaunch": 0,
+    "sharedWorktreeSerialized": true
+  },
+  "restrictions": {
+    "CAS12R1Dispatchable": false,
+    "CAS13OrAuditAllowed": false,
+    "remoteMutation": false,
+    "commitMergePushPublishDeploy": false
+  },
+  "stop": "Launch exactly one fresh same-directory CAS-11.R2 worker. Keep CAS-12.R1 non-dispatchable until exact CODEX_PLUGIN_READY evidence is verified."
+}

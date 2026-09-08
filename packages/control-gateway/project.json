@@ -1,0 +1,9 @@
+{
+  "name": "@codex/control-gateway",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "packages/control-gateway/src",
+  "projectType": "library",
+  "tags": ["type:lib", "scope:orchestration", "layer:foundation"],
+  "// targets": "to see all targets run: nx show project control-gateway --web",
+  "targets": {}
+}

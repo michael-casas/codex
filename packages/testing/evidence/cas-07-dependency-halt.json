@@ -1,0 +1,95 @@
+{
+  "schemaVersion": "1.0.0",
+  "assignmentId": "CAS-07",
+  "campaignId": "CAS-APP-SERVER-20260901-01",
+  "writeLeaseId": "CAS-07-REMOTE-WORKFLOW",
+  "status": "HALT",
+  "reason": "COORDINATOR_COMPOSITION_AUTHORITY_REQUIRED",
+  "baseRevision": "b9dc01512975a8b11bc673b5ec906c818dd708f6",
+  "missingAuthority": {
+    "capability": "Add @codex/workflows as a production dependency of @codex/daemon and synchronize the shared bun.lock composition.",
+    "owner": "single coordinator for overlapping daemon/root composition",
+    "evidence": "The package-local composition import cannot resolve until the daemon workspace link and lockfile importer are updated; bun.lock is explicitly read-only for CAS-07.",
+    "resumeCondition": "A coordinator amendment or integrated checkpoint adds the daemon-to-workflows dependency and synchronized bun.lock entry without discarding predecessor state."
+  },
+  "completedLockedWork": {
+    "greenContract": {
+      "id": "CAS-07-GC-1",
+      "path": ".agent/testing/cas-07/CAS-07-GC-1.json",
+      "sha256": "07edb49db66fa97f03f2b8a5690b37fb422b6381b546e405db9497a595419085",
+      "frozen": true
+    },
+    "red": [
+      {
+        "layer": "L1",
+        "target": "@codex/workflows:test-l1",
+        "selected": 60,
+        "failedCAS07": 1,
+        "failure": "missing frozen node attribution before implementation"
+      },
+      {
+        "layer": "L1",
+        "target": "@codex/daemon:test-l1",
+        "selected": 6,
+        "failedCAS07": 2,
+        "failure": "missing durable runWorkflow and cancellation service"
+      },
+      {
+        "layer": "L2",
+        "target": "@codex/daemon:test-l2-e2e",
+        "selected": 4,
+        "failedCAS07": 2,
+        "failure": "missing App Server execution and recovery composition"
+      },
+      {
+        "layer": "L3",
+        "target": "@codex/daemon:test-l3",
+        "source": 1,
+        "selected": 1,
+        "executed": 1,
+        "failed": 1,
+        "failure": "missing public workflow daemon"
+      }
+    ],
+    "green": [
+      {
+        "layer": "L1",
+        "target": "@codex/workflows:test-l1",
+        "selected": 62,
+        "passed": 62,
+        "exitCode": 0,
+        "change": "executeAgent receives frozen node identity and provider-neutral runtime callback; strict run_workflow admission produces stable run/stream identities and replay fingerprints"
+      },
+      {
+        "layer": "L1",
+        "target": "@codex/codex:test-l1",
+        "selected": 30,
+        "passed": 30,
+        "exitCode": 0,
+        "args": "src/app-server-workflow/__tests__/app-server-workflow-executor.test.ts",
+        "change": "App Server workflow executor preserves run placement and exact model/medium effort across concurrent bound turns, normalizes events, reconciles bound threads, interrupts active turns, and closes at zero active turns"
+      },
+      { "gate": "lint", "projects": ["@codex/workflows"], "exitCode": 0 },
+      { "gate": "lint", "projects": ["@codex/codex"], "exitCode": 0 },
+      { "gate": "typecheck", "projects": ["@codex/codex"], "exitCode": 0 },
+      {
+        "gate": "typecheck",
+        "projects": ["@codex/workflows", "@codex/daemon"],
+        "exitCode": 0
+      },
+      { "gate": "nx-sync-check", "exitCode": 0 }
+    ]
+  },
+  "noWriteState": {
+    "liveAesJ5SynologyMutation": false,
+    "controlledWssMutationStarted": false,
+    "databaseFixturesCreated": 0,
+    "pgBossWorkersStarted": 0,
+    "temporaryRuntimeResources": 0,
+    "bunLockModifiedByCAS07": false,
+    "commitCreated": false,
+    "descendantsLaunched": 0
+  },
+  "nextCheck": "bun nx sync:check --outputStyle=static && bun nx run-many -t typecheck -p @codex/workflows @codex/daemon --outputStyle=static",
+  "independence": "Worker halt evidence only; no audit, QA, verification, or self-certification was performed."
+}

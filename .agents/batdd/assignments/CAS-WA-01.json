@@ -1,0 +1,67 @@
+{
+  "$schema": "../assignment.schema.json",
+  "schemaVersion": "1.0.0",
+  "assignmentId": "CAS-WA-01",
+  "status": "ready",
+  "dispatchable": true,
+  "role": "worker",
+  "objective": "Provide safe one-call admission and launch of trusted workflow source files through the existing Codex Control API and App Server backend, preserving explicit approved model/effort and existing TypeScript authoring primitives.",
+  "completionScope": "vertical-slice",
+  "mayReportFeatureComplete": true,
+  "feature": "docs/goals/codex-app-server/CAS-WA-01.md",
+  "requiredLayers": {
+    "l1": { "status": "required" },
+    "l2": { "status": "required" },
+    "l3": {
+      "status": "not-applicable",
+      "reason": "Real source admission and App Server process integration are proven at L2; final desktop user dogfood remains CAS-12.R1 and cannot be claimed by this implementation seam."
+    }
+  },
+  "writeSurface": [
+    "packages/workflows/src/**",
+    "packages/workflows/package.json",
+    "packages/workflows/vitest.config.ts",
+    "packages/workflows/project.json",
+    "packages/workflows/SCHEMA.md",
+    "packages/process/src/workflow-execution/**",
+    "packages/control-gateway/src/**",
+    "apps/daemon/src/control-runtime.ts",
+    "apps/daemon/vitest.config.ts",
+    "apps/daemon/src/workflow-execution/**",
+    "apps/codex-workflows/src/**",
+    "apps/codex-workflows/CLI.md",
+    "apps/codex-control/src/**",
+    "apps/codex-control/package.json",
+    "packages/testing/manifests/workflows.json",
+    "plugins/codex-control/src/**",
+    "plugins/codex-control/skills/codex-control/SKILL.md",
+    "skills/workflows/SKILL.md",
+    "skills/workflows/references/**",
+    "apps/codex-control-e2e/src/cas-wa-01/**",
+    ".agent/testing/cas-wa-01/**",
+    "packages/testing/evidence/cas-wa-01-*.json"
+  ],
+  "baseRevision": "b9dc01512975a8b11bc673b5ec906c818dd708f6",
+  "stopBoundary": "READY-FOR-AUDIT",
+  "greenContract": {
+    "id": "CAS-WA-01-GC-1",
+    "strategy": "basic-then-adversarial",
+    "redPolicy": "all-new-or-changed-contract-rows",
+    "adversarialRequired": true
+  },
+  "commitAuthority": { "allowed": false, "maxCommits": 0 },
+  "dependencies": [
+    "CAS-RP-01:AGENT_RUNTIME_PROFILE_READY",
+    "CAS-09.R2:CONTROL_RUNTIME_READY",
+    "CAS-11.R2:CODEX_PLUGIN_READY"
+  ],
+  "evidence": [
+    "predecessor:CAS-RP-01:sha256:e924d0e981e9f5835cc9423b4b3f64ca796d47dc4aca865843ec870f359f5a26",
+    "model:gpt-5.6-sol",
+    "reasoning-effort:medium",
+    "write-lease:CAS-WA-01-WORKFLOW-ADMISSION",
+    "activation-requires-exact-CAS-RP-01-terminal-and-owner-quiescence",
+    "no-demo-before-this-seam-and-runtime-profile-ready",
+    "no-SDK-fallback-no-second-DSL-no-self-acceptance"
+  ]
+}

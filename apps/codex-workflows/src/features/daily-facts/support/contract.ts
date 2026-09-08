@@ -27,6 +27,74 @@ export interface ValidateDailyFactsOptions {
     | 'publisher-metadata';
 }
 
+export const dailyFactsDisallowedHosts = [
+  'google.com',
+  'bing.com',
+  'perplexity.ai',
+  'chatgpt.com',
+  'openai.com',
+  'reddit.com',
+  'x.com',
+  'twitter.com',
+  'facebook.com',
+  'instagram.com',
+  'linkedin.com',
+  'youtube.com',
+  'tiktok.com',
+] as const;
+
+export const dailyFactsSourceClusters = {
+  1: [
+    'arxiv.org',
+    'techcrunch.com',
+    'arstechnica.com',
+    'tomshardware.com',
+    'nvidianews.nvidia.com',
+    'newsroom.intel.com',
+    'amd.com',
+    'aws.amazon.com',
+    'news.microsoft.com',
+  ],
+  2: [
+    'techcrunch.com',
+    'theverge.com',
+    'engadget.com',
+    '9to5mac.com',
+    'macrumors.com',
+    'github.blog',
+    'apple.com',
+    'newsroom.spotify.com',
+  ],
+  3: [
+    'techradar.com',
+    'creativebloq.com',
+    'gamesindustry.biz',
+    'eurogamer.net',
+    'polygon.com',
+    'rockpapershotgun.com',
+    'news.xbox.com',
+    'blog.playstation.com',
+  ],
+} as const satisfies Readonly<Record<1 | 2 | 3, readonly string[]>>;
+
+export const dailyFactsPreferredSourceHosts = [
+  ...new Set([
+    ...dailyFactsSourceClusters[1],
+    ...dailyFactsSourceClusters[2],
+    ...dailyFactsSourceClusters[3],
+    'anthropic.com',
+    'blog.google',
+  ]),
+] as const;
+
+export function isDailyFactsDisallowedHost(hostname: string): boolean {
+  const normalizedHostname = hostname.trim().toLowerCase().replace(/\.$/, '');
+  return dailyFactsDisallowedHosts.some(
+    (host) =>
+      normalizedHostname === host || normalizedHostname.endsWith(`.${host}`),
+  );
+}
+
 export class DailyFactsContractError extends Error {
   readonly code = 'DAILY_FACTS_INVALID';
 
@@ -188,26 +256,7 @@ function article(
   if (url.protocol !== 'https:' || !url.hostname.includes('.')) {
     return fail('Article URL must be a direct HTTPS link.');
   }
-  const disallowedHosts = [
-    'google.com',
-    'bing.com',
-    'perplexity.ai',
-    'chatgpt.com',
-    'openai.com',
-    'reddit.com',
-    'x.com',
-    'twitter.com',
-    'facebook.com',
-    'instagram.com',
-    'linkedin.com',
-    'youtube.com',
-    'tiktok.com',
-  ];
-  if (
-    disallowedHosts.some(
-      (host) => url.hostname === host || url.hostname.endsWith(`.${host}`),
-    )
-  ) {
+  if (isDailyFactsDisallowedHost(url.hostname)) {
     return fail('Article URL must link directly to the publishing source.');
   }
   const segments = url.pathname.split('/').filter(Boolean);

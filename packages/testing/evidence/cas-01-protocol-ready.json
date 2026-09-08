@@ -1,0 +1,140 @@
+{
+  "schemaVersion": "1.0.0",
+  "campaignId": "CAS-APP-SERVER-20260901-01",
+  "assignmentId": "CAS-01",
+  "status": "PROTOCOL_READY",
+  "stopBoundary": "READY-FOR-AUDIT",
+  "recordedAt": "2026-09-01T17:08:20Z",
+  "workingDirectory": "/Users/mcasa_atlantis/.codex/worktrees/7467/.codex",
+  "baseRevision": "b9dc01512975a8b11bc673b5ec906c818dd708f6",
+  "candidateSurfaceDigest": "sha256:d08c32b57e9fa54da76e3b3b567b6842dc63f17537713d4c6dfd57b2ed88f8ac",
+  "authority": {
+    "campaignSha256": "2e090e0715a9dc871eb502701d48c333c1a605087125849ed64b2d3bac5a46d6",
+    "profileSha256": "0f1ddd62f238c8c190ad27ccdfe8df5bb226a2054ad110582471f301731e3135",
+    "cas00EvidenceSha256": "c8344ad54f5fd29ce53080546987290e87e1c8e0163fc7847b91d29d674ae532",
+    "assignmentSha256": "4bb5400f9fecce70660d80e5d4d74b1c3379ef92cda3eb8ebd7762188efa5732",
+    "greenContractSha256": "18a21036863d0849140d38ba5ce6f4ba589b1e716546d37bbfe2ff0df5978209",
+    "officialProtocol": "https://learn.chatgpt.com/docs/app-server"
+  },
+  "protocol": {
+    "cliVersion": "codex-cli 0.151.0",
+    "generatedPath": "packages/codex/generated/app-server/0.151.0",
+    "generatedFileCount": 699,
+    "generatedTreeSha256": "112d6c0e0e9b3c101a6791e0da5038a2caff9810a142eb923787636c06c9fea3",
+    "rawRegenerationDiffCount": 0,
+    "command": "codex app-server generate-ts --out packages/codex/generated/app-server/0.151.0 --prettier <workspace-prettier>",
+    "stableSurface": [
+      "initialize -> initialized exactly once",
+      "thread/start",
+      "turn/start",
+      "turn/interrupt",
+      "bounded notification and server-request feed",
+      "generic request/response correlation",
+      "owned provider-error mapping",
+      "abort, timeout, ambiguous EOF, and bounded close"
+    ]
+  },
+  "red": {
+    "contract": "packages/testing/evidence/cas-01-green-contract.json",
+    "l1": {
+      "command": "bun nx run @codex/codex:test-l1-unit --outputStyle=static",
+      "exitCode": 1,
+      "selected": 22,
+      "passedExisting": 16,
+      "failedCAS01": 6,
+      "failure": "missing connectAppServer behavior"
+    },
+    "l2": {
+      "command": "bun nx run @codex/codex:test-l2-integration --outputStyle=static",
+      "exitCode": 1,
+      "selected": 12,
+      "passedExisting": 10,
+      "failedCAS01": 2,
+      "failure": "missing connectAppServer behavior"
+    }
+  },
+  "green": [
+    {
+      "command": "bun nx run @codex/codex:test-l1-unit --outputStyle=static",
+      "exitCode": 0,
+      "selected": 22,
+      "passed": 22,
+      "cas01Rows": 6
+    },
+    {
+      "command": "bun nx run @codex/codex:test-l1 --outputStyle=static",
+      "exitCode": 0,
+      "selected": 29,
+      "passed": 29
+    },
+    {
+      "command": "bun nx run @codex/codex:test-l2-integration --outputStyle=static",
+      "exitCode": 0,
+      "selected": 12,
+      "passed": 12,
+      "cas01Rows": 2,
+      "realBoundary": "codex app-server --listen stdio://"
+    },
+    {
+      "command": "bun nx run @codex/codex:test-l2 --outputStyle=static",
+      "exitCode": 0,
+      "selected": 12,
+      "passed": 12,
+      "realBoundary": "codex app-server --listen stdio://"
+    },
+    {
+      "command": "bun nx run @codex/codex:test --outputStyle=static",
+      "exitCode": 0,
+      "dependsOn": ["test-sdk-imports", "test-l1", "test-l2"],
+      "cacheHits": 0,
+      "aggregateArtifact": "test-output/codex-workflows/codex.json",
+      "aggregateArtifactSha256": "47118868acac3ca3c64ab428769b3e46137b622a188c2f1199b8f1611a3934b0"
+    },
+    {
+      "command": "bun nx run @codex/codex:lint --outputStyle=static",
+      "exitCode": 0
+    },
+    {
+      "command": "bun nx run @codex/codex:typecheck --outputStyle=static",
+      "exitCode": 0,
+      "buildDependencyExecuted": true
+    },
+    {
+      "command": "bun nx run @codex/codex:build --outputStyle=static",
+      "exitCode": 0,
+      "cache": "local hit after the uncached typecheck dependency build"
+    },
+    {
+      "command": "bunx prettier --check <CAS-01 handwritten and evidence paths>",
+      "exitCode": 0
+    }
+  ],
+  "layerDisposition": {
+    "l1": "GREEN",
+    "l2": "GREEN against real stdio App Server",
+    "l3": "N/A by immutable assignment: protocol behavior is fully observable at L1/L2; actor-facing orchestration begins downstream"
+  },
+  "resourceDelta": {
+    "clientMetrics": "every controlled and real client asserted pendingRequests=0, bufferedMessages=0, closed=true, childExited=true after close",
+    "temporaryCas01Paths": 0,
+    "providerSecretsInErrors": 0,
+    "commitsCreated": 0,
+    "stashesAppliedOrDeleted": 0,
+    "unrelatedFilesWritten": 0
+  },
+  "writeSurface": {
+    "handwrittenModuleFiles": 6,
+    "generatedProtocolFiles": 699,
+    "projectConfiguration": ["packages/codex/project.json"],
+    "packageFacade": ["packages/codex/src/index.ts"],
+    "evidence": [
+      "packages/testing/evidence/cas-01-green-contract.json",
+      "packages/testing/evidence/cas-01-protocol-ready.json"
+    ]
+  },
+  "handoff": {
+    "cas02": "Use connectAppServer for exact-version local stdio admission and consume its owned diagnostics/feed; remote framing remains CAS-02.",
+    "cas08": "Consume one bounded messages() feed; notifications and server requests are JSON-safe owned envelopes and raw provider errors/secrets are excluded.",
+    "independentStatus": "Implementation evidence only. Fresh verification/audit remains required."
+  }
+}

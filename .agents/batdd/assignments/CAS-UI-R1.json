@@ -1,0 +1,56 @@
+{
+  "$schema": "../assignment.schema.json",
+  "schemaVersion": "1.0.0",
+  "assignmentId": "CAS-UI-R1",
+  "status": "ready",
+  "dispatchable": true,
+  "role": "worker",
+  "objective": "Diagnose and repair live production workflow/agent visibility through real event ingestion and rendered UI in shared a4a6 on gpt-5.6-sol high, without restarting halted dogfood.",
+  "completionScope": "vertical-slice",
+  "mayReportFeatureComplete": true,
+  "feature": "docs/goals/codex-app-server/CAS-UI-R1.md",
+  "requiredLayers": {
+    "l1": { "status": "required" },
+    "l2": { "status": "required" },
+    "l3": { "status": "required" }
+  },
+  "writeSurface": [
+    "migrations/process/006_visibility_source_reads.sql",
+    "apps/daemon/src/**",
+    "apps/daemon/package.json",
+    "apps/daemon/vitest.config.ts",
+    "packages/process/src/visibility/**",
+    "packages/codex/src/app-server-workflow/**",
+    "packages/db/src/runtime-visibility/**",
+    "packages/control-gateway/src/**",
+    "apps/codex-control-ui/src/**",
+    "apps/codex-control-e2e/features/cas-ui-r1/**",
+    "apps/codex-control-e2e/src/cas-ui-r1/**",
+    "apps/codex-control-e2e/package.json",
+    "packages/testing/manifests/daemon.json",
+    "packages/testing/evidence/cas-ui-r1-*.json",
+    ".agent/testing/cas-ui-r1/**"
+  ],
+  "baseRevision": "b9dc01512975a8b11bc673b5ec906c818dd708f6",
+  "stopBoundary": "READY-FOR-AUDIT",
+  "greenContract": {
+    "id": "CAS-UI-R1-GC-1",
+    "strategy": "basic-then-adversarial",
+    "redPolicy": "all-new-or-changed-contract-rows",
+    "adversarialRequired": true
+  },
+  "commitAuthority": { "allowed": false, "maxCommits": 0 },
+  "dependencies": [
+    "CAS-WA-01:WORKFLOW_AUTHORING_READY",
+    "CAS-RP-01:AGENT_RUNTIME_PROFILE_READY"
+  ],
+  "evidence": [
+    "model:gpt-5.6-sol",
+    "reasoning-effort:high",
+    "write-lease:CAS-UI-R1-LIVE-VISIBILITY",
+    "founder-halts-demo-and-explicitly-authorizes-sol-high-diagnosis-repair",
+    "predecessor:CAS-WA-01:sha256:65868931bf3ccf243f83d33aa6a23c5f29092024f005d12ca19ce98104df7fd1",
+    "predecessor:CAS-RP-01:sha256:e924d0e981e9f5835cc9423b4b3f64ca796d47dc4aca865843ec870f359f5a26",
+    "no-demo-retry-no-fake-projection-no-audit-commit-publish"
+  ]
+}

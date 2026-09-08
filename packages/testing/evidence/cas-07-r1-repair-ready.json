@@ -1,0 +1,206 @@
+{
+  "schemaVersion": "1.0.0",
+  "campaignId": "CAS-APP-SERVER-20260901-01",
+  "assignmentId": "CAS-07.R1",
+  "writeLeaseId": "CAS-07-REMOTE-WORKFLOW",
+  "status": "REPAIR_READY",
+  "workerVerdict": "READY-FOR-AUDIT",
+  "completionScope": "layer",
+  "mayReportFeatureComplete": false,
+  "baseRevision": "b9dc01512975a8b11bc673b5ec906c818dd708f6",
+  "workingDirectory": "/Users/mcasa_atlantis/.codex/worktrees/a4a6/.codex",
+  "authority": {
+    "assignmentSha256": "2ef28c517cd07a7e79ee0da5ff4dd7fe2b6c291f6df95d1f9cfbaf66d760bf04",
+    "amendmentSha256": "2e5d341f5e64c8ba604bcc7240e7c6c2b3d0105cd70971f95edc087ff3df209a",
+    "greenContractId": "CAS-07-R1-GC-1",
+    "greenContractSha256": "be817ed6addf072b47e2f35d1dade6611bc0508ca3422c86d9577dcddd962db8",
+    "redEvidenceSha256": "ce9aee8c7d6c26cdeabf261f6bf7d8fc5112e91f13be6a0bbf11783d13627975",
+    "cas07TerminalSha256": "43dcec6fb6c4829ca8c69ff490eb2a188680ffc30060a29bf914a34b431e7957",
+    "cas09DependencyHaltSha256": "3a49ecdeb91226a432bc49d529b0d925b77dea9f8f36aa67de4e3579e5a5d272",
+    "candidateSurfaceSha256": "939d3a922c9143c2bb2bdcd87e39ed61308d1f2b2d7be9a3546544cda997b10d",
+    "commitAuthority": false,
+    "selfCertified": false
+  },
+  "interface": {
+    "package": "@codex/process",
+    "factory": "createDurableWorkflowClient",
+    "operations": [
+      "runWorkflow / run_workflow",
+      "readWorkflow(runId, afterCursor)",
+      "cancelWorkflow(runId)"
+    ],
+    "runResult": ["runId", "state", "cursor"],
+    "observationResult": [
+      "runId",
+      "state",
+      "cursor",
+      "changed",
+      "cancellationRequested",
+      "result?",
+      "nodes?",
+      "artifacts?"
+    ],
+    "providerChoreographyExposed": false,
+    "callerRawPathsAllowed": false
+  },
+  "implementation": {
+    "packageClient": "Owns strict durable submission, combined command/runtime stream observation, compact terminal result shaping, and idempotent cancellation requests behind an injected prepare function and control-store port.",
+    "daemonConsumption": "The daemon constructs and delegates run/read/cancel to the package client while retaining App Server execution, workspace acquisition, artifacts, runtime reconciliation, active controller ownership, and terminal reduction.",
+    "crossProcessCancel": "The daemon subscribes to the accepted PostgreSQL event stream and aborts an active bound workflow when the package client writes workflow.cancel.requested.",
+    "truth": "Existing PostgreSQL control commands/events remain authoritative.",
+    "delivery": "Existing pg-boss transactional writer remains sole delivery/retry owner.",
+    "newScheduler": false,
+    "newRetryLoop": false,
+    "newEventStore": false,
+    "newNetworkServer": false,
+    "newMigration": false,
+    "newExternalDependency": false,
+    "rootLockfileChangedByRepair": false
+  },
+  "red": [
+    {
+      "row": "CAS07R1-L1-CLIENT",
+      "target": "@codex/process:test-l1",
+      "selected": 29,
+      "passedLocked": 26,
+      "failedRepair": 3,
+      "exitCode": 1,
+      "decisive": "createDurableWorkflowClient absent"
+    },
+    {
+      "row": "CAS07R1-L2-DURABLE",
+      "target": "@codex/daemon:test-l2-e2e",
+      "selected": 8,
+      "passedLocked": 7,
+      "failedRepair": 1,
+      "exitCode": 1,
+      "decisive": "package client absent while locked daemon boundaries stayed green"
+    }
+  ],
+  "green": [
+    {
+      "layer": "L1",
+      "project": "@codex/process",
+      "target": "test-l1",
+      "selected": 29,
+      "passed": 29,
+      "exitCode": 0,
+      "cache": "bypassed"
+    },
+    {
+      "layer": "L1",
+      "project": "@codex/daemon",
+      "target": "test-l1",
+      "selected": 7,
+      "passed": 7,
+      "exitCode": 0,
+      "cache": "bypassed"
+    },
+    {
+      "layer": "L2",
+      "project": "@codex/daemon",
+      "target": "test-l2-e2e",
+      "selected": 8,
+      "passed": 8,
+      "exitCode": 0,
+      "cache": "bypassed",
+      "boundary": "real PostgreSQL, pg-boss, authenticated WSS, App Server, visibility, and daemon composition"
+    },
+    {
+      "layer": "L2",
+      "project": "@codex/daemon-e2e",
+      "target": "test-l2-e2e",
+      "selected": 1,
+      "passed": 1,
+      "exitCode": 0,
+      "boundary": "built daemon process start/stop/restart"
+    },
+    {
+      "gate": "process-build",
+      "exitCode": 0
+    },
+    {
+      "gate": "process-typecheck",
+      "exitCode": 0
+    },
+    {
+      "gate": "process-scoped-lint",
+      "paths": [
+        "packages/process/src/workflow-execution",
+        "packages/process/src/index.ts"
+      ],
+      "exitCode": 0
+    },
+    {
+      "gate": "daemon-typecheck-lint-build",
+      "exitCode": 0
+    },
+    {
+      "gate": "nx-sync-check",
+      "exitCode": 0
+    },
+    {
+      "gate": "prettier-exact-repair-files",
+      "exitCode": 0
+    }
+  ],
+  "baselineFailures": [
+    {
+      "gate": "bun nx run @codex/process:lint --outputStyle=static",
+      "exitCode": 1,
+      "unrelated": true,
+      "path": "packages/process/src/delegation/index.steps.ts:17",
+      "rule": "no-empty",
+      "reasonNotRepaired": "Outside the immutable CAS-07.R1 write surface; scoped repair lint is green."
+    },
+    {
+      "gate": "bun install --frozen-lockfile",
+      "exitCode": 1,
+      "unrelated": true,
+      "decisive": "apps/codex-control exists in the shared checkout but has no bun.lock workspace importer",
+      "reasonNotRepaired": "CAS-09/root composition predates this repair and root lockfile writes require a separate coordinator amendment. CAS-07.R1 added no dependency and changed no root lockfile."
+    }
+  ],
+  "observedFailedGreenAttempts": [
+    {
+      "surface": "L1 controlled preparer",
+      "failure": "Fixture emitted a non-hex placeholder fingerprint and was correctly rejected by trust-boundary validation.",
+      "resolution": "Test plumbing now uses Node SHA-256; product contract was unchanged."
+    },
+    {
+      "surface": "L2 job observation",
+      "failure": "The existing delivery inspection helper is intentionally fixed to control-command and could not inspect workflow-execution.",
+      "resolution": "The frozen one-job guarantee is observed through one committed delivery.requested event plus successful transactional enqueue and exact replay; product behavior was unchanged."
+    }
+  ],
+  "preservation": {
+    "cas09GreenContractBeforeSha256": "a68d951ebe0addcae3778f1a618a5ac56c49d2464ecc5a0e3e1e580c95aeab4d",
+    "cas09GreenContractAfterSha256": "a68d951ebe0addcae3778f1a618a5ac56c49d2464ecc5a0e3e1e580c95aeab4d",
+    "cas09RedBeforeSha256": "adde70d6eed15e0c829910f1c2f8af775637b2b18a3221b23b02081430b116d6",
+    "cas09RedAfterSha256": "adde70d6eed15e0c829910f1c2f8af775637b2b18a3221b23b02081430b116d6",
+    "cas07LockedTerminalPreserved": true,
+    "liveSynologyContacted": false,
+    "liveSynologyMutated": false,
+    "productionSdkRestored": false,
+    "commitsCreated": 0,
+    "descendantsLaunched": 0
+  },
+  "resourceDelta": {
+    "testDatabases": 0,
+    "controlledWssAppServerProcesses": 0,
+    "networkListenersAdded": 0,
+    "unexpectedResources": 0
+  },
+  "handoff": {
+    "CAS-09": "Import createDurableWorkflowClient and its types only from @codex/process; compose it with the accepted prepareWorkflowRun and PostgreSQL control store, then rerun the three frozen CAS-09 RED rows byte-unchanged before GREEN.",
+    "forbidden": "Do not import apps/daemon, add a scheduler/retry/event truth, expose provider method order, or change the frozen CAS-09 contract/RED."
+  },
+  "stop": {
+    "terminal": "READY-FOR-AUDIT",
+    "featureCompleteClaimed": false,
+    "independentVerificationRequired": true,
+    "auditOrQaLaunched": false,
+    "commitCreated": false,
+    "pushPerformed": false
+  }
+}

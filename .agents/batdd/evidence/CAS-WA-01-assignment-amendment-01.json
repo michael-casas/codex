@@ -1,0 +1,27 @@
+{
+  "schemaVersion": "1.0.0",
+  "assignmentId": "CAS-WA-01",
+  "status": "READY",
+  "previousAssignmentSha256": "9af0677a2f1c8104b8f5c3c1edb024be1493d65472d8955c7250648dd607a677",
+  "amendedAssignmentSha256": "24c3b1183af48fb48b990ad3be3827ffdf318bc13ce778af711c8c383731d54a",
+  "schemaValid": true,
+  "addedWriteSurface": [
+    "packages/workflows/package.json",
+    "packages/workflows/vitest.config.ts",
+    "packages/workflows/project.json"
+  ],
+  "observed": {
+    "existingEsbuildConsumer": "apps/codex-workflows/package.json",
+    "existingExactVersion": "0.27.7",
+    "workflowsVitestIncludes": ["src/**/*.test.ts"],
+    "resolvedTestL2Target": null
+  },
+  "authorizedChanges": [
+    "Declare existing exact esbuild 0.27.7 for reusable source-loader mechanics without app-to-app imports.",
+    "Add real source-loader L2 collection and its Nx target; keep L1 and L2 entrypoints independently selected and preserve all standing L1 coverage."
+  ],
+  "coordinatorOwned": ["bun.lock", "workspace dependency link materialization"],
+  "newDependencyVersionAllowed": false,
+  "allOtherAssignmentFieldsUnchanged": true,
+  "auditCommitDeployAuthority": false
+}

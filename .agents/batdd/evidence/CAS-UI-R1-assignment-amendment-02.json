@@ -1,0 +1,21 @@
+{
+  "schemaVersion": "1.0.0",
+  "assignmentId": "CAS-UI-R1",
+  "status": "READY",
+  "previousAssignmentSha256": "122bcaff166dff931cf42e57399bce95313505ff898ddc4db4916fa60b5a154e",
+  "amendedAssignmentSha256": "d792d71a51619a73baecbbb862809898311516cfabeb5735ecc10fd88c90fb8d",
+  "schemaValid": true,
+  "addedWriteSurface": ["packages/codex/src/app-server-workflow/**"],
+  "observed": "Executor generic runtime events retain itemType but omit live content/deltas; options currently lack a visibility observation callback.",
+  "authorizedChange": "Optional node/thread/item-scoped provider observation callback feeding the existing daemon visibility normalizer and module-local tests.",
+  "constraints": [
+    "Exclude private reasoning; redact and bound allowed text before durable storage or browser delivery.",
+    "Do not add raw payloads to generic workflow events or logs.",
+    "No second transport subscriber or ownership mapping race.",
+    "Absent callback preserves CLI/runtime contracts; test attribution, error handling, cancellation and cleanup.",
+    "No transport frame-limit or reconnect-policy repair authorized by this amendment."
+  ],
+  "generatedProtocolOrDependencyChanges": false,
+  "allOtherAssignmentFieldsUnchanged": true,
+  "demoRestartAuditCommitDeployAuthority": false
+}

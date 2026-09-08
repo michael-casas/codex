@@ -1,0 +1,156 @@
+{
+  "schemaVersion": "1.0.0",
+  "campaignId": "CAS-APP-SERVER-20260901-01",
+  "assignmentId": "CAS-01",
+  "contractId": "CAS-01-GC-1",
+  "baseRevision": "b9dc01512975a8b11bc673b5ec906c818dd708f6",
+  "strategy": "basic-then-adversarial",
+  "redPolicy": "all-new-or-changed-contract-rows",
+  "sourceAuthority": {
+    "charter": "docs/goals/codex-app-server/CAS-01.md",
+    "assignmentSha256": "4bb5400f9fecce70660d80e5d4d74b1c3379ef92cda3eb8ebd7762188efa5732",
+    "authoritySha256": "2e090e0715a9dc871eb502701d48c333c1a605087125849ed64b2d3bac5a46d6",
+    "officialProtocol": "https://learn.chatgpt.com/docs/app-server"
+  },
+  "rows": [
+    {
+      "id": "CAS01-L1-INITIALIZE-VERSION",
+      "form": "basic",
+      "layer": "L1",
+      "runtime": "vitest",
+      "file": "packages/codex/src/app-server-client/__tests__/app-server-client-protocol.test.ts",
+      "testIdentity": "[L1:UNIT] CAS01-L1-INITIALIZE-VERSION initializes exactly once after exact CLI version admission",
+      "nxTarget": "@codex/codex:test-l1-unit",
+      "expectedRed": "The existing package exports no App Server client, so the selected assertion reports the missing connect behavior.",
+      "observableGreen": "Exact CLI 0.151.0 is admitted, mismatch rejects before server spawn, initialize is sent once, and initialized follows the successful response.",
+      "isolationCleanup": "Controlled child exits; no process, stream, listener, or temporary-file delta.",
+      "counts": { "source": 1, "selected": 1, "generated": 0, "executed": 1 }
+    },
+    {
+      "id": "CAS01-L1-CORRELATION",
+      "form": "basic",
+      "layer": "L1",
+      "runtime": "vitest",
+      "file": "packages/codex/src/app-server-client/__tests__/app-server-client-protocol.test.ts",
+      "testIdentity": "[L1:UNIT] CAS01-L1-CORRELATION resolves concurrent out-of-order responses and fails closed on unmatched IDs",
+      "nxTarget": "@codex/codex:test-l1-unit",
+      "expectedRed": "The existing package exports no request-correlation behavior.",
+      "observableGreen": "Monotonic unique request IDs correlate out-of-order responses; unmatched or duplicate response IDs close the connection and reject pending work.",
+      "isolationCleanup": "Controlled child and pending requests are closed with zero listeners or timers retained.",
+      "counts": { "source": 1, "selected": 1, "generated": 0, "executed": 1 }
+    },
+    {
+      "id": "CAS01-L1-PROVIDER-ERROR",
+      "form": "basic",
+      "layer": "L1",
+      "runtime": "vitest",
+      "file": "packages/codex/src/app-server-client/__tests__/app-server-client-protocol.test.ts",
+      "testIdentity": "[L1:UNIT] CAS01-L1-PROVIDER-ERROR maps provider failures without leaking provider messages or secrets",
+      "nxTarget": "@codex/codex:test-l1-unit",
+      "expectedRed": "The existing package has no owned App Server failure vocabulary.",
+      "observableGreen": "Callers receive an owned method/code failure while raw provider message, data, request payload, environment, and stderr remain absent.",
+      "isolationCleanup": "Controlled child exits and the failed request is removed from correlation state.",
+      "counts": { "source": 1, "selected": 1, "generated": 0, "executed": 1 }
+    },
+    {
+      "id": "CAS01-L1-INBOUND-BOUNDS",
+      "form": "adversarial",
+      "layer": "L1",
+      "runtime": "vitest",
+      "file": "packages/codex/src/app-server-client/__tests__/app-server-client-protocol.test.ts",
+      "testIdentity": "[L1:UNIT] CAS01-L1-INBOUND-BOUNDS exposes notifications and server requests through one bounded feed",
+      "nxTarget": "@codex/codex:test-l1-unit",
+      "expectedRed": "The existing package has no bounded App Server inbound feed.",
+      "observableGreen": "Known and unknown notifications plus server requests retain stable method/id/JSON-safe params; a slow consumer that fills the configured bound closes deterministically.",
+      "isolationCleanup": "The single feed consumer, waiters, and controlled child are released on return and close.",
+      "counts": { "source": 1, "selected": 1, "generated": 0, "executed": 1 }
+    },
+    {
+      "id": "CAS01-L1-MALFORMED-LIMIT",
+      "form": "adversarial",
+      "layer": "L1",
+      "runtime": "vitest",
+      "file": "packages/codex/src/app-server-client/__tests__/app-server-client-protocol.test.ts",
+      "testIdentity": "[L1:UNIT] CAS01-L1-MALFORMED-LIMIT rejects malformed or oversized JSONL without echoing content",
+      "nxTarget": "@codex/codex:test-l1-unit",
+      "expectedRed": "The existing package has no App Server trust-boundary parser or byte limit.",
+      "observableGreen": "Malformed JSON, non-object messages, invalid response envelopes, and oversized lines close with static owned errors that never echo input.",
+      "isolationCleanup": "Parser/readline/child resources close on every rejection path.",
+      "counts": { "source": 1, "selected": 1, "generated": 0, "executed": 1 }
+    },
+    {
+      "id": "CAS01-L1-CANCEL-EOF",
+      "form": "adversarial",
+      "layer": "L1",
+      "runtime": "vitest",
+      "file": "packages/codex/src/app-server-client/__tests__/app-server-client-protocol.test.ts",
+      "testIdentity": "[L1:UNIT] CAS01-L1-CANCEL-EOF distinguishes local cancellation from ambiguous EOF and drains safely",
+      "nxTarget": "@codex/codex:test-l1-unit",
+      "expectedRed": "The existing package has no App Server cancellation, tombstone, EOF, or close semantics.",
+      "observableGreen": "Pre-send abort writes nothing; post-send abort tombstones one late response; EOF rejects written pending calls as ambiguous; close is idempotent and bounded.",
+      "isolationCleanup": "Abort listeners, timers, tombstones, pending requests, feed waiters, and child process all reach zero.",
+      "counts": { "source": 1, "selected": 1, "generated": 0, "executed": 1 }
+    },
+    {
+      "id": "CAS01-L2-REAL-STREAM",
+      "form": "basic",
+      "layer": "L2",
+      "runtime": "vitest-real-stdio",
+      "file": "packages/codex/src/app-server-client/__specs__/app-server-client-stdio.spec.ts",
+      "testIdentity": "[L2:INTEGRATION] CAS01-L2-REAL-STREAM starts a real thread and turn and streams delta through terminal completion",
+      "nxTarget": "@codex/codex:test-l2-integration",
+      "expectedRed": "The real CLI handshake is independently healthy, but the package exposes no client that can drive the public flow.",
+      "observableGreen": "Pinned CLI initializes, thread/start and turn/start return stable IDs, the feed observes item delta and completed item, and turn/completed is authoritative.",
+      "isolationCleanup": "The dedicated temporary CODEX_HOME, thread process, stdio streams, and client child are closed with zero resource delta.",
+      "counts": { "source": 1, "selected": 1, "generated": 0, "executed": 1 }
+    },
+    {
+      "id": "CAS01-L2-REAL-INTERRUPT",
+      "form": "adversarial",
+      "layer": "L2",
+      "runtime": "vitest-real-stdio",
+      "file": "packages/codex/src/app-server-client/__specs__/app-server-client-stdio.spec.ts",
+      "testIdentity": "[L2:INTEGRATION] CAS01-L2-REAL-INTERRUPT interrupts a real active turn and closes every owned resource",
+      "nxTarget": "@codex/codex:test-l2-integration",
+      "expectedRed": "The real CLI is available, but the package exposes no typed interrupt or bounded cleanup path.",
+      "observableGreen": "turn/interrupt targets the exact thread/turn, the feed reaches terminal completion without duplicate terminal events, and close leaves no child or stream alive.",
+      "isolationCleanup": "The dedicated temporary CODEX_HOME and all child descendants, streams, timers, and listeners return to the pre-test inventory.",
+      "counts": { "source": 1, "selected": 1, "generated": 0, "executed": 1 }
+    }
+  ],
+  "layers": {
+    "l1": "required",
+    "l2": "required",
+    "l3": {
+      "status": "not-applicable",
+      "reason": "Protocol-client behavior is fully observable at L1 and the real App Server L2 boundary; actor-facing orchestration begins downstream."
+    }
+  },
+  "freeze": {
+    "status": "frozen",
+    "frozenAt": "2026-09-01T16:52:30Z",
+    "redEvidence": [
+      {
+        "command": "bun nx run @codex/codex:test-l1-unit --outputStyle=static",
+        "workingDirectory": "/Users/mcasa_atlantis/.codex/worktrees/7467/.codex",
+        "revision": "b9dc01512975a8b11bc673b5ec906c818dd708f6",
+        "exitCode": 1,
+        "selected": 22,
+        "passedExisting": 16,
+        "failedCAS01": 6,
+        "decisiveFailure": "CAS-01 connect behavior is not implemented: expected undefined to be type of function"
+      },
+      {
+        "command": "bun nx run @codex/codex:test-l2-integration --outputStyle=static",
+        "workingDirectory": "/Users/mcasa_atlantis/.codex/worktrees/7467/.codex",
+        "revision": "b9dc01512975a8b11bc673b5ec906c818dd708f6",
+        "exitCode": 1,
+        "selected": 12,
+        "passedExisting": 10,
+        "failedCAS01": 2,
+        "decisiveFailure": "CAS-01 connect behavior is not implemented: expected undefined to be type of function"
+      }
+    ],
+    "contractCorrectionAuthority": "CAS-00 coordinator or Founder"
+  }
+}

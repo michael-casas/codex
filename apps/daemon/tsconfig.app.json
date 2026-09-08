@@ -13,8 +13,33 @@
     "vitest.config.ts",
     "src/**/*.spec.ts",
     "src/**/*.test.ts",
+    "src/**/*.steps.ts",
+    "src/workflow-execution/support/**",
     "eslint.config.js",
     "eslint.config.cjs",
     "eslint.config.mjs"
+  ],
+  "references": [
+    {
+      "path": "../../packages/codex/tsconfig.lib.json"
+    },
+    {
+      "path": "../../packages/control-gateway/tsconfig.lib.json"
+    },
+    {
+      "path": "../../packages/delivery/tsconfig.lib.json"
+    },
+    {
+      "path": "../../packages/db/tsconfig.lib.json"
+    },
+    {
+      "path": "../../packages/process/tsconfig.lib.json"
+    },
+    {
+      "path": "../../packages/transport/tsconfig.lib.json"
+    },
+    {
+      "path": "../../packages/workflows/tsconfig.lib.json"
+    }
   ]
 }

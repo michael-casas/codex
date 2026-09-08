@@ -1,0 +1,27 @@
+{
+  "schemaVersion": "1.0.0",
+  "assignmentId": "CAS-WA-01",
+  "status": "READY",
+  "assignmentSha256": "f1337cbb2862a3a5f5097acd061c6d02ea427dae98d8a69d72d451c535518c77",
+  "lockBeforeSha256": "1adaa629d7bb19ecb3831ef0c7d1c4a382404778acc12656898fdb0f5fac5a6a",
+  "lockAfterSha256": "b9e8f042e0506ca8421655bccd88638980209400f006ffa6efd4f8264fad1ab3",
+  "onlyImporterAdditions": [
+    "packages/workflows dependencies esbuild 0.27.7",
+    "apps/codex-control devDependencies @codex/codex workspace:*"
+  ],
+  "inMemoryRemovalReproducesPriorLockHash": true,
+  "consumerLinksResolve": true,
+  "packageDeclarationsUnchangedDuringIntegration": true,
+  "companionReference": {
+    "path": "apps/codex-control/tsconfig.app.json",
+    "added": "../../packages/codex/tsconfig.lib.json",
+    "reason": "Nx sync reported this exact missing reference after the declared direct workspace dependency was materialized.",
+    "sha256": "97e7708ab6796c69474bbe475d8e75b27fb90da8866bb550c644c5fcc629485d"
+  },
+  "frozenInstall": "PASS_NO_CHANGES",
+  "nxSyncCheck": "PASS",
+  "formatting": "PASS",
+  "productOrTestLogicModified": false,
+  "newExternalPackageVersion": false,
+  "commitAuditDeploy": false
+}

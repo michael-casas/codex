@@ -1,0 +1,114 @@
+{
+  "schemaVersion": "1.0.0",
+  "campaignId": "CAS-APP-SERVER-20260901-01",
+  "assignmentId": "CAS-09.R1",
+  "status": "REPAIR_READY",
+  "workerVerdict": "READY-FOR-AUDIT",
+  "recordedDate": "2026-09-02",
+  "baseRevision": "b9dc01512975a8b11bc673b5ec906c818dd708f6",
+  "workingDirectory": "/Users/mcasa_atlantis/.codex/worktrees/a4a6/.codex",
+  "authority": {
+    "assignmentPath": "/Users/mcasa_atlantis/.codex/worktrees/0c2e/.codex/.agents/batdd/assignments/CAS-09.R1.json",
+    "assignmentSha256": "58b8c4dc737e70d97f1c387904eb30585acb3b6b7d781676a90bcd07ce2da943",
+    "authorizationPath": "/Users/mcasa_atlantis/.codex/worktrees/0c2e/.codex/.agents/batdd/evidence/CAS-09-R1-CONTROL-GATEWAY-AUTHORIZED.json",
+    "authorizationSha256": "7336f9b1227ab4ac8c75eaeee3a7ff9c9a6b1e4fbb5c38b319cdaa4cfd6a0aa0",
+    "sourceHaltPath": "/Users/mcasa_atlantis/.codex/worktrees/a4a6/.codex/packages/testing/evidence/cas-11-app-import-prohibition-halt.json",
+    "sourceHaltSha256": "b55118f74bc0b4cf8e52f50a308cb704f2a70755d5ed46b002bea9ef5de75beb",
+    "commitAuthority": false,
+    "selfCertified": false
+  },
+  "repair": {
+    "package": "@codex/control-gateway",
+    "root": "packages/control-gateway",
+    "consumers": ["@codex/codex-control", "@codex/plugin-codex-control"],
+    "gatewayBeforeSha256": "3dcfa85dc59c8ea9d0e29dfa6ed23dac3a0c9afbe2f0a414d962ed57757f69db",
+    "gatewayAfterMoveSha256": "3dcfa85dc59c8ea9d0e29dfa6ed23dac3a0c9afbe2f0a414d962ed57757f69db",
+    "behaviorMoveByteIdentical": true,
+    "appCompatibilityFacade": "apps/codex-control/src/control/codex-control.gateway.ts re-exports @codex/control-gateway",
+    "pluginImport": "@codex/control-gateway",
+    "candidateSurfaceSha256": "dd53b37a35dd3dcecd0afd3b0716b4b43f44b38928e55ecc2e01b7e1d513b3f9"
+  },
+  "files": {
+    "packages/control-gateway/src/lib/control-gateway.ts": "3dcfa85dc59c8ea9d0e29dfa6ed23dac3a0c9afbe2f0a414d962ed57757f69db",
+    "packages/control-gateway/src/index.ts": "84b61ef6959b2009cac3b289940c51d68da2825bbc6890976094b11a8a882381",
+    "packages/control-gateway/package.json": "40adc46768c1146f6238ad70667651e6249ad873bb7a26329fd7502d59c25ad0",
+    "packages/control-gateway/project.json": "f70d7f35a4a0ce54adf4fd32cb277a62c6f433f1ae5d95e4f6969f8788c2f080",
+    "packages/control-gateway/tsconfig.json": "4e2a4326a268f26f664ac488a782909c8f6ba7836ba8707ea557b2bfe056cb41",
+    "packages/control-gateway/tsconfig.lib.json": "9bbeda315b52ad46b0acaa91d14bb39e47c10bd37023e6916cc67b61bbe27c1d",
+    "apps/codex-control/src/control/codex-control.gateway.ts": "72abaf934caa1d92c356538832cd2a353ff8c5df098fd63e336052b2d9a61418",
+    "apps/codex-control/package.json": "6d4513550b89938db23fc8bf8a75044b6f37c4b1acd99b5c1f95bd97249376a9",
+    "apps/codex-control/tsconfig.app.json": "786f165aafb9a891a01f464ce4e283ec86caa0dee20ee012a2a75c866d9e444f",
+    "plugins/codex-control/src/server.ts": "39941ec55a62ff42f5e6ac63570687786f4569bfaea8ccfeb025740e90049e3d",
+    "plugins/codex-control/package.json": "72ac2aecb106e8f4fe78911a59ef17c25c3a878c4fd780dfcf471d04179801d4",
+    "plugins/codex-control/project.json": "0ab48cd0362c8991b2628676b4c6a5649db74d2d3ec274e61f4ada3572ccca7e",
+    "plugins/codex-control/tsconfig.json": "743a4a403f508b993ff37826023a2b8737fd2cb7cf2e156881f79f48d5c858b6",
+    "eslint.config.mjs": "02ce36e8bb67c51f48f3b45e2bbb71fea43bf8e6f9015466385082c7d98f26e9",
+    "package.json": "0896239ff2af6f53ed5efcd06eaefcebfd3fc0675c9107567ac4bf5a1cb0dc44",
+    "bun.lock": "34ec0afe6268a97a7990adf9efbbfcdf9d0e5c227d5dd5fef2324a8089a9f324",
+    "tsconfig.json": "6f843fc4baaba47de35c595c74025fc910761f214c2b7dbd304756cf27d68e28"
+  },
+  "failedApproachRemoved": {
+    "appServerSubpathExport": true,
+    "pluginAppDependency": true,
+    "layerPackagingTagAndRule": true,
+    "forbiddenProductionAppImports": 0
+  },
+  "validation": {
+    "frozenInstall": "GREEN; 1024 installs across 1106 packages; zero changes",
+    "nxSync": "GREEN",
+    "buildTypecheckLint": {
+      "projects": [
+        "@codex/control-gateway",
+        "@codex/codex-control",
+        "@codex/plugin-codex-control"
+      ],
+      "exitCode": 0,
+      "cache": "bypassed"
+    },
+    "CAS-09": {
+      "l1": { "selected": 1, "passed": 1 },
+      "l2": { "selected": 1, "passed": 1 },
+      "l3": { "scenarios": 1, "steps": 4, "passed": true },
+      "supplemental": { "selected": 6, "passed": 6 },
+      "stdio": { "selected": 1, "passed": 1 },
+      "postgresPgBoss": { "selected": 1, "passed": 1 }
+    },
+    "CAS-11": {
+      "l1": { "selected": 4, "passed": 4 },
+      "l2": { "selected": 2, "passed": 2 },
+      "pluginValidation": "GREEN",
+      "web": {
+        "selected": 16,
+        "passed": 16,
+        "projects": ["chromium", "mobile-chromium"]
+      }
+    },
+    "prettier": "GREEN for exact repair files"
+  },
+  "cleanup": {
+    "testDatabases": 0,
+    "listener4200": 0,
+    "ownedPluginProcesses": 0,
+    "ownedPlaywrightProcesses": 0,
+    "isolatedCodexHomes": 0,
+    "unexpectedResourceDelta": 0
+  },
+  "restrictions": {
+    "behaviorChanged": false,
+    "gatewayCopied": false,
+    "lintWeakened": false,
+    "hiddenDynamicImport": false,
+    "appRelabeledAsLibrary": false,
+    "newWorker": false,
+    "CAS-12Launch": false,
+    "auditQaVerificationFinalPolish": false,
+    "publicPublishDeployTunnel": false,
+    "liveSynology": "read-only and not contacted",
+    "commitPush": false
+  },
+  "stop": {
+    "terminal": "READY-FOR-AUDIT",
+    "featureCompleteClaimed": false,
+    "independentVerificationRequired": true
+  }
+}

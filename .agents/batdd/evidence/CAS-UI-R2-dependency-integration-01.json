@@ -1,0 +1,28 @@
+{
+  "assignmentId": "CAS-UI-R2",
+  "operation": "pinned-renderer-dependency-integration",
+  "dependency": "streamdown-svelte@3.0.6",
+  "package": "apps/codex-control-ui/package.json",
+  "before": {
+    "packageSha256": "62bdba8354c46e435921e1e582dfd06392b2efbab8b5ba044d615ec294840f3f",
+    "lockSha256": "d23438959ce8387e1bac2e0672b050a03ad8086cc2747eee9ae09f88526900ca"
+  },
+  "after": {
+    "packageSha256": "38393371c82d6759ed8fa0ee166d4734983ec1046f9a24b4af953ef2a9c130b1",
+    "lockSha256": "d8fc3db32b30abbf14be41e55e07aa2e83fb88b588420d7d4814da4b41667333"
+  },
+  "validation": {
+    "install": "bun install --ignore-scripts: exit 0, 239 packages installed",
+    "frozenInstall": "bun install --frozen-lockfile --ignore-scripts: exit 0, no changes",
+    "nxSync": "bun nx sync:check: exit 0, workspace up to date",
+    "consumerResolution": "streamdown-svelte 3.0.6, Apache-2.0, peer svelte ^5.0.0, 23 direct runtime dependencies"
+  },
+  "limitations": [
+    "Installation count is not production bundle size; worker must measure initial/lazy JS/CSS impact.",
+    "No browser rendering or safety validation claimed by installation.",
+    "Existing dirty worktree retained; historical campaign lock changes not reverted."
+  ],
+  "lifecycleScriptsExecuted": false,
+  "liveRuntimeRestarted": false,
+  "providerInference": false
+}

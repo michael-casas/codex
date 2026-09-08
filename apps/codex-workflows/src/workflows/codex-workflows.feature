@@ -28,7 +28,7 @@ Feature: Deterministic Codex workflow preparation
       Given a controlled trusted TypeScript workflow and input
       When the user executes the workflow through its codex-workflows shebang
       Then the two research agents overlap and the consolidator receives both actual outputs
-      And the requested valid gpt models and medium reasoning reach the SDK boundary
+      And the requested valid gpt models and medium reasoning reach the App Server boundary
       And the final proposal artifact and completed local journal exist
       And public workflow state contains digests but no prompt input environment or raw error values
 
@@ -36,4 +36,4 @@ Feature: Deterministic Codex workflow preparation
       Given a controlled trusted TypeScript workflow and input
       When the user plans and dry-runs the TypeScript workflow
       Then both inspections succeed and report zero launched agents
-      And the controlled SDK trace remains empty
+      And the controlled App Server trace remains empty

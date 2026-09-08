@@ -2,13 +2,34 @@
   "name": "@codex/daemon",
   "version": "0.0.1",
   "private": true,
+  "type": "module",
   "nx": {
     "tags": [
       "type:app",
-      "scope:orchestration",
-      "layer:delivery"
+      "scope:orchestration"
     ],
     "targets": {
+      "docker-dogfood": {
+        "executor": "nx:run-commands",
+        "cache": false,
+        "options": {
+          "command": "bun apps/daemon/docker-dogfood/run.mjs"
+        }
+      },
+      "test-l2-delivery-failure": {
+        "executor": "nx:run-commands",
+        "cache": false,
+        "options": {
+          "command": "vitest run --config apps/daemon/vitest.config.ts src/workflow-execution/__specs__/workflow-execution-daemon.spec.ts --testNamePattern=DELIVERY-EXHAUSTED-L2"
+        }
+      },
+      "eval-readable": {
+        "executor": "nx:run-commands",
+        "cache": false,
+        "options": {
+          "command": "bun apps/daemon/src/visibility/support/readable-visibility-runtime.fixture.mjs"
+        }
+      },
       "build": {
         "executor": "@nx/esbuild:esbuild",
         "outputs": [
@@ -19,10 +40,10 @@
           "platform": "node",
           "outputPath": "apps/daemon/dist",
           "format": [
-            "cjs"
+            "esm"
           ],
           "bundle": false,
-          "main": "apps/daemon/src/main.ts",
+          "main": "apps/daemon/src/bootstrap.ts",
           "tsConfig": "apps/daemon/tsconfig.app.json",
           "assets": [
             "apps/daemon/src/assets"
@@ -105,7 +126,8 @@
         "executor": "nx:run-commands",
         "cache": false,
         "dependsOn": [
-          "build"
+          "build",
+          "test-pre-build"
         ],
         "outputs": [
           "{workspaceRoot}/test-output/ground-zero/daemon.json"
@@ -124,25 +146,68 @@
       "test-l1-unit": {
         "executor": "nx:run-commands",
         "options": {
-          "command": "vitest run --config apps/daemon/vitest.config.ts src/main.test.ts --testNamePattern='L1:UNIT'"
+          "command": "vitest run --config apps/daemon/vitest.config.ts src/main.test.ts src/workflow-execution/__tests__/workflow-execution-daemon.test.ts --testNamePattern='L1:UNIT'"
+        }
+      },
+      "test-l1-integration": {
+        "executor": "nx:run-commands",
+        "options": {
+          "command": "vitest run --config apps/daemon/vitest.config.ts src/control-runtime.test.ts src/visibility/__tests__/control-visibility.test.ts src/workflow-execution/__tests__/workflow-execution-daemon.test.ts src/workflow-execution/__tests__/readable-recovery.test.ts src/visibility/__tests__/legacy-title-replay.test.ts --testNamePattern='L1:INTEGRATION'"
         }
       },
       "test-l1": {
         "executor": "nx:run-commands",
         "options": {
-          "command": "vitest run --config apps/daemon/vitest.config.ts src/main.test.ts"
+          "command": "vitest run --config apps/daemon/vitest.config.ts src/main.test.ts src/control-runtime.test.ts src/visibility/__tests__/control-visibility.test.ts src/workflow-execution/__tests__/workflow-execution-daemon.test.ts src/workflow-execution/__tests__/readable-recovery.test.ts src/visibility/__tests__/legacy-title-replay.test.ts"
+        }
+      },
+      "test-visibility-l1": {
+        "executor": "nx:run-commands",
+        "options": {
+          "command": "vitest run --config apps/daemon/vitest.config.ts src/visibility/__tests__/control-visibility.test.ts src/visibility/__tests__/legacy-title-replay.test.ts"
+        }
+      },
+      "test-visibility-l2": {
+        "executor": "nx:run-commands",
+        "cache": false,
+        "options": {
+          "command": "vitest run --config apps/daemon/vitest.config.ts src/visibility/__specs__/control-visibility.spec.ts src/visibility/__specs__/legacy-replay.spec.ts"
         }
       },
       "test-l2-e2e": {
         "executor": "nx:run-commands",
+        "dependsOn": [
+          "@codex/codex:build",
+          "@codex/delivery:build",
+          "@codex/transport:build"
+        ],
         "options": {
-          "command": "bun nx test-l2-e2e @codex/daemon-e2e --outputStyle=static"
+          "command": "vitest run --config apps/daemon/vitest.config.ts src/agent-messaging/__specs__/agent-messaging-daemon.spec.ts src/delegation/__specs__/delegation-daemon.spec.ts src/workflow-execution/__specs__/workflow-execution-daemon.spec.ts src/visibility/__specs__/runtime-visibility-daemon.spec.ts src/visibility/__specs__/control-visibility.spec.ts --testNamePattern='L2:E2E' && bun nx test-l2-e2e @codex/daemon-e2e --outputStyle=static"
         }
       },
       "test-l2": {
         "executor": "nx:run-commands",
         "options": {
-          "command": "bun nx test-l2-e2e @codex/daemon-e2e --outputStyle=static"
+          "command": "vitest run --config apps/daemon/vitest.config.ts src/control-runtime.spec.ts src/agent-messaging/__specs__/agent-messaging-daemon.spec.ts src/delegation/__specs__/delegation-daemon.spec.ts src/visibility/__specs__/runtime-visibility-daemon.spec.ts src/visibility/__specs__/control-visibility.spec.ts --testNamePattern='L2:E2E' && bun nx test-l2-e2e @codex/daemon-e2e --outputStyle=static"
+        }
+      },
+      "test-pre-build": {
+        "executor": "nx:run-commands",
+        "options": {
+          "command": "tsc -p apps/daemon/tsconfig.cucumber.json"
+        }
+      },
+      "test-l3": {
+        "executor": "nx:run-commands",
+        "cache": false,
+        "dependsOn": [
+          "test-pre-build"
+        ],
+        "outputs": [
+          "{workspaceRoot}/test-output/cucumber/daemon-remote-workflow.json"
+        ],
+        "options": {
+          "command": "bun packages/testing/src/cli.ts verify-cucumber apps/daemon/src/workflow-execution/remote-workflow-execution.feature apps/daemon/out-tsc/cucumber/workflow-execution/index.steps.js test-output/cucumber/daemon-remote-workflow.json"
         }
       },
       "docker:build": {
@@ -153,5 +218,17 @@
       }
     }
   },
-  "dependencies": {}
+  "devDependencies": {
+    "pg": "^8.23.0",
+    "@types/pg": "^8.21.0"
+  },
+  "dependencies": {
+    "@codex/codex": "workspace:*",
+    "@codex/control-gateway": "workspace:*",
+    "@codex/db": "workspace:*",
+    "@codex/delivery": "workspace:*",
+    "@codex/process": "workspace:*",
+    "@codex/transport": "workspace:*",
+    "@codex/workflows": "workspace:*"
+  }
 }

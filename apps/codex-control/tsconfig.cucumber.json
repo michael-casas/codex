@@ -1,0 +1,18 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "composite": false,
+    "declaration": false,
+    "declarationMap": false,
+    "emitDeclarationOnly": false,
+    "outDir": "out-tsc/cucumber",
+    "rootDir": "src",
+    "types": ["node"]
+  },
+  "include": [
+    "src/**/*.steps.ts",
+    "src/control/support/**/*.ts",
+    "src/control/codex-control.gateway.ts",
+    "src/control/codex-control.module.ts"
+  ]
+}

@@ -1,0 +1,84 @@
+{
+  "$schema": "../assignment.schema.json",
+  "schemaVersion": "1.0.0",
+  "assignmentId": "CAS-UI-R2",
+  "status": "active",
+  "dispatchable": true,
+  "role": "worker",
+  "objective": "Implement bounded evaluation of selective Svelte AI Elements/streamdown-svelte with readable typed items, human titles, scrolling/motion and authoritative cancelled active-view removal; preserve Codex App Server and live viewer.",
+  "completionScope": "vertical-slice",
+  "mayReportFeatureComplete": true,
+  "feature": "docs/goals/codex-app-server/CAS-UI-R2.md",
+  "requiredLayers": {
+    "l1": {
+      "status": "required"
+    },
+    "l2": {
+      "status": "required"
+    },
+    "l3": {
+      "status": "required"
+    }
+  },
+  "writeSurface": [
+    "apps/codex-control-ui/src/**",
+    "apps/codex-control-ui/THIRD-PARTY-NOTICES",
+    "apps/codex-control-e2e/src/cas-ui-r2/**",
+    "apps/codex-control-e2e/features/cas-ui-r2/**",
+    "apps/codex-control-e2e/package.json",
+    "apps/daemon/src/visibility/**",
+    "apps/daemon/src/delegation/**",
+    "apps/daemon/src/workflow-execution/**",
+    "apps/daemon/src/control-runtime.ts",
+    "apps/daemon/package.json",
+    "packages/codex/src/app-server-workflow/**",
+    "packages/codex/project.json",
+    "packages/process/src/visibility/**",
+    "packages/process/src/workflow-execution/**",
+    "packages/process/src/index.ts",
+    "packages/process/package.json",
+    "packages/db/src/runtime-visibility/**",
+    "packages/db/package.json",
+    "packages/control-gateway/src/**",
+    "packages/workflows/src/authoring/api.ts",
+    "packages/workflows/src/authoring/types.ts",
+    "packages/workflows/src/authoring/execution.ts",
+    "packages/workflows/src/control/run-workflow.ts",
+    "packages/workflows/src/authoring/__tests__/readable-output.test.ts",
+    "packages/workflows/src/application/commands/submit-workflow-source/__tests__/readable-title.test.ts",
+    "packages/workflows/src/application/commands/submit-workflow-source/submit-workflow-source.command.ts",
+    "packages/workflows/src/application/commands/submit-workflow-source/submit-workflow-source.handler.ts",
+    "packages/workflows/src/infrastructure/workflow-source/workflow-source.compiler.ts",
+    "migrations/process/007_visibility_items.sql",
+    "packages/testing/manifests/daemon.json",
+    ".agent/testing/cas-ui-r1/r2/**",
+    "docs/goals/codex-app-server/CAS-UI-R2.md"
+  ],
+  "baseRevision": "b9dc01512975a8b11bc673b5ec906c818dd708f6",
+  "stopBoundary": "READY-FOR-AUDIT",
+  "greenContract": {
+    "id": "CAS-UI-R2-GC-1",
+    "strategy": "basic-then-adversarial",
+    "redPolicy": "all-new-or-changed-contract-rows",
+    "adversarialRequired": true
+  },
+  "commitAuthority": {
+    "allowed": false,
+    "maxCommits": 0
+  },
+  "dependencies": [
+    "CAS-UI-DISCOVERY-01:planning_complete",
+    "CAS-UI-R1:candidate",
+    "CAS-HOST-R1:candidate"
+  ],
+  "evidence": [
+    "founder-approves-implementation-evaluation",
+    "existing-founder-campaign-exception:same-a4a6-detached-no-branch-stash-commit-topology-changes",
+    "coordinator-only:UI-package-dependency-and-bun.lock-integration",
+    "007:isolated-fixtures-only-no-live-mutation",
+    "caps:evaluation-only-65536-UTF8-bytes-per-item-100-items-2097152-aggregate-projection-bytes",
+    "max-one-bounded-child-no-recursion",
+    "no-paid-turns-dogfood-retry-audits-push-deploy",
+    "root-facade-and-selector-edits-limited-to-required-named-exports-R2-test-paths"
+  ]
+}

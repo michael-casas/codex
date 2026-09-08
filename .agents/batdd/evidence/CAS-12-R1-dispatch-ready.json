@@ -1,0 +1,25 @@
+{
+  "schemaVersion": "1.0.0",
+  "campaignId": "CAS-APP-SERVER-20260901-01",
+  "status": "DISPATCH_READY",
+  "assignmentId": "CAS-12.R1",
+  "workingDirectory": "/Users/mcasa_atlantis/.codex/worktrees/a4a6/.codex",
+  "baseRevision": "b9dc01512975a8b11bc673b5ec906c818dd708f6",
+  "assignmentSha256": "0054f51578febf716b731e8dd72a258a06a28aeb1bf257ec78ec84c8d845f3c6",
+  "schemaValid": true,
+  "predecessor": {
+    "path": "packages/testing/evidence/cas-11-r2-codex-plugin-ready.json",
+    "sha256": "cd25a47dee4742cecab5572c45185ba8f1e38ae45b467ad1b4800d87767daeec",
+    "ownerTask": "01a06821-20d8-7653-8e4e-abc305e3fb52",
+    "ownerConfirmedNoRemainingWritesOrGates": true,
+    "discoveryTask": "01a068e0-b2f4-74d0-a913-21091a9cf77b",
+    "sourceAndInstalledArtifactHashesMatch": true
+  },
+  "model": "gpt-5.6-sol",
+  "reasoningEffort": "medium",
+  "duplicateTitleMatchesBeforeLaunch": 0,
+  "remoteTasksReadOnly": true,
+  "auditAcceptance": false,
+  "commitMergePushPublishDeploy": false,
+  "stopBoundary": "BASE_READY or exact dependency halt"
+}

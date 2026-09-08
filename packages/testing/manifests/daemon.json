@@ -14,6 +14,7 @@
         "--config",
         "apps/daemon/vitest.config.ts",
         "src/main.test.ts",
+        "src/workflow-execution/__tests__/workflow-execution-daemon.test.ts",
         "--testNamePattern=L1:UNIT"
       ],
       "expected": "vitest-output",
@@ -22,16 +23,73 @@
     {
       "heading": "--- In-Process Integration Tests [L1:INTEGRATION] ---",
       "layer": "l1-integration",
-      "reason": "N/A: the daemon remains a single-module Nx scaffold"
+      "command": [
+        "bun",
+        "vitest",
+        "run",
+        "--config",
+        "apps/daemon/vitest.config.ts",
+        "src/control-runtime.test.ts",
+        "src/workflow-execution/__tests__/workflow-execution-daemon.test.ts",
+        "src/visibility/__tests__/control-visibility.test.ts",
+        "src/visibility/__tests__/legacy-title-replay.test.ts",
+        "--testNamePattern=L1:INTEGRATION"
+      ],
+      "expected": "vitest-output",
+      "artifact": "nx://@codex/daemon/test/l1-integration"
     },
     {
       "groupHeading": "=== Layer 2 Test Suite ===",
       "heading": "--- Real-Boundary Integration Tests [L2:INTEGRATION] ---",
       "layer": "l2-integration",
-      "reason": "N/A: no product persistence, protocol, or infrastructure boundary exists yet"
+      "command": [
+        "bun",
+        "vitest",
+        "run",
+        "--config",
+        "apps/daemon/vitest.config.ts",
+        "src/visibility/__specs__/legacy-replay.spec.ts",
+        "--testNamePattern=L2:INTEGRATION"
+      ],
+      "expected": "vitest-output",
+      "artifact": "nx://@codex/daemon/test/l2-legacy-replay"
     },
     {
       "heading": "--- End-to-End Tests [L2:E2E] ---",
+      "layer": "l2-e2e",
+      "command": [
+        "bun",
+        "vitest",
+        "run",
+        "--config",
+        "apps/daemon/vitest.config.ts",
+        "src/control-runtime.spec.ts",
+        "src/agent-messaging/__specs__/agent-messaging-daemon.spec.ts",
+        "src/delegation/__specs__/delegation-daemon.spec.ts",
+        "src/visibility/__specs__/runtime-visibility-daemon.spec.ts",
+        "src/visibility/__specs__/control-visibility.spec.ts",
+        "--testNamePattern=L2:E2E"
+      ],
+      "expected": "vitest-output",
+      "artifact": "nx://@codex/daemon/test/l2-runtime-e2e"
+    },
+    {
+      "heading": "--- Delivery Exhaustion Tests [L2:E2E] ---",
+      "layer": "l2-e2e",
+      "command": [
+        "bun",
+        "vitest",
+        "run",
+        "--config",
+        "apps/daemon/vitest.config.ts",
+        "src/workflow-execution/__specs__/workflow-execution-daemon.spec.ts",
+        "--testNamePattern=DELIVERY-EXHAUSTED-L2"
+      ],
+      "expected": "vitest-output",
+      "artifact": "nx://@codex/daemon/test-l2-delivery-failure"
+    },
+    {
+      "heading": "--- Process Restart Tests [L2:E2E] ---",
       "layer": "l2-e2e",
       "command": [
         "bun",
@@ -43,13 +101,22 @@
         "--testNamePattern=L2:E2E"
       ],
       "expected": "vitest-output",
-      "artifact": "nx://@codex/daemon/test/l2-e2e"
+      "artifact": "nx://@codex/daemon-e2e/test/l2-e2e"
     },
     {
       "groupHeading": "=== Layer 3 Test Suite ===",
       "heading": "--- Cucumber Behavioral Tests ---",
       "layer": "l3",
-      "reason": "N/A: the generated daemon scaffold is not a ratified product behavior surface"
+      "command": [
+        "bun",
+        "packages/testing/src/cli.ts",
+        "verify-cucumber",
+        "apps/daemon/src/workflow-execution/remote-workflow-execution.feature",
+        "apps/daemon/out-tsc/cucumber/workflow-execution/index.steps.js",
+        "test-output/cucumber/daemon-remote-workflow.json"
+      ],
+      "expected": "cucumber-output",
+      "artifact": "test-output/cucumber/daemon-remote-workflow.json"
     }
   ]
 }

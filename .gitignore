@@ -54,6 +54,7 @@ test-output
 .dmux/
 .pi/
 # Secrets and machine-local credentials
+/.secrets/
 /.env
 /.env/
 /.env.*
@@ -74,6 +75,7 @@ test-output
 *.pfx
 
 # Local service data
+/.data/
 /.volume/
 
 # Private agent plans, reports, scratch databases, and compaction state
@@ -115,6 +117,7 @@ test-output
 /monitors/
 /thread-writer-locks/
 /app-server-daemon/
+/app-server-control/
 /.sandbox_migration
 
 # Executed workflow journals and produced artifacts
@@ -124,7 +127,8 @@ test-output
 /log/
 /cache/
 /computer-use/
-/plugins/
+/plugins/*
+!/plugins/codex-control/
 /vendor_imports/
 /models_cache.json
 /version.json
@@ -136,6 +140,8 @@ node_modules/
 .bun/
 .nx/
 dist/
+!/plugins/codex-control/dist/
+!/plugins/codex-control/dist/**
 tmp/
 out-tsc/
 coverage/
@@ -181,3 +187,5 @@ __pycache__/
 npm-debug.log
 yarn-error.log
 testem.log
+
+vite.config.*.timestamp*

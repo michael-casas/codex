@@ -1,0 +1,20 @@
+{
+  "$schema":"../assignment.schema.json",
+  "schemaVersion":"1.0.0",
+  "assignmentId":"CAS-TEMP-R1",
+  "status":"active",
+  "dispatchable":true,
+  "role":"worker",
+  "objective":"Create a lease-owned private temp directory and bind App Server workflow tool temp writes to it without system-temp or network widening.",
+  "completionScope":"vertical-slice",
+  "mayReportFeatureComplete":true,
+  "feature":"docs/goals/codex-app-server/CAS-TEMP-R1.md",
+  "requiredLayers":{"l1":{"status":"required"},"l2":{"status":"required"},"l3":{"status":"not-applicable","reason":"Execution containment is faithfully observable at request-shape and real App Server filesystem boundaries; no new user UI behavior."}},
+  "writeSurface":["packages/transport/src/workspace-lease/**","packages/transport/package.json","packages/codex/src/app-server-workflow/**","packages/codex/project.json","apps/daemon/src/workflow-execution/**","apps/daemon/package.json","packages/testing/manifests/transport.json","packages/testing/manifests/daemon.json",".agents/batdd/assignments/CAS-TEMP-R1.json","docs/goals/codex-app-server/CAS-TEMP-R1.md",".agent/testing/cas-ui-r1/r2/temp-r1/**"],
+  "baseRevision":"b9dc01512975a8b11bc673b5ec906c818dd708f6",
+  "stopBoundary":"READY-FOR-AUDIT",
+  "greenContract":{"id":"CAS-TEMP-R1-GC-1","strategy":"basic-then-adversarial","redPolicy":"all-new-or-changed-contract-rows","adversarialRequired":true},
+  "commitAuthority":{"allowed":false,"maxCommits":0},
+  "dependencies":["CAS-UI-R2:READY-FOR-VERIFICATION"],
+  "evidence":["coordinator-exact-write-lease-approved","pinned-app-server-0.151.0","no-system-tmp-or-network-widening","isolated-fixtures-only","no-paid-inference","coordinator-live-restart-only"]
+}

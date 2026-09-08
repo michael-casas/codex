@@ -1,0 +1,15 @@
+{
+  "schemaVersion": "1.0.0",
+  "assignmentId": "CAS-RP-01",
+  "status": "READY",
+  "previousAssignmentSha256": "b8fed376836c504bbd2516bc326cb31721554af7a7da8a0e69a56e7b530d7289",
+  "amendedAssignmentSha256": "30e460d10a1374e80debdc1bf9004f5276f3155081c8c8b1c84f6b52717b370e",
+  "addendumPath": "docs/goals/codex-app-server/CAS-RP-01-PROFILES-ADDENDUM.md",
+  "addendumSha256": "9a64d01acfa48b500419576098bb516ca164daaffaa312c292b96ce8599e22ce",
+  "priorWorkerContractSha256": "64c50640461fb6a53d00376918806a0471b94a4f2e0e2a9d070cb87890d77392",
+  "authority": "Founder explicitly adds existing Codex named-profile recognition; official OpenAI Advanced Configuration Profiles documentation fetched.",
+  "source": "https://learn.chatgpt.com/docs/config-file/config-advanced#profiles",
+  "schemaValid": true,
+  "writeSurfaceChanged": false,
+  "requiredAction": "Preserve prior RED and contract rows, add versioned profile rows and meaningful RED before profile GREEN. Pin resolution to target host; explicit overrides and managed limits remain authoritative."
+}

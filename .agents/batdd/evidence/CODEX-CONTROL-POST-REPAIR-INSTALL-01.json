@@ -1,0 +1,21 @@
+{
+  "status": "INSTALLED_DESKTOP_SCHEMA_REFRESH_PENDING",
+  "runtimeProfileEvidenceSha256": "e924d0e981e9f5835cc9423b4b3f64ca796d47dc4aca865843ec870f359f5a26",
+  "authoringEvidenceSha256": "65868931bf3ccf243f83d33aa6a23c5f29092024f005d12ca19ce98104df7fd1",
+  "authoringSourceAndReportHashesVerified": 29,
+  "installedVersion": "0.1.0+codex.20260904005135",
+  "marketplace": "codex-control-local",
+  "sourceAndInstalledServerSha256": "2ed5fbb161dcbfcf7a725b2a535548b75521b2769064bf02beccb2af3b1c2d99",
+  "sourceAndInstalledManifestSha256": "48a86081c89f3b385744d302f5573308a8cbb6a01cd8d9f7a9c125ad92c0099c",
+  "pluginValidator": "PASS",
+  "currentDesktopToolSnapshot": "run_workflow still advertises legacy-only fields without source or reasoningEffort",
+  "remaining": [
+    "Refresh desktop plugin snapshot and prove actual source-form discovery.",
+    "Configure accepted daemon workflowSources for server-authenticated actor and desktop token/origin.",
+    "Configure authenticated tailnet-only workflow viewer and preview ingress.",
+    "Run CAS-12.R1 and Founder-approved demo only after operational admission."
+  ],
+  "newProviderTests": 0,
+  "demoAgentsLaunched": 0,
+  "baseReadyClaimed": false
+}

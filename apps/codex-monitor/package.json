@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "type": "module",
-  "scripts": {
-    "test:node": "node --test scripts/*.test.mjs"
+  "dependencies": {
+    "@codex/codex": "workspace:*"
   }
 }

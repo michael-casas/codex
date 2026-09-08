@@ -1,0 +1,53 @@
+{
+  "schemaVersion": "1.0.0",
+  "assignmentId": "CAS-06",
+  "campaignId": "CAS-APP-SERVER-20260901-01",
+  "writeLeaseId": "CAS-06-DIRECT-HANDOFF",
+  "status": "HANDOFF_READY",
+  "workerVerdict": "READY-FOR-AUDIT",
+  "baseRevision": "b9dc01512975a8b11bc673b5ec906c818dd708f6",
+  "greenContract": {
+    "id": "CAS-06-GC-1",
+    "path": ".agent/testing/cas-06/CAS-06-GC-1.json",
+    "sha256": "043cfb92eaa8ef7dc6468cb22cac54096df7cadd65dcb662d831282a846ac07e",
+    "frozen": true
+  },
+  "publicContract": {
+    "entrypoint": "delegateAgent",
+    "maxCallsPerOperation": 1,
+    "result": ["delegationId", "executionId", "agentId", "hostId", "threadId"],
+    "providerChoreographyExposed": false,
+    "callerRawPathsAllowed": false
+  },
+  "implementation": {
+    "processSha256": "23c955aaae76714800a3fcc48c0917188c20d2f0428cffd5c4d0925c735ff813",
+    "repositorySha256": "b45b225179a5a3431ebf358c8c8b0c1394ca8b6665dc1a0fe94a98f4b63237df",
+    "migrationSha256": "d030fb8dec8913f996ecf40852c6ff23db86e411b14d551cc550e1c0e9a8cee8",
+    "l3BindingsSha256": "d2a2abd8e7c8a28869698d6a3918891128d01849158ac969258b97c4b79b662b"
+  },
+  "evidence": [
+    {"layer":"L1","target":"@codex/process:test-l1","selected":20,"passed":20,"exitCode":0},
+    {"layer":"L2","target":"@codex/db:test-l2-integration","selected":7,"passed":7,"exitCode":0,"boundary":"real PostgreSQL"},
+    {"layer":"L2","target":"@codex/delivery:test-l2-integration","selected":8,"passed":8,"exitCode":0,"boundary":"pg-boss plus controlled authenticated WSS App Server"},
+    {"layer":"L2","target":"@codex/daemon:test-l2-e2e","selected":3,"passed":3,"exitCode":0,"boundary":"daemon composition and process lifecycle"},
+    {"layer":"L3","target":"@codex/process:test-l3","source":4,"selected":4,"executed":4,"passed":4,"exitCode":0,"directHandoffReportSha256":"5fbc30c6f4c47c4f3f7dbb092a5efb5735a6f1702a16f0d1256ceb472ee843c9","directHandoff":"one real local stdio App Server plus one controlled authenticated remote WSS App Server"},
+    {"gate":"typecheck","projects":["@codex/process","@codex/db","@codex/delivery","@codex/daemon","@codex/daemon-e2e"],"exitCode":0},
+    {"gate":"lint","projects":["@codex/process","@codex/db","@codex/delivery","@codex/daemon","@codex/daemon-e2e"],"exitCode":0,"warnings":"test-only explicit-any warnings in CAS-06 fixtures"},
+    {"gate":"nx-sync-check","exitCode":0},
+    {"gate":"resource-delta","temporaryWssDirectories":0,"testDatabases":0}
+  ],
+  "safety": {
+    "liveRemoteHost": "aes-j5-synology",
+    "liveRemoteMutation": false,
+    "remoteMutationFixture": "controlled authenticated WSS only",
+    "commits": 0,
+    "descendants": 0
+  },
+  "handoffs": {
+    "CAS-07": "AgentHandle plus continue/cancel/read public seam is available for remote workflow placement.",
+    "CAS-08": "Delegation states and completion boundaries are durable and queryable for visibility projection.",
+    "CAS-09": "Blocked approval and user-input reductions are stable owned states.",
+    "CAS-12": "Stable delegation/execution/agent/host/thread identities are available for bounded control tools."
+  },
+  "independence": "Worker evidence only; independent verification and judgment remain required."
+}

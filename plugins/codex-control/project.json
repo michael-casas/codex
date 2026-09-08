@@ -1,0 +1,90 @@
+{
+  "name": "@codex/plugin-codex-control",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "library",
+  "sourceRoot": "plugins/codex-control/src",
+  "tags": ["npm:private", "type:plugin", "scope:control-ui", "layer:delivery"],
+  "implicitDependencies": ["@codex/codex-control"],
+  "targets": {
+    "build": {
+      "executor": "nx:run-commands",
+      "cache": true,
+      "dependsOn": ["^build"],
+      "outputs": ["{projectRoot}/dist"],
+      "options": {
+        "command": "bun plugins/codex-control/scripts/build.ts"
+      }
+    },
+    "typecheck": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "tsc --noEmit -p plugins/codex-control/tsconfig.json"
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint",
+      "dependsOn": ["build"],
+      "options": {
+        "lintFilePatterns": [
+          "plugins/codex-control/src/**/*.ts",
+          "plugins/codex-control/scripts/**/*.ts",
+          "plugins/codex-control/scripts/**/*.mjs",
+          "plugins/codex-control/vitest.config.ts",
+          "plugins/codex-control/package.json",
+          "plugins/codex-control/generators.json"
+        ]
+      }
+    },
+    "validate-plugin": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "python3 /Users/mcasa_atlantis/.codex/skills/.system/plugin-creator/scripts/validate_plugin.py plugins/codex-control"
+      }
+    },
+    "test-l1": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "vitest run --config plugins/codex-control/vitest.config.ts src/__tests__/canonical-plugin.test.ts src/__tests__/native-plugin-gate.test.ts src/generators/init/generator.test.ts"
+      }
+    },
+    "test-l2": {
+      "executor": "nx:run-commands",
+      "cache": false,
+      "dependsOn": ["build"],
+      "options": {
+        "command": "vitest run --config plugins/codex-control/vitest.config.ts src/__specs__/canonical-runtime.spec.ts"
+      }
+    },
+    "generator-e2e": {
+      "executor": "nx:run-commands",
+      "cache": false,
+      "dependsOn": ["build"],
+      "options": {
+        "command": "bun plugins/codex-control/scripts/generator-e2e.ts"
+      }
+    },
+    "native-plugin-smoke": {
+      "executor": "nx:run-commands",
+      "cache": false,
+      "dependsOn": ["build"],
+      "options": {
+        "command": "bun plugins/codex-control/scripts/native-plugin-gate.ts"
+      }
+    },
+    "native-plugin-live": {
+      "executor": "nx:run-commands",
+      "cache": false,
+      "dependsOn": ["build"],
+      "options": {
+        "command": "bun plugins/codex-control/scripts/native-plugin-gate.ts --live"
+      }
+    },
+    "test": {
+      "executor": "nx:run-commands",
+      "cache": false,
+      "options": {
+        "command": "bun nx test-l1 @codex/plugin-codex-control --skipNxCache && bun nx test-l2 @codex/plugin-codex-control --skipNxCache && bun nx generator-e2e @codex/plugin-codex-control --skipNxCache && bun nx validate-plugin @codex/plugin-codex-control --skipNxCache"
+      }
+    }
+  }
+}

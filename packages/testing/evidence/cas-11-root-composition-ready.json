@@ -1,0 +1,123 @@
+{
+  "schemaVersion": "1.0.0",
+  "campaignId": "CAS-APP-SERVER-20260901-01",
+  "assignmentId": "CAS-11",
+  "status": "ROOT_COMPOSITION_READY",
+  "recordedDate": "2026-09-02",
+  "baseRevision": "b9dc01512975a8b11bc673b5ec906c818dd708f6",
+  "workingDirectory": "/Users/mcasa_atlantis/.codex/worktrees/a4a6/.codex",
+  "authority": {
+    "assignmentPath": "/Users/mcasa_atlantis/.codex/worktrees/0c2e/.codex/.agents/batdd/assignments/CAS-11.json",
+    "assignmentSha256": "770fc449de48e3132ac856801c6a94c1e320754ee96daa4333a33fcf0a86d28f",
+    "l3AmendmentPath": "/Users/mcasa_atlantis/.codex/worktrees/0c2e/.codex/.agents/batdd/evidence/CAS-11-L3-REENTRY-AMENDMENT-01.json",
+    "l3AmendmentSha256": "0f19652d60a9ead7a8a1c2fb3131139ae3256ca782c48b1d5b1f519caf13a92e",
+    "rootHaltPath": "/Users/mcasa_atlantis/.codex/worktrees/a4a6/.codex/packages/testing/evidence/cas-11-root-composition-halt.json",
+    "rootHaltSha256": "4f59b331ee99a65342e6af0f7faccd664ee769d0b2f1a0698d95aaac580c4e73",
+    "writeLeaseId": "CAS-11-PLUGIN-PACKAGING",
+    "commitAuthority": false,
+    "selfCertified": false
+  },
+  "rootCause": {
+    "packageManager": "Root package workspaces omitted plugins/*, so Bun did not own a plugin workspace importer.",
+    "nx": "Root .gitignore excluded /plugins/, so Nx intentionally omitted plugins/codex-control even after Bun workspace admission.",
+    "typescript": "After discovery, Nx sync required both the root project reference and the plugin-local dependency reference."
+  },
+  "rootChanges": {
+    "package.json": {
+      "beforeSha256": "31eb3a21b5ef4abc531b43b37d7e2cfa07f677348ef837ad70971c2402673990",
+      "afterSha256": "0896239ff2af6f53ed5efcd06eaefcebfd3fc0675c9107567ac4bf5a1cb0dc44",
+      "delta": "Add plugins/* to workspaces."
+    },
+    "bun.lock": {
+      "beforeSha256": "d72fa29a6aaff33f8dc834937ab7274010d293b0f506e3a88f17c16073fcfee4",
+      "afterSha256": "156455a724e402ae8509b636cf222e608988cd168a4fc46b5b1d046347ac85f1",
+      "delta": "Add plugins/codex-control importer and @codex/plugin-codex-control workspace identity only."
+    },
+    ".gitignore": {
+      "beforeSha256": "a59348241d1d31c39f188d4bf6521fa41725a923ce68ab2595a971f8da98e154",
+      "afterSha256": "ba22c86892455e9192141fc41b9306d6df848ce7b410a1a9cf4829c614fbf984",
+      "delta": "Keep unrelated plugins ignored while admitting only /plugins/codex-control/."
+    },
+    "tsconfig.json": {
+      "beforeSha256": "2f296be6c898d822c4fb61e9f9a2819dfc50b2147a26186a5666d25b29f6d593",
+      "afterSha256": "46b44f7e86dda7d8d7691279a1098691ed2fbc349ec6e3fc80b268cbeaea93bd",
+      "delta": "Add the Nx-proven ./plugins/codex-control project reference."
+    }
+  },
+  "workerOwnedComposition": {
+    "plugins/codex-control/project.json": {
+      "sha256": "6d8cf59dfda0f40bf748952fec72dd186da2f57ab2017037231d7d92a62edefb",
+      "changedByCoordinator": false
+    },
+    "plugins/codex-control/tsconfig.json": {
+      "beforeSha256": "ec9838da9acaa80575a8286b321def683a5d6444097098db5150f57434745fa7",
+      "afterSha256": "b46585801f333fb219e3d19a9170a77753400a6e45523f66bf9ed081884235de",
+      "delta": "Canonical worker added only ../../apps/codex-control/tsconfig.json after Nx sync proved the dependency reference necessary."
+    }
+  },
+  "resolvedProject": {
+    "name": "@codex/plugin-codex-control",
+    "root": "plugins/codex-control",
+    "projectType": "application",
+    "implicitDependencies": ["@codex/codex-control", "@codex/codex-control-ui"],
+    "targets": [
+      "build",
+      "lint",
+      "test",
+      "test-l1",
+      "test-l2",
+      "typecheck",
+      "validate-plugin"
+    ]
+  },
+  "validation": [
+    {
+      "gate": "bun install --frozen-lockfile",
+      "exitCode": 0,
+      "installs": 1022,
+      "packages": 1105,
+      "changes": 0
+    },
+    {
+      "gate": "bun nx sync:check --outputStyle=static",
+      "exitCode": 0
+    },
+    {
+      "gate": "bun nx show project @codex/plugin-codex-control --json",
+      "exitCode": 0,
+      "resolvedTargets": 7
+    },
+    {
+      "gate": "bun nx show projects --json includes @codex/plugin-codex-control",
+      "exitCode": 0
+    },
+    {
+      "gate": "Prettier check for root package.json, root tsconfig.json, and plugin-local tsconfig.json",
+      "exitCode": 0
+    }
+  ],
+  "nonBlockingWorkerSurface": {
+    "projectJsonFormattingWarning": "The worker-authored project.json is Nx-readable but not yet Prettier-clean. It was not changed by the coordinator and remains CAS-11-owned before RED/GREEN completion.",
+    "acceptanceOrProductFilesChangedByCoordinator": 0
+  },
+  "reentry": {
+    "threadId": "01a06262-3f55-7811-8166-b272bb867cda",
+    "sameTaskContinuation": true,
+    "direction": [
+      "Verify this packet, the amended CAS-11 assignment, and the L3 amendment digests.",
+      "Re-run Nx show/sync from shared a4a6, then proceed to the detailed plan and meaningful all-row RED.",
+      "Format worker-owned plugin files inside the CAS-11 lease before claiming final formatting GREEN.",
+      "Do not edit root composition, launch another worker, or begin CAS-12."
+    ]
+  },
+  "restrictions": {
+    "implementationOrREDRunByCoordinator": false,
+    "pluginOrE2EHarnessFilesChangedByCoordinator": false,
+    "descendants": 0,
+    "CAS-12Launch": 0,
+    "auditQaVerificationFinalPolish": 0,
+    "publicPublishDeployTunnel": false,
+    "liveSynology": "read-only and not contacted",
+    "commitPush": false
+  }
+}

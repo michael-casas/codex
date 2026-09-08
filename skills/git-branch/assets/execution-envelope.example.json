@@ -1,0 +1,28 @@
+{
+  "schemaVersion": 1,
+  "executionId": "<uuid>",
+  "role": "worker",
+  "issue": {
+    "provider": "jira",
+    "epicId": "AES-13",
+    "taskId": "AES-45",
+    "subtaskId": null
+  },
+  "workspace": {
+    "repository": "<absolute-path>",
+    "baseRevision": "<immutable-sha>",
+    "owningBranch": "AES-13/AES-45",
+    "pullRequestBase": "AES-13/integration",
+    "worktree": "<absolute-path>"
+  },
+  "authority": {
+    "commit": true,
+    "pushOwningBranch": true,
+    "openPullRequest": true,
+    "merge": false,
+    "promote": false,
+    "deploy": false
+  },
+  "validation": [],
+  "stopBoundary": "pull-request-ready"
+}

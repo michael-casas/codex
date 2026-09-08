@@ -20,7 +20,7 @@ import {
   type ControlledMode,
 } from './support/controlled-source.js';
 
-// === L2: REAL PROCESS / REAL CODEX SDK BOUNDARY TESTS ===
+// === L2: REAL PROCESS / CONTROLLED APP SERVER BOUNDARY TESTS ===
 
 const workspace = resolve(import.meta.dirname, '../../../..');
 const executable = resolve(workspace, 'apps/codex-workflows/dist/main.js');
@@ -29,6 +29,9 @@ const controlledCodex = fileURLToPath(
     '../../../../packages/codex/src/fixtures/controlled-codex.mjs',
     import.meta.url,
   ),
+);
+const controlledAppServer = fileURLToPath(
+  new URL('./support/controlled-app-server-bridge.mjs', import.meta.url),
 );
 
 interface Fixture {
@@ -51,13 +54,15 @@ async function fixture(mode: ControlledMode): Promise<Fixture> {
   await writeFile(trace, '');
   await chmod(source, 0o755);
   await chmod(controlledCodex, 0o755);
+  await chmod(controlledAppServer, 0o755);
   return { root, source, input, trace, state };
 }
 
 function environment(item: Fixture): NodeJS.ProcessEnv {
   return {
     ...process.env,
-    CODEX_WORKFLOWS_CODEX_PATH: controlledCodex,
+    CODEX_WORKFLOWS_CODEX_PATH: controlledAppServer,
+    CODEX_WORKFLOWS_CONTROLLED_TURN_PATH: controlledCodex,
     CODEX_WORKFLOWS_HOME: item.state,
     CODEX_TEST_TRACE: item.trace,
   };
@@ -245,7 +250,7 @@ describe('[L2:INTEGRATION] direct TypeScript workflow runner', () => {
     }
   });
 
-  test('[L2:INTEGRATION] TS-GC2-008 admits only trusted root-contained exact-shebang TypeScript and plans/dry-runs without SDK launch', async () => {
+  test('[L2:INTEGRATION] TS-GC2-008 admits only trusted root-contained exact-shebang TypeScript and plans/dry-runs without App Server launch', async () => {
     const item = await fixture('success');
     try {
       for (const flag of ['--plan', '--dry-run']) {
@@ -306,7 +311,7 @@ describe('[L2:INTEGRATION] direct TypeScript workflow runner', () => {
     }
   });
 
-  test('[L2:INTEGRATION] TS-GC2-009 maps real agent and schema failures deterministically, aborts siblings, and reaps SDK children', async () => {
+  test('[L2:INTEGRATION] TS-GC2-009 maps real agent and schema failures deterministically, aborts siblings, and reaps App Server children', async () => {
     const failure = await fixture('failure');
     try {
       const failed = invoke(failure, [
@@ -440,7 +445,7 @@ export default defineWorkflow({
     }
   });
 
-  test('[L2:INTEGRATION] DF-GC1-007 returns only after children, journal events, artifacts, SDK host, and temporary files are terminally quiet', async () => {
+  test('[L2:INTEGRATION] DF-GC1-007 returns only after children, journal events, artifacts, App Server host, and temporary files are terminally quiet', async () => {
     const item = await fixture('failure');
     try {
       const result = invoke(item, [
@@ -612,7 +617,7 @@ export default defineWorkflow({
     }
   });
 
-  test('[L2:INTEGRATION] TS-GC2-010 converts SIGINT to cancellation, atomically journals it, and guarantees SDK host cleanup', async () => {
+  test('[L2:INTEGRATION] TS-GC2-010 converts SIGINT to cancellation, atomically journals it, and guarantees App Server host cleanup', async () => {
     const item = await fixture('cancel');
     try {
       const child = spawn(

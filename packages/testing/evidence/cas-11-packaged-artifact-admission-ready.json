@@ -1,0 +1,76 @@
+{
+  "schemaVersion": "1.0.0",
+  "campaignId": "CAS-APP-SERVER-20260901-01",
+  "assignmentId": "CAS-11",
+  "status": "PACKAGED_ARTIFACT_ADMISSION_READY",
+  "recordedDate": "2026-09-02",
+  "baseRevision": "b9dc01512975a8b11bc673b5ec906c818dd708f6",
+  "workingDirectory": "/Users/mcasa_atlantis/.codex/worktrees/a4a6/.codex",
+  "sourceHalt": {
+    "path": "/Users/mcasa_atlantis/.codex/worktrees/a4a6/.codex/packages/testing/evidence/cas-11-packaged-artifact-admission-halt.json",
+    "sha256": "d232d84196f90c619a5eaf4ee49746d236315e4b50e642700436d22ac96968ad"
+  },
+  "gitignore": {
+    "path": "/Users/mcasa_atlantis/.codex/worktrees/a4a6/.codex/.gitignore",
+    "beforeSha256": "ba22c86892455e9192141fc41b9306d6df848ce7b410a1a9cf4829c614fbf984",
+    "afterSha256": "7b8ce4af34c687469df325438f1131bbf0d873c7e68e7a71769dde1e301dcf69",
+    "addedRules": [
+      "!/plugins/codex-control/dist/",
+      "!/plugins/codex-control/dist/**"
+    ],
+    "otherRulesChanged": false,
+    "diffCheckExitCode": 0
+  },
+  "admittedArtifacts": {
+    "plugins/codex-control/dist/server.mjs": "bf806aad9098121701a711b13882be2aa866f5bd86f7f33aee836d9309ace127",
+    "plugins/codex-control/dist/ui/index.html": "990ebd63f94cd0469479c51e734cec17c688fe2465e08186bbe8a58380ee65c4",
+    "plugins/codex-control/dist/ui/app.js": "572b1460f695570a382452fe38c6e8ab59064bd8545adff29d164f3f77ee06aa",
+    "plugins/codex-control/dist/ui/app.css": "a68a79a24cc53b792ba6aa78a2e078f71e2394f1a52c6c7082193d2123d122c8",
+    "plugins/codex-control/dist/ui/manifest.json": "3d20d38416b083549a40b78d9ba3275391832461130c895898a44cf547393de3"
+  },
+  "admissionProof": {
+    "requiredArtifactCount": 5,
+    "requiredArtifactsIgnoredAfter": 0,
+    "requiredArtifactsVisibleAsUntracked": 5,
+    "command": "git check-ignore -q <each required plugin artifact>",
+    "expectedExitPerArtifact": 1
+  },
+  "nonAdmissionProof": {
+    "globalDistRulePreserved": ".gitignore:141:dist/",
+    "stillIgnored": [
+      "apps/codex-control-ui/dist/index.html",
+      "apps/codex-control/dist/main.js",
+      "packages/control-gateway/dist/index.js"
+    ],
+    "unexpectedOtherDistAdmissions": 0,
+    "scope": "The only negated dist path is /plugins/codex-control/dist/**."
+  },
+  "preservedGreen": {
+    "l1": "4/4",
+    "l2": "2/2",
+    "web": "16/16",
+    "buildTypecheckLint": "GREEN",
+    "pluginValidation": "GREEN",
+    "frozenInstall": "GREEN",
+    "nxSync": "GREEN"
+  },
+  "reentry": {
+    "threadId": "01a06262-3f55-7811-8166-b272bb867cda",
+    "sameTaskContinuation": true,
+    "direction": [
+      "Verify this packet, the .gitignore hash, and all five artifact digests.",
+      "Include the admitted artifact bytes in final candidate/evidence hashing.",
+      "Run only the final locked evidence/resource closure; do not rebuild or alter product solely for admission."
+    ]
+  },
+  "restrictions": {
+    "productOrTestsChanged": false,
+    "otherDistTreeAdmitted": false,
+    "newWorker": false,
+    "CAS-12Launch": false,
+    "auditQaVerificationFinalPolish": false,
+    "publicPublishDeployTunnel": false,
+    "liveSynology": "read-only and not contacted",
+    "commitPush": false
+  }
+}

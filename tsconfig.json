@@ -25,7 +25,34 @@
       "path": "./packages/process"
     },
     {
+      "path": "./packages/transport"
+    },
+    {
       "path": "./apps/wiki-cli"
+    },
+    {
+      "path": "./apps/codex-control"
+    },
+    {
+      "path": "./apps/codex-control-ui"
+    },
+    {
+      "path": "./apps/codex-monitor"
+    },
+    {
+      "path": "./packages/db"
+    },
+    {
+      "path": "./packages/delivery"
+    },
+    {
+      "path": "./apps/codex-control-e2e"
+    },
+    {
+      "path": "./plugins/codex-control"
+    },
+    {
+      "path": "./packages/control-gateway"
     }
   ]
 }

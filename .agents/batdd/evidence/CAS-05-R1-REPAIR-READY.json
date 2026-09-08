@@ -1,0 +1,90 @@
+{
+  "schemaVersion": "1.0.0",
+  "checkpointId": "CAS-05-R1-REPAIR-READY-01",
+  "campaignId": "CAS-APP-SERVER-20260901-01",
+  "assignmentId": "CAS-05.R1",
+  "status": "REPAIR_READY",
+  "baseRevision": "b9dc01512975a8b11bc673b5ec906c818dd708f6",
+  "workingDirectory": "/Users/mcasa_atlantis/.codex/worktrees/a4a6/.codex",
+  "authority": {
+    "amendment": {
+      "path": "/Users/mcasa_atlantis/.codex/worktrees/0c2e/.codex/.agents/batdd/evidence/CAS-05-R1-AUTHORIZED.json",
+      "sha256": "137b3bd4a33b8f7bcbb03c631a8169f4771451ed31d94cb0c8d4628d44c946aa"
+    },
+    "assignment": {
+      "path": "/Users/mcasa_atlantis/.codex/worktrees/0c2e/.codex/.agents/batdd/assignments/CAS-05.R1.json",
+      "sha256": "d8138dd18d6dc124cf35b4b6de7dff8010aaa02cf03ad7b4525c65d81a44fb5e"
+    },
+    "dependencyClassification": {
+      "path": "/Users/mcasa_atlantis/.codex/worktrees/a4a6/.codex/.agents/batdd/evidence/CAS-05-R1-DEPENDENCY-CLASSIFICATION-READY.json",
+      "sha256": "e15ea4fdc40c0186afd58f0284d6980842a98d6f9812156d46b9e8843af36265"
+    },
+    "model": "gpt-5.6-sol",
+    "reasoningEffort": "medium",
+    "writeLeaseId": "CAS-05-DURABLE-INTERCOM",
+    "commitAuthority": false,
+    "stopBoundary": "READY-FOR-AUDIT"
+  },
+  "implementation": {
+    "packages/delivery/src/durable-control/pg-boss-delivery.ts": "45c9b107fe931ea24b1d47228ebabd6d94f503e30778023ef7f0a6e58aa6ffa5",
+    "packages/delivery/src/durable-control/__specs__/pg-boss-delivery.spec.ts": "acdbd69fbe4b4b1d66019ce3f372beea666825d1c6196666509b2bd9e13aa068",
+    "changedFiles": 2,
+    "behavior": [
+      "PgBossDeliveryRuntime.ensureQueue(name) fails closed with DELIVERY_NOT_STARTED before start.",
+      "While started, ensureQueue delegates to the existing pg-boss createQueue owner.",
+      "Repeated admission is idempotent under real pg-boss.",
+      "No runtime, scheduler, migration, dependency, retry loop, abstraction, facade, or root behavior was added by the repair."
+    ]
+  },
+  "evidence": {
+    "deliveryL2": {
+      "target": "@codex/delivery:test-l2",
+      "selected": 10,
+      "passed": 10,
+      "status": "GREEN",
+      "source": "CAS-05.R1 owner result bound by coordinator request"
+    },
+    "dependencyCheckpointGates": {
+      "frozenInstall": "GREEN",
+      "nxSync": "GREEN",
+      "deliveryLint": "GREEN with zero errors",
+      "deliveryTypecheck": "GREEN",
+      "daemonTypecheck": "GREEN"
+    },
+    "lockedCAS05GreensPreserved": true
+  },
+  "independence": {
+    "workerEvidence": true,
+    "coordinatorEvidence": true,
+    "independentVerification": false,
+    "auditAcceptance": false,
+    "selfCertification": false,
+    "meaning": "REPAIR_READY permits bounded CAS-07 re-entry; it is not a shippability or acceptance verdict."
+  },
+  "CAS07Reentry": {
+    "authorized": true,
+    "writeAuthority": "CAS-07-owned daemon surface only",
+    "requiredAction": "During daemon startup, call PgBossDeliveryRuntime.ensureQueue for workflow-execution and workflow-execution-dead before send or work registration.",
+    "forbidden": [
+      "CAS-07 edit to packages/delivery",
+      "SDK removal before separate authority",
+      "live Synology mutation",
+      "scope expansion beyond the frozen CAS-07 Green Contract"
+    ]
+  },
+  "preservedState": {
+    "productEditsByCoordinator": 0,
+    "SDKRemovalPerformed": false,
+    "rawSecretsCopiedOrPersisted": 0,
+    "liveSynologyTouched": false,
+    "commitsCreated": 0
+  },
+  "launches": {
+    "workers": 0,
+    "audit": 0,
+    "qa": 0,
+    "verification": 0,
+    "finalPolish": 0,
+    "CAS-08-or-later": 0
+  }
+}

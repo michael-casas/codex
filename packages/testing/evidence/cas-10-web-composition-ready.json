@@ -1,0 +1,137 @@
+{
+  "schemaVersion": "1.0.0",
+  "campaignId": "CAS-APP-SERVER-20260901-01",
+  "assignmentId": "CAS-10",
+  "status": "WEB_COMPOSITION_READY",
+  "recordedDate": "2026-09-02",
+  "baseRevision": "b9dc01512975a8b11bc673b5ec906c818dd708f6",
+  "workingDirectory": "/Users/mcasa_atlantis/.codex/worktrees/a4a6/.codex",
+  "authority": {
+    "assignmentPath": "/Users/mcasa_atlantis/.codex/worktrees/0c2e/.codex/.agents/batdd/assignments/CAS-10.json",
+    "assignmentSha256": "5bf84bd6e72b0ab4eb4b40d2a0bbd04a77a12984e4b6214be6bdae89e9702954",
+    "dualPresentationAmendmentSha256": "1009de4067013a392408de4aefdb0e6c852c26d98c50a53279dc46b0a2f9d0ed",
+    "singleWriterEvidenceSha256": "9727680a52dd970e9ecad99ea56562263e432f3f5a3a1b851bda8d17fc194770",
+    "writeLeaseId": "CAS-10-SVELTE-VISIBILITY",
+    "commitAuthority": false,
+    "selfCertified": false
+  },
+  "compiledProfile": {
+    "path": "/Users/mcasa_atlantis/.codex/worktrees/a4a6/.codex/.agents/batdd/profile.json",
+    "beforeSha256": "0a409252f81a89c1986c3118c87c9822207d44e0c6ccf5edb316b47f1ab310f5",
+    "afterSha256": "0f1ddd62f238c8c190ad27ccdfe8df5bb226a2054ad110582471f301731e3135",
+    "schemaPath": "/Users/mcasa_atlantis/.codex/worktrees/a4a6/.codex/.agents/batdd/profile.schema.json",
+    "schemaSha256": "0dc652e7d53fd19f1080107e4aa7dc53d26226cb6ef4d38c64312221220510be",
+    "schemaValid": true,
+    "profileVersion": "1.1.0",
+    "status": "active",
+    "web": {
+      "status": "required",
+      "runtime": "playwright",
+      "patterns": ["*.spec.ts"],
+      "cachePolicy": "uncached-live"
+    }
+  },
+  "generator": {
+    "plugin": "@nx/playwright",
+    "version": "23.1.0",
+    "generator": "configuration",
+    "sourceInspected": true,
+    "dryRunPerformed": true,
+    "command": "bun nx g @nx/playwright:configuration --project=@codex/codex-control-e2e --directory=src --linter=eslint --webServerCommand='bun nx serve @codex/codex-control-ui' --webServerAddress='http://localhost:4200' --skipInstall --no-interactive",
+    "generatedExampleRemoved": true,
+    "reason": "Placeholder example behavior cannot become CAS-10 acceptance."
+  },
+  "runtime": {
+    "playwrightTest": "1.62.1",
+    "browser": "chromium",
+    "browserRevision": "1234",
+    "desktopProject": "chromium",
+    "mobileProject": "mobile-chromium",
+    "externalBrowserCacheOnly": true
+  },
+  "resolvedProject": {
+    "name": "@codex/codex-control-e2e",
+    "root": "apps/codex-control-e2e",
+    "implicitDependency": "@codex/codex-control-ui",
+    "targets": ["e2e", "e2e-ci", "e2e-ci--merge-reports", "lint", "typecheck"],
+    "e2eCache": false,
+    "webServerCommand": "bun nx serve @codex/codex-control-ui",
+    "webServerAddress": "http://localhost:4200"
+  },
+  "files": {
+    ".agents/batdd/profile.json": "0f1ddd62f238c8c190ad27ccdfe8df5bb226a2054ad110582471f301731e3135",
+    "package.json": "31eb3a21b5ef4abc531b43b37d7e2cfa07f677348ef837ad70971c2402673990",
+    "bun.lock": "d72fa29a6aaff33f8dc834937ab7274010d293b0f506e3a88f17c16073fcfee4",
+    "nx.json": "43d1009ec97c83478846448c9d467377accfcfb8099b23f90c1086c4c6626a36",
+    "tsconfig.json": "2f296be6c898d822c4fb61e9f9a2819dfc50b2147a26186a5666d25b29f6d593",
+    "eslint.config.mjs": "02ce36e8bb67c51f48f3b45e2bbb71fea43bf8e6f9015466385082c7d98f26e9",
+    "apps/codex-control-e2e/package.json": "f7ab51968b4233198c97962f1ca67e5b9da70ca9eefaf6dad2a1adeffcecda6d",
+    "apps/codex-control-e2e/playwright.config.mts": "01a4669dc16d38542d947b82d6a57fd82781092625f60c9d0fab8e94b4e374ed",
+    "apps/codex-control-e2e/tsconfig.json": "8feef99f63147295b429a7cc206dafa41ba576c2e6329a03e9a391f7d1f76765",
+    "apps/codex-control-e2e/eslint.config.mjs": "89181ed2c2e083fa180009df5d2ad07a6094006fe889ca39f7d744aebc9fd55b"
+  },
+  "validation": [
+    {
+      "gate": "compiled-profile-schema-and-web-required",
+      "exitCode": 0
+    },
+    {
+      "gate": "bun install --frozen-lockfile",
+      "exitCode": 0,
+      "installs": 1021,
+      "packages": 1104,
+      "changes": 0
+    },
+    {
+      "gate": "bun nx sync:check --outputStyle=static",
+      "exitCode": 0
+    },
+    {
+      "gate": "bun nx show project @codex/codex-control-e2e --json",
+      "exitCode": 0,
+      "selectedTargets": 5
+    },
+    {
+      "gate": "bun nx run @codex/codex-control-e2e:lint --outputStyle=static",
+      "exitCode": 0,
+      "cacheHit": false
+    },
+    {
+      "gate": "bun nx run @codex/codex-control-e2e:typecheck --outputStyle=static",
+      "exitCode": 0,
+      "cacheHit": false
+    },
+    {
+      "gate": "bunx prettier --check exact composition files",
+      "exitCode": 0
+    },
+    {
+      "gate": "bunx playwright test --config apps/codex-control-e2e/playwright.config.mts --list",
+      "exitCode": 1,
+      "selected": 0,
+      "classification": "EXPECTED_PRE_ACCEPTANCE_HALT",
+      "meaning": "The runner/config loads, but CAS-10 owns all meaningful browser scenarios. Zero tests is not GREEN."
+    }
+  ],
+  "scope": {
+    "uiBehaviorFilesChanged": 0,
+    "CAS-10FeatureOrScenarioFilesChanged": 0,
+    "placeholderTestsRetained": 0,
+    "unexpectedRepositoryFilesChanged": 0,
+    "liveSynologyContacted": false,
+    "descendantsLaunched": 0,
+    "auditQaVerificationFinalPolishCAS11Launched": false,
+    "commitCreated": false,
+    "pushPerformed": false
+  },
+  "reentry": {
+    "workerThreadId": "01a06227-4ffd-7d03-9dc2-d475d22c06b7",
+    "direction": [
+      "Revalidate this packet, the amended CAS-10 assignment, and the Web-required shared profile.",
+      "Author every CAS-10 L2/L3 browser row only inside the unchanged CAS-10 write surface.",
+      "Capture meaningful RED through the resolved uncached @codex/codex-control-e2e:e2e target, freeze the Green Contract, then implement fidelity-ordered GREEN.",
+      "Do not treat the coordinator's zero-test list result as acceptance evidence."
+    ]
+  },
+  "stop": "Coordinator Web/profile composition only; CAS-10 behavior and acceptance remain worker-owned."
+}

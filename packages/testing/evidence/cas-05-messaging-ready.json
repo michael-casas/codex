@@ -1,0 +1,148 @@
+{
+  "schemaVersion": "1.0.0",
+  "campaignId": "CAS-APP-SERVER-20260901-01",
+  "assignmentId": "CAS-05",
+  "writeLeaseId": "CAS-05-DURABLE-INTERCOM",
+  "status": "MESSAGING_READY",
+  "terminal": "READY-FOR-AUDIT",
+  "recordedAt": "2026-09-02T01:39:58Z",
+  "workingDirectory": "/Users/mcasa_atlantis/.codex/worktrees/a4a6/.codex",
+  "baseRevision": "b9dc01512975a8b11bc673b5ec906c818dd708f6",
+  "authority": {
+    "assignmentSha256": "9627ed343a09ac9264d2eeda859e634b6a4506a98e206ecb59c9edb46b1bd337",
+    "integrationPacketSha256": "faf3da8fbe1a04126bcd2cd7be0185a331e0c3b9046bafe606c5d2a3c537e199",
+    "greenContractId": "CAS-05-GC-1",
+    "greenContractSha256": "1f6e97f29a9ccab55969631fc09fed3c072bf1e3d91b32c105e51e4ba5f8733e",
+    "commitAuthority": false,
+    "selfCertified": false
+  },
+  "candidate": {
+    "ownedSourceManifestSha256": "d50b80cab8cfdd75f2d3c6290230141c28822d68cf8122c82e32e2112f3a2edd",
+    "migrationSha256": "c94594fc6168a9c147bd2ac1b1c096cb682b6a9ce07d90a80289a29513504fe5",
+    "l3ArtifactSha256": "d35cd4119ded4ee1ef8f7135728b9d4990e42d7e22bfe3d8cdfff4edc3f442d9"
+  },
+  "publicSeam": {
+    "directory": ["register", "read", "list"],
+    "messaging": ["send", "ask", "reply", "pending"],
+    "maxCallsPerSendAskReply": 1,
+    "handleFields": ["messageId", "correlationId", "state"],
+    "providerChoreographyExposed": false
+  },
+  "durability": {
+    "truth": "PostgreSQL process.agent_runtime, process.agent_message, and process.agent_message_outbox",
+    "transaction": "message, outbox row, and pg-boss job commit through one database transaction",
+    "deliveryAuthority": "pg-boss owns leases, retry delay/backoff, expiration, recovery, and dead-letter routing",
+    "idempotency": "transaction-scoped advisory serialization plus exact payload comparison returns stable identities; conflict produces no write",
+    "correlation": "reply correlation must name a nonterminal reversed-party ask; a valid reply marks the ask replied without collapsing reply delivery state"
+  },
+  "appServerDelivery": {
+    "protocolVersion": "0.151.0",
+    "active": "turn/steer with expectedTurnId and clientUserMessageId",
+    "idle": "turn/start with clientUserMessageId",
+    "observation": "thread/read, then experimental thread/items/list plus thread/list status, then version-compatible read fallbacks",
+    "observationRace": "known acceptance with a not-yet-visible marker fails the job as MESSAGE_OBSERVATION_PENDING; pg-boss redelivery observes the marker before any second mutation",
+    "ambiguousDisconnect": "reconnect and marker reconciliation precede disposition; unresolved ambiguity is marked failed and never blindly mutates again",
+    "passiveInjectionClaimedAsWake": false,
+    "collabToolCallClaimedAsBus": false
+  },
+  "validation": [
+    {
+      "project": "@codex/process",
+      "target": "test-l1",
+      "runtime": "vitest",
+      "selected": 16,
+      "passed": 16,
+      "exitCode": 0,
+      "cache": "bypassed"
+    },
+    {
+      "project": "@codex/db",
+      "target": "test-l2-integration",
+      "runtime": "vitest-postgresql",
+      "selected": 6,
+      "passed": 6,
+      "exitCode": 0,
+      "cache": "bypassed"
+    },
+    {
+      "project": "@codex/delivery",
+      "target": "test-l2-integration",
+      "runtime": "vitest-postgresql-pg-boss-authenticated-wss",
+      "selected": 7,
+      "passed": 7,
+      "exitCode": 0,
+      "cache": "bypassed"
+    },
+    {
+      "project": "@codex/daemon",
+      "target": "test-l2-e2e",
+      "runtime": "vitest-process-postgresql-pg-boss",
+      "selected": 2,
+      "passed": 2,
+      "exitCode": 0,
+      "cache": "bypassed"
+    },
+    {
+      "project": "@codex/process",
+      "target": "test-l3",
+      "runtime": "cucumber-postgresql-pg-boss-authenticated-wss",
+      "source": 1,
+      "selected": 1,
+      "executed": 1,
+      "scenariosPassed": 1,
+      "stepsPassed": 3,
+      "exitCode": 0,
+      "cache": "bypassed"
+    },
+    {
+      "projects": [
+        "@codex/process",
+        "@codex/db",
+        "@codex/delivery",
+        "@codex/daemon"
+      ],
+      "targets": ["build", "typecheck", "lint"],
+      "exitCode": 0,
+      "cache": "bypassed"
+    },
+    { "target": "nx-sync-check", "exitCode": 0 }
+  ],
+  "adversarialEvidence": [
+    "body empty and 32769-byte boundary",
+    "wrong actor and missing scope no-write",
+    "expired command and pre-host expiry",
+    "invalid reply correlation no-write",
+    "exact sequential and concurrent replay",
+    "conflicting idempotency reuse no-write",
+    "invalid backward durable state transition",
+    "active expected-turn steer versus idle start",
+    "ambiguous disconnect marker reconciliation without a second mutation",
+    "offline queued replay after pg-boss and admitted transport reconnect",
+    "one distinct visible user-message item after retry and replay",
+    "pg-boss job payload contains only messageId"
+  ],
+  "resourceDelta": {
+    "unexpected": 0,
+    "testDatabases": 0,
+    "testRoles": 0,
+    "controlledWssTempDirectories": 0,
+    "controlledWssAppServerProcesses": 0
+  },
+  "handoff": {
+    "CAS-06": "Compose createProductionAgentMessagingDaemon with the admitted AppServerHostRegistry; preserve marker-before-mutation reconciliation.",
+    "CAS-07": "Use stable agent/message/correlation handles only; do not expose App Server method order.",
+    "CAS-08": "Project app-server-accepted, thread-observed, and replied as distinct durable states; omit bodies, credentials, and raw reasoning from public event streams.",
+    "CAS-09": "Expose one-call send, ask, reply, and authorized pending tools with compact handles; retain one-call budget and recipient authorization."
+  },
+  "forbiddenOperations": {
+    "liveAesJ5SynologyMutation": false,
+    "filesystemMailbox": false,
+    "pollingRetryAuthority": false,
+    "tmuxDelivery": false,
+    "herdrDelivery": false,
+    "auditLaunched": false,
+    "qaLaunched": false,
+    "commitCreated": false,
+    "pushPerformed": false
+  }
+}

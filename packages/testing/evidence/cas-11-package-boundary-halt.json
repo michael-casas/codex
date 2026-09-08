@@ -1,0 +1,58 @@
+{
+  "schemaVersion": "1.0.0",
+  "campaignId": "CAS-APP-SERVER-20260901-01",
+  "assignmentId": "CAS-11",
+  "status": "PACKAGE_BOUNDARY_HALT",
+  "recordedAt": "2026-09-02T14:50:48Z",
+  "workingDirectory": "/Users/mcasa_atlantis/.codex/worktrees/a4a6/.codex",
+  "baseRevision": "b9dc01512975a8b11bc673b5ec906c818dd708f6",
+  "authority": {
+    "assignmentSha256": "770fc449de48e3132ac856801c6a94c1e320754ee96daa4333a33fcf0a86d28f",
+    "rootCompositionSha256": "4506ee289bd11ea751dad308f5c5a5239052db94d367da3079b9c4d424d31efd",
+    "dependencyCompositionSha256": "eb269854b6b80ed0c476035d996db01018c332430a19c8b2bacacab7d99d940d",
+    "contractErratumReproofSha256": "2b0feda3736956452586ee9273011b2b48c2ef5fde1175a9a2b0025204e23c41",
+    "l3ScopeAmendmentSha256": "9e9522f2394071da93db3bcbee6a74458138e40389a1f556f3682b8eaf885bbe",
+    "greenContractSha256": "3c3589dc1bad7a3e7549318f426cf7fef8e10609e488811dbd9557049bbfbfd8",
+    "contractFreezeSha256": "b31b518011c7b7ca356cd72634b746dcf380643c4e6defbbc77011e52f8f3540",
+    "redEvidenceSha256": "94e39572762eb3f351dbe1e082d328beaa25a214558ea57aac05f64fe8ec25ad"
+  },
+  "lockedGreen": {
+    "l1": { "selected": 4, "passed": 4 },
+    "l2": { "selected": 2, "passed": 2 },
+    "webAffected": {
+      "selected": 16,
+      "passed": 16,
+      "cas11Source": 1,
+      "cas11Selected": 1,
+      "cas11Generated": 1,
+      "cas11Executed": 2,
+      "projects": ["chromium", "mobile-chromium"]
+    },
+    "build": "GREEN",
+    "typecheck": "GREEN",
+    "pluginValidation": "GREEN"
+  },
+  "blocker": {
+    "gate": "@codex/plugin-codex-control:lint",
+    "path": "plugins/codex-control/src/server.ts:7",
+    "rule": "@nx/enforce-module-boundaries",
+    "failure": "Projects cannot be imported by a relative or absolute path and must begin with an npm scope.",
+    "serverSha256": "6765b487b338082dd17f1a4ca505ba3f8f74c10cf399dc2cb3547a4fa66cbf75",
+    "predecessorPackageSha256": "3796cab05f692ef30818ce9a2749a6c920fcdd0ff117f236f9dcb708e88b640b"
+  },
+  "resumeCondition": "The coordinator exposes createCodexControlServer through one explicit @codex/codex-control package subpath, authorizes the plugin's scoped workspace dependency and exact lock delta, and provides any required packaging-layer tag ruling. The worker replaces only the relative import, reruns the locked green closure, and does not copy CAS-09 gateway code or suppress lint.",
+  "forbiddenFixes": [
+    "eslint disable or allow-list bypass",
+    "copying the CAS-09 gateway into the plugin",
+    "a second MCP control implementation",
+    "deep source import through an undeclared package path"
+  ],
+  "resourceDelta": {
+    "isolatedCodexHomesRemaining": 0,
+    "installedPluginsRemaining": 0,
+    "pluginProcessesRemaining": 0,
+    "listenersRemaining": 0,
+    "tunnelsCreated": 0,
+    "liveSynologyContacted": false
+  }
+}

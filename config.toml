@@ -32,20 +32,39 @@ session SQLite scratchpad is restored separately after compaction.
 approval_policy = "never"
 approvals_reviewer = "user"
 sandbox_mode = "danger-full-access"
-service_tier = "default"
 
-notify = ["/Users/mcasa_atlantis/.codex/computer-use/Codex Computer Use.app/Contents/SharedSupport/SkyComputerUseClient.app/Contents/MacOS/SkyComputerUseClient", "turn-ended"]
+notify = [
+  "/Users/mcasa_atlantis/.codex/computer-use/Codex Computer Use.app/Contents/SharedSupport/SkyComputerUseClient.app/Contents/MacOS/SkyComputerUseClient",
+  "turn-ended",
+]
+service_tier = "default"
 
 [shell_environment_policy]
 inherit = "all"
-include_only = ["HOME", "PATH", "USER", "SHELL", "LANG", "LC_.*", "TERM", "TMPDIR", "TZ", "XDG_.*", "CODEX_.*", "HERDR_.*", "AGENT_WIKI_HOME", "WIKI_.*", "OPENAI_API_KEY", "OPENCODE_API_KEY", "ANTHROPIC_API_KEY", "OPENROUTER_API_KEY", "MCP_OAUTH_.*"]
+include_only = [
+  "HOME",
+  "PATH",
+  "USER",
+  "SHELL",
+  "LANG",
+  "LC_.*",
+  "TERM",
+  "TMPDIR",
+  "TZ",
+  "XDG_.*",
+  "CODEX_.*",
+  "HERDR_.*",
+  "AGENT_WIKI_HOME",
+  "WIKI_.*",
+  "OPENAI_API_KEY",
+  "OPENCODE_API_KEY",
+  "ANTHROPIC_API_KEY",
+  "OPENROUTER_API_KEY",
+  "MCP_OAUTH_.*",
+]
 
 [shell_environment_policy.set]
 NODE_REPL_TRUSTED_BROWSER_CLIENT_SHA256S = "9230e2bd8b24b7ac7a0ba6774c64bf0d78ecdabbdd91d0ed627b02a587bae2df"
-
-[sandbox_workspace_write]
-writable_roots = ["/Users/mcasa_atlantis/.agent-device"]
-network_access = true
 
 [network]
 allow_local_binding = true
@@ -87,7 +106,7 @@ notification_condition = "unfocused"
 raw_output_mode = false
 show_tooltips = false
 vim_mode_default = false
-status_line = ["model-with-reasoning", "context-used", "context-window-size", "current-dir", "git-branch", "weekly-limit"]
+status_line = ["model-with-reasoning", "context-used", "context-window-size", "git-branch", "weekly-limit", "task-progress"]
 status_line_use_colors = true
 terminal_title = ["spinner", "project"]
 
@@ -138,6 +157,48 @@ trust_level = "trusted"
 [projects."/Users/mcasa_atlantis/.no-mistakes/repos"]
 trust_level = "trusted"
 
+[projects."/Users/mcasa_atlantis/Documents/repos/github.com/michael-casas/michael-casas"]
+trust_level = "trusted"
+
+[projects."/Users/mcasa_atlantis/.pi"]
+trust_level = "trusted"
+
+[projects."/Users/mcasa_atlantis/Documents/repos/github.com/michael-casas/lead-gen"]
+trust_level = "trusted"
+
+[projects."/Users/mcasa_atlantis/.dotfiles"]
+trust_level = "trusted"
+
+[projects."/Users/mcasa_atlantis/Documents/Codex/2026-09-01/cas-01-code-quality-audit"]
+trust_level = "trusted"
+
+[projects."/Users/mcasa_atlantis/Documents/Codex/2026-09-01/cas-01-qa-audit"]
+trust_level = "trusted"
+
+[projects."/Users/mcasa_atlantis/Documents/Codex/2026-09-01/cas-04-workspace-lease"]
+trust_level = "trusted"
+
+[projects."/Users/mcasa_atlantis/Documents/Codex/2026-09-01/cas-05-durable-intercom"]
+trust_level = "trusted"
+
+[projects."/Users/mcasa_atlantis/Documents/Codex/2026-09-01/cas-06-direct-handoff"]
+trust_level = "trusted"
+
+[projects."/Users/mcasa_atlantis/Documents/Codex/2026-09-01/cas-07-remote-workflow-execution"]
+trust_level = "trusted"
+
+[projects."/Users/mcasa_atlantis/Documents/Codex/2026-09-02/cas-08-runtime-visibility"]
+trust_level = "trusted"
+
+[projects."/Users/mcasa_atlantis/Documents/Codex/2026-09-02/cas-09-task-level-mcp-gateway"]
+trust_level = "trusted"
+
+[projects."/Users/mcasa_atlantis/Documents/Codex/2026-09-02/cas-10-svelte-visibility-plane"]
+trust_level = "trusted"
+
+[projects."/Users/mcasa_atlantis/Documents/repos/github.com/arcana-market/arcana-market"]
+trust_level = "trusted"
+
 # Machine-local Codex configuration fragment.
 # Generated during Task 10 cutover from backed-up active config.toml.
 # Excludes credentials, live hooks.json trust hashes, projects trust,
@@ -154,6 +215,7 @@ selected-avatar-id = "stacky"
 dock-icon-preference = "codex-system"
 show-context-window-usage = true
 notifications-turn-mode = "always"
+"browser-family-enabled:chrome" = true
 
 [desktop.open-in-target-preferences]
 global = "ghostty"
@@ -164,13 +226,19 @@ global = "ghostty"
 "/Users/mcasa_atlantis/.codex/worktrees/ea97/Aesgoldseed" = "ghostty"
 
 [marketplaces.openai-bundled]
-last_updated = "2026-08-20T14:25:02Z"
 source_type = "local"
 source = "/Users/mcasa_atlantis/.codex/.tmp/bundled-marketplaces/openai-bundled"
 
 [mcp_servers.executor]
 command = "/Users/mcasa_atlantis/.nvm/versions/node/v24.15.0/bin/executor"
-args = ["mcp", "--scope", "/Users/mcasa_atlantis/.executor", "--no-artifacts", "--elicitation-mode", "model"]
+args = [
+  "mcp",
+  "--scope",
+  "/Users/mcasa_atlantis/.executor",
+  "--no-artifacts",
+  "--elicitation-mode",
+  "model",
+]
 cwd = "/Users/mcasa_atlantis/.executor"
 default_tools_approval_mode = "approve"
 
@@ -186,12 +254,13 @@ NODE_REPL_NODE_PATH = "/Applications/ChatGPT.app/Contents/Resources/cua_node/bin
 NODE_REPL_TRUSTED_CODE_PATHS = "/Users/mcasa_atlantis/.codex:/Applications/ChatGPT.app/Contents/Resources/cua_node/lib/node_modules"
 CODEX_HOME = "/Users/mcasa_atlantis/.codex"
 BROWSER_USE_AVAILABLE_BACKENDS = "chrome,iab"
+BROWSER_USE_TINYSKY_ENABLED = "0"
 NODE_REPL_INSTRUCTIONS_USE_CASE_BROWSER = "Control the in-app browser in conjunction with the Browser Plugin."
 NODE_REPL_INSTRUCTIONS_USE_CASE_CHROME = "Control the Chrome browser in conjunction with the Chrome Plugin. Prefer this method of controlling Chrome over alternatives (such as Computer Use) unless the user explicitly mentions an alternative."
 NODE_REPL_INSTRUCTIONS_USE_CASE_COMPUTER_USE = "Control desktop apps on macOS through Computer Use."
 BROWSER_USE_CODEX_APP_BUILD_FLAVOR = "prod"
-BROWSER_USE_CODEX_APP_VERSION = "26.814.41407"
-NODE_REPL_TRUSTED_SERVICES = '{"browser":"/Users/mcasa_atlantis/.codex/plugins/cache/openai-bundled/browser/26.814.41407/scripts/browser-service.mjs","sky":"@oai/sky/service"}'
+BROWSER_USE_CODEX_APP_VERSION = "26.901.31953"
+NODE_REPL_TRUSTED_SERVICES = '{"browser":"/Users/mcasa_atlantis/.codex/plugins/cache/openai-bundled/browser/26.901.31953/scripts/browser-service.mjs","sky":"@oai/sky/service"}'
 SKY_CUA_SERVICE_PATH = "/Users/mcasa_atlantis/.codex/computer-use/Codex Computer Use.app"
 CODEX_CLI_PATH = "/Applications/ChatGPT.app/Contents/Resources/codex"
 
@@ -199,7 +268,11 @@ CODEX_CLI_PATH = "/Applications/ChatGPT.app/Contents/Resources/codex"
 command = "./Codex Computer Use.app/Contents/SharedSupport/SkyComputerUseClient.app/Contents/MacOS/SkyComputerUseClient"
 args = ["mcp"]
 cwd = "."
-enabled = true
+enabled = false
+
+[mcp_servers.cua_repl]
+command = "/Applications/ChatGPT.app/Contents/MacOS/ChatGPT"
+enabled = false
 
 [marketplaces.nx-claude-plugins]
 last_updated = "2026-08-11T13:32:30Z"
@@ -208,9 +281,18 @@ source_type = "git"
 source = "https://github.com/nrwl/nx-ai-agents-config.git"
 
 [marketplaces.openai-primary-runtime]
-last_updated = "2026-08-19T22:51:55Z"
 source_type = "local"
 source = "/Users/mcasa_atlantis/.cache/codex-runtimes/codex-primary-runtime/plugins/openai-primary-runtime"
+
+[marketplaces.ponytail]
+last_updated = "2026-08-31T20:06:15Z"
+last_revision = "2ed6c52c9d7e5e56942508591085fd45dea277d3"
+source_type = "git"
+source = "https://github.com/DietrichGebert/ponytail.git"
+
+[marketplaces.codex-control-local]
+source_type = "local"
+source = "/Users/mcasa_atlantis/.codex/worktrees/a4a6/.codex"
 
 [hooks.state]
 
@@ -274,6 +356,21 @@ trusted_hash = "sha256:12efdd54b3c8a0778d63d1056073a7cbeec09518b5bfd46e2893c96b2
 [hooks.state."/Users/mcasa_atlantis/Documents/repos/github.com/casona-ai/casona-ai/.codex/hooks.json:stop:0:0"]
 trusted_hash = "sha256:15e2e58db3e02eb8b44667e15b8ae7c28d08178d5dd1c1ed4b9369ef3ecf56d9"
 
+[hooks.state."/Users/mcasa_atlantis/Documents/repos/github.com/michael-casas/michael-casas/.codex/hooks.json:post_tool_use:0:0"]
+trusted_hash = "sha256:12efdd54b3c8a0778d63d1056073a7cbeec09518b5bfd46e2893c96b2292af7f"
+
+[hooks.state."/Users/mcasa_atlantis/Documents/repos/github.com/michael-casas/michael-casas/.codex/hooks.json:stop:0:0"]
+trusted_hash = "sha256:15e2e58db3e02eb8b44667e15b8ae7c28d08178d5dd1c1ed4b9369ef3ecf56d9"
+
+[hooks.state."ponytail@ponytail:hooks/claude-codex-hooks.json:session_start:0:0"]
+trusted_hash = "sha256:5f81d38f47448a1581c08ec877e044d9e04dd6f814dce3f2671f7a8edadd719b"
+
+[hooks.state."ponytail@ponytail:hooks/claude-codex-hooks.json:user_prompt_submit:0:0"]
+trusted_hash = "sha256:6a6f42bc3b58d6262db38bfd74d7f340fcca2b09cdb134aad365063f0bfefca4"
+
+[hooks.state."ponytail@ponytail:hooks/claude-codex-hooks.json:subagent_start:0:0"]
+trusted_hash = "sha256:1423b56c1322f96c8f74c51c1e7ae9a047b904c1fa43ee9165d462fd7a6e70ef"
+
 [plugins."visualize@openai-bundled"]
 enabled = true
 
@@ -302,4 +399,13 @@ enabled = true
 enabled = true
 
 [plugins."codex-app-tools@openai-bundled"]
+enabled = true
+
+[plugins."ponytail@ponytail"]
+enabled = true
+
+[plugins."codex-control@codex-control-local"]
+enabled = true
+
+[apps.connector_openai_codex_document_control]
 enabled = true

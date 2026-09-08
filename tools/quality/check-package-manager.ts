@@ -43,17 +43,17 @@ const manifest = JSON.parse(
 };
 const violations: string[] = [];
 
-if (manifest.packageManager !== 'bun@1.3.14') {
-  violations.push('package.json must declare packageManager=bun@1.3.14');
+if (manifest.packageManager !== 'bun@1.4.2') {
+  violations.push('package.json must declare packageManager=bun@1.4.2');
 }
 if (manifest.private !== true)
   violations.push('package.json must remain private');
 if (
   JSON.stringify(manifest.workspaces) !==
-  JSON.stringify(['apps/*', 'packages/*'])
+  JSON.stringify(['apps/*', 'packages/*', 'plugins/*'])
 ) {
   violations.push(
-    'package.json workspaces must be exactly apps/* and packages/*',
+    'package.json workspaces must be exactly apps/*, packages/*, and plugins/*',
   );
 }
 if (!existsSync(join(root, 'bun.lock'))) violations.push('bun.lock is missing');

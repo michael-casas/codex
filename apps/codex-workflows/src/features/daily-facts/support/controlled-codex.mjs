@@ -131,7 +131,7 @@ emit({ type: 'thread.started', thread_id: `daily-facts-slot-${slot ?? 0}` });
 emit({ type: 'turn.started' });
 
 // Keep the controlled turns open long enough for all three independently
-// spawned SDK processes to publish their readiness records under aggregate load.
+// spawned controlled turn processes to publish readiness under aggregate load.
 await new Promise((resolve) => setTimeout(resolve, 500));
 
 if (!slot) {

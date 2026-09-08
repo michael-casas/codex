@@ -1,0 +1,85 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+readonly real_codex="${CODEX_HERDR_REAL_CODEX:-/usr/local/bin/codex}"
+readonly lease_path="${CODEX_HERDR_LEASE_PATH:-${XDG_STATE_HOME:-$HOME/.local/state}/codex-herdr/context.env}"
+readonly launcher="${CODEX_HERDR_LAUNCHER:-$HOME/.local/bin/codex-app-herdr}"
+readonly required_keys=(
+  HERDR_ENV
+  HERDR_SOCKET_PATH
+  HERDR_WORKSPACE_ID
+  HERDR_TAB_ID
+  HERDR_PANE_ID
+)
+
+die() {
+  local code="$1"
+  shift
+  printf 'codex-herdr-proxy: %s\n' "$*" >&2
+  exit "$code"
+}
+
+is_proxy_request() {
+  [[ "${1:-}" == "app-server" && "${2:-}" == "proxy" ]]
+}
+
+lease_mode() {
+  if [[ "$(uname -s)" == "Darwin" ]]; then
+    stat -f '%Lp' "$lease_path"
+  else
+    stat -c '%a' "$lease_path"
+  fi
+}
+
+lease_is_live() {
+  [[ -f "$lease_path" && -O "$lease_path" ]] || return 1
+  case "$(lease_mode)" in
+    400|600) ;;
+    *) return 1 ;;
+  esac
+
+  # The lease is owner-only data emitted by codex-herdr-context-guardian.
+  # shellcheck disable=SC1090
+  source "$lease_path"
+
+  [[ "${HERDR_ENV:-}" == "1" ]] || return 1
+  local key
+  for key in "${required_keys[@]:1}"; do
+    [[ -n "${!key:-}" ]] || return 1
+  done
+  [[ "${CODEX_HERDR_GUARDIAN_PID:-}" =~ ^[1-9][0-9]*$ ]] ||
+    return 1
+  kill -0 "$CODEX_HERDR_GUARDIAN_PID" 2>/dev/null || return 1
+  [[ -S "$HERDR_SOCKET_PATH" ]] || return 1
+}
+
+load_lease() {
+  lease_is_live ||
+    die 78 'Herdr context lease is unavailable; start the J5 codex-app-herdr guardian'
+
+  export "${required_keys[@]}"
+}
+
+bootstrap_guardian() {
+  lease_is_live && return 0
+  [[ "$(uname -s)" == "Linux" ]] || return 0
+  [[ "${CODEX_HERDR_AUTO_START:-1}" == "1" ]] || return 0
+  [[ -x "$launcher" ]] || return 0
+  CODEX_HERDR_AUTO_START=0 "$launcher" start >/dev/null
+}
+
+if ! is_proxy_request "$@"; then
+  [[ -x "$real_codex" ]] || die 69 "real Codex executable is unavailable: $real_codex"
+  exec "$real_codex" "$@"
+fi
+
+bootstrap_guardian
+load_lease
+
+if [[ "${CODEX_HERDR_DRY_RUN:-}" == "1" ]]; then
+  printf '{"herdrKeys":5,"mode":"proxy-dry-run","status":"herdr-ready"}\n'
+  exit 0
+fi
+
+[[ -x "$real_codex" ]] || die 69 "real Codex executable is unavailable: $real_codex"
+exec "$real_codex" "$@"

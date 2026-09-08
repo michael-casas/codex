@@ -1,0 +1,127 @@
+{
+  "schemaVersion": "1.0.0",
+  "checkpointId": "CAS-07-SDK-REMOVAL-COMPLETE-01",
+  "campaignId": "CAS-APP-SERVER-20260901-01",
+  "assignmentId": "CAS-07",
+  "status": "SDK_REMOVAL_COMPLETE",
+  "baseRevision": "b9dc01512975a8b11bc673b5ec906c818dd708f6",
+  "workingDirectory": "/Users/mcasa_atlantis/.codex/worktrees/a4a6/.codex",
+  "authority": {
+    "sdkRemovalReadyPath": "/Users/mcasa_atlantis/.codex/worktrees/a4a6/.codex/packages/testing/evidence/cas-07-sdk-removal-ready.json",
+    "sdkRemovalReadySha256": "b376f5c5111416cad7d36a025cdb3a138b484c068cfdecfba5b73ff73840433e",
+    "greenContractId": "CAS-07-GC-1",
+    "coordinatorRole": "parent campaign coordinator evidence-only closeout",
+    "commitAuthority": false
+  },
+  "migrated": {
+    "apps/codex-workflows/src/runtime/local-runner.ts": {
+      "sha256": "d51cb4a258ec89b068a520c74952a004dee3daa56456faa998a00022d12cac5b",
+      "behavior": "Direct trusted TypeScript compatibility execution now composes connectAppServer and createAppServerWorkflowExecutor while preserving the CLI journal, artifacts, cancellation, exact model/medium reasoning, and deterministic failures."
+    },
+    "packages/codex/src/index.ts": {
+      "sha256": "76c2e2b453424079f95b9cf0c98ea5f9c2e378a197c7e85bb56219a310738876",
+      "behavior": "Production exports retain the generated App Server client and workflow executor; SDK runtime exports are removed."
+    }
+  },
+  "removed": {
+    "dependency": "@openai/codex-sdk",
+    "files": [
+      "packages/codex/src/runtime/adapter.ts",
+      "packages/codex/src/runtime/attestation.ts",
+      "packages/codex/src/runtime/facade.test.ts",
+      "packages/codex/src/runtime/observability.test.ts",
+      "packages/codex/src/runtime/sdk.spec.ts",
+      "packages/codex/src/runtime/singleton.test.ts",
+      "packages/codex/src/runtime/singleton.ts",
+      "packages/codex/src/runtime/types.ts"
+    ],
+    "productionReferenceSearch": "No @openai/codex-sdk, initializeCodexHost, or createCodexSdkAdapter reference remains under packages/apps outside the retained import-policy detector and immutable evidence.",
+    "duplicateCanonicalRuntime": false
+  },
+  "digests": {
+    "apps/codex-workflows/package.json": "69df60c8fdecfabdeb76393783d540f16059b819e2f1d2862dceffde4ce2cfa3",
+    "packages/codex/package.json": "f2584def3d8095720a0445c078ba464dbae6a1cb4567a19b287dc27d184f631f",
+    "bun.lock": "be43d553ac6b375826dd910561d424246376309b9b3850b5cafa0b99db5c34d8"
+  },
+  "preserved": [
+    "generated App Server 0.151.0 bindings",
+    "CAS-01 typed App Server client",
+    "CAS-07 App Server workflow executor",
+    "trusted-source TypeScript admission",
+    "direct TypeScript workflow CLI and journal",
+    "schema and artifact validation",
+    "SDK import-policy detector preventing production reintroduction",
+    "all predecessor and unrelated dirty state",
+    "external credential boundary and live Synology read-only restriction"
+  ],
+  "validation": [
+    {
+      "command": "bun install --frozen-lockfile",
+      "exitCode": 0,
+      "result": "1011 installs across 1094 packages; no changes"
+    },
+    {
+      "command": "bun nx sync:check --outputStyle=static",
+      "exitCode": 0,
+      "result": "workspace up to date"
+    },
+    {
+      "command": "bun nx run-many -t build,typecheck -p @codex/codex @codex/codex-workflows @codex/workflows --skipNxCache --outputStyle=static",
+      "exitCode": 0,
+      "cache": "bypassed"
+    },
+    {
+      "command": "bun nx run-many -t lint -p @codex/codex @codex/workflows --skipNxCache --outputStyle=static",
+      "exitCode": 0,
+      "cache": "bypassed"
+    },
+    {
+      "command": "bun nx run @codex/codex:test --skipNxCache --outputStyle=static",
+      "exitCode": 0,
+      "l1Passed": 8,
+      "realStdioL2Passed": 2,
+      "cache": "bypassed"
+    },
+    {
+      "command": "bun nx run @codex/workflows:test --skipNxCache --outputStyle=static",
+      "exitCode": 0,
+      "l1Passed": 59,
+      "cache": "bypassed"
+    },
+    {
+      "command": "bun nx run @codex/codex-workflows:test-l1 --skipNxCache --outputStyle=static",
+      "exitCode": 0,
+      "passed": 39,
+      "cache": "bypassed"
+    },
+    {
+      "command": "bun nx run @codex/codex-workflows:test-l2 --skipNxCache --outputStyle=static",
+      "exitCode": 0,
+      "passed": 18,
+      "cache": "bypassed",
+      "cleanup": "direct-runner children, journals, artifacts, temporary files, and App Server hosts reached terminal quiet"
+    }
+  ],
+  "state": {
+    "productionSdkPathPresent": false,
+    "newExternalDependencies": 0,
+    "rawSecretsCopiedOrPersisted": 0,
+    "liveSynologyTouched": false,
+    "commitsCreated": 0,
+    "auditOrQaClaimed": false,
+    "independentVerificationClaimed": false
+  },
+  "reentry": {
+    "authorized": true,
+    "workerThreadId": "01a06031-a1ff-7ba2-b567-1c4cc75dba24",
+    "requiredAction": "CAS-07 reruns its final affected gates against the SDK-free candidate and may publish REMOTE_WORKFLOW_READY / READY-FOR-AUDIT if every frozen row remains green.",
+    "forbidden": [
+      "CAS-08 or later",
+      "audit or QA",
+      "Final Polish",
+      "live Synology mutation",
+      "commit or push"
+    ]
+  },
+  "independence": "Coordinator and worker evidence only; this checkpoint is not independent verification or acceptance."
+}

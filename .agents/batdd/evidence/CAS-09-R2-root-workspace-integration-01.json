@@ -1,0 +1,49 @@
+{
+  "schemaVersion": "1.0.0",
+  "campaignId": "CAS-APP-SERVER-20260901-01",
+  "recordId": "CAS-09-R2-ROOT-WORKSPACE-INTEGRATION-01",
+  "status": "READY",
+  "workingDirectory": "/Users/mcasa_atlantis/.codex/worktrees/a4a6/.codex",
+  "baseRevision": "b9dc01512975a8b11bc673b5ec906c818dd708f6",
+  "consumer": {
+    "package": "@codex/daemon",
+    "packageJsonSha256": "441defa1dad2597421514850fd4a68740c93b92a2cd4cd66334654f260a2eb18",
+    "tsconfigSha256": "56342e32d516cc33e89827af99442f9f84b41c46cd8667b4bb443541d3c6efe7",
+    "workerOwnedFilesChangedByCoordinator": 0
+  },
+  "lockfile": {
+    "path": "bun.lock",
+    "beforeSha256": "34ec0afe6268a97a7990adf9efbbfcdf9d0e5c227d5dd5fef2324a8089a9f324",
+    "afterSha256": "05165d172934cedf70afb176cf584bbd6b8cfbd30d293ad4818bce5f6ca88fe6",
+    "addedImporterEntries": [
+      "apps/daemon.dependencies.@codex/control-gateway=workspace:*",
+      "apps/daemon.dependencies.@codex/transport=workspace:*"
+    ],
+    "inMemoryRemovalReproducedBeforeSha256": true,
+    "unexpectedDelta": false
+  },
+  "links": [
+    {
+      "path": "apps/daemon/node_modules/@codex/control-gateway",
+      "target": "../../../../packages/control-gateway"
+    },
+    {
+      "path": "apps/daemon/node_modules/@codex/transport",
+      "target": "../../../../packages/transport"
+    }
+  ],
+  "validation": {
+    "bunVersion": "1.4.0",
+    "finalFrozenInstall": "PASS_NO_CHANGES",
+    "nxSyncCheck": "PASS_WORKSPACE_UP_TO_DATE",
+    "rootPackageJsonSha256": "0896239ff2af6f53ed5efcd06eaefcebfd3fc0675c9107567ac4bf5a1cb0dc44",
+    "rootTsconfigSha256": "6f843fc4baaba47de35c595c74025fc910761f214c2b7dbd304756cf27d68e28"
+  },
+  "restrictions": {
+    "thirdPartyDependenciesAdded": false,
+    "productOrTestFilesChanged": false,
+    "nextSeamOrAuditLaunched": false,
+    "commitPushPublishDeploy": false
+  },
+  "resume": "CAS-09.R2 may resume daemon typecheck and frozen GREEN validation using the two materialized workspace links."
+}

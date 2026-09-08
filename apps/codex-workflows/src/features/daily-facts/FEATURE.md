@@ -5,7 +5,7 @@ The standardized public workflow researches three independently selected industr
 ## Rules
 
 - Execution uses the literal public `#!/usr/bin/env -S codex-workflows` entrypoint.
-- Exactly three dependency-free research nodes run with `gpt-5.6-luna` and `medium` reasoning; there is no consolidator node.
+- Exactly three dependency-free research nodes run with `gpt-5.6-luna` and `low` reasoning; there is no consolidator node.
 - The three normalized industry/topic pairs are distinct and selected from seed-randomized, disjoint industry groups.
 - Each brief answers “what's going on with `<INDUSTRY>` in `<TOPIC>`” with a substantive summary and at least two titled direct HTTPS article links.
 - Under the Founder ruling `FOUNDER-20260810-SEVEN-DAY-NEWS-WINDOW`, article publication age is 0 through 7 UTC days inclusive relative to the workflow timestamp. Future articles and articles older than seven days fail closed.

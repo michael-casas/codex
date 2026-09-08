@@ -1,0 +1,57 @@
+{
+  "schemaVersion": "1.0.0",
+  "campaignId": "CAS-APP-SERVER-20260901-01",
+  "assignmentId": "CAS-11",
+  "writeLeaseId": "CAS-11-PLUGIN-PACKAGING",
+  "status": "ROOT_COMPOSITION_HALT",
+  "recordedAt": "2026-09-02T14:13:09Z",
+  "workingDirectory": "/Users/mcasa_atlantis/.codex/worktrees/a4a6/.codex",
+  "baseRevision": "b9dc01512975a8b11bc673b5ec906c818dd708f6",
+  "authority": {
+    "assignmentSha256": "770fc449de48e3132ac856801c6a94c1e320754ee96daa4333a33fcf0a86d28f",
+    "l3ReentrySha256": "0f19652d60a9ead7a8a1c2fb3131139ae3256ca782c48b1d5b1f519caf13a92e",
+    "greenContractSha256": "6b291a3a38838f8d39da42de139e5ae2dc521cbc48bcda66690c0509cc8dbc7d"
+  },
+  "disproof": {
+    "projectFile": "plugins/codex-control/project.json",
+    "projectFileSha256": "6d8cf59dfda0f40bf748952fec72dd186da2f57ab2017037231d7d92a62edefb",
+    "showProjectCommand": "bun nx show project @codex/plugin-codex-control --json",
+    "showProjectExitCode": 1,
+    "showProjectOutput": "Could not find project @codex/plugin-codex-control",
+    "showProjectsContainsPlugin": false,
+    "syncCheck": "GREEN",
+    "rootWorkspaceGlobs": ["apps/*", "packages/*"]
+  },
+  "completedLockedWork": {
+    "pluginCreatorScaffold": true,
+    "compileSafeMissingBehaviorSeams": true,
+    "l1L2L3HarnessAuthored": true,
+    "meaningfulRedCaptured": false,
+    "contractFrozen": false,
+    "productImplementationStarted": false,
+    "pluginProjectSha256": "6d8cf59dfda0f40bf748952fec72dd186da2f57ab2017037231d7d92a62edefb",
+    "resourceStubSha256": "4e1a0efb12aed9f8704df23c5b22a95d042eb8fdd2487b4b1afbb70890cb69c1",
+    "l3FeatureSha256": "1204008ec79a515f1de149a21aa380252f543c6d963216a784e12e449e937710",
+    "l3SpecSha256": "58c325377f98084869e5ed56ca9107b43a380e3c81adcba5e093f2f24d68db00"
+  },
+  "owner": "CAS-00 coordinator root-composition lease",
+  "resumeCondition": "The root workspace admits plugins/*, the Bun lock records only the required workspace importer/link, Nx sync is green, and Nx resolves @codex/plugin-codex-control with nonzero declared targets.",
+  "nextCheck": "Verify the coordinator packet and rerun Nx discovery before executing any RED target.",
+  "resourceDelta": {
+    "pluginProcessesStarted": 0,
+    "pluginsInstalled": 0,
+    "marketplacesModified": 0,
+    "tunnelsCreated": 0,
+    "liveSynologyContacted": false
+  },
+  "restrictions": {
+    "descendantsLaunched": 0,
+    "CAS12OrLaterLaunched": false,
+    "auditLaunched": false,
+    "qaLaunched": false,
+    "verificationLaunched": false,
+    "finalPolishLaunched": false,
+    "commitCreated": false,
+    "pushPerformed": false
+  }
+}

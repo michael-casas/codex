@@ -1,0 +1,198 @@
+{
+  "assignment": "CAS-HOST-R1",
+  "status": "READY-FOR-VERIFICATION",
+  "stopBoundary": "READY-FOR-AUDIT",
+  "baseRevision": "b9dc01512975a8b11bc673b5ec906c818dd708f6",
+  "independentAcceptance": false,
+  "generatedAt": "2026-09-04T14:39:43Z",
+  "sources": [
+    {
+      "path": "packages/transport/src/app-server-host/app-server-bridge-budget.ts",
+      "sha256": "0373e02861916745cbd7a59009125a4c24fe81cdf576eed2fdd7d3878f6e5911"
+    },
+    {
+      "path": "packages/transport/src/app-server-host/app-server-unix-bridge.ts",
+      "sha256": "b1caed411460e1bf7fcc0e5642419bcab772c7627c28ca2470d9f0d263dcfd0a"
+    },
+    {
+      "path": "packages/transport/src/app-server-host/app-server-wss-bridge.ts",
+      "sha256": "6ee6d6f98c2b9d9ff728424197ceb986bb639ae455a114bcd2d0bbf168693396"
+    },
+    {
+      "path": "packages/transport/src/app-server-host/app-server-host.registry.ts",
+      "sha256": "0032cc97f743a9bce14396351d3b8ab43b5817b3688ca40da3c3fff20c5342fa"
+    },
+    {
+      "path": "packages/transport/src/app-server-host/support/host-message-limit.fixture.ts",
+      "sha256": "7a36c27ac3d6c67df7a9c3d17e001e1b2d0bbcf62515f8352f4a4ebbad26f887"
+    },
+    {
+      "path": "packages/transport/src/app-server-host/__tests__/app-server-host.test.ts",
+      "sha256": "230a6aa003cd7878207f85e61d045575a8cdea003fc1f312a946f4235bb3edd5"
+    },
+    {
+      "path": "packages/transport/src/app-server-host/__specs__/app-server-host.spec.ts",
+      "sha256": "55f95528b258a5b14b516ae500b9f9ff883a8bd70cce924c19027d57367b1dbe"
+    },
+    {
+      "path": "packages/codex/src/app-server-client/app-server-client.client.ts",
+      "sha256": "6a8f4011ef22cd481cf9630b3bc3b3dd52d5fd9372409ef4bf4cb3a51d0ba22c"
+    },
+    {
+      "path": "packages/codex/src/app-server-client/app-server-client.types.ts",
+      "sha256": "da991bc32f7664df22c87c65574ec573cb86af58ff1598820ec4146b67255373"
+    },
+    {
+      "path": "packages/codex/src/app-server-client/index.ts",
+      "sha256": "4199d12671138e8fe040983d16732669934c01697a1715e814c6a52e7f344926"
+    },
+    {
+      "path": "packages/codex/src/app-server-client/__tests__/app-server-client-protocol.test.ts",
+      "sha256": "22a045956f95c79b2ebf99c32ffd6d9cb02ffb2560cc4025adf29c8a38923670"
+    },
+    {
+      "path": "packages/codex/src/app-server-client/__specs__/app-server-client-stdio.spec.ts",
+      "sha256": "6a40b4dc36b25b079e5a0000e65b1fe2f5d84556b9416d89221ff70113b7efac"
+    },
+    {
+      "path": "packages/codex/src/app-server-client/fixtures/controlled-app-server.mjs",
+      "sha256": "912504d59bcc2293be4e7ec9b7441d44f835c3edfdfc3144ab497a737849284c"
+    },
+    {
+      "path": "packages/codex/src/index.ts",
+      "sha256": "4eebe897fd5e52bf4da8d7fa3d2c6e9adea9af649c0426dcef215a6cd262915d"
+    },
+    {
+      "path": "packages/codex/src/app-server-workflow/app-server-workflow.executor.ts",
+      "sha256": "ef9f0baf901fa6f5f43bb0b7985cc4c2d4cf4b02810a9a8e2727c63082a0f558"
+    },
+    {
+      "path": "packages/codex/src/app-server-workflow/__tests__/app-server-workflow-executor.test.ts",
+      "sha256": "12def908d59d3667d8e3fe50933ea26e1e5cac36225a2d52116f4cab1e7aa0fa"
+    }
+  ],
+  "candidateSha256": "f0be048d51960dff3b9abf4b50d86c8dd227ca85be03ba333b70710d810af8cb",
+  "reports": [
+    {
+      "path": ".agent/testing/cas-host-r1/final-codex-l1.json",
+      "sha256": "3c554e71237a73242c19932f458f15117501e9d090ca190ae519311fca08853e",
+      "passed": 16,
+      "failed": 0,
+      "unselected": 0,
+      "success": true
+    },
+    {
+      "path": ".agent/testing/cas-host-r1/final-transport-l1.json",
+      "sha256": "0d9bcf1ad033c6828803a3601243f7dc8718084d4fc54c5496474ff6b9cb9957",
+      "passed": 15,
+      "failed": 0,
+      "unselected": 0,
+      "success": true
+    },
+    {
+      "path": ".agent/testing/cas-host-r1/final-client-l2.json",
+      "sha256": "8ec56b7ac0b9cbf6bd27d641fd9fd3ae99f08f302c7bffec3a8f35d0696e390d",
+      "passed": 6,
+      "failed": 0,
+      "unselected": 3,
+      "success": true
+    },
+    {
+      "path": ".agent/testing/cas-host-r1/final-transport-l2.json",
+      "sha256": "abd3e406712c70d24a9a43d9ad7366794d24f1d61da96e09671e0a8682dbb0db",
+      "passed": 6,
+      "failed": 0,
+      "unselected": 6,
+      "success": true
+    },
+    {
+      "path": ".agent/testing/cas-ui-r1/green-provider-host-join.json",
+      "sha256": "53b02a993aedc7d70e7537e7ac5a17240af7be5a8aa228654a83bb5aedd1826c",
+      "passed": 2,
+      "failed": 0,
+      "unselected": 16,
+      "success": true
+    },
+    {
+      "path": ".agent/testing/cas-host-r1/final-codex-l1-canonical.json",
+      "sha256": "dc1ce5f8be693f7277c2aa6a0e68971705c8a869d3e9b74abb9c783010a138e5",
+      "passed": 18,
+      "failed": 0,
+      "unselected": 0,
+      "success": true
+    }
+  ],
+  "contractArtifacts": [
+    ".agent/testing/cas-host-r1/green-contract.json",
+    ".agent/testing/cas-host-r1/executor-contract.json",
+    ".agent/testing/cas-host-r1/executor-contract-amendment-01.json",
+    ".agent/testing/cas-host-r1/contract-amendment-02.json"
+  ],
+  "implementation": [
+    "Shared finite16MiB default and64MiB ceiling; client and Unix/WSS bridges receive aligned cap.",
+    "Bounded allowlisted MESSAGE_TOO_LARGE diagnostics survive stdout/stderr terminal ordering; registry preserves numeric provenance.",
+    "One executor recovery budget; metadata before history. Deterministic size failure reconnects only for owned-turn cessation, never oversized history replay.",
+    "Concurrent stop obligations bound to2s, interrupt plus metadata idle confirmation; unknown remains explicitly retained. Failed feed rejects new launches."
+  ],
+  "gates": {
+    "syntheticAndStandingPassed": 43,
+    "uiCallbackJoinPassed": 2,
+    "lint": [
+      "@codex/codex",
+      "@codex/transport"
+    ],
+    "typecheck": [
+      "@codex/codex",
+      "@codex/transport"
+    ],
+    "build": [
+      "@codex/codex",
+      "@codex/transport"
+    ],
+    "format": "parent changed files and child changed files pass",
+    "schemaValidation": "profile and amended assignment valid",
+    "uncached": true,
+    "liveL2IntentionallyUnselected": 9,
+    "finalCanonicalPassed": 45,
+    "canonicalTestL1IncludesCallback": true
+  },
+  "cleanup": {
+    "syntheticProcessesRemaining": 0,
+    "hostR1TemporaryRootsRemaining": 0,
+    "ownedSockets": "fixture servers/sockets closed and temp Unix socket roots removed",
+    "liveRuntimeOperations": 0,
+    "paidInference": 0,
+    "remoteOperations": 0,
+    "commits": 0
+  },
+  "limitations": [
+    "Original media-sized event is a high-confidence trigger, not proof of exact original wire frame; original frame/stderr was not captured.",
+    "Confirmed means interrupt followed by idle metadata. Unknown is not remote cessation; already-issued underlying RPC may outlive2s local wait.",
+    "Stop obligation retention is executor-local plus returned error.stopStatus; durable downstream projection is not newly implemented by this repair.",
+    "UI visual/mobile acceptance remains UI owner; no dogfood restart, BASE_READY, independent audit or acceptance claimed."
+  ],
+  "incident": {
+    "occurred": true,
+    "description": "Earlier parent and child RED whole-object assertions emitted inherited credential-bearing environment into test tool output. Corrected to scalar assertions before reruns; synthetic fixtures use minimal environment where feasible.",
+    "knownDestination": "tool/transcript output",
+    "exactTime": "before14:24UTC parent compaction; exact parent and child times unknown",
+    "logCacheLocations": "unknown; not reread",
+    "credentialVariableNames": "not safely ascertained",
+    "audience": "unknown beyond session/tool output",
+    "valuesCopiedIntoEvidence": false,
+    "credentialsRotated": false,
+    "logsDeleted": false
+  },
+  "integrationDependencies": [
+    {
+      "path": "packages/codex/project.json",
+      "sha256": "3485333907bc3dc1030c7761909074af312baa47b760c5ed4c4a257ac8177f04",
+      "owner": "CAS-UI-R1"
+    },
+    {
+      "path": ".agent/testing/cas-ui-r1/canonical-target-amendment-02.json",
+      "sha256": "afe003efc54f05e27ff99c61beec9c8f0b9e1fe3944f4349dc8c53acb6d74b34",
+      "owner": "CAS-UI-R1"
+    }
+  ]
+}

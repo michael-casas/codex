@@ -1,0 +1,100 @@
+{
+  "schemaVersion": "1.0.0",
+  "checkpointId": "CAS-05-R1-DEPENDENCY-CLASSIFICATION-READY-01",
+  "campaignId": "CAS-APP-SERVER-20260901-01",
+  "assignmentId": "CAS-05.R1",
+  "status": "DEPENDENCY_CLASSIFICATION_READY",
+  "baseRevision": "b9dc01512975a8b11bc673b5ec906c818dd708f6",
+  "workingDirectory": "/Users/mcasa_atlantis/.codex/worktrees/a4a6/.codex",
+  "authority": {
+    "assignmentPath": "/Users/mcasa_atlantis/.codex/worktrees/0c2e/.codex/.agents/batdd/assignments/CAS-05.R1.json",
+    "assignmentSha256": "d8138dd18d6dc124cf35b4b6de7dff8010aaa02cf03ad7b4525c65d81a44fb5e",
+    "amendmentPath": "/Users/mcasa_atlantis/.codex/worktrees/0c2e/.codex/.agents/batdd/evidence/CAS-05-R1-AUTHORIZED.json",
+    "amendmentSha256": "137b3bd4a33b8f7bcbb03c631a8169f4771451ed31d94cb0c8d4628d44c946aa"
+  },
+  "necessityProof": {
+    "productionImports": 0,
+    "productionSearch": "@codex/process under packages/delivery/src excluding __specs__ and *.spec.ts returned no matches",
+    "testOnlyUses": [
+      "packages/delivery/src/agent-delegation/__specs__/agent-delegation.spec.ts",
+      "packages/delivery/vitest.config.ts alias"
+    ],
+    "failure": "@codex/delivery lint rejected @codex/process as a production dependency used only by test code"
+  },
+  "changedSurfaces": {
+    "packages/delivery/package.json": {
+      "beforeSha256": "e1c205c53b202110409bc753ab0c36154441da91d442e9e433d2e4395a55ad48",
+      "afterSha256": "13c3ef1e28faf7540502c83d97342ce7a407c1d4a4dbb3a49e4183e6d3fa63d1",
+      "delta": "Moved @codex/process: workspace:* from dependencies to sorted devDependencies."
+    },
+    "bun.lock": {
+      "beforeSha256": "36a0ced667433dd7cf499416b33ec1051ae8beea070c7060990f8b98b4386d2a",
+      "afterSha256": "20c69c916868b01b54caedb6d292ccb3ad48185ffbe36c3c246a2824cdfacfef",
+      "delta": "Moved @codex/process only within the packages/delivery importer from dependencies to devDependencies.",
+      "newPackages": 0,
+      "removedPackages": 0
+    }
+  },
+  "workspaceLink": {
+    "path": "packages/delivery/node_modules/@codex/process",
+    "target": "../../../process",
+    "resolvedTo": "/Users/mcasa_atlantis/.codex/worktrees/a4a6/.codex/packages/process",
+    "preserved": true
+  },
+  "lockedRepairGreens": {
+    "packages/delivery/src/durable-control/pg-boss-delivery.ts": "45c9b107fe931ea24b1d47228ebabd6d94f503e30778023ef7f0a6e58aa6ffa5",
+    "packages/delivery/src/durable-control/__specs__/pg-boss-delivery.spec.ts": "acdbd69fbe4b4b1d66019ce3f372beea666825d1c6196666509b2bd9e13aa068",
+    "queueRepairL2": "10/10 GREEN as reported by CAS-05.R1 owner",
+    "filesChangedByCoordinator": 0
+  },
+  "validation": [
+    {
+      "command": "bun install --frozen-lockfile",
+      "exitCode": 0,
+      "result": "1014 installs across 1102 packages; no changes"
+    },
+    {
+      "command": "bun nx sync:check --outputStyle=static",
+      "exitCode": 0,
+      "result": "workspace up to date"
+    },
+    {
+      "command": "bun nx run @codex/delivery:lint --outputStyle=static",
+      "exitCode": 0,
+      "errors": 0,
+      "warnings": "3 existing no-explicit-any warnings in the delegation test fixture"
+    },
+    {
+      "command": "bun nx run @codex/delivery:typecheck --outputStyle=static",
+      "exitCode": 0
+    },
+    {
+      "command": "bun nx run @codex/daemon:typecheck --outputStyle=static",
+      "exitCode": 0
+    },
+    {
+      "command": "bunx prettier --check packages/delivery/package.json",
+      "exitCode": 0
+    }
+  ],
+  "preservedState": {
+    "rootPackageJsonSha256": "64333539ed221f98e0c4bd545d970f31285bd5b4017be57f1ea74e9c632a4467",
+    "rootNxJsonSha256": "e5792ce9b1586875741d78b3c5ed1c766cf32c0f459d4cba53a112288bbac4a3",
+    "rootTsconfigSha256": "53b3145c305d4f4609c1cbe5fd63bf6509e1a4722b0a8ace2bd8d3d150c1ecfe",
+    "dirtyStatusSha256BeforeCheckpoint": "832fa45552c3db2646a221b66f2e97dd424720c5a6438c3915d29c4c0d98dcd9",
+    "CAS-07BehaviorOrTestsChanged": false,
+    "SDKRemovalPerformed": false,
+    "rawSecretsCopiedOrPersisted": 0,
+    "liveSynologyTouched": false,
+    "commitsCreated": 0
+  },
+  "launches": {
+    "workers": 0,
+    "audit": 0,
+    "qa": 0,
+    "verification": 0,
+    "finalPolish": 0,
+    "CAS-08-or-later": 0
+  },
+  "resumeAction": "CAS-05.R1 owner may complete its required lint/typecheck handoff; CAS-07 may re-enter its daemon queue-admission integration after the repair-ready packet is published."
+}

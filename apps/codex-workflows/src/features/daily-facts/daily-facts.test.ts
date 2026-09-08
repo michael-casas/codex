@@ -17,6 +17,9 @@ interface DailyFact {
 }
 
 interface DailyFactsContractApi {
+  dailyFactsPreferredSourceHosts: readonly string[];
+  dailyFactsSourceClusters: Readonly<Record<1 | 2 | 3, readonly string[]>>;
+  isDailyFactsDisallowedHost(hostname: string): boolean;
   validateDailyFacts(
     value: unknown,
     currentUtcDate: string,
@@ -155,6 +158,69 @@ describe('[L1:UNIT] daily-facts content contract', () => {
       `${validFacts[0]!.articles[0]!.url}`,
     );
   });
+
+  test('[L1:UNIT] CAS-DAILY-SOURCE-RELIABILITY-R1-GC keeps source guidance inside the unchanged admission policy', async () => {
+    const contract = await contractApi();
+    const guidedHosts = [
+      ...new Set([
+        ...Object.values(contract.dailyFactsSourceClusters).flat(),
+        ...contract.dailyFactsPreferredSourceHosts,
+      ]),
+    ];
+
+    expect(guidedHosts).toContain('aws.amazon.com');
+    expect(guidedHosts).not.toContain('cloud.google.com');
+    expect(guidedHosts).not.toContain('about.fb.com');
+    expect(
+      guidedHosts.filter((hostname) =>
+        contract.isDailyFactsDisallowedHost(hostname),
+      ),
+    ).toEqual([]);
+
+    const accepted = structuredClone(validFacts);
+    const acceptedReport = accepted[0];
+    const acceptedArticle = acceptedReport?.articles[0];
+    if (!acceptedReport || !acceptedArticle) {
+      throw new Error('A direct-publisher fixture article is required.');
+    }
+    acceptedReport.articles[0] = {
+      ...acceptedArticle,
+      url: 'https://aws.amazon.com/blogs/aws/new-service-launch/',
+      publisher: 'AWS News Blog',
+    };
+    expect(() =>
+      contract.validateDailyFacts(accepted, currentDate),
+    ).not.toThrow();
+  });
+
+  test.each([
+    ['Google root', 'https://google.com/news/current-article'],
+    [
+      'retained Google Cloud Blog failure',
+      'https://cloud.google.com/blog/products/compute/google-named-a-leader-in-2026-gartner-magic-quadrant-for-scps',
+    ],
+    ['nested Reddit host', 'https://updates.reddit.com/news/current-article'],
+  ])(
+    '[L1:UNIT] CAS-DAILY-SOURCE-RELIABILITY-R1-GC rejects %s as source infrastructure',
+    async (_caseName, url) => {
+      const contract = await contractApi();
+      const rejected = structuredClone(validFacts);
+      const rejectedReport = rejected[0];
+      const rejectedArticle = rejectedReport?.articles[0];
+      if (!rejectedReport || !rejectedArticle) {
+        throw new Error('A rejected-source fixture article is required.');
+      }
+      rejectedReport.articles[0] = {
+        ...rejectedArticle,
+        url,
+        publisher: 'Rejected Source',
+      };
+
+      expect(() => contract.validateDailyFacts(rejected, currentDate)).toThrow(
+        'Article URL must link directly to the publishing source.',
+      );
+    },
+  );
 
   test('[L1:UNIT] DF-GC1-011 defers agent-claimed URL date conflicts until publisher metadata can correct or discard the reserve', async () => {
     const contract = await contractApi();

@@ -33,6 +33,12 @@ const canonicalContract = resolve(
 const controlledCodex = fileURLToPath(
   new URL('./support/controlled-codex.mjs', import.meta.url),
 );
+const controlledAppServer = fileURLToPath(
+  new URL(
+    '../../workflows/support/controlled-app-server-bridge.mjs',
+    import.meta.url,
+  ),
+);
 
 function processExists(pid: number): boolean {
   try {
@@ -54,7 +60,7 @@ async function trace(path: string): Promise<Record<string, unknown>[]> {
 
 // === L2: END-TO-END TESTS ===
 describe('[L2:E2E] Founder daily-facts public workflow', () => {
-  test('[L2:E2E] DF-GC1-011 runs exactly three concurrent Luna medium researchers and publishes the exact validated report', async () => {
+  test('[L2:E2E] DF-GC1-011 runs exactly three concurrent Luna low researchers and publishes the exact validated report', async () => {
     const root = await mkdtemp(join(tmpdir(), 'codex-daily-facts-e2e-'));
     try {
       const bin = join(root, 'bin');
@@ -69,9 +75,14 @@ describe('[L2:E2E] Founder daily-facts public workflow', () => {
       );
       const input = join(root, 'daily-facts.input.json');
       const tracePath = join(root, 'controlled-codex.jsonl');
+      const agentWorkingDirectory = join(
+        root,
+        '.agent/testing/workflows/20260810T170000Z',
+      );
       await mkdir(bin);
       await mkdir(dirname(source), { recursive: true });
       await mkdir(dirname(contract), { recursive: true });
+      await mkdir(agentWorkingDirectory, { recursive: true });
       await cp(canonicalWorkflow, source);
       await cp(canonicalContract, contract);
       await writeFile(
@@ -84,6 +95,7 @@ describe('[L2:E2E] Founder daily-facts public workflow', () => {
       await writeFile(tracePath, '');
       await chmod(publicExecutable, 0o755);
       await chmod(controlledCodex, 0o755);
+      await chmod(controlledAppServer, 0o755);
       await chmod(source, 0o755);
       await symlink(publicExecutable, join(bin, 'codex-workflows'));
 
@@ -93,14 +105,16 @@ describe('[L2:E2E] Founder daily-facts public workflow', () => {
         env: {
           ...process.env,
           PATH: `${bin}:${process.env.PATH ?? '/usr/bin:/bin'}`,
-          CODEX_WORKFLOWS_CODEX_PATH: controlledCodex,
+          CODEX_WORKFLOWS_CODEX_PATH: controlledAppServer,
+          CODEX_WORKFLOWS_CONTROLLED_TURN_PATH: controlledCodex,
           CODEX_WORKFLOWS_HOME: state,
+          CODEX_WORKFLOWS_AGENT_WORKING_DIRECTORY: agentWorkingDirectory,
           CODEX_DAILY_FACTS_TEST_TRACE: tracePath,
           CODEX_DAILY_FACTS_ALLOW_CONTROLLED_SOURCES: '1',
         },
       });
       expect(result.error).toBeUndefined();
-      expect(result.status).toBe(0);
+      expect(result.status, result.stderr).toBe(0);
       const payload = JSON.parse(result.stdout) as {
         journalPath: string;
         nodeCount: number;
@@ -122,7 +136,7 @@ describe('[L2:E2E] Founder daily-facts public workflow', () => {
             '--model',
             'gpt-5.6-luna',
             '--config',
-            'model_reasoning_effort="medium"',
+            'model_reasoning_effort="low"',
           ]),
         );
       }

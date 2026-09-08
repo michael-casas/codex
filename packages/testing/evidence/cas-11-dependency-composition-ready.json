@@ -1,0 +1,120 @@
+{
+  "schemaVersion": "1.0.0",
+  "campaignId": "CAS-APP-SERVER-20260901-01",
+  "assignmentId": "CAS-11",
+  "status": "DEPENDENCY_COMPOSITION_READY_PRODUCT_TYPECHECK_RED",
+  "recordedDate": "2026-09-02",
+  "baseRevision": "b9dc01512975a8b11bc673b5ec906c818dd708f6",
+  "workingDirectory": "/Users/mcasa_atlantis/.codex/worktrees/a4a6/.codex",
+  "authority": {
+    "assignmentPath": "/Users/mcasa_atlantis/.codex/worktrees/0c2e/.codex/.agents/batdd/assignments/CAS-11.json",
+    "assignmentSha256": "770fc449de48e3132ac856801c6a94c1e320754ee96daa4333a33fcf0a86d28f",
+    "l3AmendmentPath": "/Users/mcasa_atlantis/.codex/worktrees/0c2e/.codex/.agents/batdd/evidence/CAS-11-L3-REENTRY-AMENDMENT-01.json",
+    "l3AmendmentSha256": "0f19652d60a9ead7a8a1c2fb3131139ae3256ca782c48b1d5b1f519caf13a92e",
+    "rootCompositionPath": "/Users/mcasa_atlantis/.codex/worktrees/a4a6/.codex/packages/testing/evidence/cas-11-root-composition-ready.json",
+    "rootCompositionSha256": "4506ee289bd11ea751dad308f5c5a5239052db94d367da3079b9c4d424d31efd",
+    "commitAuthority": false,
+    "selfCertified": false
+  },
+  "pluginManifests": {
+    "package": {
+      "path": "/Users/mcasa_atlantis/.codex/worktrees/a4a6/.codex/plugins/codex-control/package.json",
+      "sha256": "65521b9405a1c1c745beab938d996d41a249c1da77ccd947b493be0684863dea",
+      "dependencies": {
+        "@modelcontextprotocol/sdk": "1.30.0",
+        "zod": "^4.3.6"
+      }
+    },
+    "tsconfig": {
+      "path": "/Users/mcasa_atlantis/.codex/worktrees/a4a6/.codex/plugins/codex-control/tsconfig.json",
+      "sha256": "6d7ed6f0776ff26ed066ef3146a7e688589127ad1ad83feeb0318e0b1324efd4",
+      "references": [
+        "../../apps/codex-control/tsconfig.json",
+        "../../apps/codex-control-ui/tsconfig.json"
+      ]
+    }
+  },
+  "rootComposition": {
+    "bunLock": {
+      "path": "/Users/mcasa_atlantis/.codex/worktrees/a4a6/.codex/bun.lock",
+      "beforeSha256": "156455a724e402ae8509b636cf222e608988cd168a4fc46b5b1d046347ac85f1",
+      "afterSha256": "7cc30e162b62c8b7a4bf99c7e89f6a10d5fd083b16b5a3704423d658dfd82370",
+      "delta": "Add only the plugin importer dependency links to existing @modelcontextprotocol/sdk 1.30.0 and zod ^4.3.6 resolutions."
+    },
+    "rootTsconfig": {
+      "path": "/Users/mcasa_atlantis/.codex/worktrees/a4a6/.codex/tsconfig.json",
+      "beforeSha256": "46b44f7e86dda7d8d7691279a1098691ed2fbc349ec6e3fc80b268cbeaea93bd",
+      "afterSha256": "46b44f7e86dda7d8d7691279a1098691ed2fbc349ec6e3fc80b268cbeaea93bd",
+      "changed": false,
+      "reason": "Nx sync required no additional root reference."
+    }
+  },
+  "validation": [
+    {
+      "gate": "bun install --frozen-lockfile",
+      "exitCode": 0,
+      "installs": 1022,
+      "packages": 1105,
+      "changes": 0
+    },
+    {
+      "gate": "bun nx sync:check --outputStyle=static",
+      "exitCode": 0
+    },
+    {
+      "gate": "bun nx show project @codex/plugin-codex-control --json",
+      "exitCode": 0,
+      "resolvedTargets": 7
+    },
+    {
+      "gate": "bun nx run @codex/codex-control-ui:build --outputStyle=static",
+      "exitCode": 0,
+      "purpose": "Eliminate an unbuilt accepted-UI runtime bundle as the cause of plugin typecheck failure."
+    },
+    {
+      "gate": "bun nx run @codex/plugin-codex-control:typecheck --outputStyle=static",
+      "exitCode": 1,
+      "dependencyResolutionFailures": 0,
+      "workerProductFailures": [
+        {
+          "code": "TS6305",
+          "path": "plugins/codex-control/src/resource.ts:3",
+          "reason": "The worker directly imports an app source project whose Vite build does not emit the declaration output required by a TypeScript project reference."
+        },
+        {
+          "code": "TS2322",
+          "path": "plugins/codex-control/src/resource.ts:53",
+          "reason": "The worker-owned returned CSP arrays infer never[] rather than the frozen readonly empty-tuple contract."
+        }
+      ]
+    }
+  ],
+  "classification": {
+    "dependencyCompositionReady": true,
+    "typecheckGreen": false,
+    "rootBlockerRemaining": false,
+    "workerGreenBlockerRemaining": true,
+    "claim": "The lock/importer and Nx graph are ready. This packet does not claim CAS-11 product typecheck GREEN."
+  },
+  "reentry": {
+    "threadId": "01a06262-3f55-7811-8166-b272bb867cda",
+    "sameTaskContinuation": true,
+    "direction": [
+      "Verify this packet and the unchanged plugin package/tsconfig hashes.",
+      "Continue CAS-11 GREEN and resolve the two worker-owned TypeScript failures inside the existing lease.",
+      "If TS6305 requires a write outside the CAS-11 lease rather than a plugin-local boundary correction, halt with the exact required predecessor amendment.",
+      "Do not edit root lock or root TypeScript composition."
+    ]
+  },
+  "restrictions": {
+    "pluginProductOrTestsChangedByCoordinator": false,
+    "dependenciesWidened": false,
+    "rootTsconfigChanged": false,
+    "descendants": 0,
+    "CAS-12Launch": 0,
+    "auditQaVerificationFinalPolish": 0,
+    "publicPublishDeployTunnel": false,
+    "liveSynology": "read-only and not contacted",
+    "commitPush": false
+  }
+}
