@@ -22,6 +22,16 @@
       "layer:provider"
     ],
     "targets": {
+      "test-local-cli-compat": {
+        "executor": "nx:run-commands",
+        "cache": false,
+        "dependsOn": [
+          "build"
+        ],
+        "options": {
+          "command": "vitest run --config packages/transport/vitest.config.ts src/app-server-host/__specs__/local-cli-compat.spec.ts"
+        }
+      },
       "test-l1-unit": {
         "executor": "nx:run-commands",
         "options": {

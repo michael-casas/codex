@@ -157,7 +157,7 @@ type NormalizedHost =
   | {
       hostId: string;
       transport: 'local-proxy';
-      expectedVersion: typeof APP_SERVER_PROTOCOL_VERSION;
+      expectedVersion: typeof APP_SERVER_PROTOCOL_VERSION | '0.153.2';
       codexHome?: string;
       socketPath?: string;
       requiredCapabilities: readonly AppServerHostCapability[];
@@ -282,7 +282,10 @@ function normalize(input: AppServerHostInput): NormalizedHost {
   if (!isRecord(input) || !HOST_ID.test(String(input.hostId ?? ''))) {
     throw hostError('INVALID_HOST', 'Invalid App Server host');
   }
-  if (input.expectedVersion !== APP_SERVER_PROTOCOL_VERSION) {
+  if (
+    input.expectedVersion !== APP_SERVER_PROTOCOL_VERSION &&
+    !(input.transport === 'local-proxy' && input.expectedVersion === '0.153.2')
+  ) {
     throw hostError('VERSION_MISMATCH', 'App Server host version mismatch');
   }
   if (input.transport === 'local-proxy') {
@@ -296,7 +299,9 @@ function normalize(input: AppServerHostInput): NormalizedHost {
     return {
       hostId: input.hostId,
       transport: input.transport,
-      expectedVersion: APP_SERVER_PROTOCOL_VERSION,
+      expectedVersion: input.expectedVersion as
+        | typeof APP_SERVER_PROTOCOL_VERSION
+        | '0.153.2',
       ...(input.codexHome === undefined ? {} : { codexHome: input.codexHome }),
       ...(input.socketPath === undefined
         ? {}
