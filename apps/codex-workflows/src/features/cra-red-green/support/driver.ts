@@ -39,8 +39,7 @@ interface CliPayload {
       executable: string;
       argv: string[];
       environment: {
-        NPM_CONFIG_USERCONFIG: string;
-        NPM_CONFIG_CACHE: string;
+        BUN_INSTALL_CACHE_DIR: string;
       };
       cwd: string;
       startedAt: string;
@@ -192,20 +191,20 @@ function workspaceRoot(): string {
   return realpathSync(result.stdout.trim());
 }
 
-export class CraRedGreenDriver {
+export class BunReactRedGreenDriver {
   readonly workspace = workspaceRoot();
   readonly source = resolve(
     this.workspace,
-    'apps/codex-workflows/examples/cra-red-green.workflow.ts',
+    'apps/codex-workflows/examples/bun-react-red-green.workflow.ts',
   );
   readonly timestamp = utcTimestamp(new Date());
   readonly relativeOutputRoot = `.agent/testing/workflows/${this.timestamp}`;
   readonly outputRoot = resolve(this.workspace, this.relativeOutputRoot);
   readonly reportPath = join(this.outputRoot, 'CRA_RED_GREEN.md');
-  readonly projectPath = join(this.outputRoot, 'cra-proof-app');
+  readonly projectPath = join(this.outputRoot, 'bun-react-proof-app');
   readonly stateRoot = join(this.outputRoot, 'run-state');
   readonly tmuxRoot = join(this.outputRoot, 'tmux');
-  readonly inputPath = join(this.outputRoot, '.cra-red-green.input.json');
+  readonly inputPath = join(this.outputRoot, '.bun-react-red-green.input.json');
   readonly binDirectory = join(this.outputRoot, '.bin');
   private beforeTemps: string[] = [];
   private afterTemps: string[] = [];
@@ -331,7 +330,7 @@ export class CraRedGreenDriver {
     assert.equal(this.payload.artifactCount, 1);
     assert.deepEqual(
       this.journal.nodes.map((node) => node.label),
-      ['cra-builder', 'cra-auditor', 'cra-remediator'],
+      ['bun-react-builder', 'bun-react-auditor', 'bun-react-remediator'],
     );
     assert.deepEqual(
       this.journal.nodes.map((node) => node.phase),
@@ -372,19 +371,37 @@ export class CraRedGreenDriver {
     );
     assert.deepEqual(builder.commandEvidence?.rules, [
       {
-        id: 'workflow-scaffold-launcher',
+        id: 'workflow-bun-vite-scaffold-launcher',
         expectedCount: 1,
         observedCount: 1,
         passed: true,
       },
       {
-        id: 'direct-npx',
+        id: 'direct-create-vite',
         expectedCount: 0,
         observedCount: 0,
         passed: true,
       },
       {
-        id: 'direct-create-react-app',
+        id: 'foreign-npm',
+        expectedCount: 0,
+        observedCount: 0,
+        passed: true,
+      },
+      {
+        id: 'foreign-npx',
+        expectedCount: 0,
+        observedCount: 0,
+        passed: true,
+      },
+      {
+        id: 'foreign-pnpm',
+        expectedCount: 0,
+        observedCount: 0,
+        passed: true,
+      },
+      {
+        id: 'foreign-yarn',
         expectedCount: 0,
         observedCount: 0,
         passed: true,
@@ -401,16 +418,16 @@ export class CraRedGreenDriver {
     const proof = this.payload.output.scaffoldProof;
     assert.equal(proof.schemaVersion, 1);
     assert.equal(proof.invocationCount, 1);
-    assert.match(proof.executable, /\/npx$/);
+    assert.match(proof.executable, /\/bun$/);
     assert.deepEqual(proof.argv, [
-      '--yes',
-      'create-react-app@5.1.0',
+      'create',
+      'vite@9.2.0',
       this.projectPath,
-      '--use-npm',
+      '--template',
+      'react',
     ]);
     assert.deepEqual(proof.environment, {
-      NPM_CONFIG_USERCONFIG: '/dev/null',
-      NPM_CONFIG_CACHE: join(this.outputRoot, 'npm-cache'),
+      BUN_INSTALL_CACHE_DIR: join(this.outputRoot, 'bun-cache'),
     });
     assert.equal(proof.cwd, this.workspace);
     assert.equal(proof.exitCode, 0);
@@ -442,8 +459,8 @@ export class CraRedGreenDriver {
     assert.equal(this.payload.output.final.verdict, 'GREEN');
     assert.equal(this.payload.output.status, 'READY_FOR_EXTERNAL_AUDIT');
     assert.deepEqual(this.payload.output.changedPaths, [
-      'src/App.js',
-      'src/App.test.js',
+      'src/App.jsx',
+      'src/App.test.jsx',
     ]);
   }
 
@@ -468,7 +485,7 @@ export class CraRedGreenDriver {
         `Scaffold trace digest: ${this.payload.output.scaffoldProof.digest}`,
       ),
     );
-    assert.match(report, /CRA_RED_GREEN_COMPLETE/);
+    assert.match(report, /BUN_REACT_RED_GREEN_COMPLETE/);
     assert.equal(this.journal.events.at(-1)?.type, 'workflow.completed');
     assert.deepEqual(
       this.journal.events.map((event) => event.sequence),
@@ -485,14 +502,14 @@ export class CraRedGreenDriver {
     );
     assert.deepEqual(temporaryFiles(this.outputRoot), []);
     assert.equal(existsSync(join(this.projectPath, 'node_modules')), false);
-    assert.equal(existsSync(join(this.projectPath, 'build')), false);
+    assert.equal(existsSync(join(this.projectPath, 'dist')), false);
     assert.equal(existsSync(join(this.projectPath, '.git')), false);
     assert.equal(
-      existsSync(join(this.outputRoot, '.cra-scaffold-once.mjs')),
+      existsSync(join(this.outputRoot, '.bun-react-scaffold-once.mjs')),
       false,
     );
     assert.equal(
-      existsSync(join(this.outputRoot, '.cra-scaffold.lock')),
+      existsSync(join(this.outputRoot, '.bun-react-scaffold.lock')),
       false,
     );
     assert.equal(this.afterDiffDigest, this.beforeDiffDigest);

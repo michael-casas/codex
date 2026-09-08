@@ -9,20 +9,20 @@ import {
   World,
 } from '@cucumber/cucumber';
 
-import { CraRedGreenDriver } from './support/driver.js';
+import { BunReactRedGreenDriver } from './support/driver.js';
 
 setDefaultTimeout(1_260_000);
 
-class CraRedGreenWorld extends World {
-  driver?: CraRedGreenDriver;
+class BunReactRedGreenWorld extends World {
+  driver?: BunReactRedGreenDriver;
 }
 
-setWorldConstructor(CraRedGreenWorld);
+setWorldConstructor(BunReactRedGreenWorld);
 
 Given(
-  'the canonical CRA RED to GREEN workflow and isolated proof root are admitted',
-  function (this: CraRedGreenWorld) {
-    this.driver = new CraRedGreenDriver();
+  'the canonical Bun React RED to GREEN workflow and isolated proof root are admitted',
+  function (this: BunReactRedGreenWorld) {
+    this.driver = new BunReactRedGreenDriver();
     assert.deepEqual(this.driver.prepare(), {
       exactShebang: true,
       executable: true,
@@ -33,7 +33,7 @@ Given(
 
 When(
   'the workflow executes through its literal installed shebang with the live backend',
-  async function (this: CraRedGreenWorld) {
+  async function (this: BunReactRedGreenWorld) {
     assert.ok(this.driver);
     await this.driver.execute();
     this.driver.assertExecutionSucceeded();
@@ -42,15 +42,15 @@ When(
 
 Then(
   'exactly three sequential Luna low stages complete as builder auditor and remediator',
-  function (this: CraRedGreenWorld) {
+  function (this: BunReactRedGreenWorld) {
     assert.ok(this.driver);
     this.driver.assertTopology();
   },
 );
 
 Then(
-  'the pinned Create React App baseline receives an immutable independent RED audit',
-  function (this: CraRedGreenWorld) {
+  'the pinned Bun and Vite React baseline receives an immutable independent RED audit',
+  function (this: BunReactRedGreenWorld) {
     assert.ok(this.driver);
     this.driver.assertRedAudit();
   },
@@ -58,7 +58,7 @@ Then(
 
 Then(
   'the remediator consumes that RED makes the fixed audit GREEN and stops READY_FOR_EXTERNAL_AUDIT',
-  function (this: CraRedGreenWorld) {
+  function (this: BunReactRedGreenWorld) {
     assert.ok(this.driver);
     this.driver.assertGreenStop();
   },
@@ -66,7 +66,7 @@ Then(
 
 Then(
   'the journal report generated source tree and resource delta are complete and bounded',
-  function (this: CraRedGreenWorld) {
+  function (this: BunReactRedGreenWorld) {
     assert.ok(this.driver);
     this.driver.assertEvidenceAndResources();
   },
