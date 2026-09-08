@@ -74,16 +74,27 @@ preserves the exact record or tuple/array result shape. The local scheduler
 enforces the workflow concurrency bound.
 
 `agent<Output, Input>(options)` requires explicit `label`, `model`, `reasoning`,
-and `prompt`; accepts typed `input`, optional strict JSON `outputSchema`, and an
-optional `commandEvidence` policy. A command-evidence policy declares bounded
+and `prompt`; accepts typed `input`, optional strict JSON `outputSchema`,
+optional boolean `networkAccess`, and an optional `commandEvidence` policy.
+Omitting `networkAccess` enables network access for CAS agent execution;
+explicit `networkAccess: false` remains a per-agent opt-out. The effective
+boolean is frozen and journaled with the node. It does not alter read-only or
+writable-root filesystem policy, approval policy, authentication, TLS, or
+secret handling. A command-evidence policy declares bounded
 stable rule IDs, private command substrings, and exact expected occurrence
 counts. The local host evaluates completed SDK command items, fails the node if
 any count differs, and retains only policy/command digests plus rule counts—not
 raw commands or command output.
-`WorkflowModel` is a `gpt-${string}` token. Runtime admission requires a
-bounded, non-whitespace `gpt-` value and forwards it unchanged; the Codex SDK
-decides whether the model exists. The current workflow reasoning boundary is
-`medium`. No fallback or model-name allowlist exists.
+`WorkflowModel` and `WorkflowReasoning` are explicit per-agent strings.
+Models are safe identifiers of 1–254 characters; reasoning is a lowercase
+identifier of 1–64 characters. Runtime admission rejects malformed inputs,
+then forwards both values unchanged to Codex App Server. Provider availability
+and supported model/effort combinations remain provider authority: there is
+no local model matrix, medium-only restriction, or silent fallback.
+Each frozen node and durable command preserves its exact chosen profile.
+The task-level `run_workflow` tool requires `reasoningEffort` explicitly.
+Named Codex configuration profiles are a separate unresolved capability in the
+pinned App Server version, not an alias for these explicit settings.
 
 Actual upstream outputs are serialized into the downstream turn context. Node
 dependency identities are additionally derived from output/input digests;
@@ -102,7 +113,8 @@ artifacts. Runtime helpers fail closed outside an active execution.
 ## Public events and journal projection
 
 Every agent emits a frozen node record before launch containing stable ID,
-ordinal, label, phase, dependencies, model, reasoning, prompt/input/output
+ordinal, label, phase, dependencies, model, reasoning, effective network access,
+prompt/input/output
 schema digests, optional command-evidence-policy digest, and freeze time. Start
 and terminal events add timing, duration, terminal outcome, output digest,
 optional digest-bound command evidence, and a classified diagnostic.
@@ -147,3 +159,53 @@ write.
 JSON is not a required author-authored compilation artifact for TypeScript
 execution. JSON `run` remains unavailable until the distinct durable control
 plane exists.
+
+# Trusted workflow-file submission
+
+Codex Control also accepts the source form of `run_workflow`:
+
+```json
+{
+  "source": ".agent/artifacts/demo.workflow.ts",
+  "input": { "topics": ["design", "copy"] },
+  "idempotencyKey": "demo-request-1"
+}
+```
+
+`hostId` is optional when exactly one actor-bound context is admitted. Missing or
+ambiguous context fails before source access; it is not inferred from global
+credentials. A new intentional run needs a new idempotency key. Existing registered
+workflow calls retain their full explicit envelope and behavior.
+
+The daemon's trusted startup `workflowSources` configuration binds actorAgentId,
+hostId, repositoryId, assignmentId, baseRevision, sourceRoot and runtimeProfile.
+Bind actorAgentId to the daemon-authenticated principal (currently `codex-control`
+for the default loopback server), not a self-asserted client identity. Multiple
+matching contexts fail explicitly; a caller cannot expand its authority by
+changing a request body or a plugin environment variable.
+The repository/host must already be admitted. `sourceRoot` is the local authoring
+root, independent of the selected execution host's checkoutPath. Profiles retain
+explicit model, reasoningEffort, sandbox and approvalPolicy values. Per-node
+model/reasoning remains unchanged. Empty `workflows: []` is valid when at least
+one source context exists; individual workflow modules need not be registered.
+
+Source files must end in `.workflow.ts`. Static relative imports are bundled,
+with at most 128 input files, 1 MiB per file and 8 MiB aggregate/output. Imports
+must remain inside the approved source root or the owned authoring library.
+Node builtins remain available because this is trusted code execution, NOT a
+sandbox. Nonliteral dynamic imports/requires and unbound external packages are
+rejected, rather than omitted from executable identity.
+
+The server-only `@codex/workflows/source` subpath owns compilation and compiled
+source loading. The root authoring facade does not import esbuild. Executable
+identity covers bundled bytes plus compiler version and source/dependency hashes.
+Artifacts are stored under the authoring root's `.agent/workflow-modules/` with
+content-addressed names and verified again when resolved, including after daemon
+restart. These admitted source artifacts are retained for recovery; deleting them
+while runs remain recoverable is not supported.
+
+Compiler and source-admission errors expose stable codes, not file contents.
+The `source.*` reference namespace is internal; callers must use source admission
+rather than forge a registered reference. Successful submission returns the same
+durable handle and Browser URL contract as registered workflows. Compiling source
+does not prove that a desktop plugin or daemon is configured and running.

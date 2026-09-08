@@ -9,6 +9,13 @@ Canonical contracts:
 
 ## Primary TypeScript API
 
+For the installed Codex Control desktop path, submit trusted `.workflow.ts`
+using `run_workflow({source, input, idempotencyKey, hostId?})`; do not calculate a
+source digest, compile JavaScript manually, or register individual modules.
+The daemon requires pre-authorized actor/repository/assignment context and
+executes agents through App Server. This does not change the direct CLI's
+separate process-local lifecycle or make it equivalent to desktop dogfood.
+
 `@codex/workflows` exports:
 
 ```ts
@@ -25,10 +32,20 @@ Use ordinary typed variables for dataflow. Wrap ready sibling thunks in
 results as downstream `input`; dependency digests are observability metadata,
 not a substitute for values. `phase` groups progress only.
 
-`agent` requires explicit model and reasoning. It admits any bounded,
-non-whitespace `gpt-*` model token with `medium`, forwards the exact token to
-the Codex SDK, and never falls back silently. An output schema causes JSON
+`agent` requires explicit model and reasoning. It admits bounded safe identifiers,
+forwards both unchanged to Codex App Server, and never falls back silently.
+The provider decides model availability and supported effort combinations.
+Named configuration profiles remain separate from these explicit settings.
+An output schema causes JSON
 parse plus strict schema validation and maps failure to exit 68.
+
+Security work retains its separate role-routing requirement regardless of
+available reasoning levels. Security audit and security fix/remediation assignments each require
+exactly `gpt-5.5` with `high` reasoning and separate identities. Dispatch them
+outside `agent()` through the authorized dedicated execution path. Reject the
+workflow at review time if it attempts to disguise security work as a general
+audit, safety, compliance, vulnerability, authorization, secret-handling, or
+security-remediation node. Do not downgrade or substitute the locked seat.
 
 Every node is frozen before launch with stable ID, dependencies,
 model/reasoning, prompt/input/schema digests, and timing. Public events and

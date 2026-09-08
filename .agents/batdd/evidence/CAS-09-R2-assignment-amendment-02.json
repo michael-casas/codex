@@ -1,0 +1,57 @@
+{
+  "schemaVersion": "1.0.0",
+  "campaignId": "CAS-APP-SERVER-20260901-01",
+  "recordId": "CAS-09-R2-ASSIGNMENT-AMENDMENT-02",
+  "status": "READY",
+  "workingDirectory": "/Users/mcasa_atlantis/.codex/worktrees/a4a6/.codex",
+  "baseRevision": "b9dc01512975a8b11bc673b5ec906c818dd708f6",
+  "assignment": {
+    "path": ".agents/batdd/assignments/CAS-09-R2.json",
+    "previousSha256": "559afbe7b4c35128331e6e2521b83d5195cbd898610af01e64117ada42569341",
+    "amendedSha256": "c23f147818ea0c73282368041fef91489d24eb7e3df92beb82dfb68918a7c7c8",
+    "schema": ".agents/batdd/assignment.schema.json",
+    "schemaValid": true
+  },
+  "predecessorAmendment": {
+    "path": ".agents/batdd/evidence/CAS-09-R2-assignment-amendment-01.json",
+    "sha256": "1c910ff41daa8c28c84d9cea00aaeffb52754c82c9eec6f38a46a57a0d2cea3c"
+  },
+  "affectedConsumerFailure": {
+    "project": "@codex/daemon-e2e",
+    "target": "test-l2-e2e",
+    "command": "bun nx run @codex/daemon-e2e:test-l2-e2e --outputStyle=static",
+    "exitCode": 1,
+    "cacheHits": "0/8",
+    "selected": 1,
+    "failed": 1,
+    "test": "CAS03-L2-DAEMON starts, reports ready, stops cleanly, and restarts",
+    "durationMilliseconds": 15378,
+    "observable": "stdout did not contain status ready before timeout",
+    "cause": "The standing daemon E2E launch supplies database URLs but not required CODEX_CONTROL_RUNTIME_CONFIG."
+  },
+  "amendment": {
+    "field": "writeSurface",
+    "added": ["apps/daemon-e2e/**"],
+    "reason": "The production bootstrap contract changed within CAS-09.R2, so its directly affected standing process-boundary consumer must be reconciled within the same seam."
+  },
+  "unchanged": [
+    "objective",
+    "model",
+    "reasoning effort",
+    "base revision",
+    "dependencies",
+    "required layers",
+    "Green Contract",
+    "commit authority",
+    "stop boundary",
+    "all other write surfaces"
+  ],
+  "restrictions": {
+    "rootWrites": false,
+    "nextSeam": false,
+    "auditOrAcceptance": false,
+    "remoteMutation": false,
+    "commitPushPublishDeploy": false
+  },
+  "resume": "CAS-09.R2 may reconcile the existing daemon E2E launch with the accepted production runtime configuration and rerun affected standing L2."
+}

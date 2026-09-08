@@ -1,0 +1,15 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "rootDir": ".",
+    "outDir": "out-tsc/spec",
+    "types": ["node", "vitest/globals"]
+  },
+  "include": [
+    "vitest.config.ts",
+    "scripts/**/*.ts",
+    "src/**/*.ts",
+    "tests/**/*.ts"
+  ],
+  "references": [{ "path": "./tsconfig.app.json" }]
+}

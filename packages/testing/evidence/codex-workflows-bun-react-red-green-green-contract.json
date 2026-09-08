@@ -1,0 +1,59 @@
+{
+  "schemaVersion": "1.0.0",
+  "artifactType": "codex-workflows-bun-react-red-green-green-contract",
+  "contractId": "CDX-WF-BUN-REACT-RG-GC-1",
+  "status": "frozen-after-meaningful-red",
+  "rowsDigest": "sha256:38b98fa6da1cb32ec36c4bfde1d2ba8d716417e51407b1b87c926daa926b7cf2",
+  "frozenAt": "2026-09-08T02:58:10Z",
+  "sourceAuthority": {
+    "founderRuling": "Keep Bun-only absolute and replace the legacy CRA scaffold contract with pinned Bun plus Vite React while retaining the behavioral guarantees.",
+    "assignment": ".agents/batdd/assignments/CDX.BUN-REACT-RED-GREEN.W1.json"
+  },
+  "strategy": "basic-then-adversarial",
+  "rows": [
+    {
+      "id": "BUN-REACT-RG-GC1-001-FIXED-AUDIT-POLICY",
+      "form": "basic-and-adversarial",
+      "layer": "L1",
+      "runtime": "Vitest",
+      "file": "apps/codex-workflows/src/features/cra-red-green/cra-red-green.test.ts",
+      "target": "@codex/codex-workflows:test-l1-cra-red-green",
+      "status": "required",
+      "expectedMeaningfulRed": "The existing evaluator recognizes CRA/react-scripts rather than a pinned Vite React project with bun.lock, Bun-only command evidence, and no foreign lockfiles.",
+      "observableGreen": "The evaluator returns RED for exactly the two intentional homepage/test gaps, rejects malformed Vite package identity, missing bun.lock, foreign lockfiles, non-Bun command evidence, path escape, and nondeterministic source hashing, then returns GREEN after only the two bounded source changes.",
+      "counts": { "source": 1, "selectedMinimum": 7, "executedMinimum": 7 },
+      "cleanup": "Every temporary fixture root is removed on pass or failure.",
+      "artifact": "packages/testing/evidence/codex-workflows-bun-react-red-green-red.json"
+    },
+    {
+      "id": "BUN-REACT-RG-GC1-002-CONTROLLED-THREE-STAGE",
+      "form": "basic-and-adversarial",
+      "layer": "L2",
+      "runtime": "Vitest through the built public CLI and controlled App Server boundary",
+      "file": "apps/codex-workflows/src/features/cra-red-green/cra-red-green.spec.ts",
+      "target": "@codex/codex-workflows:test-l2-cra-red-green",
+      "status": "required",
+      "expectedMeaningfulRed": "The current launcher records npx create-react-app and npm environment evidence instead of bun create vite@9.2.0 and Bun-only evidence.",
+      "observableGreen": "Exactly three sequential gpt-5.6-luna/low stages preserve immutable audit and remediation semantics; the host proves one pinned Bun create-vite invocation, rejects direct or foreign package-manager commands, retains bun.lock, removes material build/install resources, and fails closed on duplicate scaffold evidence.",
+      "counts": { "source": 1, "selectedMinimum": 3, "executedMinimum": 3 },
+      "cleanup": "Controlled success and failure roots remove node_modules, dist, caches, nested Git metadata, processes, and temporary files.",
+      "artifact": "packages/testing/evidence/codex-workflows-bun-react-red-green-red.json"
+    },
+    {
+      "id": "BUN-REACT-RG-GC1-003-CANONICAL-LIVE-L3",
+      "form": "representative-behavior",
+      "layer": "L3",
+      "runtime": "Physical Gherkin through the literal installed shebang, live Codex backend, Bun 1.4.2, and pinned create-vite@9.2.0",
+      "file": "apps/codex-workflows/src/features/cra-red-green/cra-red-green.feature",
+      "target": "@codex/codex-workflows:test-l3-cra-red-green",
+      "status": "coordinator-owned-live-gate",
+      "expectedMeaningfulRed": "The predecessor live evidence proves an npm/CRA command and cannot satisfy the Bun-only scaffold identity.",
+      "observableGreen": "The canonical scenario proves the three live Luna-low stages, immutable independent RED, actual audit consumption, bounded remediation, Bun-native test/build, exact output schema, report, cleanup, and READY_FOR_EXTERNAL_AUDIT marker.",
+      "counts": { "source": 1, "selected": 1, "generated": 1, "executed": 1 },
+      "cleanup": "Only the declared report and source-only proof tree remain; resource delta is zero.",
+      "artifact": "test-output/cucumber/codex-workflows-bun-react-red-green.json"
+    }
+  ],
+  "freezeRule": "Freeze row identities, assertions, scaffold pin, Bun-only negatives, three-stage topology, exact model and reasoning, immutable auditor digest, schema, cleanup, and stop marker after meaningful RED and before product writes.",
+  "acceptanceLimitation": "The worker may stop READY-FOR-REVIEW only; the coordinator owns the single paid live L3 and independent acceptance."
+}

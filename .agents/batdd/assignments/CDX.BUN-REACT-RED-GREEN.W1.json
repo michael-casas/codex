@@ -1,0 +1,54 @@
+{
+  "$schema": "../assignment.schema.json",
+  "schemaVersion": "1.0.0",
+  "assignmentId": "CDX.BUN-REACT-RED-GREEN.W1",
+  "status": "active",
+  "dispatchable": true,
+  "role": "worker",
+  "objective": "Implement a Bun-only three-stage workflow that scaffolds pinned Vite React, obtains an independent fixed-criteria RED audit, remediates only those findings, proves deterministic GREEN, and stops at READY_FOR_EXTERNAL_AUDIT.",
+  "completionScope": "vertical-slice",
+  "mayReportFeatureComplete": true,
+  "feature": "apps/codex-workflows/src/features/cra-red-green/FEATURE.md",
+  "requiredLayers": {
+    "l1": { "status": "required" },
+    "l2": { "status": "required" },
+    "l3": { "status": "required" }
+  },
+  "writeSurface": [
+    ".agents/batdd/assignments/CDX.BUN-REACT-RED-GREEN.W1.json",
+    "apps/codex-workflows/examples/cra-red-green.workflow.ts",
+    "apps/codex-workflows/examples/bun-react-red-green.workflow.ts",
+    "apps/codex-workflows/examples/bun-react-red-green.input.json",
+    "apps/codex-workflows/project.json",
+    "apps/codex-workflows/CLI.md",
+    "apps/codex-workflows/src/features/cra-red-green/**",
+    "packages/testing/evidence/codex-workflows-bun-react-red-green-green-contract.json",
+    "packages/testing/evidence/codex-workflows-bun-react-red-green-red.json",
+    "packages/testing/manifests/codex-workflows.json",
+    ".agent/testing/workflows/**"
+  ],
+  "baseRevision": "bb45998b90edbb56c7022a20a0c25aaf10b20388",
+  "stopBoundary": "READY-FOR-AUDIT",
+  "greenContract": {
+    "id": "CDX-WF-BUN-REACT-RG-GC-1",
+    "strategy": "basic-then-adversarial",
+    "redPolicy": "all-new-or-changed-contract-rows",
+    "adversarialRequired": true
+  },
+  "commitAuthority": { "allowed": false, "maxCommits": 0 },
+  "dependencies": ["CDX.CRA-RED-GREEN.W1"],
+  "evidence": [
+    "new-meaningful-red-before-product-write",
+    "contract-digest-frozen",
+    "bun-1.4.2-create-vite-9.2.0-react-scaffold",
+    "exact-three-sequential-luna-low-nodes",
+    "independent-auditor-read-only-tree-digest",
+    "actual-red-audit-output-consumed-by-remediator",
+    "bun-lock-and-no-foreign-locks",
+    "actual-bun-test-and-build-green",
+    "deterministic-final-green",
+    "literal-shebang-coordinator-live-l3",
+    "zero-unexpected-resource-delta",
+    "ready-for-review-stop"
+  ]
+}

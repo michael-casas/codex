@@ -1,0 +1,50 @@
+{
+  "schemaVersion": "1.0.0",
+  "campaignId": "CAS-APP-SERVER-20260901-01",
+  "assignmentId": "CAS-11",
+  "status": "APP_IMPORT_PROHIBITION_HALT",
+  "recordedAt": "2026-09-02T14:55:30Z",
+  "sourceHaltSha256": "ab8ddca6e66bcce5d1a335047a89a610a422df9bef3f715c47fb1b174c062339",
+  "lockedGreen": {
+    "l1": "4/4",
+    "l2": "2/2",
+    "web": "16/16 across chromium and mobile-chromium",
+    "build": "GREEN",
+    "typecheck": "GREEN",
+    "pluginValidation": "GREEN",
+    "resourceDelta": 0
+  },
+  "attemptedCoordinatorBoundary": {
+    "codexControlPackageSha256": "51cf056676c8f5b8f72dab20efb8af8fc3b94d03ada103161f72bdbfad99e8c5",
+    "pluginPackageSha256": "ccc959d1268c144a895610db48f5fe05fe9eb364635398a9f8febd720db677a3",
+    "pluginProjectSha256": "205f4938717f3a709f817fd6ff068c4da8acfeada039bd7cb891db4424d0473a",
+    "eslintSha256": "3c0ebdb819d8840199c6e83ca6bc5b2e358609235a07250d65c216429acf7e9d",
+    "bunLockSha256": "346e7ca2a3e4dfff580abeb3c16905a4d3fc520a4e18763ef6be325e16352e33",
+    "workerImportSha256": "e9befb2f88aae4722b9301e41eacfd6abe19b987a8d196eb74a72b3066f8346a"
+  },
+  "disproof": {
+    "gate": "bun nx run-many -t lint,build,typecheck -p @codex/plugin-codex-control @codex/codex-control-e2e --skipNxCache --outputStyle=static",
+    "failedTarget": "@codex/plugin-codex-control:lint",
+    "path": "plugins/codex-control/src/server.ts:7",
+    "message": "Imports of apps are forbidden",
+    "build": "GREEN",
+    "typecheck": "GREEN"
+  },
+  "classification": "The CAS-09 MCP server factory has two current consumers—the codex-control executable app and codex-control plugin—so reusable server mechanics now earn a package boundary. An app export remains an app dependency and cannot satisfy Nx architecture law.",
+  "resumeCondition": "A coordinator-owned CAS-09 repair extracts the unchanged gateway/server factory into one precise reusable package, rewires the app and plugin through scoped package imports, preserves all CAS-09 locked tests and CAS-11 locked greens, updates only required root composition, and publishes immutable evidence.",
+  "forbiddenFixes": [
+    "application import allow-list or eslint suppression",
+    "dynamic or string-built hidden app import",
+    "copying gateway behavior into the plugin",
+    "changing an application project into a library",
+    "putting MCP gateway dependencies into an unrelated existing foundation package"
+  ],
+  "resourceDelta": {
+    "pluginProcessesRemaining": 0,
+    "isolatedCodexHomesRemaining": 0,
+    "installedPluginsRemaining": 0,
+    "listenersRemaining": 0,
+    "tunnelsCreated": 0,
+    "liveSynologyContacted": false
+  }
+}

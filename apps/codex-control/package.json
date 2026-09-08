@@ -1,0 +1,105 @@
+{
+  "name": "@codex/codex-control",
+  "version": "0.0.1",
+  "private": true,
+  "type": "module",
+  "nx": {
+    "tags": [
+      "type:app",
+      "scope:orchestration"
+    ],
+    "targets": {
+      "build": {
+        "executor": "@nx/esbuild:esbuild",
+        "outputs": [
+          "{options.outputPath}"
+        ],
+        "options": {
+          "platform": "node",
+          "outputPath": "apps/codex-control/dist",
+          "format": [
+            "esm"
+          ],
+          "bundle": false,
+          "main": "apps/codex-control/src/main.ts",
+          "tsConfig": "apps/codex-control/tsconfig.app.json"
+        }
+      },
+      "test-l1": {
+        "executor": "nx:run-commands",
+        "options": {
+          "command": "vitest run --config apps/codex-control/vitest.config.ts src/control/__tests__/codex-control-catalog.test.ts src/control/__tests__/codex-control-runtime.test.ts"
+        }
+      },
+      "test-l2": {
+        "executor": "nx:run-commands",
+        "cache": false,
+        "options": {
+          "command": "vitest run --config apps/codex-control/vitest.config.ts src/control/__specs__/codex-control-protocol.spec.ts src/control/__specs__/codex-control-runtime.spec.ts"
+        }
+      },
+      "test-pre-build": {
+        "executor": "nx:run-commands",
+        "options": {
+          "command": "tsc -p apps/codex-control/tsconfig.cucumber.json"
+        }
+      },
+      "test-l3": {
+        "executor": "nx:run-commands",
+        "cache": false,
+        "dependsOn": [
+          "test-pre-build"
+        ],
+        "outputs": [
+          "{workspaceRoot}/test-output/cucumber/codex-control.json"
+        ],
+        "options": {
+          "command": "bun packages/testing/src/cli.ts verify-cucumber apps/codex-control/src/control/codex-control.feature apps/codex-control/out-tsc/cucumber/control/index.steps.js test-output/cucumber/codex-control.json"
+        }
+      },
+      "test-supplemental": {
+        "executor": "nx:run-commands",
+        "cache": false,
+        "options": {
+          "command": "vitest run --config apps/codex-control/vitest.config.ts src/control/__tests__/codex-control-composition.test.ts src/control/__specs__/codex-control-behavior.spec.ts"
+        }
+      },
+      "test-stdio": {
+        "executor": "nx:run-commands",
+        "cache": false,
+        "dependsOn": [
+          "build"
+        ],
+        "options": {
+          "command": "vitest run --config apps/codex-control/vitest.config.ts src/control/__specs__/codex-control-stdio.spec.ts"
+        }
+      },
+      "test-postgres": {
+        "executor": "nx:run-commands",
+        "cache": false,
+        "options": {
+          "command": "vitest run --config apps/codex-control/vitest.config.ts src/control/__specs__/codex-control-postgres.spec.ts"
+        }
+      },
+      "test": {
+        "executor": "nx:run-commands",
+        "cache": false,
+        "options": {
+          "command": "bun nx test-l1 @codex/codex-control && bun nx test-l2 @codex/codex-control --skipNxCache && bun nx test-l3 @codex/codex-control --skipNxCache && bun nx test-supplemental @codex/codex-control --skipNxCache && bun nx test-stdio @codex/codex-control --skipNxCache"
+        }
+      }
+    }
+  },
+  "dependencies": {
+    "@codex/control-gateway": "workspace:*",
+    "@codex/process": "workspace:*",
+    "@codex/workflows": "workspace:*",
+    "@modelcontextprotocol/sdk": "1.30.0",
+    "zod": "^4.3.6"
+  },
+  "devDependencies": {
+    "@codex/codex": "workspace:*",
+    "@codex/db": "workspace:*",
+    "@codex/delivery": "workspace:*"
+  }
+}

@@ -1,0 +1,70 @@
+{
+  "name": "@codex/transport",
+  "version": "0.0.1",
+  "private": true,
+  "type": "module",
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    "./package.json": "./package.json",
+    ".": {
+      "@codex/source": "./src/index.ts",
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "default": "./dist/index.js"
+    }
+  },
+  "nx": {
+    "tags": [
+      "type:lib",
+      "scope:transport",
+      "layer:provider"
+    ],
+    "targets": {
+      "test-l1-unit": {
+        "executor": "nx:run-commands",
+        "options": {
+          "command": "vitest run --config packages/transport/vitest.config.ts src/app-server-host/__tests__/app-server-host.test.ts src/workspace-lease/__tests__/workspace-lease.test.ts --testNamePattern='L1:UNIT'"
+        }
+      },
+      "test-l1-integration": {
+        "executor": "nx:run-commands",
+        "options": {
+          "command": "vitest run --config packages/transport/vitest.config.ts src/app-server-host/__tests__/app-server-host.test.ts src/workspace-lease/__tests__/workspace-lease.test.ts --testNamePattern='L1:INTEGRATION'"
+        }
+      },
+      "test-l1": {
+        "executor": "nx:run-commands",
+        "options": {
+          "command": "vitest run --config packages/transport/vitest.config.ts src/app-server-host/__tests__/app-server-host.test.ts src/workspace-lease/__tests__/workspace-lease.test.ts"
+        }
+      },
+      "test-l2-integration": {
+        "executor": "nx:run-commands",
+        "cache": false,
+        "options": {
+          "command": "vitest run --config packages/transport/vitest.config.ts src/app-server-host/__specs__/app-server-host.spec.ts src/workspace-lease/__specs__/workspace-lease.spec.ts --testNamePattern='L2:INTEGRATION'"
+        }
+      },
+      "test-l2": {
+        "executor": "nx:run-commands",
+        "cache": false,
+        "options": {
+          "command": "vitest run --config packages/transport/vitest.config.ts src/app-server-host/__specs__/app-server-host.spec.ts src/workspace-lease/__specs__/workspace-lease.spec.ts"
+        }
+      },
+      "test": {
+        "executor": "nx:noop",
+        "cache": false,
+        "dependsOn": [
+          "test-l1",
+          "test-l2"
+        ]
+      }
+    }
+  },
+  "dependencies": {
+    "@codex/codex": "workspace:*"
+  }
+}

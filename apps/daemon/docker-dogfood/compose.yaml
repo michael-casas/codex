@@ -1,0 +1,51 @@
+services:
+  app-server:
+    restart: '${CAS_RESTART_POLICY:-no}'
+    build:
+      context: .
+      dockerfile: Dockerfile.ubuntu
+      args:
+        CODEX_UID: '${CAS_RUNTIME_UID:-1100}'
+        CODEX_GID: '${CAS_RUNTIME_GID:-1100}'
+    init: true
+    ports:
+      - '${CAS_BIND_IP:-127.0.0.1}:14501:4501'
+    volumes:
+      - '${CAS_HOST_HOME:?required}:/mnt/host-codex:ro'
+      - '${CAS_TEST_ROOT:?required}/app:/workspace'
+      - '${CAS_TEST_ROOT:?required}/secrets:/run/cas-secrets:ro'
+    tmpfs:
+      - /home/codex/.codex:mode=0700
+    environment:
+      NEXT_TELEMETRY_DISABLED: '1'
+    healthcheck:
+      test:
+        ['CMD', 'curl', '--fail', '--silent', 'http://127.0.0.1:4500/readyz']
+      interval: 2s
+      timeout: 2s
+      retries: 20
+  preview:
+    image: cas-nextjs-dogfood-app-server
+    profiles: [preview]
+    init: true
+    user: '${CAS_RUNTIME_UID:-1100}:${CAS_RUNTIME_GID:-1100}'
+    entrypoint: ['bun', 'run', 'start']
+    working_dir: /workspace
+    ports:
+      - '${CAS_BIND_IP:-127.0.0.1}:13000:3000'
+    volumes:
+      - '${CAS_TEST_ROOT:?required}/app:/workspace:ro'
+    environment:
+      NEXT_TELEMETRY_DISABLED: '1'
+    healthcheck:
+      test:
+        [
+          'CMD',
+          'curl',
+          '--fail',
+          '--silent',
+          'http://127.0.0.1:3000/api/health',
+        ]
+      interval: 2s
+      timeout: 2s
+      retries: 20

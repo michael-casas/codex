@@ -1,0 +1,216 @@
+{
+  "schemaVersion": "1.0.0",
+  "campaignId": "CAS-APP-SERVER-20260901-01",
+  "assignmentId": "CAS-07",
+  "writeLeaseId": "CAS-07-REMOTE-WORKFLOW",
+  "status": "REMOTE_WORKFLOW_READY",
+  "workerVerdict": "READY-FOR-AUDIT",
+  "baseRevision": "b9dc01512975a8b11bc673b5ec906c818dd708f6",
+  "workingDirectory": "/Users/mcasa_atlantis/.codex/worktrees/a4a6/.codex",
+  "authority": {
+    "greenContractId": "CAS-07-GC-1",
+    "greenContractSha256": "07edb49db66fa97f03f2b8a5690b37fb422b6381b546e405db9497a595419085",
+    "sdkRemovalReadySha256": "b376f5c5111416cad7d36a025cdb3a138b484c068cfdecfba5b73ff73840433e",
+    "sdkRemovalCompleteSha256": "27fd1b4525c20f291e88c56833ac5ac9b67903125cefbbb0ebb42540137116fe",
+    "queueRepairSha256": "06649bc837ddb3051672db92c8fbfe3062d60f822cb2403117e161f1df50f949",
+    "candidateSurfaceSha256": "67ec15a55fe01f6f41442530c89a67ce2c14fc97f6354f5cbd0f8651e465ddcd",
+    "commitAuthority": false,
+    "selfCertified": false
+  },
+  "publicContract": {
+    "entrypoint": "run_workflow",
+    "maxCallsPerOperation": 1,
+    "acceptedInput": [
+      "trusted workflow reference",
+      "source digest",
+      "JSON input",
+      "admitted host",
+      "workspace intent",
+      "runtime profile",
+      "idempotency key"
+    ],
+    "handle": ["runId", "state", "cursor"],
+    "durableObservation": ["result", "nodes", "artifacts"],
+    "providerChoreographyExposed": false,
+    "callerRawPathsAllowed": false,
+    "placement": "run-level; every node uses one admitted host and one workspace lease"
+  },
+  "implementation": {
+    "workflowSeam": "executeWorkflow receives stable frozen node identity and provider-neutral normalized runtime callbacks while preserving typed phase, parallel, agent, and artifact dataflow",
+    "appServerExecutor": "thread/start and turn/start use exact node model and medium reasoning, one selected cwd, bounded events, active turn interruption, and bound-thread reconciliation",
+    "durableDaemon": "PostgreSQL owns accepted command, runtime binding, normalized events, artifact metadata/content, final result, and stable cursor truth",
+    "delivery": "pg-boss remains sole delivery, retry, restart, expiration, and dead-letter timing owner; workflow queues are admitted before send/work registration",
+    "idempotency": "exact replay returns the stable run handle; conflicting reuse fails before duplicate job, thread, turn, artifact, or terminal transition",
+    "terminalLaw": "App Server runtime completion is evidence only; durable completed state is published after schema validation and artifact/result registration",
+    "sdkRemoval": "direct compatibility runner and daemon both use App Server; production @openai/codex-sdk dependency, singleton, adapter, and duplicate canonical runtime are removed"
+  },
+  "validation": [
+    {
+      "gate": "frozen-install",
+      "command": "bun install --frozen-lockfile",
+      "exitCode": 0,
+      "result": "1011 installs across 1094 packages; no changes"
+    },
+    {
+      "gate": "nx-sync",
+      "command": "bun nx sync:check --outputStyle=static",
+      "exitCode": 0
+    },
+    {
+      "gate": "build-typecheck-lint",
+      "projects": [
+        "@codex/codex",
+        "@codex/workflows",
+        "@codex/codex-workflows",
+        "@codex/daemon"
+      ],
+      "cache": "bypassed",
+      "exitCode": 0,
+      "lint": "zero errors; pre-existing test-only non-null warnings remain in codex-workflows"
+    },
+    {
+      "layer": "L1",
+      "project": "@codex/codex",
+      "target": "test-l1",
+      "selected": 8,
+      "passed": 8,
+      "exitCode": 0,
+      "cache": "bypassed"
+    },
+    {
+      "layer": "L1",
+      "project": "@codex/workflows",
+      "target": "test-l1",
+      "selected": 62,
+      "passed": 62,
+      "exitCode": 0,
+      "cache": "bypassed"
+    },
+    {
+      "layer": "L1",
+      "project": "@codex/codex-workflows",
+      "target": "test-l1",
+      "selected": 39,
+      "passed": 39,
+      "exitCode": 0,
+      "cache": "bypassed"
+    },
+    {
+      "layer": "L1",
+      "project": "@codex/daemon",
+      "target": "test-l1",
+      "selected": 7,
+      "passed": 7,
+      "exitCode": 0,
+      "cache": "bypassed"
+    },
+    {
+      "layer": "L2",
+      "project": "@codex/codex",
+      "target": "test-l2",
+      "selected": 2,
+      "passed": 2,
+      "exitCode": 0,
+      "boundary": "real stdio App Server stream and interrupt",
+      "cache": "bypassed"
+    },
+    {
+      "layer": "L2",
+      "project": "@codex/codex-workflows",
+      "target": "test-l2",
+      "selected": 18,
+      "passed": 18,
+      "exitCode": 0,
+      "boundary": "SDK-free App Server compatibility runner, CLI, journal, schema, failure, cleanup, and artifacts",
+      "cache": "bypassed",
+      "note": "one daily-facts exit-67 flake was reproduced once and the declared full target immediately reran 18/18 GREEN, matching coordinator evidence"
+    },
+    {
+      "layer": "L2",
+      "project": "@codex/daemon",
+      "target": "test-l2-e2e",
+      "selected": 6,
+      "passed": 6,
+      "exitCode": 0,
+      "boundary": "real PostgreSQL, pg-boss, TLS-authenticated WSS, parallel/dependent App Server turns, restart, cancellation, redaction, result, and artifact",
+      "cache": "bypassed"
+    },
+    {
+      "layer": "L2",
+      "project": "@codex/daemon-e2e",
+      "target": "test-l2-e2e",
+      "selected": 1,
+      "passed": 1,
+      "exitCode": 0,
+      "boundary": "built daemon process start, stop, and restart",
+      "cache": "bypassed"
+    },
+    {
+      "layer": "L3",
+      "project": "@codex/codex-workflows",
+      "target": "test-l3",
+      "source": 5,
+      "selected": 5,
+      "executed": 5,
+      "scenariosPassed": 5,
+      "stepsPassed": 28,
+      "exitCode": 0,
+      "artifactSha256": "add780eba3573e9f14f886804e6dbd458a78cfb1682531e05b4af2a6e3bf5a6e"
+    },
+    {
+      "layer": "L3",
+      "project": "@codex/daemon",
+      "target": "test-l3",
+      "source": 1,
+      "selected": 1,
+      "executed": 1,
+      "scenariosPassed": 1,
+      "stepsPassed": 5,
+      "exitCode": 0,
+      "artifactSha256": "2e7acb2b296f850f6c53378ad5fdf3177693547da09290167a2135fc16b9b194"
+    }
+  ],
+  "greenContractDisposition": {
+    "CAS07-L1-NODE": "GREEN: stable node attribution, exact model/reasoning, provider-neutral event callback",
+    "CAS07-L1-COMMAND": "GREEN: one call, strict admission, stable handle, exact replay, conflicting no-write",
+    "CAS07-L1-CANCEL": "GREEN: idempotent cancellation, active bound interrupt, forbidden downstream start",
+    "CAS07-L2-RUNTIME": "GREEN: authenticated WSS parallel/dependent turns, schema values, durable bindings, artifact and result",
+    "CAS07-L2-RECOVERY": "GREEN: accepted-job delivery restart, bound-thread disconnect reconciliation, redaction, zero active resources",
+    "CAS07-L3-REMOTE": "GREEN: N/X research completes before implementation and final artifact/result is observable from one handle"
+  },
+  "adversarialEvidence": [
+    "raw paths, provider choreography, wrong reasoning, malformed identity, and non-JSON input rejected",
+    "exact replay and conflicting idempotency reuse",
+    "two real parallel turns and dependent-phase ordering",
+    "schema failure and artifact conflict fail closed",
+    "accepted pg-boss job survives delivery runtime restart",
+    "active bound turn interrupted and future node forbidden",
+    "disconnect reconciles completed bound thread without duplicate thread/start",
+    "runtime completion cannot race ahead of durable result completion",
+    "public control events omit prompts, raw input envelope, credentials, environment, command text, and reasoning",
+    "production SDK import/dependency/runtime search returns zero"
+  ],
+  "resourceDelta": {
+    "testDatabases": 0,
+    "controlledWssAppServerProcesses": 0,
+    "controlledWssTmpDirectories": 0,
+    "workspaceReleases": "exactly one per executed run",
+    "interruptedHarnessFixture": "explicit stale /tmp fixture moved to Trash without exposing its token; no active process/database remained",
+    "liveSynologyMutation": false,
+    "newExternalDependencies": 0
+  },
+  "handoff": {
+    "CAS-08": "Project workflow.runtime.binding/event and durable terminal/result/artifact summaries; preserve redaction and bounded cursor semantics.",
+    "CAS-09": "Expose one run_workflow command returning the compact stable handle; callers must not know App Server method order or raw paths.",
+    "CAS-12": "Use run-level admitted host/workspace placement and the authenticated WSS driver; preserve zero-resource cleanup and SDK-free runtime assertion."
+  },
+  "stop": {
+    "terminal": "REMOTE_WORKFLOW_READY",
+    "workerBoundary": "READY-FOR-AUDIT",
+    "independentVerificationRequired": true,
+    "auditOrQaLaunched": false,
+    "CAS08OrLaterStarted": false,
+    "commitCreated": false,
+    "pushPerformed": false
+  }
+}

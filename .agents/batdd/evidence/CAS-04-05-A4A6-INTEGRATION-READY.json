@@ -1,0 +1,196 @@
+{
+  "schemaVersion": "1.0.0",
+  "integrationId": "CAS-04-05-A4A6-INTEGRATION-READY-01",
+  "campaignId": "CAS-APP-SERVER-20260901-01",
+  "status": "INTEGRATION_READY",
+  "phase": "BASE",
+  "phaseState": "PHASE_LOCKED",
+  "baseRevision": "b9dc01512975a8b11bc673b5ec906c818dd708f6",
+  "workingDirectory": "/Users/mcasa_atlantis/.codex/worktrees/a4a6/.codex",
+  "authority": {
+    "campaign": {
+      "path": "/Users/mcasa_atlantis/.codex/worktrees/0c2e/.codex/.agents/batdd/campaigns/CAS-APP-SERVER-20260901-01.json",
+      "sha256": "bf3a9b5d3babed6f70dea88908301e5f705ddd7ee1a429e342d0bf5752067d20"
+    },
+    "batchEvidence": {
+      "path": "/Users/mcasa_atlantis/.codex/worktrees/0c2e/.codex/.agents/batdd/evidence/CAS-04-05-BASE-BATCH-OPEN.json",
+      "sha256": "2a9c392ff40445152c7c73581daa7b48072a939e8f5bbfb2f2be0463eece7c5f"
+    },
+    "CAS-04": {
+      "assignmentPath": "/Users/mcasa_atlantis/.codex/worktrees/0c2e/.codex/.agents/batdd/assignments/CAS-04.json",
+      "assignmentSha256": "f28e80992ac407feee3c674d7c1cc4be7e1dd9e94ce0ff87bbfa98407f3275fd",
+      "charterPath": "/Users/mcasa_atlantis/.codex/worktrees/a4a6/.codex/docs/goals/codex-app-server/CAS-04.md",
+      "charterSha256": "01d5dcb450eaf2eda5de0f593bb51aa2650927cc832711245dcdb47d8329137f",
+      "writeLeaseId": "CAS-04-WORKSPACE-LEASE",
+      "model": "gpt-5.6-sol",
+      "reasoningEffort": "medium",
+      "dispatchable": true,
+      "commitAuthority": false
+    },
+    "CAS-05": {
+      "assignmentPath": "/Users/mcasa_atlantis/.codex/worktrees/0c2e/.codex/.agents/batdd/assignments/CAS-05.json",
+      "assignmentSha256": "9627ed343a09ac9264d2eeda859e634b6a4506a98e206ecb59c9edb46b1bd337",
+      "charterPath": "/Users/mcasa_atlantis/.codex/worktrees/a4a6/.codex/docs/goals/codex-app-server/CAS-05.md",
+      "charterSha256": "ce581ea56688c04b2f1878e7f8d15cefea45007a415baf50f4ac454e818164d5",
+      "writeLeaseId": "CAS-05-DURABLE-INTERCOM",
+      "model": "gpt-5.6-sol",
+      "reasoningEffort": "medium",
+      "dispatchable": true,
+      "commitAuthority": false
+    },
+    "CAS-06": {
+      "allocationPath": "/Users/mcasa_atlantis/.codex/worktrees/0c2e/.codex/.agents/batdd/evidence/CAS-06-ALLOCATED.json",
+      "allocationSha256": "21ba6d78ad7048e0874a66844166603401e0a8c0956371fcc88adec48c1260c3",
+      "assignmentPath": "/Users/mcasa_atlantis/.codex/worktrees/0c2e/.codex/.agents/batdd/assignments/CAS-06.json",
+      "assignmentSha256": "885273b8b147f48ebaf7a3d37e766103ae1d13390c3a03f7693918f28eb7cdfc",
+      "writeLeaseId": "CAS-06-DIRECT-HANDOFF",
+      "dispatchable": false,
+      "workerLaunches": 0
+    }
+  },
+  "predecessors": {
+    "CAS-01": {
+      "packetPath": "/Users/mcasa_atlantis/.codex/worktrees/7467/.codex/packages/testing/evidence/cas-01-protocol-ready.json",
+      "packetSha256": "7526be019a07222c2dc0171fea77c0a84ba5f64b8a8a492ac699ab9296578568",
+      "sourceWorktree": "/Users/mcasa_atlantis/.codex/worktrees/7467/.codex",
+      "filesCompared": 709,
+      "sourceManifestSha256": "5ddb0be530c651dd9a99e8c05783fdbc302878eadaeedd810dcf9f6772ef2824",
+      "destinationManifestSha256": "5ddb0be530c651dd9a99e8c05783fdbc302878eadaeedd810dcf9f6772ef2824",
+      "mismatches": 0
+    },
+    "CAS-02": {
+      "packetPath": "/Users/mcasa_atlantis/.codex/worktrees/3568/.codex/packages/testing/evidence/cas-02-host-transport-ready.json",
+      "packetSha256": "6d9de03da07248b7a1739a9ee9ea83d532da32c752cb7e3b3ed3a22f1be9e0e8",
+      "sourceWorktree": "/Users/mcasa_atlantis/.codex/worktrees/3568/.codex",
+      "filesCompared": 15,
+      "sourceManifestSha256": "371d7ee649c59f37da34ec940db13f9f8f8b784b9b4664e7e44f273799a6fdef",
+      "destinationManifestSha256": "371d7ee649c59f37da34ec940db13f9f8f8b784b9b4664e7e44f273799a6fdef",
+      "mismatches": 0
+    },
+    "CAS-03": {
+      "packetPath": "/Users/mcasa_atlantis/.codex/worktrees/7701/.codex/packages/testing/evidence/cas-03-control-foundation.json",
+      "packetSha256": "4e51ff75219a1704e5ef82ea81a7851ca4fd31fb7293fc7c55ec0c174d130ef2",
+      "sourceWorktree": "/Users/mcasa_atlantis/.codex/worktrees/7701/.codex",
+      "filesCompared": 48,
+      "sourceManifestSha256": "cb3a52c62ba7eb42060ebc08e677adf72d605db03f3d44971ce834dfab4d3ac7",
+      "destinationManifestSha256": "cb3a52c62ba7eb42060ebc08e677adf72d605db03f3d44971ce834dfab4d3ac7",
+      "mismatches": 0
+    }
+  },
+  "mergedRootComposition": {
+    "packageJson": {
+      "sha256": "64333539ed221f98e0c4bd545d970f31285bd5b4017be57f1ea74e9c632a4467",
+      "changedByIntegration": false
+    },
+    "nxJson": {
+      "sha256": "e5792ce9b1586875741d78b3c5ed1c766cf32c0f459d4cba53a112288bbac4a3",
+      "changedByIntegration": false
+    },
+    "tsconfigJson": {
+      "beforeSha256": "bb83b506391331480770246341ce5bf8ed73cdab4bf55cee6bfde2c24bb433cf",
+      "afterSha256": "53b3145c305d4f4609c1cbe5fd63bf6509e1a4722b0a8ace2bd8d3d150c1ecfe",
+      "addedReferences": [
+        "./packages/transport",
+        "./packages/db",
+        "./packages/delivery"
+      ],
+      "preservedReference": "./apps/codex-control-ui"
+    },
+    "bunLock": {
+      "beforeSha256": "7aaa928119121dd0181e550bce3e792ff1826f6e3f3fe020e034c165e9bec610",
+      "afterSha256": "b837934c1a28cc6493e8400163ed28e4b6e334f41bc876c51f0227a39f9151e5",
+      "composition": [
+        "@codex/transport workspace and @codex/codex link",
+        "@codex/db and @codex/delivery workspaces",
+        "daemon and daemon-e2e dependencies",
+        "pg-boss and transitive dependencies",
+        "existing Svelte workspace dependencies"
+      ]
+    },
+    "migration": "migrations/process/002_durable_control.sql materialized exactly from CAS-03",
+    "daemonComposition": "CAS-03 daemon and daemon-E2E candidate files materialized exactly; no CAS-04/CAS-05 product edit has started."
+  },
+  "changedSurfaces": [
+    "packages/codex/src/app-server-client/**",
+    "packages/codex/generated/app-server/0.151.0/**",
+    "packages/codex/src/index.ts",
+    "packages/codex/project.json",
+    "packages/transport CAS-02 files excluding pre-existing FEATURES.md",
+    "packages/process CAS-03 durable-control files and facade/config",
+    "packages/db/**",
+    "packages/delivery/**",
+    "migrations/process/002_durable_control.sql",
+    "apps/daemon CAS-03 files",
+    "apps/daemon-e2e CAS-03 files",
+    "packages/testing/evidence/cas-01-*.json",
+    "packages/testing/evidence/cas-02-*.json",
+    "packages/testing/evidence/cas-03-control-foundation.json",
+    "tsconfig.json",
+    "bun.lock",
+    ".agents/batdd/evidence/CAS-04-05-A4A6-INTEGRATION-READY.json"
+  ],
+  "preservedUnrelatedState": {
+    "initialDirtyStatusSha256": "60ce6632a7cf6fc1690dd35ecc80298abd7aa73891e5c978b2d481fa320fdca1",
+    "finalDirtyStatusSha256BeforePacket": "672b2eaee510b4269c1301e7158b83a6156ba8a4f4cd5737db1bd1c5ebdf238f",
+    "svelteScaffold": {
+      "files": 13,
+      "sha256": "9a87e40e3ba012cc6ffab77ea0f914c9b9e8d01019003b1846d6ebec6a2804d4"
+    },
+    "goalCharters": {
+      "files": 10,
+      "sha256": "5ae51bd92e9201caf817221aab443360d7d3fe9b73fd7017d120515b2d46181d"
+    },
+    "plans": {
+      "files": 1,
+      "sha256": "c9cf7772686aabb62bbb1664068aa268e439c3344d496350639c89afe3a3e8c8"
+    },
+    "protectedStashes": [
+      "ed2f0fdd9f4d267c3d865aeb2b3c13b55a219648",
+      "898240b7dafabde67950ed00ae2ade199af6e750"
+    ],
+    "stashesAppliedOrDeleted": 0,
+    "unrelatedFilesDeletedOrReverted": 0,
+    "rawSecretsCopiedOrPersisted": 0,
+    "credentialBoundary": "External credential references remain external; no token or secret file entered the repository."
+  },
+  "validation": {
+    "bunInstall": "GREEN; combined lock generated from materialized workspace packages",
+    "bunFrozenInstall": "GREEN; no changes",
+    "nxSyncCheck": "GREEN; workspace up to date",
+    "buildAndTypecheck": "GREEN for @codex/codex, @codex/transport, @codex/process, @codex/db, @codex/delivery, and @codex/daemon",
+    "CAS-01": "L1 29/29 and real stdio L2 12/12 GREEN in integrated checkout",
+    "CAS-02": "L1 5/5 and controlled real-boundary L2 3/3 GREEN in integrated checkout",
+    "CAS-03": {
+      "processL1": "12/12 GREEN",
+      "processL2": "3/3 GREEN against real PostgreSQL",
+      "dbL2": "5/5 GREEN against real PostgreSQL",
+      "deliveryL2": "2/2 GREEN against real pg-boss",
+      "daemonL1": "4/4 GREEN",
+      "daemonL2": "1/1 GREEN after canonical POSTGRES_URL environment was loaded",
+      "daemonE2ETypecheckLint": "GREEN"
+    },
+    "initialEnvironmentalFailure": "The first daemon E2E attempt failed closed because POSTGRES_URL was absent; no product change followed. Rerun with the canonical local substrate environment passed.",
+    "materializationProductTests": "No CAS-04 or CAS-05 product test or implementation has started."
+  },
+  "dispatchReadiness": {
+    "checkout": "/Users/mcasa_atlantis/.codex/worktrees/a4a6/.codex",
+    "environment": "projectless chat pointed directly at the existing shared checkout; no Git worktree creation",
+    "CAS-04": {
+      "model": "gpt-5.6-sol",
+      "reasoningEffort": "medium",
+      "charter": "/Users/mcasa_atlantis/.codex/worktrees/a4a6/.codex/docs/goals/codex-app-server/CAS-04.md",
+      "assignment": "/Users/mcasa_atlantis/.codex/worktrees/0c2e/.codex/.agents/batdd/assignments/CAS-04.json",
+      "writeLeaseId": "CAS-04-WORKSPACE-LEASE"
+    },
+    "CAS-05": {
+      "model": "gpt-5.6-sol",
+      "reasoningEffort": "medium",
+      "charter": "/Users/mcasa_atlantis/.codex/worktrees/a4a6/.codex/docs/goals/codex-app-server/CAS-05.md",
+      "assignment": "/Users/mcasa_atlantis/.codex/worktrees/0c2e/.codex/.agents/batdd/assignments/CAS-05.json",
+      "writeLeaseId": "CAS-05-DURABLE-INTERCOM"
+    },
+    "workerLaunches": 0,
+    "CAS-06-workerLaunches": 0,
+    "auditQaVerificationPolishOrCAS07PlusLaunches": 0
+  }
+}

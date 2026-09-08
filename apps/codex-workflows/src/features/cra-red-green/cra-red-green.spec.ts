@@ -24,7 +24,7 @@ const publicExecutable = resolve(
 );
 const canonicalWorkflow = resolve(
   workspace,
-  'apps/codex-workflows/examples/cra-red-green.workflow.ts',
+  'apps/codex-workflows/examples/bun-react-red-green.workflow.ts',
 );
 const canonicalContract = resolve(
   workspace,
@@ -33,8 +33,14 @@ const canonicalContract = resolve(
 const controlledCodex = fileURLToPath(
   new URL('./support/controlled-codex.mjs', import.meta.url),
 );
-const controlledNpx = fileURLToPath(
-  new URL('./support/controlled-npx.mjs', import.meta.url),
+const controlledAppServer = fileURLToPath(
+  new URL(
+    '../../workflows/support/controlled-app-server-bridge.mjs',
+    import.meta.url,
+  ),
+);
+const controlledBun = fileURLToPath(
+  new URL('./support/controlled-bun.mjs', import.meta.url),
 );
 
 async function readTrace(path: string): Promise<Record<string, unknown>[]> {
@@ -46,21 +52,21 @@ async function readTrace(path: string): Promise<Record<string, unknown>[]> {
 }
 
 // === L2: END-TO-END TESTS ===
-describe('[L2:E2E] CRA RED to GREEN public workflow', () => {
-  test('[L2:E2E] CRA-RG-GC1-002 executes the exact controlled builder audit remediator chain', async () => {
-    const root = await mkdtemp(join(tmpdir(), 'codex-cra-red-green-e2e-'));
+describe('[L2:E2E] Bun React RED to GREEN public workflow', () => {
+  test('[L2:E2E] BUN-REACT-RG-GC1-002 proves the pinned Bun create-vite scaffold boundary', async () => {
+    const root = await mkdtemp(join(tmpdir(), 'codex-bun-react-red-green-e2e-'));
     try {
       const bin = join(root, 'bin');
       const state = join(root, 'state');
       const source = join(
         root,
-        'apps/codex-workflows/examples/cra-red-green.workflow.ts',
+        'apps/codex-workflows/examples/bun-react-red-green.workflow.ts',
       );
       const contract = join(
         root,
         'apps/codex-workflows/src/features/cra-red-green/support/contract.ts',
       );
-      const input = join(root, 'cra-red-green.input.json');
+      const input = join(root, 'bun-react-red-green.input.json');
       const tracePath = join(root, 'controlled-codex.jsonl');
       await mkdir(bin);
       await mkdir(dirname(source), { recursive: true });
@@ -74,10 +80,11 @@ describe('[L2:E2E] CRA RED to GREEN public workflow', () => {
       await writeFile(tracePath, '');
       await chmod(publicExecutable, 0o755);
       await chmod(controlledCodex, 0o755);
-      await chmod(controlledNpx, 0o755);
+      await chmod(controlledAppServer, 0o755);
+      await chmod(controlledBun, 0o755);
       await chmod(source, 0o755);
       await symlink(publicExecutable, join(bin, 'codex-workflows'));
-      await symlink(controlledNpx, join(bin, 'npx'));
+      await symlink(controlledBun, join(bin, 'bun'));
 
       const result = spawnSync(source, ['--input', input, '--json'], {
         cwd: root,
@@ -86,9 +93,10 @@ describe('[L2:E2E] CRA RED to GREEN public workflow', () => {
         env: {
           ...process.env,
           PATH: `${bin}:${process.env.PATH ?? '/usr/bin:/bin'}`,
-          CODEX_WORKFLOWS_CODEX_PATH: controlledCodex,
+          CODEX_WORKFLOWS_CODEX_PATH: controlledAppServer,
+          CODEX_WORKFLOWS_CONTROLLED_TURN_PATH: controlledCodex,
           CODEX_WORKFLOWS_HOME: state,
-          CODEX_CRA_RED_GREEN_TEST_TRACE: tracePath,
+          CODEX_BUN_REACT_RED_GREEN_TEST_TRACE: tracePath,
         },
       });
       expect(result.error).toBeUndefined();
@@ -106,8 +114,7 @@ describe('[L2:E2E] CRA RED to GREEN public workflow', () => {
             executable: string;
             argv: string[];
             environment: {
-              NPM_CONFIG_USERCONFIG: string;
-              NPM_CONFIG_CACHE: string;
+              BUN_INSTALL_CACHE_DIR: string;
             };
             cwd: string;
             exitCode: number;
@@ -127,7 +134,7 @@ describe('[L2:E2E] CRA RED to GREEN public workflow', () => {
       expect(payload.output).toEqual(
         expect.objectContaining({
           status: 'READY_FOR_EXTERNAL_AUDIT',
-          changedPaths: ['src/App.js', 'src/App.test.js'],
+          changedPaths: ['src/App.jsx', 'src/App.test.jsx'],
           baseline: expect.objectContaining({ verdict: 'RED' }),
           auditor: expect.objectContaining({ verdict: 'RED' }),
           final: expect.objectContaining({ verdict: 'GREEN' }),
@@ -147,28 +154,36 @@ describe('[L2:E2E] CRA RED to GREEN public workflow', () => {
           schemaVersion: 1,
           invocationCount: 1,
           argv: [
-            '--yes',
-            'create-react-app@5.1.0',
-            join(expectedProofRoot, 'cra-proof-app'),
-            '--use-npm',
+            'create',
+            'vite@9.2.0',
+            join(expectedProofRoot, 'bun-react-proof-app'),
+            '--template',
+            'react',
           ],
           environment: {
-            NPM_CONFIG_USERCONFIG: '/dev/null',
-            NPM_CONFIG_CACHE: join(expectedProofRoot, 'npm-cache'),
+            BUN_INSTALL_CACHE_DIR: join(expectedProofRoot, 'bun-cache'),
           },
           cwd: expectedWorkspace,
           exitCode: 0,
           signal: null,
-          tracePath: join(expectedProofRoot, 'CRA_SCAFFOLD_TRACE.json'),
+          tracePath: join(expectedProofRoot, 'BUN_REACT_SCAFFOLD_TRACE.json'),
         }),
       );
-      expect(payload.output.scaffoldProof.executable).toMatch(/\/npx$/);
+      expect(payload.output.scaffoldProof.executable).toMatch(/\/bun$/);
       expect(payload.output.scaffoldProof.digest).toMatch(
         /^sha256:[a-f0-9]{64}$/,
       );
       const scaffoldTrace = JSON.parse(
         await readFile(payload.output.scaffoldProof.tracePath, 'utf8'),
       ) as Record<string, unknown>;
+      expect(payload.output.scaffoldProof.executable).toMatch(/\/bun$/);
+      expect(payload.output.scaffoldProof.argv).toEqual([
+        'create',
+        'vite@9.2.0',
+        join(expectedProofRoot, 'bun-react-proof-app'),
+        '--template',
+        'react',
+      ]);
       expect(scaffoldTrace).toEqual(
         expect.objectContaining({
           schemaVersion: 1,
@@ -196,7 +211,7 @@ describe('[L2:E2E] CRA RED to GREEN public workflow', () => {
       expect(
         started.every((entry) =>
           JSON.stringify(entry.args).includes(
-            'model_reasoning_effort=\\"medium\\"',
+            'model_reasoning_effort=\\"low\\"',
           ),
         ),
       ).toBe(true);
@@ -232,9 +247,9 @@ describe('[L2:E2E] CRA RED to GREEN public workflow', () => {
       };
       expect(journal.status).toBe('completed');
       expect(journal.nodes.map((node) => node.label)).toEqual([
-        'cra-builder',
-        'cra-auditor',
-        'cra-remediator',
+        'bun-react-builder',
+        'bun-react-auditor',
+        'bun-react-remediator',
       ]);
       expect(journal.nodes.map((node) => node.phase)).toEqual([
         'implementation',
@@ -250,7 +265,7 @@ describe('[L2:E2E] CRA RED to GREEN public workflow', () => {
         journal.nodes.every(
           (node) =>
             node.model === 'gpt-5.6-luna' &&
-            node.reasoning === 'medium' &&
+            node.reasoning === 'low' &&
             node.status === 'completed',
         ),
       ).toBe(true);
@@ -262,19 +277,37 @@ describe('[L2:E2E] CRA RED to GREEN public workflow', () => {
           commandDigests: [expect.stringMatching(/^sha256:[a-f0-9]{64}$/)],
           rules: [
             {
-              id: 'workflow-scaffold-launcher',
+              id: 'workflow-bun-vite-scaffold-launcher',
               expectedCount: 1,
               observedCount: 1,
               passed: true,
             },
             {
-              id: 'direct-npx',
+              id: 'direct-create-vite',
               expectedCount: 0,
               observedCount: 0,
               passed: true,
             },
             {
-              id: 'direct-create-react-app',
+              id: 'foreign-npm',
+              expectedCount: 0,
+              observedCount: 0,
+              passed: true,
+            },
+            {
+              id: 'foreign-npx',
+              expectedCount: 0,
+              observedCount: 0,
+              passed: true,
+            },
+            {
+              id: 'foreign-pnpm',
+              expectedCount: 0,
+              observedCount: 0,
+              passed: true,
+            },
+            {
+              id: 'foreign-yarn',
               expectedCount: 0,
               observedCount: 0,
               passed: true,
@@ -309,22 +342,38 @@ describe('[L2:E2E] CRA RED to GREEN public workflow', () => {
       expect(report).not.toContain(payload.output.scaffoldProof.executable);
       expect(report).not.toContain('create-react-app');
       expect(report).not.toContain('npx');
+      expect(await readFile(join(payload.output.projectPath, 'bun.lock'), 'utf8')).not.toBe('');
+      expect(await readFile(join(payload.output.projectPath, 'src/App.jsx'), 'utf8')).toContain(
+        'data-testid="audit-remediation-status"',
+      );
+      expect(await readFile(join(payload.output.projectPath, 'src/App.test.jsx'), 'utf8')).toContain(
+        'Audit findings resolved',
+      );
+      for (const foreignLock of [
+        'package-lock.json',
+        'npm-shrinkwrap.json',
+        'pnpm-lock.yaml',
+        'yarn.lock',
+      ]) {
+        await expect(access(join(payload.output.projectPath, foreignLock))).rejects.toThrow();
+      }
       await expect(
         access(join(payload.output.projectPath, 'node_modules')),
       ).rejects.toThrow();
+      await expect(access(join(payload.output.projectPath, 'dist'))).rejects.toThrow();
     } finally {
       await rm(root, { recursive: true, force: true });
     }
   });
 
-  test('[L2:E2E] CRA-RG-GC1-003 cleans all material scaffold resources when the builder provider fails after mutation', async () => {
-    const root = await mkdtemp(join(tmpdir(), 'codex-cra-red-green-fail-'));
+  test('[L2:E2E] BUN-REACT-RG-GC1-003 cleans all material scaffold resources when the builder provider fails after mutation', async () => {
+    const root = await mkdtemp(join(tmpdir(), 'codex-bun-react-red-green-fail-'));
     try {
       const bin = join(root, 'bin');
       const state = join(root, 'state');
       const source = join(
         root,
-        'apps/codex-workflows/examples/cra-red-green.workflow.ts',
+        'apps/codex-workflows/examples/bun-react-red-green.workflow.ts',
       );
       const contract = join(
         root,
@@ -332,8 +381,8 @@ describe('[L2:E2E] CRA RED to GREEN public workflow', () => {
       );
       const timestamp = '20260810T224501Z';
       const proofRoot = join(root, `.agent/testing/workflows/${timestamp}`);
-      const projectPath = join(proofRoot, 'cra-proof-app');
-      const input = join(root, 'cra-red-green.input.json');
+      const projectPath = join(proofRoot, 'bun-react-proof-app');
+      const input = join(root, 'bun-react-red-green.input.json');
       const tracePath = join(root, 'controlled-codex.jsonl');
       await mkdir(bin);
       await mkdir(dirname(source), { recursive: true });
@@ -347,10 +396,11 @@ describe('[L2:E2E] CRA RED to GREEN public workflow', () => {
       await writeFile(tracePath, '');
       await chmod(publicExecutable, 0o755);
       await chmod(controlledCodex, 0o755);
-      await chmod(controlledNpx, 0o755);
+      await chmod(controlledAppServer, 0o755);
+      await chmod(controlledBun, 0o755);
       await chmod(source, 0o755);
       await symlink(publicExecutable, join(bin, 'codex-workflows'));
-      await symlink(controlledNpx, join(bin, 'npx'));
+      await symlink(controlledBun, join(bin, 'bun'));
 
       const result = spawnSync(source, ['--input', input, '--json'], {
         cwd: root,
@@ -359,10 +409,11 @@ describe('[L2:E2E] CRA RED to GREEN public workflow', () => {
         env: {
           ...process.env,
           PATH: `${bin}:${process.env.PATH ?? '/usr/bin:/bin'}`,
-          CODEX_WORKFLOWS_CODEX_PATH: controlledCodex,
+          CODEX_WORKFLOWS_CODEX_PATH: controlledAppServer,
+          CODEX_WORKFLOWS_CONTROLLED_TURN_PATH: controlledCodex,
           CODEX_WORKFLOWS_HOME: state,
-          CODEX_CRA_RED_GREEN_TEST_TRACE: tracePath,
-          CODEX_CRA_RED_GREEN_FAIL_STAGE: 'builder',
+          CODEX_BUN_REACT_RED_GREEN_TEST_TRACE: tracePath,
+          CODEX_BUN_REACT_RED_GREEN_FAIL_STAGE: 'builder',
         },
       });
       expect(result.error).toBeUndefined();
@@ -377,20 +428,28 @@ describe('[L2:E2E] CRA RED to GREEN public workflow', () => {
       ) as {
         status: string;
         nodes: Array<{ label: string; status: string; outcome: string }>;
+        events: Array<Record<string, unknown>>;
       };
       expect(journal.status).toBe('failed');
       expect(journal.nodes).toEqual([
         expect.objectContaining({
-          label: 'cra-builder',
+          label: 'bun-react-builder',
           status: 'failed',
           outcome: 'failed',
         }),
       ]);
+      expect(journal.events).toContainEqual(
+        expect.objectContaining({
+          kind: 'turn.failed',
+          nodeId: 'founder-bun-react-red-green:001:bun-react-builder',
+          status: 'failed',
+        }),
+      );
       await new Promise((resolveDelay) => setTimeout(resolveDelay, 1_200));
       await expect(access(join(projectPath, 'node_modules'))).rejects.toThrow();
-      await expect(access(join(projectPath, 'build'))).rejects.toThrow();
+      await expect(access(join(projectPath, 'dist'))).rejects.toThrow();
       await expect(access(join(projectPath, '.git'))).rejects.toThrow();
-      await expect(access(join(proofRoot, 'npm-cache'))).rejects.toThrow();
+      await expect(access(join(proofRoot, 'bun-cache'))).rejects.toThrow();
       await expect(
         access(join(proofRoot, 'CRA_RED_GREEN.md')),
       ).rejects.toThrow();
@@ -399,21 +458,21 @@ describe('[L2:E2E] CRA RED to GREEN public workflow', () => {
     }
   });
 
-  test('[L2:E2E] CRA-RG-GC1-004 rejects a builder transcript containing a second direct scaffold command', async () => {
-    const root = await mkdtemp(join(tmpdir(), 'codex-cra-red-green-policy-'));
+  test('[L2:E2E] BUN-REACT-RG-GC1-004 rejects a builder transcript containing a second direct scaffold command', async () => {
+    const root = await mkdtemp(join(tmpdir(), 'codex-bun-react-red-green-policy-'));
     try {
       const bin = join(root, 'bin');
       const state = join(root, 'state');
       const source = join(
         root,
-        'apps/codex-workflows/examples/cra-red-green.workflow.ts',
+        'apps/codex-workflows/examples/bun-react-red-green.workflow.ts',
       );
       const contract = join(
         root,
         'apps/codex-workflows/src/features/cra-red-green/support/contract.ts',
       );
       const timestamp = '20260810T224502Z';
-      const input = join(root, 'cra-red-green.input.json');
+      const input = join(root, 'bun-react-red-green.input.json');
       const tracePath = join(root, 'controlled-codex.jsonl');
       await mkdir(bin);
       await mkdir(dirname(source), { recursive: true });
@@ -427,10 +486,11 @@ describe('[L2:E2E] CRA RED to GREEN public workflow', () => {
       await writeFile(tracePath, '');
       await chmod(publicExecutable, 0o755);
       await chmod(controlledCodex, 0o755);
-      await chmod(controlledNpx, 0o755);
+      await chmod(controlledAppServer, 0o755);
+      await chmod(controlledBun, 0o755);
       await chmod(source, 0o755);
       await symlink(publicExecutable, join(bin, 'codex-workflows'));
-      await symlink(controlledNpx, join(bin, 'npx'));
+      await symlink(controlledBun, join(bin, 'bun'));
 
       const result = spawnSync(source, ['--input', input, '--json'], {
         cwd: root,
@@ -439,10 +499,11 @@ describe('[L2:E2E] CRA RED to GREEN public workflow', () => {
         env: {
           ...process.env,
           PATH: `${bin}:${process.env.PATH ?? '/usr/bin:/bin'}`,
-          CODEX_WORKFLOWS_CODEX_PATH: controlledCodex,
+          CODEX_WORKFLOWS_CODEX_PATH: controlledAppServer,
+          CODEX_WORKFLOWS_CONTROLLED_TURN_PATH: controlledCodex,
           CODEX_WORKFLOWS_HOME: state,
-          CODEX_CRA_RED_GREEN_TEST_TRACE: tracePath,
-          CODEX_CRA_RED_GREEN_EXTRA_SCAFFOLD: 'true',
+          CODEX_BUN_REACT_RED_GREEN_TEST_TRACE: tracePath,
+          CODEX_BUN_REACT_RED_GREEN_EXTRA_SCAFFOLD: 'true',
         },
       });
       expect(result.error).toBeUndefined();
@@ -461,12 +522,12 @@ describe('[L2:E2E] CRA RED to GREEN public workflow', () => {
       expect(journal.status).toBe('failed');
       expect(journal.nodes).toEqual([
         expect.objectContaining({
-          label: 'cra-builder',
+          label: 'bun-react-builder',
           status: 'failed',
           outcome: 'failed',
         }),
       ]);
-      expect(JSON.stringify(journal)).not.toContain('create-react-app@5.1.0');
+      expect(JSON.stringify(journal)).not.toContain('vite@9.2.0');
     } finally {
       await rm(root, { recursive: true, force: true });
     }

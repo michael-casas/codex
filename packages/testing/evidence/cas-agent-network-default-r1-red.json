@@ -1,0 +1,119 @@
+{
+  "schemaVersion": "1.0.0",
+  "artifactType": "cas-agent-network-default-r1-red-evidence",
+  "assignmentId": "CAS-AGENT-NETWORK-DEFAULT-R1",
+  "contractId": "CAS-AGENT-NETWORK-DEFAULT-R1-GC-1",
+  "contractRowsDigest": "sha256:3c92ae123bd32f61dac3857855bf6170f638a9ba34183392f310e55341299ae2",
+  "baseRevision": "efe2f25aeb3782dbb72139b5a6eb30457a2743e0",
+  "workingDirectory": "/Users/mcasa_atlantis/.codex/worktrees/a4a6/.codex/.agent/artifacts/marketing-agency-demo/workspaces/1f99ffdacef902e3426a7c51035c741fad1c723b72290ceb1a7f581aa794d1e2",
+  "capturedAt": "2026-09-08T11:00:10Z",
+  "meaningfulRed": [
+    {
+      "rowIds": [
+        "CAS-NET-GC1-001-WORKFLOW-DEFAULT-ALLOW",
+        "CAS-NET-GC1-002-WORKFLOW-EXPLICIT-DENY",
+        "CAS-NET-GC1-003-WORKFLOW-INVALID-REJECTION"
+      ],
+      "command": "bun nx run @codex/workflows:test-l1 --skip-nx-cache --outputStyle=static",
+      "runtime": "Vitest L1",
+      "sourceCount": 10,
+      "selectedCount": 82,
+      "executedCount": 82,
+      "failedCount": 6,
+      "passedCount": 76,
+      "exitCode": 1,
+      "decisiveFailure": "Omitted permission was absent instead of true, explicit false was absent from the frozen node, and four malformed values completed and launched instead of failing before node.freeze."
+    },
+    {
+      "rowIds": ["CAS-NET-GC1-004-DIRECT-HANDOFF-PROPAGATION"],
+      "command": "bun nx run @codex/process:test-l1 --skip-nx-cache --outputStyle=static",
+      "runtime": "Vitest L1",
+      "sourceCount": 9,
+      "selectedCount": 36,
+      "executedCount": 36,
+      "failedCount": 2,
+      "passedCount": 34,
+      "exitCode": 1,
+      "decisiveFailure": "Omitted direct-handoff permission remained undefined and explicit false was rejected by the strict runtime-profile validator."
+    },
+    {
+      "rowIds": ["CAS-NET-GC1-005-APP-SERVER-POLICY-AND-FILESYSTEM-SEPARATION"],
+      "command": "bun nx run @codex/codex:test-l1 --skip-nx-cache --outputStyle=static",
+      "runtime": "Vitest L1",
+      "sourceCount": 6,
+      "selectedCount": 32,
+      "executedCount": 32,
+      "failedCount": 3,
+      "passedCount": 29,
+      "exitCode": 1,
+      "decisiveFailure": "Malformed permission reached the provider and both readOnly and workspaceWrite turn policies hard-coded networkAccess:false; existing writable roots and temp exclusions remained observable."
+    },
+    {
+      "rowIds": ["CAS-NET-GC1-006-LOCAL-DURABLE-PROTOCOL-PROPAGATION"],
+      "command": "bun nx run @codex/daemon:test-l1 --skip-nx-cache --outputStyle=static",
+      "runtime": "Vitest L1 in-process durable daemon",
+      "sourceCount": 6,
+      "selectedCount": 21,
+      "executedCount": 21,
+      "failedCount": 1,
+      "passedCount": 20,
+      "exitCode": 1,
+      "decisiveFailure": "The durable execution request and node.frozen event omitted default true and the explicit false node value, proving the daemon path could not journal the effective per-agent permission."
+    },
+    {
+      "rowIds": ["CAS-NET-GC1-006-LOCAL-DURABLE-PROTOCOL-PROPAGATION"],
+      "command": "bun nx run @codex/codex:test-l2 --skip-nx-cache --outputStyle=static",
+      "runtime": "Vitest L2 real stdio JSON-RPC child",
+      "sourceCount": 2,
+      "selectedCount": 9,
+      "executedCount": 9,
+      "failedCount": 3,
+      "passedCount": 6,
+      "exitCode": 1,
+      "decisiveFailure": "The intended profile wire selected one test and observed networkAccess:false where default true was required. Two existing real-CLI tests separately failed because installed CLI 0.153.2 did not match the repository-pinned 0.151.0 protocol; those are baseline failures, not contract RED."
+    },
+    {
+      "rowIds": ["CAS-NET-GC1-006-LOCAL-DURABLE-PROTOCOL-PROPAGATION"],
+      "command": "bun nx run @codex/codex-control:test-l2 --skip-nx-cache --outputStyle=static",
+      "runtime": "Vitest L2 MCP plus stdio JSON-RPC child",
+      "sourceCount": 2,
+      "selectedCount": 8,
+      "executedCount": 8,
+      "failedCount": 2,
+      "passedCount": 6,
+      "exitCode": 1,
+      "decisiveFailure": "delegate_agent did not advertise networkAccess and the serialized direct service rejected explicit false before issuing its two turn/start requests."
+    },
+    {
+      "rowIds": ["CAS-NET-GC1-007-NO-MODEL-LIVE-NETWORK"],
+      "command": "Predecessor bounded pinned Codex App Server command/exec probe recorded in CAS-BUN-LIVE-REPAIR-R1-HANDOFF.md",
+      "runtime": "Pinned Codex App Server 0.151.0, no thread/turn/model",
+      "sourceCount": 1,
+      "selectedCount": 1,
+      "executedCount": 1,
+      "failedCount": 1,
+      "passedCount": 0,
+      "exitCode": 1,
+      "decisiveFailure": "networkAccess:false produced DNSResolveFailed downloading create-vite while the workflow product exposed no true permission path."
+    }
+  ],
+  "defectiveAttemptsExcluded": [
+    {
+      "commands": [
+        "bun nx run @codex/workflows:test-l1 --skip-nx-cache --outputStyle=static",
+        "bun nx run @codex/daemon:test-l1 --skip-nx-cache --outputStyle=static",
+        "bun nx run @codex/codex-control:test-l2 --skip-nx-cache --outputStyle=static"
+      ],
+      "reason": "Initial runs could not resolve unbuilt workspace package entrypoints. They were rerun after the lockfile-pinned dependency build and were not counted as RED."
+    },
+    {
+      "command": "bun nx exec -- vitest run --config packages/codex/vitest.config.ts packages/codex/src/app-server-workflow/__specs__/app-server-workflow-profile.spec.ts",
+      "reason": "nx exec inherited a package working directory and could not resolve the workspace-relative config; this harness invocation was not counted."
+    }
+  ],
+  "freeze": {
+    "status": "frozen-after-all-required-red",
+    "frozenAt": "2026-09-08T11:00:10Z",
+    "contractRowsDigest": "sha256:3c92ae123bd32f61dac3857855bf6170f638a9ba34183392f310e55341299ae2"
+  }
+}

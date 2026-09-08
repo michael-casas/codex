@@ -1,0 +1,57 @@
+{
+  "schemaVersion": "1.0.0",
+  "campaignId": "CAS-APP-SERVER-20260901-01",
+  "assignmentId": "CAS-11",
+  "writeLeaseId": "CAS-11-PLUGIN-PACKAGING",
+  "status": "DEPENDENCY_HALT",
+  "recordedAt": "2026-09-02T14:01:42Z",
+  "workingDirectory": "/Users/mcasa_atlantis/.codex/worktrees/a4a6/.codex",
+  "baseRevision": "b9dc01512975a8b11bc673b5ec906c818dd708f6",
+  "authority": {
+    "charterSha256": "acf3797dbdc410e32524d11091ad0b94a73e48add86bac48d1e9490fdb0bdd58",
+    "assignmentSha256": "e911cdbcdaf990feae2c5b816e3a425e927b1a4c5a751bbc85ea4c104802dcc0",
+    "dispatchSha256": "69af2d3eafed09fb164d845c7330e6c3bf143fe70812ca1c77b3aaadf5493839",
+    "containedLaunchSha256": "5fd6517dce81c1bd9f965e38c9e7e99558abd495d63f0b95de590dac0fce788c",
+    "cas10UiReadySha256": "d735ea7615de0b7f00e7c90bc5ec3ef5e7a415f3ef5ed0e52e99cc02999c766e",
+    "profileSchemaValid": true,
+    "assignmentSchemaValid": true
+  },
+  "missingAuthority": [
+    {
+      "fact": "The required CAS-11 L3 layer has no authorized canonical Web acceptance write surface.",
+      "owner": "CAS-00 coordinator",
+      "evidence": "The assignment requires L3 but leases only plugins/codex-control and evidence; repository BATDD/File System law locates canonical Web L3 in apps/codex-control-e2e."
+    },
+    {
+      "fact": "A real ChatGPT developer-mode connection is not available inside the current no-registration, no-tunnel, no-publication boundary.",
+      "owner": "CAS-00 coordinator or CAS-12 integration authority",
+      "evidence": "CAS-11 forbids root marketplace registration and tunnel deployment; a simulated iframe cannot be relabeled as a real ChatGPT connection."
+    }
+  ],
+  "completedLockedWork": [
+    "Official OpenAI MCP Apps UI/resource/reference documentation opened.",
+    "MCP Apps primary specification inspected for lifecycle, tool calls, MIME, visibility, and cancellation.",
+    "Repository, worker, BATDD, Nx, plugin, data, clean-code, file-system, and ponytail authority hydrated.",
+    "CAS-09 MCP and exact CAS-10 Svelte bundle inputs traced without modification."
+  ],
+  "resumeCondition": "A schema-valid coordinator amendment supplies the canonical CAS-11 L3 write surface and binds a faithful local plugin-install/host proof while assigning the real ChatGPT developer-mode checkpoint to CAS-12, or supplies an already-authorized real ChatGPT connection surface.",
+  "nextCheck": "Validate the replacement assignment/amendment digests and required L3 mapping before writing the execution plan, Green Contract, tests, scaffold, or implementation.",
+  "resourceDelta": {
+    "productFilesWritten": 0,
+    "pluginProcessesStarted": 0,
+    "marketplacesModified": 0,
+    "pluginsInstalled": 0,
+    "tunnelsCreated": 0,
+    "liveSynologyContacted": false
+  },
+  "restrictions": {
+    "descendantsLaunched": 0,
+    "CAS12OrLaterLaunched": false,
+    "auditLaunched": false,
+    "qaLaunched": false,
+    "verificationLaunched": false,
+    "finalPolishLaunched": false,
+    "commitCreated": false,
+    "pushPerformed": false
+  }
+}

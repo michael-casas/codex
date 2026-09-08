@@ -3,13 +3,19 @@
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "packages/codex/src",
   "projectType": "library",
-  "tags": ["type:lib", "scope:codex", "layer:foundation"],
+  "tags": [
+    "type:lib",
+    "scope:codex",
+    "layer:foundation"
+  ],
   "// targets": "to see all targets run: nx show project @codex/codex --web",
   "targets": {
     "build": {
       "executor": "nx:run-commands",
       "cache": true,
-      "outputs": ["{projectRoot}/dist"],
+      "outputs": [
+        "{projectRoot}/dist"
+      ],
       "options": {
         "command": "tsc --build packages/codex/tsconfig.runtime.json"
       }
@@ -17,46 +23,45 @@
     "test-l1-unit": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "vitest run --config packages/codex/vitest.config.ts src/runtime/singleton.test.ts src/policy/sdk-imports.test.ts --testNamePattern='L1:UNIT'"
+        "command": "vitest run --config packages/codex/vitest.config.ts src/app-server-client/__tests__/app-server-client-protocol.test.ts --testNamePattern='L1:UNIT'"
       }
     },
     "test-l1-integration": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "vitest run --config packages/codex/vitest.config.ts src/runtime/facade.test.ts src/runtime/observability.test.ts --testNamePattern='L1:INTEGRATION'"
+        "command": "vitest run --config packages/codex/vitest.config.ts src/app-server-workflow/__tests__/app-server-workflow-executor.test.ts src/app-server-workflow/__tests__/app-server-visibility.test.ts src/app-server-workflow/__tests__/readable-provider.test.ts src/app-server-workflow/__tests__/readable-recovery.test.ts src/app-server-workflow/__tests__/workspace-temp-policy.test.ts --testNamePattern='L1:INTEGRATION'"
       }
     },
     "test-l1": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "vitest run --config packages/codex/vitest.config.ts src/runtime/singleton.test.ts src/runtime/facade.test.ts src/runtime/observability.test.ts src/policy/sdk-imports.test.ts"
+        "command": "vitest run --config packages/codex/vitest.config.ts src/app-server-client/__tests__/app-server-client-protocol.test.ts src/app-server-workflow/__tests__/app-server-workflow-executor.test.ts src/app-server-workflow/__tests__/app-server-visibility.test.ts src/app-server-workflow/__tests__/readable-provider.test.ts src/app-server-workflow/__tests__/readable-recovery.test.ts src/app-server-workflow/__tests__/workspace-temp-policy.test.ts"
       }
     },
     "test-l2-integration": {
       "executor": "nx:run-commands",
       "cache": false,
       "options": {
-        "command": "vitest run --config packages/codex/vitest.config.ts src/runtime/sdk.spec.ts --testNamePattern='L2:INTEGRATION'"
+        "command": "vitest run --config packages/codex/vitest.config.ts src/app-server-client/__specs__/app-server-client-stdio.spec.ts --testNamePattern='L2:INTEGRATION'"
       }
     },
     "test-l2": {
       "executor": "nx:run-commands",
       "cache": false,
       "options": {
-        "command": "vitest run --config packages/codex/vitest.config.ts src/runtime/sdk.spec.ts"
-      }
-    },
-    "test-sdk-imports": {
-      "executor": "nx:run-commands",
-      "options": {
-        "command": "bun packages/codex/tools/check-sdk-imports.ts"
+        "command": "vitest run --config packages/codex/vitest.config.ts src/app-server-client/__specs__/app-server-client-stdio.spec.ts src/app-server-workflow/__specs__/app-server-workflow-profile.spec.ts"
       }
     },
     "test": {
       "executor": "nx:run-commands",
       "cache": false,
-      "outputs": ["{workspaceRoot}/test-output/codex-workflows/codex.json"],
-      "dependsOn": ["test-sdk-imports"],
+      "outputs": [
+        "{workspaceRoot}/test-output/codex-workflows/codex.json"
+      ],
+      "dependsOn": [
+        "test-l1",
+        "test-l2"
+      ],
       "options": {
         "command": "bun packages/testing/src/cli.ts aggregate packages/testing/manifests/codex.json"
       }

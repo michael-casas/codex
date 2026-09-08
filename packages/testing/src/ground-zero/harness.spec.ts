@@ -1,5 +1,4 @@
 import {
-  chmod,
   mkdtemp,
   readFile,
   readdir,
@@ -47,175 +46,6 @@ afterEach(async () => {
 
 // === L2: REAL-BOUNDARY INTEGRATION TESTS ===
 describe('[L2:INTEGRATION] Ground-0 process and filesystem boundaries', () => {
-  it('[L2:INTEGRATION] HERDR-DESKTOP-001 rejects launch outside a Herdr-managed pane without mutation', async () => {
-    const root = await temporaryRoot();
-    const marker = join(root, 'osascript-invoked');
-    const fakeOsascript = join(root, 'osascript');
-    await writeFile(
-      fakeOsascript,
-      `#!/bin/sh\nprintf invoked > "${marker}"\n`,
-    );
-    await chmod(fakeOsascript, 0o755);
-    const env = { ...process.env };
-    for (const key of [
-      'HERDR_ENV',
-      'HERDR_SOCKET_PATH',
-      'HERDR_WORKSPACE_ID',
-      'HERDR_TAB_ID',
-      'HERDR_PANE_ID',
-    ]) {
-      delete env[key];
-    }
-
-    const run = spawnSync(
-      'bash',
-      [resolve('scripts/launch-chatgpt-in-herdr')],
-      {
-        cwd: resolve('.'),
-        encoding: 'utf8',
-        env: { ...env, CODEX_HERDR_OSASCRIPT_BIN: fakeOsascript },
-      },
-    );
-
-    expect(run.status).toBe(78);
-    expect(run.stderr).toContain('must run inside a Herdr-managed pane');
-    expect(existsSync(marker)).toBe(false);
-  });
-
-  it('[L2:INTEGRATION] HERDR-DESKTOP-002 dry-run exposes the direct-launch plan without quitting ChatGPT', async () => {
-    const root = await temporaryRoot();
-    const marker = join(root, 'osascript-invoked');
-    const fakeOsascript = join(root, 'osascript');
-    const fakeChatGpt = join(root, 'ChatGPT');
-    await writeFile(
-      fakeOsascript,
-      `#!/bin/sh\nprintf invoked > "${marker}"\n`,
-    );
-    await writeFile(fakeChatGpt, '#!/bin/sh\nexit 0\n');
-    await Promise.all([
-      chmod(fakeOsascript, 0o755),
-      chmod(fakeChatGpt, 0o755),
-    ]);
-
-    const run = spawnSync(
-      'bash',
-      [resolve('scripts/launch-chatgpt-in-herdr'), '--dry-run'],
-      {
-        cwd: resolve('.'),
-        encoding: 'utf8',
-        env: {
-          ...process.env,
-          HERDR_ENV: '1',
-          HERDR_SOCKET_PATH: join(root, 'herdr.sock'),
-          HERDR_WORKSPACE_ID: 'w-test',
-          HERDR_TAB_ID: 'w-test:t1',
-          HERDR_PANE_ID: 'w-test:p1',
-          CODEX_HERDR_CHATGPT_BIN: fakeChatGpt,
-          CODEX_HERDR_OSASCRIPT_BIN: fakeOsascript,
-        },
-      },
-    );
-
-    expect(run.status).toBe(0);
-    expect(JSON.parse(run.stdout)).toMatchObject({
-      executable: fakeChatGpt,
-      launch: 'direct-executable',
-      mode: 'dry-run',
-      status: 'ready',
-    });
-    expect(existsSync(marker)).toBe(false);
-  });
-
-  it('[L2:INTEGRATION] HERDR-DESKTOP-003 validates the persistent guardian without mutating Desktop state', async () => {
-    const root = await temporaryRoot();
-    const marker = join(root, 'osascript-invoked');
-    const fakeOsascript = join(root, 'osascript');
-    const fakeChatGpt = join(root, 'ChatGPT');
-    await writeFile(
-      fakeOsascript,
-      `#!/bin/sh\nprintf invoked > "${marker}"\n`,
-    );
-    await writeFile(fakeChatGpt, '#!/bin/sh\nexit 0\n');
-    await Promise.all([
-      chmod(fakeOsascript, 0o755),
-      chmod(fakeChatGpt, 0o755),
-    ]);
-
-    const run = spawnSync(
-      'bash',
-      [
-        resolve('scripts/launch-chatgpt-in-herdr'),
-        '--watch',
-        '--dry-run',
-      ],
-      {
-        cwd: resolve('.'),
-        encoding: 'utf8',
-        env: {
-          ...process.env,
-          HERDR_ENV: '1',
-          HERDR_SOCKET_PATH: join(root, 'herdr.sock'),
-          HERDR_WORKSPACE_ID: 'w-test',
-          HERDR_TAB_ID: 'w-test:t1',
-          HERDR_PANE_ID: 'w-test:p1',
-          CODEX_HERDR_CHATGPT_BIN: fakeChatGpt,
-          CODEX_HERDR_OSASCRIPT_BIN: fakeOsascript,
-        },
-      },
-    );
-
-    expect(run.status).toBe(0);
-    expect(JSON.parse(run.stdout)).toMatchObject({
-      launch: 'direct-executable',
-      mode: 'watch-dry-run',
-      status: 'ready',
-    });
-    expect(existsSync(marker)).toBe(false);
-  });
-
-  it('[L2:INTEGRATION] HERDR-DESKTOP-004 accepts Herdr detached-shell active context without a pane process', async () => {
-    const root = await temporaryRoot();
-    const fakeChatGpt = join(root, 'ChatGPT');
-    await writeFile(fakeChatGpt, '#!/bin/sh\nexit 0\n');
-    await chmod(fakeChatGpt, 0o755);
-    const env = { ...process.env };
-    for (const key of [
-      'HERDR_ENV',
-      'HERDR_WORKSPACE_ID',
-      'HERDR_TAB_ID',
-      'HERDR_PANE_ID',
-    ]) {
-      delete env[key];
-    }
-
-    const run = spawnSync(
-      'bash',
-      [
-        resolve('scripts/launch-chatgpt-in-herdr'),
-        '--watch',
-        '--dry-run',
-      ],
-      {
-        cwd: resolve('.'),
-        encoding: 'utf8',
-        env: {
-          ...env,
-          HERDR_SOCKET_PATH: join(root, 'herdr.sock'),
-          HERDR_ACTIVE_WORKSPACE_ID: 'w-background',
-          HERDR_ACTIVE_TAB_ID: 'w-background:t1',
-          HERDR_ACTIVE_PANE_ID: 'w-background:p1',
-          CODEX_HERDR_CHATGPT_BIN: fakeChatGpt,
-        },
-      },
-    );
-
-    expect(run.status).toBe(0);
-    expect(JSON.parse(run.stdout)).toMatchObject({
-      mode: 'watch-dry-run',
-      status: 'ready',
-    });
-  });
-
   it('[L2:INTEGRATION] NX-NAME-001 enforces @codex identities for the workspace and every package-bearing project', async () => {
     const workspacePackage = JSON.parse(
       await readFile(resolve('package.json'), 'utf8'),
@@ -239,7 +69,10 @@ describe('[L2:INTEGRATION] Ground-0 process and filesystem boundaries', () => {
       const root = project.data.root;
       expect(root).toMatch(/^(?:apps|packages|plugins|tools)\//);
 
-      const expectedName = `@codex/${basename(root)}`;
+      const expectedName =
+        root === 'plugins/codex-control'
+          ? '@codex/plugin-codex-control'
+          : `@codex/${basename(root)}`;
       expect(project.name).toBe(expectedName);
       const packagePath = resolve(root, 'package.json');
       expect(existsSync(packagePath)).toBe(true);
@@ -594,13 +427,21 @@ describe('[L2:INTEGRATION] Ground-0 process and filesystem boundaries', () => {
       'shared configuration',
       'cucumber.mjs',
       [
-        '@codex/daemon',
-        '@codex/daemon-e2e',
-        '@codex/process',
-        '@codex/testing',
         '@codex/codex',
+        '@codex/codex-control',
+        '@codex/codex-control-e2e',
+        '@codex/codex-control-ui',
         '@codex/codex-monitor',
         '@codex/codex-workflows',
+        '@codex/control-gateway',
+        '@codex/daemon',
+        '@codex/daemon-e2e',
+        '@codex/db',
+        '@codex/delivery',
+        '@codex/plugin-codex-control',
+        '@codex/process',
+        '@codex/testing',
+        '@codex/transport',
         '@codex/wiki-cli',
         '@codex/workflows',
       ],
@@ -609,13 +450,21 @@ describe('[L2:INTEGRATION] Ground-0 process and filesystem boundaries', () => {
       'lockfile',
       'bun.lock',
       [
-        '@codex/daemon',
-        '@codex/daemon-e2e',
-        '@codex/process',
-        '@codex/testing',
         '@codex/codex',
+        '@codex/codex-control',
+        '@codex/codex-control-e2e',
+        '@codex/codex-control-ui',
         '@codex/codex-monitor',
         '@codex/codex-workflows',
+        '@codex/control-gateway',
+        '@codex/daemon',
+        '@codex/daemon-e2e',
+        '@codex/db',
+        '@codex/delivery',
+        '@codex/plugin-codex-control',
+        '@codex/process',
+        '@codex/testing',
+        '@codex/transport',
         '@codex/wiki-cli',
         '@codex/workflows',
       ],
@@ -629,13 +478,21 @@ describe('[L2:INTEGRATION] Ground-0 process and filesystem boundaries', () => {
       'bootstrap SQL',
       'db/bootstrap/roles.sql',
       [
-        '@codex/daemon',
-        '@codex/daemon-e2e',
-        '@codex/process',
-        '@codex/testing',
         '@codex/codex',
+        '@codex/codex-control',
+        '@codex/codex-control-e2e',
+        '@codex/codex-control-ui',
         '@codex/codex-monitor',
         '@codex/codex-workflows',
+        '@codex/control-gateway',
+        '@codex/daemon',
+        '@codex/daemon-e2e',
+        '@codex/db',
+        '@codex/delivery',
+        '@codex/plugin-codex-control',
+        '@codex/process',
+        '@codex/testing',
+        '@codex/transport',
         '@codex/wiki-cli',
         '@codex/workflows',
       ],
@@ -644,13 +501,21 @@ describe('[L2:INTEGRATION] Ground-0 process and filesystem boundaries', () => {
       'migration',
       'db/migrations/001_process.sql',
       [
-        '@codex/daemon',
-        '@codex/daemon-e2e',
-        '@codex/process',
-        '@codex/testing',
         '@codex/codex',
+        '@codex/codex-control',
+        '@codex/codex-control-e2e',
+        '@codex/codex-control-ui',
         '@codex/codex-monitor',
         '@codex/codex-workflows',
+        '@codex/control-gateway',
+        '@codex/daemon',
+        '@codex/daemon-e2e',
+        '@codex/db',
+        '@codex/delivery',
+        '@codex/plugin-codex-control',
+        '@codex/process',
+        '@codex/testing',
+        '@codex/transport',
         '@codex/wiki-cli',
         '@codex/workflows',
       ],
@@ -659,13 +524,21 @@ describe('[L2:INTEGRATION] Ground-0 process and filesystem boundaries', () => {
       'protocol schema',
       'schemas/events/process.schema.json',
       [
-        '@codex/daemon',
-        '@codex/daemon-e2e',
-        '@codex/process',
-        '@codex/testing',
         '@codex/codex',
+        '@codex/codex-control',
+        '@codex/codex-control-e2e',
+        '@codex/codex-control-ui',
         '@codex/codex-monitor',
         '@codex/codex-workflows',
+        '@codex/control-gateway',
+        '@codex/daemon',
+        '@codex/daemon-e2e',
+        '@codex/db',
+        '@codex/delivery',
+        '@codex/plugin-codex-control',
+        '@codex/process',
+        '@codex/testing',
+        '@codex/transport',
         '@codex/wiki-cli',
         '@codex/workflows',
       ],

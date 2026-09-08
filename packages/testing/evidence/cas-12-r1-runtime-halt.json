@@ -1,0 +1,58 @@
+{
+  "schemaVersion": "1.0.0",
+  "campaignId": "CAS-APP-SERVER-20260901-01",
+  "assignmentId": "CAS-12.R1",
+  "writeLeaseId": "CAS-12-R1-CODEX-DOGFOOD",
+  "taskId": "01a068e5-1799-74f1-831f-7be46ca2157e",
+  "status": "EXTERNAL_CHECKPOINT_HALT",
+  "terminal": "HALT",
+  "checkpoint": "DESKTOP_CONTROL_RUNTIME_CONFIGURATION_REQUIRED",
+  "workingDirectory": "/Users/mcasa_atlantis/.codex/worktrees/a4a6/.codex",
+  "baseRevision": "b9dc01512975a8b11bc673b5ec906c818dd708f6",
+  "authority": {
+    "assignmentSha256": "0054f51578febf716b731e8dd72a258a06a28aeb1bf257ec78ec84c8d845f3c6",
+    "profileSha256": "0f1ddd62f238c8c190ad27ccdfe8df5bb226a2054ad110582471f301731e3135",
+    "assignmentAndProfileSchemaValid": true,
+    "matchedPredecessorDigests": 9,
+    "cas11ReadySha256": "cd25a47dee4742cecab5572c45185ba8f1e38ae45b467ad1b4800d87767daeec"
+  },
+  "observed": {
+    "surface": "actual installed desktop Codex Control MCP tool",
+    "tool": "mcp__codex_control__get_control_snapshot",
+    "arguments": {},
+    "isError": true,
+    "responseCode": "CONTROL_NOT_CONFIGURED",
+    "source": "plugins/codex-control/src/main.ts loadClient requires an absolute CODEX_CONTROL_TOKEN_FILE before HTTP client creation",
+    "shellEnvironmentPresenceOnly": {
+      "CODEX_CONTROL_TOKEN_FILE": false,
+      "CODEX_CONTROL_ORIGIN": false,
+      "CODEX_CONTROL_RUNTIME_CONFIG": false
+    },
+    "daemonReachability": "not tested: plugin fails before network connection"
+  },
+  "classification": "Unavailable production startup configuration; not meaningful product RED and not missing plugin discovery.",
+  "resumeRequires": [
+    "Coordinator supplies a reachable accepted daemon-owned loopback control runtime with authorized local/read-only remote host and repository registrations.",
+    "Configure the desktop-launched plugin process with an absolute owner-only CODEX_CONTROL_TOKEN_FILE matching that daemon, and CODEX_CONTROL_ORIGIN when not using the default loopback origin.",
+    "Refresh/restart the plugin process through the supported desktop mechanism; never place raw token values in chat, argv, repository, evidence, or browser URLs.",
+    "Resume this same task and first repeat the actual get_control_snapshot tool successfully before local/remote delegation and Browser dogfood."
+  ],
+  "execution": {
+    "meaningfulRedStarted": false,
+    "contractFrozen": false,
+    "l2Executed": 0,
+    "l3Executed": 0,
+    "baseReadyClaimed": false
+  },
+  "taskResourceDelta": {
+    "launchedAgents": 0,
+    "launchedWorkflows": 0,
+    "createdListeners": 0,
+    "createdBrowserTabs": 0,
+    "remoteOperations": 0,
+    "secretReadsOrWrites": 0,
+    "productOrTestWrites": 0,
+    "evidenceAndExecutionPlanOnly": true
+  },
+  "stop": "No bootstrap workaround, product repair, next seam, audit, commit, merge, push, publication, deployment, or remote mutation."
+}

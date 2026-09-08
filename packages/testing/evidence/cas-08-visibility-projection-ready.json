@@ -1,0 +1,85 @@
+{
+  "schemaVersion": "1.0.0",
+  "campaignId": "CAS-APP-SERVER-20260901-01",
+  "assignmentId": "CAS-08",
+  "writeLeaseId": "CAS-08-VISIBILITY-PROJECTION",
+  "status": "VISIBILITY_PROJECTION_READY",
+  "workerVerdict": "READY-FOR-AUDIT",
+  "recordedAt": "2026-09-02T10:29:42Z",
+  "workingDirectory": "/Users/mcasa_atlantis/.codex/worktrees/a4a6/.codex",
+  "baseRevision": "b9dc01512975a8b11bc673b5ec906c818dd708f6",
+  "authority": {
+    "replacementAssignmentSha256": "56f04c5bb7e7c7f5ddbfea9f364f8c5cecf55f51c02dd3dd26f8b06081aadd1d",
+    "dispatchReentrySha256": "41eda247018654e3d652a5433cc05e3f043fec6702165a1739e59be79cba28ac",
+    "resolvedHaltSha256": "b0d18f86f5de2a7cd4da0f8e3cfa89bd6149e9f58012195b9abf9807b5a23240",
+    "greenContractSha256": "d7d26e9ed63a66e9b3086cea91a257daa11be733bbda3fb22aebac22bd16feb1",
+    "founderAmendmentSha256": "dd80915c8c22ccc2a504f82d353616831163b033d5cb8a9c0741e14170a60a15",
+    "coverageCorrectionSha256": "7a8d552fa236e5d032254a917d5096c98ad040228ce72e0f44aeae110bb15776",
+    "contractErratumSha256": "a383a1df171a2cee532037a8cc2ecf098c9356ded9e2b9f309a82b2bc47b7372",
+    "redEvidenceSha256": "f49534e5f7d9508e7f4a8762809124487bde4e5719789d62478e1cf5ffb60458",
+    "greenEvidenceSha256": "846999c501fa2dd129598d559312c2145d51313694db2e21bbd233b598780573",
+    "implementationSurfaceSha256": "b98f47e2637e2834c45019da8c3bb06d941252f6155af4e8593bf98364e04ec0",
+    "commitAuthority": false,
+    "selfCertified": false
+  },
+  "officialOpenAiSources": [
+    "https://learn.chatgpt.com/docs/app-server",
+    "https://developers.openai.com/plugins/concepts/ui-guidelines",
+    "https://developers.openai.com/plugins/reference"
+  ],
+  "publicContract": {
+    "entrypoints": ["snapshot", "wait"],
+    "maxCallsPerOperation": 1,
+    "providerChoreographyExposed": false,
+    "callerRawPathsAllowed": false,
+    "result": "one bounded semantic summary delta with optional selected-agent detail feed",
+    "emptyWait": "compact unchanged cursor result",
+    "selection": "selected or collapsed state is explicit; selection identity rejects late prior-selection results"
+  },
+  "implementation": {
+    "normalization": "owned App Server/workflow/delegation/message observations with strict attribution and semantic statuses",
+    "privacy": "reasoning and prompt/environment fields excluded; credentials and unnecessary paths redacted; detail and error text bounded before persistence",
+    "authority": "item/completed and turn/completed are authoritative; deltas are advisory and coalesced at 50ms or 4096 bytes",
+    "durability": "PostgreSQL summaries, monotonic identity cursor, exact replay deduplication, conflicting replay no-write, snapshot-listen-requery wait, restart reconstruction",
+    "retention": "100 selected-agent detail rows at 4096 bytes each with truncation metadata; 500 summary rows with truncation metadata",
+    "uiHandoff": "compact workflow-step-agent hierarchy, concise progress labels, human-readable state/error text, host-owned appearance, and no backend colors/layout/framework schema",
+    "mechanism": "ordinary indexed PostgreSQL; no cache, stream broker, or per-token durable write path"
+  },
+  "validation": {
+    "greenEvidence": ".agent/testing/cas-08/green-evidence.json",
+    "l1": { "selected": 26, "passedAcrossOwnedTargets": 26, "exitCode": 0 },
+    "l2Database": { "selected": 12, "passed": 12, "exitCode": 0 },
+    "l2Daemon": { "selected": 7, "passed": 7, "exitCode": 0 },
+    "daemonProcessRestart": { "selected": 1, "passed": 1, "exitCode": 0 },
+    "build": "GREEN",
+    "typecheck": "GREEN",
+    "dbAndDaemonLint": "GREEN",
+    "processLint": "CAS-08 clean; target remains nonzero only for pre-existing CAS-06 delegation step error outside lease",
+    "sync": "GREEN",
+    "resourceDelta": 0
+  },
+  "predecessors": {
+    "CAS-01:PROTOCOL_READY": "sha256:7526be019a07222c2dc0171fea77c0a84ba5f64b8a8a492ac699ab9296578568",
+    "CAS-03:CONTROL_FOUNDATION_READY": "sha256:4e51ff75219a1704e5ef82ea81a7851ca4fd31fb7293fc7c55ec0c174d130ef2",
+    "CAS-05:MESSAGING_READY": "sha256:6c43f84ca6dfe81ce99fb44e42a95e770da3c3a595d4e7d4a46c69d420ba612b",
+    "CAS-06:HANDOFF_READY": "sha256:63ac4d6fd3b3546235af02109e7e8cec6aed831029066d4db768eeb4900fc6d8",
+    "CAS-07:REMOTE_WORKFLOW_READY": "sha256:43dcec6fb6c4829ca8c69ff490eb2a188680ffc30060a29bf914a34b431e7957"
+  },
+  "handoff": {
+    "CAS-09": "Expose snapshot and wait directly as one-call cursor tools; retain compact unchanged results and selected-feed filtering.",
+    "CAS-10": "Render workflows -> steps -> agents from semantic status/state/progress fields; read theme/color scheme from the host and keep collapsed/selected feed generation identity.",
+    "CAS-12": "Use durable cursor/requery, idempotent replay, reconnect replacement, daemon reconstruction, and zero-resource cleanup as integration contracts."
+  },
+  "restrictions": {
+    "liveSynologyMutation": false,
+    "liveSynologyContacted": false,
+    "descendantsLaunched": 0,
+    "auditLaunched": false,
+    "qaLaunched": false,
+    "finalPolishLaunched": false,
+    "CAS09OrLaterLaunched": false,
+    "commitCreated": false,
+    "pushPerformed": false
+  },
+  "independence": "Worker evidence only; fresh independent verification and judgment remain required."
+}

@@ -1,0 +1,131 @@
+{
+  "schemaVersion": "1.0.0",
+  "artifactType": "cas-agent-network-default-r1-green-contract",
+  "contractId": "CAS-AGENT-NETWORK-DEFAULT-R1-GC-1",
+  "status": "frozen-after-meaningful-red",
+  "rowsDigest": "sha256:3c92ae123bd32f61dac3857855bf6170f638a9ba34183392f310e55341299ae2",
+  "frozenAt": "2026-09-08T11:00:10Z",
+  "sourceAuthority": {
+    "founderRuling": "Give CAS agents network access by default while retaining explicit networkAccess:false and leaving filesystem, approval, TLS, authentication, and secret boundaries unchanged.",
+    "charter": "/Users/mcasa_atlantis/.codex/worktrees/a4a6/.codex/.agent/charters/CAS-AGENT-NETWORK-DEFAULT-R1.md",
+    "assignment": ".agents/batdd/assignments/CAS-AGENT-NETWORK-DEFAULT-R1.json",
+    "predecessorContract": "CDX-WF-BUN-REACT-RG-GC-1"
+  },
+  "strategy": "basic-then-adversarial",
+  "authorizedWriteSurfaceAmendments": [
+    {
+      "path": "packages/control-gateway/src/lib/control-gateway.ts",
+      "reason": "The public delegate_agent MCP schema and adapter are the traced direct-handoff caller boundary and must not drop explicit false."
+    },
+    {
+      "path": "apps/codex-control/src/control/__specs__/codex-control-protocol.spec.ts",
+      "reason": "The existing real stdio protocol spec is the lowest faithful public-boundary proof for direct handoff propagation."
+    }
+  ],
+  "rows": [
+    {
+      "id": "CAS-NET-GC1-001-WORKFLOW-DEFAULT-ALLOW",
+      "form": "basic",
+      "layer": "L1",
+      "runtime": "Vitest",
+      "file": "packages/workflows/src/authoring/__tests__/agent-runtime-profile.test.ts",
+      "target": "@codex/workflows:test-l1",
+      "status": "required",
+      "expectedMeaningfulRed": "An agent with omitted networkAccess freezes and forwards no effective permission instead of true.",
+      "observableGreen": "Omitted networkAccess resolves once to true, is present on the frozen node and execution request, and therefore appears in local and durable workflow journals.",
+      "counts": { "source": 1, "selectedMinimum": 1, "executedMinimum": 1 },
+      "cleanup": "In-process only; no external resources.",
+      "artifact": "packages/testing/evidence/cas-agent-network-default-r1-red.json"
+    },
+    {
+      "id": "CAS-NET-GC1-002-WORKFLOW-EXPLICIT-DENY",
+      "form": "adversarial",
+      "layer": "L1",
+      "runtime": "Vitest",
+      "file": "packages/workflows/src/authoring/__tests__/agent-runtime-profile.test.ts",
+      "target": "@codex/workflows:test-l1",
+      "status": "required",
+      "expectedMeaningfulRed": "An explicit networkAccess:false is absent from the frozen node and can drift to the default.",
+      "observableGreen": "Explicit false is preserved identically in the frozen node and execution request and changes the frozen event bytes from the default-true case.",
+      "counts": { "source": 1, "selectedMinimum": 1, "executedMinimum": 1 },
+      "cleanup": "In-process only; no external resources.",
+      "artifact": "packages/testing/evidence/cas-agent-network-default-r1-red.json"
+    },
+    {
+      "id": "CAS-NET-GC1-003-WORKFLOW-INVALID-REJECTION",
+      "form": "adversarial",
+      "layer": "L1",
+      "runtime": "Vitest",
+      "file": "packages/workflows/src/authoring/__tests__/agent-runtime-profile.test.ts",
+      "target": "@codex/workflows:test-l1",
+      "status": "required",
+      "expectedMeaningfulRed": "A non-boolean networkAccess value reaches the execution adapter.",
+      "observableGreen": "Any defined non-boolean value fails as WORKFLOW_DEFINITION_INVALID before node freeze or adapter launch.",
+      "counts": { "source": 1, "selectedMinimum": 1, "executedMinimum": 1 },
+      "cleanup": "In-process only; no external resources.",
+      "artifact": "packages/testing/evidence/cas-agent-network-default-r1-red.json"
+    },
+    {
+      "id": "CAS-NET-GC1-004-DIRECT-HANDOFF-PROPAGATION",
+      "form": "basic-and-adversarial",
+      "layer": "L1",
+      "runtime": "Vitest",
+      "file": "packages/process/src/delegation/__tests__/delegation.test.ts",
+      "target": "@codex/process:test-l1",
+      "status": "required",
+      "expectedMeaningfulRed": "The strict runtime profile rejects the optional field and turn/start has no network sandbox policy.",
+      "observableGreen": "Direct delegation freezes omitted as true, preserves explicit false, rejects non-booleans before lease/provider calls, fingerprints the effective permission, and sends it on initial and resumed turns.",
+      "counts": { "source": 1, "selectedMinimum": 3, "executedMinimum": 3 },
+      "cleanup": "Synthetic connections only; no external resources.",
+      "artifact": "packages/testing/evidence/cas-agent-network-default-r1-red.json"
+    },
+    {
+      "id": "CAS-NET-GC1-005-APP-SERVER-POLICY-AND-FILESYSTEM-SEPARATION",
+      "form": "basic-and-adversarial",
+      "layer": "L1",
+      "runtime": "Vitest",
+      "file": "packages/codex/src/app-server-workflow/__tests__/app-server-workflow-executor.test.ts",
+      "target": "@codex/codex:test-l1",
+      "status": "required",
+      "expectedMeaningfulRed": "Every workflow turn hard-codes networkAccess:false regardless of effective node permission.",
+      "observableGreen": "The effective network boolean is sent exactly while readOnly remains readOnly and workspaceWrite retains only its existing writable roots and temp exclusions; invalid values reject before thread creation.",
+      "counts": { "source": 1, "selectedMinimum": 3, "executedMinimum": 3 },
+      "cleanup": "Synthetic feed is closed and active turn count returns to zero.",
+      "artifact": "packages/testing/evidence/cas-agent-network-default-r1-red.json"
+    },
+    {
+      "id": "CAS-NET-GC1-006-LOCAL-DURABLE-PROTOCOL-PROPAGATION",
+      "form": "basic-and-adversarial",
+      "layer": "L2",
+      "runtime": "Vitest through in-process durable execution plus real stdio JSON-RPC and MCP protocol boundaries",
+      "file": "apps/daemon/src/workflow-execution/__tests__/workflow-execution-daemon.test.ts; packages/codex/src/app-server-workflow/__specs__/app-server-workflow-profile.spec.ts; apps/codex-control/src/control/__specs__/codex-control-protocol.spec.ts",
+      "target": "@codex/daemon:test-l1; @codex/codex:test-l2; @codex/codex-control:test-l2",
+      "status": "required",
+      "expectedMeaningfulRed": "The real protocol witnesses receive false for omitted workflow nodes and the public direct-handoff schema cannot carry explicit false.",
+      "observableGreen": "Real protocol witnesses observe true for omitted workflow nodes, false for explicit opt-out, the public MCP boundary preserves false, and the durable daemon journals the same effective per-node values without changing model, reasoning, sandbox, approval, ordering, replay, or cleanup.",
+      "counts": {
+        "sourceMinimum": 3,
+        "selectedMinimum": 3,
+        "executedMinimum": 3
+      },
+      "cleanup": "All child protocol processes and in-process durable executors/workspace leases close in finally-equivalent paths with zero delta.",
+      "artifact": "packages/testing/evidence/cas-agent-network-default-r1-red.json"
+    },
+    {
+      "id": "CAS-NET-GC1-007-NO-MODEL-LIVE-NETWORK",
+      "form": "real-boundary-disproof",
+      "layer": "L2",
+      "runtime": "Pinned Codex App Server command/exec with no thread, turn, agent, or model",
+      "file": ".agent/CAS-AGENT-NETWORK-DEFAULT-R1-HANDOFF.md",
+      "target": "manual bounded no-model App Server protocol probe",
+      "status": "required",
+      "expectedMeaningfulRed": "The predecessor probe under networkAccess:false fails with DNSResolveFailed while the current workflow executor cannot request true.",
+      "observableGreen": "The same bounded network operation succeeds with effective default true and explicit false still fails at the network boundary; both probes use isolated writable roots and are cleaned in finally.",
+      "counts": { "source": 1, "selected": 2, "executed": 2 },
+      "cleanup": "The owned App Server child and private probe roots are removed in finally; process and filesystem delta is zero.",
+      "artifact": ".agent/CAS-AGENT-NETWORK-DEFAULT-R1-HANDOFF.md"
+    }
+  ],
+  "freezeRule": "After all seven rows show meaningful RED, freeze row identities, test titles, assertions, default true, explicit false, invalid-input rejection, filesystem/network separation, exact turn/start policy shape, protocol witnesses, cleanup, and the coordinator-stop boundary before product implementation.",
+  "acceptanceLimitation": "This worker stops READY-FOR-REVIEW. The coordinator owns the paid three-stage Luna-low Bun reproof, fresh Preflight, independent verification, judgment, and promotion gates."
+}

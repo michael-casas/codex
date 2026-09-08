@@ -52,6 +52,10 @@ export function defineWorkflow<Input, Output>(
     !Number.isInteger(maxConcurrency) ||
     maxConcurrency < 1 ||
     maxConcurrency > 64 ||
+    (options.title !== undefined &&
+      (typeof options.title !== 'string' ||
+        !options.title.trim() ||
+        new TextEncoder().encode(options.title).length > 512)) ||
     typeof options.run !== 'function'
   ) {
     throw new WorkflowExecutionError(
@@ -62,6 +66,7 @@ export function defineWorkflow<Input, Output>(
   const definition = {
     id: options.id,
     version,
+    ...(options.title === undefined ? {} : { title: options.title.trim() }),
     ...(options.description === undefined
       ? {}
       : { description: options.description }),

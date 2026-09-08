@@ -1,0 +1,94 @@
+{
+  "schemaVersion": "1.0.0",
+  "campaignId": "CAS-APP-SERVER-20260901-01",
+  "assignmentId": "CAS-10",
+  "attempt": "R1",
+  "writeLeaseId": "CAS-10-SVELTE-VISIBILITY",
+  "status": "UI_READY",
+  "workerVerdict": "READY-FOR-AUDIT",
+  "recordedAt": "2026-09-02T13:37:45Z",
+  "workingDirectory": "/Users/mcasa_atlantis/.codex/worktrees/a4a6/.codex",
+  "baseRevision": "b9dc01512975a8b11bc673b5ec906c818dd708f6",
+  "candidateSurfaceSha256": "37d8189df6bb3f011f54a5e9e6b3f14cc4ebffc0c8e37077635dc6e295c77ba9",
+  "authority": {
+    "assignmentSha256": "5bf84bd6e72b0ab4eb4b40d2a0bbd04a77a12984e4b6214be6bdae89e9702954",
+    "singleWriterSha256": "9727680a52dd970e9ecad99ea56562263e432f3f5a3a1b851bda8d17fc194770",
+    "concurrencyIncidentSha256": "204db863ee018acbb945d621f54c760dec1bdf8a5090162c8ec45f705ea0ec71",
+    "webCompositionSha256": "02e8f7b4d1566961c4c66797edc24f06ce5f5c0e234e70392a98a6205402129e",
+    "dualPresentationSha256": "1009de4067013a392408de4aefdb0e6c852c26d98c50a53279dc46b0a2f9d0ed",
+    "greenContractSha256": "a0cbdd5e88fb7852738fc3505fa5ef7ba2b6a23cb61dc9c17f00059b229779e0",
+    "greenEvidenceSha256": "474e86e7b97780b06791e7dd40e96ef9f18c453db09db8609f43d636d964e6c6",
+    "selfCertified": false,
+    "commitAuthority": false
+  },
+  "implementation": {
+    "bundle": "one Svelte 5 bundle for direct browser routes and later MCP Apps packaging",
+    "routes": ["/workflows/:id", "/agents/:id"],
+    "view": "responsive workflow -> step -> agent hierarchy with selected-agent feed, decisions, artifacts, loading, empty, error, reconnect, host theme, native disclosure, and reduced-motion behavior",
+    "waitBudget": "one combined summary/selected-feed wait; max concurrent waits one",
+    "presentation": "one secret-free descriptor yields local route, ui://codex-control/v1.html identity, and optional authenticated read-only HTTPS mobile link",
+    "mobileIngress": "Tailscale Serve canonical when configured; Cloudflare valid only with Access; no tunnel deployed in CAS-10",
+    "transportBoundary": "UI calls the injected local control/visibility gateway contract only and never remote App Server WSS"
+  },
+  "validation": {
+    "l1": {
+      "command": "bun nx test-l1 @codex/codex-control-ui --skipNxCache --outputStyle=static",
+      "selected": 7,
+      "passed": 7,
+      "exitCode": 0
+    },
+    "web": {
+      "command": "bun nx e2e @codex/codex-control-e2e --skipNxCache --outputStyle=static --workers=1",
+      "selected": 14,
+      "passed": 14,
+      "l2Executed": 12,
+      "l3SourceScenarios": 1,
+      "l3SelectedScenarios": 1,
+      "l3GeneratedTests": 1,
+      "l3Executed": 2,
+      "projects": ["chromium", "mobile-chromium"],
+      "exitCode": 0,
+      "reportSha256": "c9a10893ca472dd71d9b13caff061d9962268f365501a0a1279bfe0985514f62"
+    },
+    "affected": {
+      "command": "bun nx run-many -t typecheck,build,lint -p @codex/codex-control-ui @codex/codex-control-e2e --skipNxCache --outputStyle=static",
+      "exitCode": 0
+    },
+    "frozenInstall": "GREEN; 1021 installs across 1104 packages; zero changes",
+    "nxSync": "GREEN",
+    "prettier": "GREEN",
+    "impeccableDetectorFindings": 0,
+    "visual": {
+      "desktopSha256": "ebf25e555f26c60e084d7ba97f4274feac1537020c81171a86a26c082614face",
+      "mobileSha256": "6d6f293585afbb8a05cbe37977313033bca4c9eaf3c99835b11c10060041b610"
+    }
+  },
+  "cleanup": {
+    "listener4200": 0,
+    "ownedPlaywrightProcesses": 0,
+    "ownedViteProcesses": 0,
+    "unexpectedResourceDelta": 0
+  },
+  "predecessors": {
+    "CAS-00:AUTHORITY_READY": "sha256:c8344ad54f5fd29ce53080546987290e87e1c8e0163fc7847b91d29d674ae532",
+    "CAS-09:MCP_READY": "sha256:751e79b9c306fff80ee8ba51df598b30d557b668376a786ec1207cfea3d29cb5"
+  },
+  "handoff": {
+    "CAS-11": "Package the exact accepted Svelte bundle as the versioned MCP Apps resource; retain direct routes and truthful mobile-link absence/presence without publishing or deploying a tunnel.",
+    "CAS-12": "Prove idempotent local side-panel presentation, authenticated read-only mobile access/denial, reconnect, and no duplicate tab/link against the accepted descriptor."
+  },
+  "restrictions": {
+    "liveSynologyContacted": false,
+    "liveSynologyMutated": false,
+    "tunnelDeployed": false,
+    "descendantsLaunched": 0,
+    "CAS11OrLaterLaunched": false,
+    "auditLaunched": false,
+    "qaLaunched": false,
+    "verificationLaunched": false,
+    "finalPolishLaunched": false,
+    "commitCreated": false,
+    "pushPerformed": false
+  },
+  "independence": "Worker evidence only; fresh verification and authorized judgment remain required after the full Base campaign."
+}

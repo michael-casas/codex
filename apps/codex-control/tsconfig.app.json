@@ -1,0 +1,26 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "outDir": "dist",
+    "rootDir": "src",
+    "types": ["node"],
+    "tsBuildInfoFile": "dist/tsconfig.app.tsbuildinfo"
+  },
+  "include": ["src/**/*.ts"],
+  "exclude": [
+    "src/**/*.test.ts",
+    "src/**/*.spec.ts",
+    "src/**/*.steps.ts",
+    "src/control/support/**",
+    "out-tsc",
+    "dist"
+  ],
+  "references": [
+    { "path": "../../packages/codex/tsconfig.lib.json" },
+    { "path": "../../packages/control-gateway/tsconfig.lib.json" },
+    { "path": "../../packages/db/tsconfig.lib.json" },
+    { "path": "../../packages/delivery/tsconfig.lib.json" },
+    { "path": "../../packages/process/tsconfig.lib.json" },
+    { "path": "../../packages/workflows/tsconfig.lib.json" }
+  ]
+}

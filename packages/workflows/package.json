@@ -3,18 +3,25 @@
   "version": "0.0.1",
   "private": true,
   "type": "module",
-  "main": "./src/index.ts",
-  "types": "./src/index.ts",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
   "exports": {
     ".": {
-      "types": "./src/index.ts",
-      "import": "./src/index.ts",
-      "default": "./src/index.ts"
+      "@codex/source": "./src/index.ts",
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "default": "./dist/index.js"
+    },
+    "./source": {
+      "@codex/source": "./src/infrastructure/workflow-source/index.ts",
+      "types": "./dist/infrastructure/workflow-source/index.d.ts",
+      "import": "./dist/infrastructure/workflow-source/index.js"
     },
     "./package.json": "./package.json"
   },
   "dependencies": {
     "@codex/codex": "workspace:*",
-    "ajv": "8.20.0"
+    "ajv": "8.20.0",
+    "esbuild": "0.27.7"
   }
 }

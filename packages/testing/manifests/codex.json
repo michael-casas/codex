@@ -13,8 +13,7 @@
         "run",
         "--config",
         "packages/codex/vitest.config.ts",
-        "src/runtime/singleton.test.ts",
-        "src/policy/sdk-imports.test.ts",
+        "src/app-server-client/__tests__/app-server-client-protocol.test.ts",
         "--testNamePattern=L1:UNIT"
       ],
       "expected": "vitest-output",
@@ -29,8 +28,8 @@
         "run",
         "--config",
         "packages/codex/vitest.config.ts",
-        "src/runtime/facade.test.ts",
-        "src/runtime/observability.test.ts",
+        "src/app-server-workflow/__tests__/app-server-workflow-executor.test.ts",
+        "src/app-server-workflow/__tests__/workspace-temp-policy.test.ts",
         "--testNamePattern=L1:INTEGRATION"
       ],
       "expected": "vitest-output",
@@ -46,7 +45,7 @@
         "run",
         "--config",
         "packages/codex/vitest.config.ts",
-        "src/runtime/sdk.spec.ts",
+        "src/app-server-client/__specs__/app-server-client-stdio.spec.ts",
         "--testNamePattern=L2:INTEGRATION"
       ],
       "expected": "vitest-output",
@@ -55,13 +54,13 @@
     {
       "heading": "--- End-to-End Tests [L2:E2E] ---",
       "layer": "l2-e2e",
-      "reason": "N/A: the SDK boundary is a library integration; public CLI process behavior belongs to @codex/codex-workflows"
+      "reason": "N/A: App Server protocol E2E behavior belongs to the public @codex/codex-workflows process surface"
     },
     {
       "groupHeading": "=== Layer 3 Test Suite ===",
       "heading": "--- Cucumber Behavioral Tests ---",
       "layer": "l3",
-      "reason": "N/A: the Codex adapter is not a direct user behavior surface"
+      "reason": "N/A: the App Server client library is not a direct user behavior surface"
     }
   ]
 }

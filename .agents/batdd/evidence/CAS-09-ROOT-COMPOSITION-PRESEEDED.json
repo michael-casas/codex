@@ -1,0 +1,59 @@
+{
+  "schemaVersion": "1.0.0",
+  "checkpointId": "CAS-09-ROOT-COMPOSITION-PRESEEDED-01",
+  "campaignId": "CAS-APP-SERVER-20260901-01",
+  "assignmentId": "CAS-09",
+  "status": "ROOT_COMPOSITION_PRESEEDED",
+  "baseRevision": "b9dc01512975a8b11bc673b5ec906c818dd708f6",
+  "workingDirectory": "/Users/mcasa_atlantis/.codex/worktrees/a4a6/.codex",
+  "changedRootSurfaces": {
+    "package.json": {
+      "beforeSha256": "64333539ed221f98e0c4bd545d970f31285bd5b4017be57f1ea74e9c632a4467",
+      "afterSha256": "399b3c6c15c3e865489389782a4c1c1be4b71c02301eec7d8e25c5a9cd7cbd3f",
+      "delta": "Added direct @modelcontextprotocol/sdk: 1.30.0 production dependency."
+    },
+    "bun.lock": {
+      "beforeSha256": "be43d553ac6b375826dd910561d424246376309b9b3850b5cafa0b99db5c34d8",
+      "afterSha256": "386e523da1069f5e2919aa678c6674f0831c9311399685984c5c2eac946b46de",
+      "delta": "Added @modelcontextprotocol/sdk 1.30.0 only to the root importer; existing resolved package graph was reused.",
+      "newInstalledPackages": 0
+    },
+    "tsconfig.json": {
+      "beforeSha256": "53b3145c305d4f4609c1cbe5fd63bf6509e1a4722b0a8ace2bd8d3d150c1ecfe",
+      "afterSha256": "274478dd13ed2dd7a01952ab735f9cacf58f2c5f0087c58853e1f6051914f3aa",
+      "delta": "Preseeded ./apps/codex-control project reference immediately before codex-control-ui."
+    }
+  },
+  "dependency": {
+    "name": "@modelcontextprotocol/sdk",
+    "version": "1.30.0",
+    "rootResolutionVerified": true,
+    "externalVersionAdded": false
+  },
+  "validation": {
+    "bunInstall": "GREEN; lockfile saved with no package install delta",
+    "frozenInstall": "GREEN; 1011 installs across 1094 packages, no changes",
+    "formatting": "GREEN for package.json and tsconfig.json",
+    "nxSync": {
+      "status": "EXPECTED_DEPENDENCY_HALT",
+      "failure": "Stale reference apps/codex-control/tsconfig.json",
+      "reason": "CAS-09-owned app skeleton is not created yet; running nx sync now would remove the preseeded reference.",
+      "resumeCondition": "CAS-09 creates apps/codex-control app-local files including tsconfig.json, then reruns nx sync:check."
+    }
+  },
+  "skippedSurface": {
+    "path": ".vscode/launch.json",
+    "reason": "Editor launch configuration is not required for runtime, build, dependency, or Nx project registration."
+  },
+  "preservedState": {
+    "appsCodexControlFilesChanged": 0,
+    "SveltePlansChartersOrPredecessorsChanged": 0,
+    "rawSecretsCopiedOrPersisted": 0,
+    "commitsCreated": 0
+  },
+  "reentry": {
+    "workerThreadId": "01a061c5-df41-78c0-ba87-4a7cbf8aee65",
+    "direction": "Create only CAS-09-owned apps/codex-control files. Preserve the preseeded root files. After app tsconfig exists, rerun nx sync:check and request coordinator help only for a new root delta.",
+    "newWorkerLaunch": false
+  }
+}

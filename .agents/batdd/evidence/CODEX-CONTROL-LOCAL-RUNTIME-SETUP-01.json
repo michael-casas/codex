@@ -1,0 +1,43 @@
+{
+  "status": "LOCAL_RUNTIME_READY_DESKTOP_ENV_REFRESH_PENDING",
+  "workingDirectory": "/Users/mcasa_atlantis/.codex/worktrees/a4a6/.codex",
+  "runtimeConfig": "/Users/mcasa_atlantis/.codex/.runtime/codex-control-a4a6/runtime.json",
+  "serviceLabel": "com.codex.control.a4a6",
+  "browserOrigin": "http://127.0.0.1:4765",
+  "database": "codex_control_a4a6",
+  "databaseLogin": "codex_control_a4a6_daemon",
+  "isolation": "Dedicated database on existing PostgreSQL; no existing passwords rotated or old shared database functions replaced.",
+  "hostMode": "local-proxy managed Unix bridge",
+  "hostHome": "/Users/mcasa_atlantis/.codex/.runtime/cc-a4a6",
+  "hostAuthentication": "Reference to existing local authentication via symlink; no credential content printed or copied.",
+  "expectedAppServerVersion": "0.151.0",
+  "workflowSourcesActor": "codex-control",
+  "workflowSourceRoot": "/Users/mcasa_atlantis/.codex/worktrees/a4a6/.codex/.agent/artifacts/marketing-agency-demo",
+  "checks": {
+    "viewerHttp": 200,
+    "readOnlySnapshotHttp": 200,
+    "unauthenticatedPostSnapshot": 401,
+    "authenticatedPostSnapshot": 200,
+    "snapshotCursor": "0",
+    "managedHostHandshake": "PASS",
+    "readOnlyAccountPresent": true,
+    "tokenAndDatabaseEnvMode": "0600",
+    "runtimeDirectoryMode": "0700",
+    "launchAgentPlistAndShellSyntax": "PASS"
+  },
+  "corrections": [
+    "Explicit standalone Unix listener did not work with raw CLI proxy; stopped that owned listener and disabled its temporary LaunchAgent. Managed local mode succeeded instead.",
+    "Initial isolated-home socket path was 109 bytes; moved to shorter cc-a4a6 path, then managed handshake passed."
+  ],
+  "remaining": [
+    "Restart desktop app to inherit non-secret token-file/origin environment and repeat actual installed MCP snapshot.",
+    "Configure trusted tailnet-only viewer ingress without changing existing Tailscale routes.",
+    "Dogfood remains unlaunched."
+  ],
+  "modelTurns": 0,
+  "demoAgents": 0,
+  "remoteHostOperations": 0,
+  "tailscaleChanges": 0,
+  "productionSourceEdits": 0,
+  "baseReadyClaimed": false
+}

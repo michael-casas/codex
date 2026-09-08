@@ -1,0 +1,36 @@
+{
+  "status": "TAILNET_VIEWER_READY_IN_APP_BROWSER_UNAVAILABLE",
+  "viewerUrl": "https://mike-macbook.taildf223c.ts.net:9443/",
+  "proxy": "http://127.0.0.1:4766",
+  "daemon": "http://127.0.0.1:4765",
+  "proxyService": "com.codex.control.a4a6.viewer",
+  "checks": {
+    "httpsStatus": 200,
+    "tlsVerification": 0,
+    "tailnetSnapshotCursor": "0",
+    "postDenied": 403,
+    "foreignOriginDenied": 403,
+    "missingIdentityLocalProbeDenied": 403,
+    "existingServeEntriesPreserved": true,
+    "existingFunnelEntriesPreserved": true,
+    "newFunnelEnabled": false
+  },
+  "scope": "Tailnet-authenticated read-only UI. Proxy validates Host/Origin/identity and strips authorization before forwarding read methods. No API control methods exposed through this route.",
+  "networkNote": "Shell proxy settings caused initial HTTPS timeouts; direct no-proxy HTTPS checks passed without disabling certificate verification.",
+  "browser": {
+    "requested": "iab",
+    "selectorResult": "Browser is not available: iab",
+    "availableFamily": "chrome",
+    "substituted": false
+  },
+  "demo": {
+    "source": ".agent/artifacts/marketing-agency-demo/workflow.workflow.ts",
+    "builderCharter": ".agent/artifacts/marketing-agency-demo/BUILDER.md",
+    "judgeCharter": ".agent/artifacts/marketing-agency-demo/JUDGE.md",
+    "agentsLaunched": 0,
+    "workflowSubmitted": false,
+    "previewPorts": [5181, 5182, 5183, 5184],
+    "leaseRoot": ".agent/artifacts/marketing-agency-demo/workspaces"
+  },
+  "baseReadyClaimed": false
+}

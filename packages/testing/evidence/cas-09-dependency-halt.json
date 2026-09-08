@@ -1,0 +1,59 @@
+{
+  "schemaVersion": "1.0.0",
+  "campaignId": "CAS-APP-SERVER-20260901-01",
+  "assignmentId": "CAS-09",
+  "writeLeaseId": "CAS-09-MCP-GATEWAY",
+  "status": "DEPENDENCY_HALT",
+  "terminal": "HALT",
+  "baseRevision": "b9dc01512975a8b11bc673b5ec906c818dd708f6",
+  "workingDirectory": "/Users/mcasa_atlantis/.codex/worktrees/a4a6/.codex",
+  "authority": {
+    "assignmentSha256": "632d535a68b3f7c57820fb13a7d0987d0e63f9400d1a77b06a8c18975e8447d2",
+    "dispatchReadySha256": "1788d0104ce6b0c886eea850453adcc9c7a3eb3c177e8f5ec58e4f38552b2bc2",
+    "predecessorSha256": "410670137e653ea97746bdacae57104fe1136cc6eafbec4df374a75996096957",
+    "rootCompositionSha256": "d6657f51741220aab1be3cecde661892ed052145af97c4539df25243eb6a93a6",
+    "greenContractId": "CAS-09-GC-1",
+    "greenContractSha256": "a68d951ebe0addcae3778f1a618a5ac56c49d2464ecc5a0e3e1e580c95aeab4d",
+    "redEvidenceSha256": "adde70d6eed15e0c829910f1c2f8af775637b2b18a3221b23b02081430b116d6",
+    "commitAuthority": false,
+    "selfCertified": false
+  },
+  "completedLockedWork": {
+    "nxGeneratorRoute": "@nx/node:application source read and dry-run inspected before app creation",
+    "appScaffold": "apps/codex-control is an Nx-discovered executable stdio MCP skeleton with module-local L1/L2 and physical L3 acceptance",
+    "allRowRed": {
+      "l1": {"selected": 1, "executed": 1, "exitCode": 1},
+      "l2": {"selected": 1, "executed": 1, "exitCode": 1, "boundary": "linked MCP client/server transport"},
+      "l3": {"source": 1, "selected": 1, "executed": 1, "stepsPassed": 3, "stepsFailed": 1, "exitCode": 1}
+    },
+    "contractFrozen": true
+  },
+  "blocker": {
+    "missingInterface": "A package-owned or authenticated daemon-client callable for the accepted durable run_workflow command (and its result/cancel observation) that apps/codex-control may lawfully consume.",
+    "evidence": [
+      "The durable implementation and run_workflow alias are in apps/daemon/src/workflow-execution/workflow-execution-daemon.ts.",
+      "packages/workflows exports command admission/prepareWorkflowRun but not durable submission, result, or cancellation.",
+      "Agent Wiki File System and repository GUIDELINES forbid app-to-app imports.",
+      "The immutable CAS-09 write surface excludes apps/daemon and package predecessor changes."
+    ],
+    "whyNoLocalStub": "A CAS-09-local adapter would duplicate durable submission/retry authority or falsely claim the CAS-07 public seam; both violate the frozen contract."
+  },
+  "resumeCondition": "The CAS-07/daemon owner or coordinator publishes an accepted package-owned or authenticated daemon-client run_workflow/result/cancel interface and grants CAS-09 read access to it, without requiring an app-to-app import or widening CAS-09's write lease.",
+  "nextCheck": "Resolve the new public interface from apps/codex-control, rerun the three frozen RED rows unchanged, then implement fidelity-ordered GREEN.",
+  "resourceDelta": {
+    "unexpectedProcesses": 0,
+    "testDatabases": 0,
+    "networkListeners": 0,
+    "liveSynologyContacted": false,
+    "liveSynologyMutated": false
+  },
+  "restrictionsPreserved": {
+    "descendantsLaunched": 0,
+    "auditLaunched": false,
+    "qaLaunched": false,
+    "finalPolishLaunched": false,
+    "cas10OrLaterStarted": false,
+    "commitCreated": false,
+    "pushPerformed": false
+  }
+}

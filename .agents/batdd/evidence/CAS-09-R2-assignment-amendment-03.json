@@ -1,0 +1,63 @@
+{
+  "schemaVersion": "1.0.0",
+  "campaignId": "CAS-APP-SERVER-20260901-01",
+  "recordId": "CAS-09-R2-ASSIGNMENT-AMENDMENT-03",
+  "status": "READY",
+  "workingDirectory": "/Users/mcasa_atlantis/.codex/worktrees/a4a6/.codex",
+  "baseRevision": "b9dc01512975a8b11bc673b5ec906c818dd708f6",
+  "assignment": {
+    "path": ".agents/batdd/assignments/CAS-09-R2.json",
+    "previousSha256": "c23f147818ea0c73282368041fef91489d24eb7e3df92beb82dfb68918a7c7c8",
+    "amendedSha256": "4e90b62a2c23208d10c5c111c865d53c5312b41721813ec4a78fdd4b31deb973",
+    "schema": ".agents/batdd/assignment.schema.json",
+    "schemaValid": true
+  },
+  "predecessorAmendment": {
+    "path": ".agents/batdd/evidence/CAS-09-R2-assignment-amendment-02.json",
+    "sha256": "574842edea4913bec35f0dbf73e8bd118964d5d6bb8149c618f3d22cc7978175"
+  },
+  "observedManifest": {
+    "path": "packages/testing/manifests/daemon.json",
+    "sha256": "23b96ef21d5908346aa9246bd3b51baaa7199afcc609727d322ce778f6df0ba3",
+    "staleClaims": [
+      "L1 integration is N/A because the daemon is a single-module Nx scaffold",
+      "L2 integration is N/A because no product persistence, protocol, or infrastructure boundary exists"
+    ],
+    "omittedAcceptedTests": [
+      "apps/daemon/src/control-runtime.test.ts",
+      "apps/daemon/src/control-runtime.spec.ts"
+    ],
+    "resolvedTargetEvidence": {
+      "l1Target": "@codex/daemon:test-l1",
+      "l2Target": "@codex/daemon:test-l2",
+      "source": "apps/daemon/package.json"
+    },
+    "risk": "The aggregate can report green while omitting the production runtime integration rows."
+  },
+  "amendment": {
+    "field": "writeSurface",
+    "added": ["packages/testing/manifests/daemon.json"],
+    "reason": "CAS-09.R2 must reconcile the directly affected aggregate manifest so accepted runtime tests cannot remain outside standing evidence."
+  },
+  "unchanged": [
+    "objective",
+    "model",
+    "reasoning effort",
+    "base revision",
+    "dependencies",
+    "required layers",
+    "Green Contract",
+    "commit authority",
+    "stop boundary",
+    "all other write surfaces"
+  ],
+  "restrictions": {
+    "otherTestingFiles": false,
+    "rootWrites": false,
+    "nextSeam": false,
+    "auditOrAcceptance": false,
+    "remoteMutation": false,
+    "commitPushPublishDeploy": false
+  },
+  "resume": "CAS-09.R2 may update only the daemon aggregate manifest to execute the real L1 and L2 runtime integration rows, then rerun the affected aggregate."
+}

@@ -9,7 +9,7 @@ interface Input {
 export default defineWorkflow<Input, unknown>({
   id: 'controlled-direct-typescript',
   version: 1,
-  description: 'Controlled real-SDK direct TypeScript acceptance workflow.',
+  description: 'Controlled App Server direct TypeScript acceptance workflow.',
   maxConcurrency: 2,
   inputSchema: {
     type: 'object',

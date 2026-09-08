@@ -1,0 +1,15 @@
+{
+  "schemaVersion": "1.0.0",
+  "assignmentId": "CAS-WA-01",
+  "status": "READY",
+  "previousAssignmentSha256": "f1337cbb2862a3a5f5097acd061c6d02ea427dae98d8a69d72d451c535518c77",
+  "amendedAssignmentSha256": "3f578b84474bdc09665300b65532e0879091e20a269c92a6919849319999f099",
+  "schemaValid": true,
+  "addedWriteSurface": ["apps/daemon/vitest.config.ts"],
+  "observedConfigSha256": "ec3ed470466f0fee31e05afa25a8b83b2ca25287ff4797ec7ea9e4a42c8512bb",
+  "observed": "Daemon Vitest aliases @codex/workflows to src/index.ts without a preceding source subpath alias; package exports now declare ./source at src/infrastructure/workflow-source/index.ts.",
+  "authorizedChange": "Add exact @codex/workflows/source resolution before the root alias; preserve all existing test coverage and product package boundaries.",
+  "allOtherAssignmentFieldsUnchanged": true,
+  "dependencyOrLockfileChanges": false,
+  "auditCommitDeployAuthority": false
+}

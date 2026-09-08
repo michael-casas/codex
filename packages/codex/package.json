@@ -13,8 +13,5 @@
       "default": "./dist/index.js"
     },
     "./package.json": "./package.json"
-  },
-  "dependencies": {
-    "@openai/codex-sdk": "0.147.0"
   }
 }

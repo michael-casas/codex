@@ -1,0 +1,14 @@
+{
+  "mcpServers": {
+    "codex-control": {
+      "command": "node",
+      "args": ["./dist/server.mjs"],
+      "cwd": ".",
+      "env_vars": [
+        "CODEX_CONTROL_ORIGIN",
+        "CODEX_CONTROL_TOKEN_FILE",
+        "CODEX_CONTROL_ACTOR_AGENT_ID"
+      ]
+    }
+  }
+}

@@ -35,7 +35,7 @@ executes the default `defineWorkflow(...)` export locally.
 
 TypeScript source is trusted executable local code. Importing it may execute
 top-level code. `plan` and `dry-run` load the definition and input, but do not
-call the SDK, launch agents, create a run journal, or evaluate the dynamic
+call App Server, launch agents, create a run journal, or evaluate the dynamic
 `run` callback. Their JSON result reports the trusted module-load effect
 instead of claiming zero local effects.
 
@@ -48,11 +48,11 @@ Local runs:
 - enforce the definition's bounded `maxConcurrency`;
 - forward exact requested model, reasoning, schema, command-evidence policy,
   and abort signal through
-  the repository-owned Codex SDK facade;
+  the repository-owned Codex App Server facade;
 - append actual typed upstream values to the downstream agent input context;
 - freeze and journal each node before launch;
 - classify failure, schema rejection, and cancellation without raw errors;
-- abort queued/running siblings and drain the SDK host;
+- abort queued/running siblings and drain the App Server host;
 - store journals under `${CODEX_WORKFLOWS_HOME}/runs/<run-id>` when the bounded
   override is present, otherwise `~/.codex/workflows/runs/<run-id>`; and
 - store artifacts under that run's `artifacts/` directory using atomic writes.
@@ -74,7 +74,7 @@ codex-workflows run <source.json> [--input <json-file>] [--json]
 codex-workflows resume|status|events|logs|cancel <run-id> [--json]
 ```
 
-JSON validate/inspect/plan/dry-run remain deterministic and SDK-free.
+JSON validate/inspect/plan/dry-run remain deterministic and runtime-free.
 `import-pi` reads bounded observed goal-v3 or goal-event JSONL as historical
 data and never writes `.pi`. JSON `run` and all run-ID control verbs return
 `CONTROL_PLANE_UNAVAILABLE` because no accepted cross-process control-plane
@@ -100,12 +100,21 @@ raw sensitive errors are not public diagnostics.
 
 ## Current model policy
 
-The runner admits any bounded, non-whitespace model token beginning with
-`gpt-`, forwards it unchanged with `medium` reasoning, and never substitutes a
-different model. The Codex SDK is authoritative for actual model availability.
+Every workflow agent supplies an explicit safe model identifier and reasoning
+effort. The runner forwards both unchanged; it never substitutes a model or
+downgrades effort to medium. Codex App Server decides model availability and
+supported model/effort combinations. Named configuration-profile selection is
+separate and remains blocked by the pinned App Server's native capability.
+Network access is enabled when an agent omits `networkAccess`; an explicit
+`networkAccess: false` remains disabled. The effective permission is frozen in
+the node journal and does not widen filesystem roots, read-only restrictions,
+approval policy, TLS/authentication, or secret handling.
 
 Tested examples:
 
+- `examples/bun-react-red-green.workflow.ts` with
+  `examples/bun-react-red-green.input.json` (three-stage Bun/Vite React
+  build, immutable RED audit, and bounded remediation)
 - `examples/nestjs-resolver-factory-research.workflow.ts`
 - `examples/nestjs-resolver-factory-research.input.json`
 - `examples/canonical-review.workflow.json`

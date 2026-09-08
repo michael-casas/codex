@@ -1,0 +1,40 @@
+{
+  "schemaVersion": "1.0.0",
+  "campaignId": "CAS-APP-SERVER-20260901-01",
+  "recordId": "CAS-09-R2-LOCAL-PROTOCOL-BINARY-01",
+  "status": "READY",
+  "workingDirectory": "/Users/mcasa_atlantis/.codex/worktrees/a4a6/.codex",
+  "baseRevision": "b9dc01512975a8b11bc673b5ec906c818dd708f6",
+  "blocker": {
+    "requiredProtocolVersion": "0.151.0",
+    "pathCodexVersion": "0.153.0",
+    "desktopBundledVersionReportedByWorker": "0.152.1",
+    "failure": "HOST_AUTHENTICATION_FAILED during controlled WSS connection because the fixture selected PATH codex."
+  },
+  "pinnedBinary": {
+    "package": "@openai/codex",
+    "version": "0.151.0",
+    "registry": "https://registry.npmjs.org",
+    "registryIntegrity": "sha512-mhtWmOZRdmWD1jPbLDnQb59BsaVP/V+lXe/OFNR9ZcLZU0UCiBwn98Fcav1ss7sDIlHkuqj6nWd44IPeXoOhJA==",
+    "prefix": "/Users/mcasa_atlantis/.local/opt/codex-0.151.0",
+    "executable": "/Users/mcasa_atlantis/.local/opt/codex-0.151.0/node_modules/.bin/codex",
+    "versionOutput": "codex-cli 0.151.0",
+    "packageJsonSha256": "9e4cf113ce684c2b3e1df40de9e03a0b0591969389e6656c32584a414149fc9e",
+    "packageLockSha256": "dc8612cd44ef293f90fc1aef08c1b2e32b3a5b979d7416d7b46dc79e77930c6a"
+  },
+  "isolation": {
+    "globalExecutable": "/opt/homebrew/bin/codex",
+    "globalVersionAfterInstall": "codex-cli 0.153.0",
+    "repositoryFilesChangedByInstall": 0,
+    "runningPinnedProcessesAfterValidation": 0,
+    "pinnedListenersAfterValidation": 0,
+    "existingInstallationsRemovedOrOverwritten": false
+  },
+  "authority": {
+    "versionAdmissionRelaxed": false,
+    "protocolVersionRefreshed": false,
+    "remoteMutation": false,
+    "commitPushPublishDeploy": false
+  },
+  "resume": "CAS-09.R2 may point only the controlled campaign fixture at the pinned executable and rerun affected standing tests. Production PATH selection and exact-version admission remain unchanged."
+}

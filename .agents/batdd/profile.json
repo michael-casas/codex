@@ -1,8 +1,8 @@
 {
   "$schema": "./profile.schema.json",
   "schemaVersion": "1.0.0",
-  "profileVersion": "1.0.0",
-  "status": "ground-zero",
+  "profileVersion": "1.1.0",
+  "status": "active",
   "standardVersions": {
     "testing": "1.1.0",
     "gherkin": "2.0.0",
@@ -37,8 +37,10 @@
       "cachePolicy": "uncached-live"
     },
     "web": {
-      "status": "not-applicable",
-      "reason": "No web product surface exists in Ground-0."
+      "status": "required",
+      "runtime": "playwright",
+      "patterns": ["*.spec.ts"],
+      "cachePolicy": "uncached-live"
     },
     "mobile": {
       "status": "not-applicable",

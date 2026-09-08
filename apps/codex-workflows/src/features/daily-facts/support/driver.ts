@@ -422,6 +422,7 @@ export class DailyFactsDriver {
               ...isolatedTmuxEnvironment(this.tmuxRoot),
               PATH: `${this.binDirectory}${delimiter}${process.env.PATH ?? ''}`,
               CODEX_WORKFLOWS_HOME: this.stateRoot,
+              CODEX_WORKFLOWS_AGENT_WORKING_DIRECTORY: this.outputRoot,
             },
             stdio: ['ignore', 'pipe', 'pipe'],
           },
@@ -494,7 +495,7 @@ export class DailyFactsDriver {
           node.status === 'completed' &&
           node.outcome === 'completed' &&
           node.model === 'gpt-5.6-luna' &&
-          node.reasoning === 'medium' &&
+          node.reasoning === 'low' &&
           node.dependencies.length === 0,
       ),
     );
