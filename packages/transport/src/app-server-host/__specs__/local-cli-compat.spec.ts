@@ -5,6 +5,7 @@ import { connectAppServer } from '@codex/codex';
 import { expect, it } from 'vitest';
 import { createAppServerHostRegistry } from '../app-server-host.registry.js';
 
+// === L2: REAL-BOUNDARY INTEGRATION TESTS ===
 it('[L2:INTEGRATION] local 0.153.2 preserves the control protocol without model turns', async () => {
   // macOS Unix socket paths must fit SUN_LEN, including the server's suffix.
   const home = await mkdtemp(
