@@ -1,6 +1,6 @@
 import { mkdtemp, mkdir, rm, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
-import { join } from 'node:path';
+import { join, resolve } from 'node:path';
 
 import { describe, expect, test } from 'vitest';
 
@@ -61,6 +61,24 @@ async function fixture(root: string, remediated = false): Promise<string> {
 
 // === L1: UNIT TESTS ===
 describe('[L1:UNIT] Bun React RED to GREEN fixed policy', () => {
+  test('[L1:UNIT] BUN-REACT-RG-GC1-006 aligns the remediator prompt with the host-required expect assertion', async () => {
+    const workflow = await import('node:fs/promises').then(({ readFile }) =>
+      readFile(
+        resolve(
+          import.meta.dirname,
+          '../../../examples/bun-react-red-green.workflow.ts',
+        ),
+        'utf8',
+      ),
+    );
+    const remediatorPrompt = workflow.split(
+      '__BUN_REACT_RED_GREEN_REMEDIATOR__',
+    )[1];
+    expect(remediatorPrompt).toContain(
+      'use expect( from bun:test to assert the exact rendered status markup',
+    );
+  });
+
   test('[L1:UNIT] BUN-REACT-RG-GC1-001 returns deterministic RED for only the two intentional baseline gaps', async () => {
     const root = await mkdtemp(join(tmpdir(), 'bun-react-audit-red-'));
     try {

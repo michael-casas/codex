@@ -20,6 +20,9 @@ import {
 } from '@codex/workflows';
 
 import { createLocalRunJournal, type LocalRunJournal } from './journal.js';
+import { resolveAgentWorkingDirectory } from './agent-working-directory.js';
+
+export { resolveAgentWorkingDirectory } from './agent-working-directory.js';
 
 export interface LocalRunRequest {
   definition: WorkflowDefinition<unknown, unknown>;
@@ -95,8 +98,12 @@ export async function runLocalWorkflow(
   let executor: ReturnType<typeof createAppServerWorkflowExecutor> | undefined;
   let tempDirectory: string | undefined;
   try {
+    const agentWorkingDirectory = await resolveAgentWorkingDirectory(
+      request.workingDirectory,
+      process.env.CODEX_WORKFLOWS_AGENT_WORKING_DIRECTORY,
+    );
     tempDirectory = await mkdtemp(
-      join(request.workingDirectory, '.codex-workspace-tmp-'),
+      join(agentWorkingDirectory, '.codex-workspace-tmp-'),
     );
     client = await connectAppServer({
       expectedVersion: APP_SERVER_PROTOCOL_VERSION,
@@ -105,7 +112,7 @@ export async function runLocalWorkflow(
         title: 'Codex Workflows',
         version: APP_SERVER_PROTOCOL_VERSION,
       },
-      cwd: request.workingDirectory,
+      cwd: agentWorkingDirectory,
       env: { ...process.env },
       ...(process.env.CODEX_WORKFLOWS_CODEX_PATH
         ? { command: process.env.CODEX_WORKFLOWS_CODEX_PATH }
@@ -124,7 +131,7 @@ export async function runLocalWorkflow(
           );
         },
       },
-      cwd: request.workingDirectory,
+      cwd: agentWorkingDirectory,
       sandbox: 'workspaceWrite',
       tempDirectory,
       approvalPolicy: 'never',
