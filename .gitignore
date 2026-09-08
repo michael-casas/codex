@@ -2,6 +2,7 @@
 
 # Agent artifacts
 .agent/
+.mark/
 .mercury/
 
 # compiled output
