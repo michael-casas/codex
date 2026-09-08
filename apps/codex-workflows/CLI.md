@@ -105,6 +105,10 @@ effort. The runner forwards both unchanged; it never substitutes a model or
 downgrades effort to medium. Codex App Server decides model availability and
 supported model/effort combinations. Named configuration-profile selection is
 separate and remains blocked by the pinned App Server's native capability.
+Network access is enabled when an agent omits `networkAccess`; an explicit
+`networkAccess: false` remains disabled. The effective permission is frozen in
+the node journal and does not widen filesystem roots, read-only restrictions,
+approval policy, TLS/authentication, or secret handling.
 
 Tested examples:
 

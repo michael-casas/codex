@@ -10,6 +10,7 @@ export interface AppServerWorkflowNode {
   readonly id: string;
   readonly model: string;
   readonly reasoning: string;
+  readonly networkAccess?: boolean;
 }
 
 export interface AppServerWorkflowRuntimeEvent {
@@ -498,7 +499,9 @@ export function createAppServerWorkflowExecutor(
         typeof request.model !== 'string' ||
         !/^[A-Za-z0-9][A-Za-z0-9._:-]{0,253}$/.test(request.model) ||
         typeof request.reasoning !== 'string' ||
-        !/^[a-z][a-z0-9-]{0,63}$/.test(request.reasoning)
+        !/^[a-z][a-z0-9-]{0,63}$/.test(request.reasoning) ||
+        (request.node.networkAccess !== undefined &&
+          typeof request.node.networkAccess !== 'boolean')
       ) {
         throw Object.assign(new Error('Invalid agent runtime profile.'), {
           code: 'WORKFLOW_DEFINITION_INVALID',
@@ -508,6 +511,7 @@ export function createAppServerWorkflowExecutor(
         throw Object.assign(new Error('Workflow turn interrupted.'), {
           code: 'WORKFLOW_CANCELLED',
         });
+      const networkAccess = request.node.networkAccess ?? true;
       const started = await options.connection.request<{
         thread: { id: string; sessionId?: string };
       }>('thread/start', {
@@ -566,11 +570,11 @@ export function createAppServerWorkflowExecutor(
                 ? {
                     type: 'workspaceWrite',
                     writableRoots: [options.cwd, options.tempDirectory],
-                    networkAccess: false,
+                    networkAccess,
                     excludeTmpdirEnvVar: true,
                     excludeSlashTmp: true,
                   }
-                : { type: 'readOnly', networkAccess: false },
+                : { type: 'readOnly', networkAccess },
             ...(request.outputSchema
               ? { outputSchema: request.outputSchema }
               : {}),

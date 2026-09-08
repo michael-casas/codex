@@ -23,7 +23,7 @@ if (process.argv.includes('--version')) {
     else if (message.method === 'thread/start')
       respond({ thread: { id: `thread-${++next}` } });
     else if (message.method === 'turn/start') {
-      const { threadId, model, effort } = message.params;
+      const { threadId, model, effort, sandboxPolicy } = message.params;
       if (effort === 'unsupported') {
         send({
           jsonrpc: '2.0',
@@ -43,7 +43,12 @@ if (process.argv.includes('--version')) {
           threadId,
           item: {
             type: 'agentMessage',
-            text: JSON.stringify({ model, effort }),
+            text: JSON.stringify({
+              model,
+              effort,
+              networkAccess: sandboxPolicy?.networkAccess,
+              sandboxType: sandboxPolicy?.type,
+            }),
           },
         },
       });

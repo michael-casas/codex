@@ -21,6 +21,20 @@ still follows CAS/CAS-BASE -> CAS/integration -> development -> staging -> main.
 Jira remains waived. No new audit campaign is implied. BASE_READY and release
 acceptance remain distinct; do not rewrite immutable predecessor packets.
 
+## Founder network ruling — 2026-09-08
+
+For CAS agent execution, omitted network policy now means enabled. Explicit
+`networkAccess: false` remains an opt-out, and the effective per-agent value
+must be validated, frozen, journaled, and propagated through local workflows,
+durable workflows, and direct local or remote App Server handoffs. This ruling
+does not widen filesystem roots, read-only restrictions, approval policy,
+TLS/authentication, secret handling, or non-agent workspace/Git command policy.
+
+Default-network hardening is deferred until after Base is fully merged into the
+development branch. This ruling is implementation authority, not release
+acceptance: the paid three-stage Luna-low reproof, fresh Preflight, independent
+verification and judgment, and final promotion gates remain required.
+
 ## Current candidate
 
 CAS/CAS-BASE at b9dc01512975a8b11bc673b5ec906c818dd708f6 plus uncommitted

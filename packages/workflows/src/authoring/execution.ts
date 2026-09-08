@@ -591,6 +591,8 @@ export async function executeWorkflow<Input, Output>(
           !request.label.trim() ||
           !validAgentModel(request.model) ||
           !validAgentReasoning(request.reasoning) ||
+          (request.networkAccess !== undefined &&
+            typeof request.networkAccess !== 'boolean') ||
           !request.prompt ||
           request.prompt.length > MAX_PROMPT_LENGTH
         ) {
@@ -618,6 +620,7 @@ export async function executeWorkflow<Input, Output>(
           dependencies,
           model: request.model,
           reasoning: request.reasoning,
+          networkAccess: request.networkAccess ?? true,
           promptDigest: sha256(request.prompt),
           inputDigest: digest(request.input, 'Agent input'),
           ...(request.outputSchema
@@ -659,6 +662,7 @@ export async function executeWorkflow<Input, Output>(
               try {
                 response = await options.executeAgent({
                   ...request,
+                  networkAccess: frozen.networkAccess,
                   prompt: effectivePrompt(request.prompt, request.input),
                   signal: operationController.signal,
                   node: frozen,

@@ -53,6 +53,7 @@ export interface AgentOptions<Input = unknown> {
   label: string;
   model: WorkflowModel;
   reasoning: WorkflowReasoning;
+  networkAccess?: boolean;
   prompt: string;
   input?: Input;
   outputSchema?: JsonSchema;
@@ -112,6 +113,7 @@ export interface FrozenWorkflowNode {
   readonly dependencies: readonly string[];
   readonly model: WorkflowModel;
   readonly reasoning: WorkflowReasoning;
+  readonly networkAccess: boolean;
   readonly promptDigest: `sha256:${string}`;
   readonly inputDigest: `sha256:${string}`;
   readonly outputSchemaDigest?: `sha256:${string}`;

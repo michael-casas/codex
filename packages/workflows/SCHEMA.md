@@ -74,8 +74,13 @@ preserves the exact record or tuple/array result shape. The local scheduler
 enforces the workflow concurrency bound.
 
 `agent<Output, Input>(options)` requires explicit `label`, `model`, `reasoning`,
-and `prompt`; accepts typed `input`, optional strict JSON `outputSchema`, and an
-optional `commandEvidence` policy. A command-evidence policy declares bounded
+and `prompt`; accepts typed `input`, optional strict JSON `outputSchema`,
+optional boolean `networkAccess`, and an optional `commandEvidence` policy.
+Omitting `networkAccess` enables network access for CAS agent execution;
+explicit `networkAccess: false` remains a per-agent opt-out. The effective
+boolean is frozen and journaled with the node. It does not alter read-only or
+writable-root filesystem policy, approval policy, authentication, TLS, or
+secret handling. A command-evidence policy declares bounded
 stable rule IDs, private command substrings, and exact expected occurrence
 counts. The local host evaluates completed SDK command items, fails the node if
 any count differs, and retains only policy/command digests plus rule counts—not
@@ -108,7 +113,8 @@ artifacts. Runtime helpers fail closed outside an active execution.
 ## Public events and journal projection
 
 Every agent emits a frozen node record before launch containing stable ID,
-ordinal, label, phase, dependencies, model, reasoning, prompt/input/output
+ordinal, label, phase, dependencies, model, reasoning, effective network access,
+prompt/input/output
 schema digests, optional command-evidence-policy digest, and freeze time. Start
 and terminal events add timing, duration, terminal outcome, output digest,
 optional digest-bound command evidence, and a classified diagnostic.

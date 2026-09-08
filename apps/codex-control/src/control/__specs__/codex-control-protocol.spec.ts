@@ -306,6 +306,88 @@ describe('[L2:INTEGRATION] codex-control MCP protocol', () => {
     expect(submitted).toEqual([command]);
   });
 
+  it('CAS-NET-GC1-006 exposes and preserves explicit direct-handoff network denial', async () => {
+    const delegated: unknown[] = [];
+    const forbidden = async () => {
+      throw new Error('Unexpected control operation');
+    };
+    const server = createCodexControlServer({
+      control: {
+        async delegateAgent(command) {
+          delegated.push(command);
+          return {
+            delegationId: 'network-delegation',
+            executionId: 'network-execution',
+            agentId: 'network-agent',
+            hostId: 'local',
+            threadId: 'network-thread',
+          };
+        },
+        runWorkflow: forbidden,
+        sendAgentMessage: forbidden,
+        cancelAgent: forbidden,
+        cancelWorkflow: forbidden,
+        snapshot: forbidden,
+        wait: forbidden,
+      },
+      authorize: () => ({
+        actorAgentId: 'owner',
+        scopes: ['control:delegate'],
+      }),
+    });
+    const client = new Client({ name: 'network-delegation', version: '1' });
+    const [clientTransport, serverTransport] =
+      InMemoryTransport.createLinkedPair();
+    await server.connect(serverTransport);
+    await client.connect(clientTransport);
+    close.push(
+      () => server.close(),
+      () => client.close(),
+    );
+
+    const advertised = (await client.listTools()).tools.find(
+      (tool) => tool.name === 'delegate_agent',
+    );
+    expect(advertised?.inputSchema.properties).toMatchObject({
+      networkAccess: { type: 'boolean' },
+    });
+    expect(advertised?.inputSchema.required).not.toContain('networkAccess');
+    const argumentsBase = {
+      idempotencyKey: 'network-delegation',
+      assignmentRef: 'CAS-AGENT-NETWORK-DEFAULT-R1',
+      assignmentDigest: `sha256:${'a'.repeat(64)}`,
+      hostId: 'local',
+      repositoryId: 'codex',
+      baseRevision: 'b'.repeat(40),
+      assignmentId: 'CAS-AGENT-NETWORK-DEFAULT-R1',
+      model: 'gpt-5.6-sol',
+      reasoningEffort: 'medium',
+      sandbox: 'readOnly',
+      approvalPolicy: 'never',
+      completionBoundary: 'ready-for-audit',
+      prompt: 'Inspect only.',
+    };
+    const response = await client.callTool({
+      name: 'delegate_agent',
+      arguments: { ...argumentsBase, networkAccess: false },
+    });
+    expect(response.isError, JSON.stringify(response.content)).not.toBe(true);
+    expect(delegated).toEqual([
+      expect.objectContaining({
+        runtimeProfile: expect.objectContaining({ networkAccess: false }),
+      }),
+    ]);
+    expect(
+      (
+        await client.callTool({
+          name: 'delegate_agent',
+          arguments: { ...argumentsBase, networkAccess: 'false' },
+        })
+      ).isError,
+    ).toBe(true);
+    expect(delegated).toHaveLength(1);
+  });
+
   it('RP-WIRE-DELEGATION preserves profile in serialized initial and resumed turns', async () => {
     const child = spawn(
       process.execPath,
@@ -405,6 +487,7 @@ describe('[L2:INTEGRATION] codex-control MCP protocol', () => {
           reasoningEffort: 'high',
           sandbox: 'readOnly',
           approvalPolicy: 'never',
+          networkAccess: false,
         },
         completionBoundary: 'runtime-settled',
         prompt: 'Read only.',
@@ -420,6 +503,7 @@ describe('[L2:INTEGRATION] codex-control MCP protocol', () => {
         expect(turn.params).toMatchObject({
           model: 'gpt-5.6-luna',
           effort: 'high',
+          sandboxPolicy: { type: 'readOnly', networkAccess: false },
         });
     } finally {
       lines.close();
