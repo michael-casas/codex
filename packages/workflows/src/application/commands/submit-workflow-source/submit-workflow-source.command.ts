@@ -4,10 +4,12 @@ export interface WorkflowSourceCommand {
   readonly source: string;
   readonly input?: unknown;
   readonly hostId?: string;
+  readonly repositoryId?: string;
   readonly idempotencyKey: string;
 }
 
 export interface WorkflowSourceContext {
+  readonly projectScoped?: true;
   readonly sourceRoot: string;
   readonly artifactDirectory: string;
   readonly hostId: string;
@@ -25,6 +27,7 @@ export interface WorkflowSourceSubmissionDependencies {
   resolveContext(
     actorAgentId: string,
     hostId?: string,
+    repositoryId?: string,
   ): Promise<WorkflowSourceContext>;
   compileSource(
     source: string,

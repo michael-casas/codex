@@ -2,7 +2,7 @@
 name: codex-control
 description: Launch, observe, message, and cancel local or remote Codex agents and workflows through Codex Control; open their live viewer beside the orchestrator and return an available mobile link.
 metadata:
-  version: "1.1.0"
+  version: '1.1.0'
 ---
 
 # Codex Control
@@ -19,6 +19,7 @@ tables. Do not assume every backend operation has a public tool.
 
 Use one task-level Codex Control tool call for the requested intent:
 
+- `admit_project` for explicit first-use admission of an authorized local Git project; this operation launches no agents.
 - `delegate_agent` for one local or remote Codex assignment.
 - `run_workflow` for one trusted workflow source file or an accepted registered workflow.
 - `get_control_snapshot` or `wait_control_delta` for visibility without launch.
@@ -41,6 +42,54 @@ Preserve each workflow node's explicit model and reasoning. Never silently
 substitute medium or a different model. Provider support errors must remain
 visible. Named Codex configuration profiles are separate and are not supported
 by pretending their values are explicit settings.
+
+## Admit and select a local project
+
+Codex Control serves authorized projects outside its own installation. Never infer
+the caller's repository from the daemon cwd, plugin cache, or a global source root.
+Inspect the task's actual local Git worktree and approved scope. If the host cannot
+attest cwd, supply its explicit canonical path and identity. A path is not authority:
+the daemon checks the authenticated actor's administrator-granted `localProjectPolicies`.
+One policy can grant approved parent roots for many projects; it is not a per-project
+daemon JSON registration. Remote admission remains a separate administrator operation.
+
+For first use, call `admit_project` with all seven fields:
+
+- `hostId`: the granted local-proxy host identity.
+- `repositoryId`: a stable, unique identity for this admitted worktree/revision binding.
+- `assignmentId`: the authorized assignment used by source submissions.
+- `baseRevision`: the verified full Git commit SHA available in that worktree.
+- `checkoutPath`: its canonical absolute Git worktree root.
+- `sourceRoot`: the approved canonical directory inside that worktree containing trusted workflow source.
+- `admissionIntent`: exactly `admit-local-project`, supplied only when project admission is authorized by the task.
+
+Reuse the returned `hostId` and `repositoryId` in `run_workflow`, with `source` relative
+to that `sourceRoot`. The same admission can be retried safely and survives daemon
+restart. A changed path, revision, or assignment cannot silently overwrite an existing
+binding; use a new approved repository identity. Do not edit registration storage.
+Changing `CODEX_CONTROL_ACTOR_AGENT_ID` does not change the trusted HTTP actor or grant
+permission. The daemon's authenticated authorization is authoritative.
+
+Direct `delegate_agent` uses the returned `hostId`, `repositoryId`, and `baseRevision`,
+plus the actual `assignmentId`, `assignmentRef`, `assignmentDigest`, `idempotencyKey`,
+`model`, `reasoningEffort`, `sandbox`, `approvalPolicy`, `completionBoundary`, and
+`prompt` from the approved charter. Do not invent a digest. The admitted policy limits
+the sandbox; local admission does not grant network access. No existing thread is adopted.
+
+Leases contain the selected committed revision. Dirty files, untracked inputs, and
+charters are not automatically copied. Preserve their custody: use explicitly approved
+tracked inputs or bounded artifacts, and keep exports inside the owned lease or an
+explicitly approved export operation. Do not copy an entire dirty worktree or credentials.
+Daemon compilation supplies `@codex/workflows`; an external project does not need to
+install internal `.codex` packages. Compilation loads trusted code, not a sandbox.
+
+Diagnostics are codes without private paths. `PROJECT_ADMISSION_UNAUTHORIZED` requires
+the correct trusted actor/local host and an existing policy grant. `PROJECT_ROOT_UNAUTHORIZED`
+means the checkout is outside that grant. `PROJECT_STORAGE_UNSAFE` requires the operator
+to check the configured owner-only lease/registry directories; first use creates missing
+directories safely and never changes permissions on existing directories. `PROJECT_REVISION_INVALID`
+requires a verified available commit. `PROJECT_IDENTITY_CONFLICT` requires preserving
+the old binding and selecting a new approved identity. Never retry by broadening scope.
 
 Respect the user's concurrency and usage budget. For validation, use the
 approved low-cost model/effort and smallest useful run; do not turn an example
@@ -72,9 +121,16 @@ export default defineWorkflow({
 });
 ```
 
-Call `run_workflow` once with `{ source, input, idempotencyKey }`; use a relative
+Call `run_workflow` once with `{ source, input, idempotencyKey, hostId, repositoryId }`; use a relative
 source path and a stable key for retries. A new intentional run gets a new key.
-Optional `hostId` selects among already authorized contexts. Do not supply a
+Optional `hostId` and `repositoryId` select among already authorized contexts. Legacy
+calls omitting repository selection remain valid when exactly one actor context matches.
+Explicit selections and dynamically admitted contexts scope idempotency to actor, host, and repository. Retry with the same
+selection and key; do not switch a legacy unscoped retry to the explicit form, which has
+a distinct identity. `WORKFLOW_CONTEXT_AMBIGUOUS` requires explicit selection;
+`WORKFLOW_CONTEXT_MISSING` requires admission under the correct actor/host;
+`WORKFLOW_SOURCE_NOT_FOUND` requires correcting the path relative to the admitted source root.
+Do not supply a
 manual sourceDigest, generated JavaScript path, or workflow registration.
 Missing/ambiguous context is an explicit setup error, never permission to invent
 an assignment or copy credentials. Relative imports are bundled and bound to the

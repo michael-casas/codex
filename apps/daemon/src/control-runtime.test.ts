@@ -56,4 +56,43 @@ describe('[L1:INTEGRATION] CAS-09.R2 production composition', () => {
       (daemon as Record<string, unknown>)['createProductionControlRuntime'],
     ).toBeTypeOf('function');
   });
+
+  it('PC-L1-POLICY parses an explicit actor-bound local project policy without requiring per-project registration', () => {
+    const localProjectPolicies = [
+      {
+        actorAgentId: 'owner',
+        hostId: 'local',
+        allowedRoots: ['/srv/projects'],
+        leaseRoot: '/srv/leases',
+        registryRoot: '/srv/admissions',
+        runtimeProfile: {
+          model: 'gpt-5.6-luna',
+          reasoningEffort: 'low',
+          sandbox: 'readOnly',
+          approvalPolicy: 'never',
+        },
+      },
+    ];
+    const parsed = daemon.parseProductionControlConfig({
+      ...config,
+      localProjectPolicies,
+    });
+    expect(parsed).toMatchObject({ localProjectPolicies });
+    expect(() =>
+      daemon.parseProductionControlConfig({
+        ...config,
+        localProjectPolicies: [
+          { ...localProjectPolicies[0], actorAgentId: '' },
+        ],
+      }),
+    ).toThrow('PROJECT_POLICY_INVALID');
+    expect(() =>
+      daemon.parseProductionControlConfig({
+        ...config,
+        localProjectPolicies: [
+          { ...localProjectPolicies[0], allowedRoots: ['/'] },
+        ],
+      }),
+    ).toThrow('PROJECT_POLICY_INVALID');
+  });
 });

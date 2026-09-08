@@ -33,8 +33,14 @@ function within(root: string, path: string) {
 }
 
 async function compile(source: string, sourceRoot: string): Promise<string> {
-  const root = await realpath(sourceRoot);
-  const entry = await realpath(resolve(root, source));
+  let root: string;
+  let entry: string;
+  try {
+    root = await realpath(sourceRoot);
+    entry = await realpath(resolve(root, source));
+  } catch {
+    throw new WorkflowSourceCompilerError('WORKFLOW_SOURCE_NOT_FOUND');
+  }
   if (!within(root, entry))
     throw new WorkflowSourceCompilerError('WORKFLOW_SOURCE_OUTSIDE_ROOT');
   if (!entry.endsWith('.workflow.ts'))

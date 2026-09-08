@@ -1,0 +1,46 @@
+{
+  "id": "CAS-PROJECT-CONTEXT-R2-GC1",
+  "status": "frozen",
+  "baseRevision": "48bdb3eef84dd23a4eb6a20ed01a327133202417",
+  "required": {
+    "l1": 4,
+    "l2": 14,
+    "l3": 1
+  },
+  "red": {
+    "l1": [
+      "test-output/project-context-l1-red.json",
+      "test-output/project-policy-l1-red.json"
+    ],
+    "l2": [
+      "test-output/project-context-l2-red.json"
+    ],
+    "l3": [
+      "test-output/cucumber/project-context-red.json"
+    ]
+  },
+  "cleanup": "zero owned temporary repositories, listeners, leases and App Server hosts; no paid model execution",
+  "scope": "Local actor-policy admission and source/direct-handoff selection; remote admission and existing-thread adoption excluded",
+  "frozen": [
+    {
+      "path": "packages/workflows/src/application/commands/submit-workflow-source/__tests__/submit-workflow-source-handler.test.ts",
+      "sha256": "d7c7a7044efb1731268f5de50d0f7b52817b59534b77e6dc6c49d4bc79bb3bde"
+    },
+    {
+      "path": "apps/daemon/src/control-runtime.test.ts",
+      "sha256": "7e7671125876a64a45743be4f8d4c8f5904893a4f2822050559ca978777fb625"
+    },
+    {
+      "path": "apps/daemon/src/workflow-execution/__specs__/project-context.spec.ts",
+      "sha256": "2183b9dee8d2544d48c898b9f23765bfada8932ced194cae0b3c70ff96bd645a"
+    },
+    {
+      "path": "apps/daemon/src/workflow-execution/project-context.feature",
+      "sha256": "00ee7985f9b0466035ff0f06cc6b1598a63a8f1f513cad40081d60cf7c6d72e3"
+    },
+    {
+      "path": "apps/daemon/src/workflow-execution/project-context.steps.ts",
+      "sha256": "42af4aca7e67bce6a6a2cfed10975d58ca02cf2c81c40fe2add14d8b460a72ef"
+    }
+  ]
+}

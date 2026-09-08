@@ -12,6 +12,10 @@ export interface ControlAuthorization {
 }
 
 export interface CodexControlPlane {
+  admitProject?(
+    command: unknown,
+    authorization: ControlAuthorization,
+  ): Promise<unknown>;
   delegateAgent(
     command: unknown,
     authorization: ControlAuthorization,
@@ -61,6 +65,7 @@ export interface CodexControlServerOptions {
 }
 
 export const codexControlToolCatalog = Object.freeze([
+  { name: 'admit_project', readOnly: false, destructive: false },
   { name: 'delegate_agent', readOnly: false, destructive: false },
   { name: 'send_agent_message', readOnly: false, destructive: false },
   { name: 'ask_agent', readOnly: false, destructive: false },
@@ -101,6 +106,7 @@ const sourceWorkflowInput = z.strictObject({
   source: z.string().min(1).max(4096),
   input: z.unknown().optional(),
   hostId: id.optional(),
+  repositoryId: id.optional(),
   idempotencyKey: id,
 });
 const registeredWorkflowInput = z.strictObject(workflowInput);
@@ -118,7 +124,7 @@ const workflowSubmissionInput = registeredWorkflowInput
       context.addIssue({
         code: 'custom',
         message:
-          'Provide source, input, idempotencyKey and optional hostId, or the complete registered workflow envelope; do not mix forms.',
+          'Provide source, input, idempotencyKey and optional hostId/repositoryId, or the complete registered workflow envelope; do not mix forms.',
       });
   });
 
@@ -308,6 +314,36 @@ export function createCodexControlServer(
   });
 
   server.registerTool(
+    'admit_project',
+    {
+      description:
+        "Explicitly admit one local Git project under the authenticated actor's configured policy. Does not launch agents. Reuse the returned hostId and repositoryId for workflow source selection and direct delegation.",
+      inputSchema: z.strictObject({
+        hostId: id,
+        repositoryId: id,
+        assignmentId: id,
+        baseRevision: revision,
+        checkoutPath: z.string().min(1).max(4096),
+        sourceRoot: z.string().min(1).max(4096),
+        admissionIntent: z.literal('admit-local-project'),
+      }),
+      annotations: annotations(false, false),
+    },
+    (input, extra) =>
+      invoke(async () =>
+        (options.control.admitProject ?? unavailable)(
+          input,
+          await authorization(
+            options,
+            'admit_project',
+            extra,
+            'control:project',
+          ),
+        ),
+      ),
+  );
+
+  server.registerTool(
     'delegate_agent',
     {
       description:
@@ -398,7 +434,7 @@ export function createCodexControlServer(
     'run_workflow',
     {
       description:
-        'Submit one trusted workflow file using source, input and idempotencyKey (optional hostId), or the legacy registered envelope. Return one durable run handle.',
+        'Submit one trusted workflow file using source, input and idempotencyKey (optional hostId and repositoryId), or the legacy registered envelope. Admit a new local project with admit_project first. Return one durable run handle.',
       inputSchema: workflowSubmissionInput,
       annotations: annotations(false, false),
     },

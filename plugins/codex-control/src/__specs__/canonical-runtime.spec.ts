@@ -42,7 +42,7 @@ describe('[L2:E2E] canonical packaged Codex Control runtime', () => {
     client = new Client({ name: 'cas-11-r2-discovery', version: '1.0.0' });
     await client.connect(transport);
 
-    expect((await client.listTools()).tools).toHaveLength(9);
+    expect((await client.listTools()).tools).toHaveLength(10);
     expect(
       await client.callTool({
         name: 'get_control_snapshot',
@@ -107,7 +107,7 @@ describe('[L2:E2E] canonical packaged Codex Control runtime', () => {
     client = new Client({ name: 'cas-11-r2', version: '1.0.0' });
     await client.connect(transport);
 
-    expect((await client.listTools()).tools).toHaveLength(9);
+    expect((await client.listTools()).tools).toHaveLength(10);
     const delegated = await client.callTool({
       name: 'delegate_agent',
       arguments: {

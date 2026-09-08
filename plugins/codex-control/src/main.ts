@@ -13,6 +13,7 @@ const origin = process.env['CODEX_CONTROL_ORIGIN'] ?? 'http://127.0.0.1:4765';
 const actorAgentId =
   process.env['CODEX_CONTROL_ACTOR_AGENT_ID'] ?? 'codex-control-user';
 const scopes = [
+  'control:project',
   'control:delegate',
   'control:message',
   'control:workflow',
@@ -54,6 +55,15 @@ function client() {
 }
 
 const control: CodexControlPlane = {
+  admitProject: async (...args) => {
+    const admit = (await client()).admitProject;
+    if (!admit)
+      throw new ControlGatewayError(
+        'PROJECT_ADMISSION_UNAVAILABLE',
+        'Project admission is unavailable.',
+      );
+    return admit(...args);
+  },
   delegateAgent: async (...args) => (await client()).delegateAgent(...args),
   sendAgentMessage: async (...args) =>
     (await client()).sendAgentMessage(...args),

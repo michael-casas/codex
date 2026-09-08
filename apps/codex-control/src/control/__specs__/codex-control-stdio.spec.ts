@@ -79,7 +79,7 @@ describe('[L2:E2E] codex-control built stdio process', () => {
     client = new Client({ name: 'cas-09-stdio', version: '1.0.0' });
     await client.connect(transport);
 
-    expect((await client.listTools()).tools).toHaveLength(9);
+    expect((await client.listTools()).tools).toHaveLength(10);
     const delegated = await client.callTool({
       name: 'delegate_agent',
       arguments: {

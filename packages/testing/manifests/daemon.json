@@ -49,6 +49,7 @@
         "--config",
         "apps/daemon/vitest.config.ts",
         "src/visibility/__specs__/legacy-replay.spec.ts",
+        "src/workflow-execution/__specs__/project-context.spec.ts",
         "--testNamePattern=L2:INTEGRATION"
       ],
       "expected": "vitest-output",
@@ -117,6 +118,20 @@
       ],
       "expected": "cucumber-output",
       "artifact": "test-output/cucumber/daemon-remote-workflow.json"
+    },
+    {
+      "heading": "--- Local project admission through MCP ---",
+      "layer": "l3",
+      "command": [
+        "bun",
+        "packages/testing/src/cli.ts",
+        "verify-cucumber",
+        "apps/daemon/src/workflow-execution/project-context.feature",
+        "apps/daemon/out-tsc/cucumber/workflow-execution/project-context.steps.js",
+        "test-output/cucumber/project-context.json"
+      ],
+      "expected": "cucumber-output",
+      "artifact": "test-output/cucumber/project-context.json"
     }
   ]
 }
