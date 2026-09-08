@@ -291,7 +291,7 @@ source = "https://github.com/DietrichGebert/ponytail.git"
 
 [marketplaces.codex-control-local]
 source_type = "local"
-source = "/Users/mcasa_atlantis/.codex/worktrees/a4a6/.codex"
+source = "/Users/mcasa_atlantis/.codex"
 
 [hooks.state]
 
