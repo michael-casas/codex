@@ -7,7 +7,7 @@
   "targets": {
     "build": {
       "executor": "@nx/esbuild:esbuild",
-      "dependsOn": ["@codex/codex:build"],
+      "dependsOn": ["^build"],
       "outputs": ["{options.outputPath}"],
       "defaultConfiguration": "production",
       "options": {

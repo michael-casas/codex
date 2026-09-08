@@ -428,6 +428,7 @@ describe('[L2:E2E] Bun React RED to GREEN public workflow', () => {
       ) as {
         status: string;
         nodes: Array<{ label: string; status: string; outcome: string }>;
+        events: Array<Record<string, unknown>>;
       };
       expect(journal.status).toBe('failed');
       expect(journal.nodes).toEqual([
@@ -437,6 +438,13 @@ describe('[L2:E2E] Bun React RED to GREEN public workflow', () => {
           outcome: 'failed',
         }),
       ]);
+      expect(journal.events).toContainEqual(
+        expect.objectContaining({
+          kind: 'turn.failed',
+          nodeId: 'founder-bun-react-red-green:001:bun-react-builder',
+          status: 'failed',
+        }),
+      );
       await new Promise((resolveDelay) => setTimeout(resolveDelay, 1_200));
       await expect(access(join(projectPath, 'node_modules'))).rejects.toThrow();
       await expect(access(join(projectPath, 'dist'))).rejects.toThrow();

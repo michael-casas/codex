@@ -128,6 +128,13 @@ export async function runLocalWorkflow(
       sandbox: 'workspaceWrite',
       tempDirectory,
       approvalPolicy: 'never',
+      async onObservation(event) {
+        if (event.kind !== 'turn.failed') return;
+        await journal.record({
+          ...event,
+          at: new Date().toISOString(),
+        });
+      },
     });
     const result = await executeWorkflow(request.definition, request.input, {
       runId,
