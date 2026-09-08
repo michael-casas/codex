@@ -3,12 +3,12 @@ name: discussion-to-docs
 description: >-
   Guided conversation-to-document pipeline. Turns open-ended discussion into
   structured documentation such as PRDs, ADRs, specs, domain maps, feature
-  inventories, and roadmaps. On Codex, begin with one complete, numbered,
-  document-specific questionnaire in ordinary assistant text; do not use
-  request_user_input, a clarify tool, or iterative one-question-at-a-time
-  prompting. Other runtimes may use their native inline questioning mechanism.
+  inventories, and roadmaps. On Codex, collect decisions through one Lavish
+  10-by-4 radio-card questionnaire with recommended defaults, optional notes,
+  progress, and one final submission. Other runtimes may use their native inline
+  questioning mechanism.
 metadata:
-  version: 1.2.0
+  version: 1.3.0
   hermes:
     tags: [discussion, docs, prd, roadmap, questionnaire, inline-questions, clarifying-questions, same-turn]
     category: engineering
@@ -17,27 +17,47 @@ metadata:
 
 # Discussion → Docs
 
-## Codex Contract — Full Questionnaire First
+## Codex Contract — Lavish Decision Grid First
 
 When running on Codex, make the first substantive response a **complete upfront
-questionnaire for the requested document**.
+questionnaire for the requested document in Lavish**.
 
 1. Identify the target document type and read its applicable schema contract.
-2. Derive the full set of decisions needed to produce a complete document. Let
-   that set determine **N**; do not impose an arbitrary question count.
-3. Present all questions together as `1` through `N` in ordinary assistant text.
-   Give concise answer choices where they reduce ambiguity, and always allow a
-   free-form answer.
-4. End the response and wait for the user to answer the questionnaire in one
-   message.
-5. Use those answers to write the document. Ask a second batch only when the
+2. Derive the full decision set, then shape it into exactly **40 useful cards**.
+   Split compound decisions or add explicit ratification checks when needed;
+   never add meaningless filler.
+3. Invoke the `lavish` skill and read its `input` playbook plus every other
+   matching playbook before writing HTML.
+4. Build a responsive questionnaire whose desktop layout is exactly **10 rows
+   by 4 columns**. It may collapse to two or one column on smaller screens.
+5. Give every card four visible native radio-button choices labeled `A` through
+   `D`. Include exactly one clearly marked recommended choice and select it by
+   default. Use `D` for a custom answer when practical and include an optional
+   note field on every card.
+6. Keep radio changes local and reversible. Show selected state, live completion
+   progress, and the difference between local selections and queued feedback.
+   Do not queue feedback on every radio change.
+7. Provide one final **Queue all answers** action that submits the complete
+   40-item answer set as one structured prompt. Preserve each question number,
+   title, selected letter, selected text, and optional note.
+8. Open the artifact with `lavish-axi`, run its foreground poll, repair every
+   error-severity layout warning, and keep the review session open while the
+   user fills it out.
+9. Use those answers to write the document. Ask a second batch only when the
    answers expose a new, genuinely blocking contradiction that could not have
    been anticipated from the document schema.
 
-This contract is mandatory on Codex even when `request_user_input`, a `clarify`
-tool, plan-mode input controls, or similar structured-question mechanisms are
-available. **Do not call them. Do not ask one question at a time. Do not start
-drafting the document before the upfront questionnaire is answered.**
+Match the artifact to the subject project's design system as required by
+Lavish. Use Lavish's fallback theme only when that project has no usable design
+system. The questionnaire HTML is a temporary review surface; the final
+document remains Markdown in the project's configured documentation path.
+
+This contract is mandatory on Codex when Lavish is available, even when
+`request_user_input`, `clarify`, plan-mode inputs, or similar mechanisms are
+present. **Do not call them. Do not ask one question at a time. Do not start
+drafting before the complete questionnaire is answered.** If Lavish is
+genuinely unavailable, report that limitation and fall back to one complete
+numbered questionnaire in ordinary assistant text.
 
 ## The Problem (why this skill exists)
 
@@ -81,17 +101,15 @@ CRITICAL: Implement ALL of the following tasks in order. Do NOT ask questions.
 Do NOT present options. Do NOT ask 'what's next'. Just execute each step.
 ```
 
-### 2. Codex CLI — Turn-Based (No Same-Turn Mechanism)
+### 2. Codex — Lavish Review Surface
 
-**Mechanism:** Codex CLI does NOT have an inline same-turn questioning
-mechanism. The model outputs clarifying text, the turn ends, the user
-responds in the next turn (standard conversation flow).
+**Mechanism:** Codex uses a Lavish HTML review surface for the complete upfront
+questionnaire. The user reviews recommended defaults, changes exceptions, adds
+notes, and sends one structured response through the Lavish conversation panel.
 
-**For discussion-to-docs on Codex:** follow the Codex Contract above. Produce
-the full document-specific `1..N` questionnaire as ordinary assistant text in
-the first substantive response. Do not call `request_user_input`, `clarify`, or
-an equivalent tool even if one is available. User replies with all answers in
-one response; then write the document.
+**For discussion-to-docs on Codex:** follow the Lavish Decision Grid contract
+above. Do not substitute `request_user_input`, `clarify`, or an iterative chat
+interview. Plain assistant text is the fallback only when Lavish is unavailable.
 
 ### 3. Pi (GPT-5.4 / cmux TUI) — Hermes' clarify Tool
 
@@ -125,10 +143,8 @@ it doesn't burn a round-trip per question.
 │              │ outputs choices, TUI   │ in response         │
 │              │ pauses for input)      │                     │
 ├──────────────┼────────────────────────┼─────────────────────┤
-│ Codex CLI    │ ⨯ No same-turn         │ End-turn text block │
-│              │ mechanism              │ (all questions at   │
-│              │                        │ once, reply next    │
-│              │                        │ turn)               │
+│ Codex        │ ✓ Lavish review        │ 10 × 4 radio-card   │
+│              │ surface                │ decision grid       │
 ├──────────────┼────────────────────────┼─────────────────────┤
 │ Pi (GPT-5.4) │ ✓ clarify tool         │ Structured choices  │
 │              │ (blocks agent thread,  │ (4 + "Other") via   │
@@ -140,8 +156,9 @@ it doesn't burn a round-trip per question.
 └──────────────┴────────────────────────┴─────────────────────┘
 ```
 
-For **Codex**, always use the mandatory full upfront `1..N` questionnaire. For
-Hermes subagents running outside CLI/TUI, fall back to an end-turn bulk block.
+For **Codex**, always use the mandatory Lavish 10-by-4 decision grid when
+available. For Hermes subagents running outside CLI/TUI, fall back to an
+end-turn bulk block.
 
 ## The Questionnaire Pattern
 
@@ -164,7 +181,7 @@ I need a few details before I can write this doc:
 Reply with the number(s) of your choice(s), or type your answer for D.
 ```
 
-### Full upfront questionnaire format (Codex)
+### Full upfront questionnaire format (Codex fallback only)
 
 ```
 Before I write the <document type>, please answer this complete questionnaire:
@@ -187,9 +204,9 @@ Reply with all answers in one message (for example, "1B, 2C, 3A, ...") or
 answer freely under each number.
 ```
 
-Do not treat the three example questions above as a fixed questionnaire. Build
-`1..N` from the required fields and decision points of the actual document
-contract.
+Do not treat the three example questions above as a fixed questionnaire. On
+Codex, the normal path is the Lavish grid; this text pattern exists only for a
+genuine Lavish outage.
 
 ## Conversation-to-Doc Pipeline
 
@@ -199,7 +216,7 @@ The full flow from raw discussion → structured docs:
 Phase 1: INTAKE
   ↓ Read the user's input / discussion / notes
   ↓ Detect the target artifact type (PRD / ADR / CONTEXT.md / Roadmap)
-  ↓ Codex → present the full upfront 1..N questionnaire and end the turn
+  ↓ Codex → open the complete Lavish 10 × 4 radio-card questionnaire
   ↓ Other runtimes → use their routed questioning mechanism
   ↓ Capture the complete answer set before drafting
 
@@ -317,9 +334,11 @@ Phase 4: REVIEW
    asking ALL clarifying questions in the first inline block, not
    iteratively.
 
-8. **For Codex sessions** — always ask the complete document-specific `1..N`
-   questionnaire up front in ordinary assistant text. Never use
-   `request_user_input`, `clarify`, or an equivalent structured-input tool.
+8. **For Codex sessions** — always use the complete Lavish 10-row × 4-column
+   radio-card questionnaire when Lavish is available. Preselect one recommended
+   answer per card, preserve optional notes, queue all 40 answers once, and
+   never use `request_user_input`, `clarify`, or an iterative interview as a
+   substitute.
 
 ## Default Output Paths
 
@@ -409,7 +428,7 @@ When the user provides raw input (notes, chat history, voice transcript):
 ```
 1. PARSE  → classify the input into one of the 4 layers
 2. FILL   → if enough info exists, write the IR for that layer
-3. QUESTION → on Codex, ask the full upfront `1..N` questionnaire in plain text;
+3. QUESTION → on Codex, open the full Lavish 10 × 4 decision grid;
               on other runtimes, use the routed mechanism
 4. CONFIRM → present the artifact to the user for review
 5. NEXT   → offer to proceed to the next layer

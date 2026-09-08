@@ -8,9 +8,11 @@ import {
 } from 'node:fs/promises';
 import { createHash } from 'node:crypto';
 import { existsSync } from 'node:fs';
+import { createServer } from 'node:net';
 import { tmpdir } from 'node:os';
 import { basename, join, resolve } from 'node:path';
 import { spawnSync } from 'node:child_process';
+import { once } from 'node:events';
 
 import { afterEach, describe, expect, it } from 'vitest';
 
@@ -51,10 +53,7 @@ describe('[L2:INTEGRATION] Ground-0 process and filesystem boundaries', () => {
     const root = await temporaryRoot();
     const marker = join(root, 'osascript-invoked');
     const fakeOsascript = join(root, 'osascript');
-    await writeFile(
-      fakeOsascript,
-      `#!/bin/sh\nprintf invoked > "${marker}"\n`,
-    );
+    await writeFile(fakeOsascript, `#!/bin/sh\nprintf invoked > "${marker}"\n`);
     await chmod(fakeOsascript, 0o755);
     const env = { ...process.env };
     for (const key of [
@@ -87,15 +86,9 @@ describe('[L2:INTEGRATION] Ground-0 process and filesystem boundaries', () => {
     const marker = join(root, 'osascript-invoked');
     const fakeOsascript = join(root, 'osascript');
     const fakeChatGpt = join(root, 'ChatGPT');
-    await writeFile(
-      fakeOsascript,
-      `#!/bin/sh\nprintf invoked > "${marker}"\n`,
-    );
+    await writeFile(fakeOsascript, `#!/bin/sh\nprintf invoked > "${marker}"\n`);
     await writeFile(fakeChatGpt, '#!/bin/sh\nexit 0\n');
-    await Promise.all([
-      chmod(fakeOsascript, 0o755),
-      chmod(fakeChatGpt, 0o755),
-    ]);
+    await Promise.all([chmod(fakeOsascript, 0o755), chmod(fakeChatGpt, 0o755)]);
 
     const run = spawnSync(
       'bash',
@@ -131,23 +124,13 @@ describe('[L2:INTEGRATION] Ground-0 process and filesystem boundaries', () => {
     const marker = join(root, 'osascript-invoked');
     const fakeOsascript = join(root, 'osascript');
     const fakeChatGpt = join(root, 'ChatGPT');
-    await writeFile(
-      fakeOsascript,
-      `#!/bin/sh\nprintf invoked > "${marker}"\n`,
-    );
+    await writeFile(fakeOsascript, `#!/bin/sh\nprintf invoked > "${marker}"\n`);
     await writeFile(fakeChatGpt, '#!/bin/sh\nexit 0\n');
-    await Promise.all([
-      chmod(fakeOsascript, 0o755),
-      chmod(fakeChatGpt, 0o755),
-    ]);
+    await Promise.all([chmod(fakeOsascript, 0o755), chmod(fakeChatGpt, 0o755)]);
 
     const run = spawnSync(
       'bash',
-      [
-        resolve('scripts/launch-chatgpt-in-herdr'),
-        '--watch',
-        '--dry-run',
-      ],
+      [resolve('scripts/launch-chatgpt-in-herdr'), '--watch', '--dry-run'],
       {
         cwd: resolve('.'),
         encoding: 'utf8',
@@ -190,11 +173,7 @@ describe('[L2:INTEGRATION] Ground-0 process and filesystem boundaries', () => {
 
     const run = spawnSync(
       'bash',
-      [
-        resolve('scripts/launch-chatgpt-in-herdr'),
-        '--watch',
-        '--dry-run',
-      ],
+      [resolve('scripts/launch-chatgpt-in-herdr'), '--watch', '--dry-run'],
       {
         cwd: resolve('.'),
         encoding: 'utf8',
@@ -214,6 +193,85 @@ describe('[L2:INTEGRATION] Ground-0 process and filesystem boundaries', () => {
       mode: 'watch-dry-run',
       status: 'ready',
     });
+  });
+
+  it('[L2:INTEGRATION] J5-HERDR-001 admits a live protected Herdr context lease without exposing its values', async () => {
+    const root = await temporaryRoot();
+    const socketPath = join(root, 'herdr.sock');
+    const leasePath = join(root, 'context.env');
+    const server = createServer();
+    server.listen(socketPath);
+    await once(server, 'listening');
+
+    try {
+      await writeFile(
+        leasePath,
+        [
+          'HERDR_ENV=1',
+          `HERDR_SOCKET_PATH=${socketPath}`,
+          'HERDR_WORKSPACE_ID=w-test',
+          'HERDR_TAB_ID=w-test:t1',
+          'HERDR_PANE_ID=w-test:p1',
+          `CODEX_HERDR_GUARDIAN_PID=${process.pid}`,
+          '',
+        ].join('\n'),
+        { mode: 0o600 },
+      );
+
+      const run = spawnSync(
+        'bash',
+        [resolve('scripts/codex-herdr-proxy'), 'app-server', 'proxy'],
+        {
+          cwd: resolve('.'),
+          encoding: 'utf8',
+          env: {
+            ...process.env,
+            CODEX_HERDR_DRY_RUN: '1',
+            CODEX_HERDR_LEASE_PATH: leasePath,
+            CODEX_HERDR_REAL_CODEX: '/usr/local/bin/codex',
+          },
+        },
+      );
+
+      expect(run.status).toBe(0);
+      expect(JSON.parse(run.stdout)).toEqual({
+        herdrKeys: 5,
+        mode: 'proxy-dry-run',
+        status: 'herdr-ready',
+      });
+      expect(run.stdout).not.toContain(socketPath);
+      expect(run.stdout).not.toContain('w-test');
+    } finally {
+      server.close();
+      await once(server, 'close');
+    }
+  });
+
+  it('[L2:INTEGRATION] J5-HERDR-002 fails closed before Codex execution when the context lease is missing', async () => {
+    const root = await temporaryRoot();
+    const marker = join(root, 'real-codex-invoked');
+    const fakeCodex = join(root, 'codex');
+    await writeFile(fakeCodex, `#!/bin/sh\nprintf invoked > "${marker}"\n`, {
+      mode: 0o755,
+    });
+
+    const run = spawnSync(
+      'bash',
+      [resolve('scripts/codex-herdr-proxy'), 'app-server', 'proxy'],
+      {
+        cwd: resolve('.'),
+        encoding: 'utf8',
+        env: {
+          ...process.env,
+          CODEX_HERDR_LEASE_PATH: join(root, 'missing.env'),
+          CODEX_HERDR_REAL_CODEX: fakeCodex,
+        },
+      },
+    );
+
+    expect(run.status).toBe(78);
+    expect(run.stderr).toContain('Herdr context lease is unavailable');
+    expect(existsSync(marker)).toBe(false);
   });
 
   it('[L2:INTEGRATION] NX-NAME-001 enforces @codex identities for the workspace and every package-bearing project', async () => {

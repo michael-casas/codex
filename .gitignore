@@ -54,6 +54,7 @@ test-output
 .dmux/
 .pi/
 # Secrets and machine-local credentials
+/.secrets/
 /.env
 /.env/
 /.env.*

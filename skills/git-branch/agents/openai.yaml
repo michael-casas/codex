@@ -1,0 +1,5 @@
+interface:
+  display_name: "Git Branch Governance"
+  short_description: "Safely operate the ratified branch hierarchy"
+  brand_color: "#04A5E3"
+  default_prompt: "Use $git-branch to inspect this repository and route my work through the correct branch and worktree."
