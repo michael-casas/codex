@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { agent, defineWorkflow, executeWorkflow } from '../../index.js';
 
+// === L1: IN-PROCESS INTEGRATION TESTS ===
 describe('[L1:INTEGRATION] visible source metadata and validated output',()=>{
   it('R2-TITLE preserves optional human title while keeping id/version identity',()=>{
     const options={id:'readable-demo',title:'Readable Demo',description:'Supporting description',run:()=>null};

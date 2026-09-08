@@ -7,6 +7,7 @@ import { createAgentMessageDatabaseFixture } from '../../agent-messaging/testing
 
 const command = { idempotencyKey: 'delegate-pg-1', assignmentRef: 'CAS-06', assignmentDigest: `sha256:${'a'.repeat(64)}` as const, hostId: 'local', workspace: { repositoryId: 'codex', baseRevision: 'b'.repeat(40), assignmentId: 'CAS-06' }, runtimeProfile: { model: 'gpt-5.6-sol', reasoningEffort: 'medium', sandbox: 'workspaceWrite', approvalPolicy: 'never' }, completionBoundary: 'ready-for-audit' as const, prompt: 'Implement CAS-06.' };
 
+// === L2: REAL-BOUNDARY INTEGRATION TESTS ===
 describe('[L2:INTEGRATION] PostgreSQL agent delegation', () => {
   test('atomically reserves, replays, binds, and rejects conflicting idempotency', async () => {
     const fixture = await createAgentMessageDatabaseFixture();

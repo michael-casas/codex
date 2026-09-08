@@ -39,6 +39,7 @@ function fixture(active = true) {
   return { calls, service, releases: () => releases };
 }
 
+// === L1: UNIT TESTS ===
 describe('[L1:UNIT] direct agent handoff', () => {
   test('validates the one-call contract and keeps completion boundaries distinct', async () => {
     expect((api as any).createDelegationService, 'CAS-06 delegation behavior is not implemented').toBeTypeOf('function');
@@ -56,6 +57,7 @@ describe('[L1:UNIT] direct agent handoff', () => {
   });
 });
 
+// === L1: IN-PROCESS INTEGRATION TESTS ===
 describe('[L1:INTEGRATION] direct agent handoff', () => {
   test('RP-DELEGATION forwards exact model/effort on initial and idle continuation without replay', async () => {
     const f = fixture(false);

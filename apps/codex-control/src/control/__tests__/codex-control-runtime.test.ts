@@ -27,6 +27,7 @@ const control: CodexControlPlane = {
   wait: async () => ({ cursor: '0', changed: false }),
 };
 
+// === L1: IN-PROCESS INTEGRATION TESTS ===
 describe('[L1:INTEGRATION] CAS-09.R2 presented MCP results', () => {
   it('RP-MCP requires explicit workflow effort and forwards it unchanged', async () => {
     const seen: unknown[] = [];

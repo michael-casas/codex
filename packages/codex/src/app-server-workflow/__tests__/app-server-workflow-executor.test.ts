@@ -28,6 +28,7 @@ class Feed {
   }
 }
 
+// === L1: IN-PROCESS INTEGRATION TESTS ===
 describe('[L1:INTEGRATION] HOSTR1 stop obligations', () => {
   it('HOSTR1 bounds four unavailable stop obligations and rejects new work on a dead feed', async () => {
     const feed = new Feed();

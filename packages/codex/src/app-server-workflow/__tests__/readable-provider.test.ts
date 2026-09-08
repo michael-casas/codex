@@ -6,6 +6,7 @@ import {
 } from '../app-server-workflow.executor.js';
 import type { AppServerInboundMessage } from '../../app-server-client/app-server-client.types.js';
 
+// === L1: IN-PROCESS INTEGRATION TESTS ===
 describe('[L1:INTEGRATION] readable provider ownership', () => {
   it('R2-PROVIDER-METADATA retains a complete bounded final and typed phase/turn while excluding raw media', () => {
     const mapped = mapAppServerVisibility({

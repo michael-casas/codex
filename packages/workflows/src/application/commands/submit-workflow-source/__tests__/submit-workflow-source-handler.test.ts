@@ -41,6 +41,7 @@ function setup() {
   };
 }
 
+// === L1: UNIT TESTS ===
 describe('[L1:UNIT] trusted workflow source admission', () => {
   it('WA-L1-ENVELOPE composes one existing durable command from actor context', async () => {
     const { run, resolveContext, compileSource, submit } = setup();

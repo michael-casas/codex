@@ -33,6 +33,7 @@ import {
 } from '@codex/process';
 import { createCodexControlServer } from '../codex-control.gateway.js';
 
+// === L2: REAL-BOUNDARY INTEGRATION TESTS ===
 describe('[L2:INTEGRATION] codex-control MCP protocol', () => {
   const close: Array<() => Promise<void>> = [];
   afterEach(async () => {

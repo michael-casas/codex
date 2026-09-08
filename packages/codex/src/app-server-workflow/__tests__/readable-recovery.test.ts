@@ -85,6 +85,7 @@ function fixture(value: unknown, readFailure?: Error) {
   };
 }
 
+// === L1: IN-PROCESS INTEGRATION TESTS ===
 describe('[L1:INTEGRATION] recovered final display provenance', () => {
   it('R2-RECOVERY-VERIFIED maps one actual matching final without live notifications or media leakage', async () => {
     const value = snapshot();

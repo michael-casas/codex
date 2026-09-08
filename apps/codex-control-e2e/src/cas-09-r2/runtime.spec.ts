@@ -23,7 +23,8 @@ const workflow = {
   ],
 };
 
-test.describe('@cas09r2-l2 same-origin production client', () => {
+// === L2: END-TO-END TESTS ===
+test.describe('[L2:E2E] @cas09r2-l2 same-origin production client', () => {
   test('loads summary without an injected window bridge', async ({ page }) => {
     await page.route('**/api/control/snapshot**', async (route) => {
       await route.fulfill({

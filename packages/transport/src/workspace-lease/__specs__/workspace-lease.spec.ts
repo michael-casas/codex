@@ -231,6 +231,7 @@ function lease(
   });
 }
 
+// === L2: REAL-BOUNDARY INTEGRATION TESTS ===
 describe('[L2:INTEGRATION] Workspace lease real boundary', () => {
   it('[L2:INTEGRATION] TEMP-L2-BUN writes only through the private lease temp and release removes it', async () => {
     const repo = await repository('cas-temp-local-');

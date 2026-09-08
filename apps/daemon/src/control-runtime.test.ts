@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 
 import * as daemon from './main.js';
 
+// === L1: IN-PROCESS INTEGRATION TESTS ===
 describe('[L1:INTEGRATION] CAS-09.R2 production composition', () => {
   const config = {
     hosts: [

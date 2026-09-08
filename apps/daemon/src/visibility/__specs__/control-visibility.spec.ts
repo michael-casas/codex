@@ -18,6 +18,7 @@ import type { VisibilityResult } from '@codex/process';
 const agentId = (run: string, node: string) =>
   `agent:${createHash('sha256').update(`${run}\0${node}`).digest('hex')}`;
 
+// === L2: END-TO-END TESTS ===
 describe('[L2:E2E] production visibility source replay', () => {
   it('UIR1-L2-REPLAY reconstructs real durable workflow events and preserves selected feed across restart', async () => {
     const database = await createRuntimeVisibilityDatabaseFixture();

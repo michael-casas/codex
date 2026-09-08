@@ -1,6 +1,7 @@
 import { expect, test } from '@playwright/test';
 
-test('R2-TOOL-DISCLOSURE opens a capped nested scrollview below an anchored Tool Call trigger', async ({
+// === L2: END-TO-END TESTS ===
+test('[L2:E2E] R2-TOOL-DISCLOSURE opens a capped nested scrollview below an anchored Tool Call trigger', async ({
   page,
 }) => {
   await page.addInitScript(() => {

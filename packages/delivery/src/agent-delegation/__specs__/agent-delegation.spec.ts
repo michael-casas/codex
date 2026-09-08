@@ -2,6 +2,7 @@ import { describe, expect, test } from 'vitest';
 import { createDelegationService, type DelegationRepository } from '@codex/process';
 import { createControlledWssAppServer } from '../../agent-messaging/support/controlled-wss-app-server.js';
 
+// === L2: REAL-BOUNDARY INTEGRATION TESTS ===
 describe('[L2:INTEGRATION] controlled authenticated WSS delegation', () => {
   test('starts and cancels one bound turn through the public handoff seam', async () => {
     const remote = await createControlledWssAppServer();

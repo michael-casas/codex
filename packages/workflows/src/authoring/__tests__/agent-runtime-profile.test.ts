@@ -22,6 +22,7 @@ const command = (model = 'gpt-5.6-luna', reasoningEffort = 'high') => ({
   },
 });
 
+// === L1: IN-PROCESS INTEGRATION TESTS ===
 describe('[L1:INTEGRATION] CAS-RP-01 agent runtime profiles', () => {
   it('RP-AUTHORING freezes and forwards independent model/effort pairs unchanged', async () => {
     const profiles = [

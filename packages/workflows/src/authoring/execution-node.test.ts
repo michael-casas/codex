@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 
 import { agent, defineWorkflow, executeWorkflow } from '../index.js';
 
+// === L1: UNIT TESTS ===
 describe('[L1:UNIT] App Server workflow node attribution', () => {
   it('CAS07-L1-NODE passes the frozen stable node to executeAgent', async () => {
     let observed: unknown;

@@ -34,6 +34,7 @@ async function fixture() {
   return { compile, load, sourceRoot, artifactDirectory };
 }
 
+// === L2: REAL-BOUNDARY INTEGRATION TESTS ===
 describe('[L2:INTEGRATION] workflow source compiler', () => {
   it('WA-L2-COMPILATION binds relative dependency bytes and verifies persisted executable', async () => {
     const { compile, load, sourceRoot, artifactDirectory } = await fixture();

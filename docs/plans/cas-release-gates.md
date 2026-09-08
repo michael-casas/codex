@@ -1,5 +1,21 @@
 # CAS release gates
 
+## CAS-RELEASE-GATES-R1 execution plan
+
+1. Hydrate the assigned base, compiled BATDD profile, resolved Nx targets, and
+   deterministic RED logs.
+2. Freeze the existing assertions and test meaning; treat package-manager
+   contract, owned layer markers/suite labels, and nonzero standing selection as
+   the only repair rows.
+3. Reproduce package-manager-policy, test-policy, and workflows standing-target
+   selection RED without launching paid live App Server tests.
+4. Apply only stale contract constants, truthful layer annotations/labels, and
+   standing-filter corrections on the authorized surfaces.
+5. Run package-manager-policy, test-policy, affected lint/typecheck/L1, applicable
+   controlled non-live tests, and cleanup/resource checks.
+6. Record exact evidence and remaining credential/runtime/paid-live prerequisites,
+   then stop `READY-FOR-REVIEW` without declaring `BASE_READY`.
+
 Founder authorized final-gate work and merge to main on 2026-09-07. Promotion
 still follows CAS/CAS-BASE -> CAS/integration -> development -> staging -> main.
 Jira remains waived. No new audit campaign is implied. BASE_READY and release

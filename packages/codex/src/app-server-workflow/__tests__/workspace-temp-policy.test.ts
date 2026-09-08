@@ -4,6 +4,7 @@ import {
   type AppServerWorkflowConnection,
 } from '../app-server-workflow.executor.js';
 
+// === L1: IN-PROCESS INTEGRATION TESTS ===
 describe('[L1:INTEGRATION] workspace temp policy', () => {
   it.each([
     '/lease/workspace/.codex-workspace-tmp',

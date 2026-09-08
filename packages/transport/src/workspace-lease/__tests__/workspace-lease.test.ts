@@ -118,6 +118,7 @@ const input = (baseRevision = BASE): Acquire => ({
   assignmentId: 'CAS-04',
 });
 
+// === L1: UNIT TESTS ===
 describe('[L1:UNIT] Workspace lease validation and conflict', () => {
   it('[L1:UNIT] CAS04-L1-VALIDATION-CONFLICT rejects caller paths, ambiguous revisions, and incompatible concurrent reuse before provider writes', async () => {
     const { lease, host } = service();
@@ -142,6 +143,7 @@ describe('[L1:UNIT] Workspace lease validation and conflict', () => {
   });
 });
 
+// === L1: IN-PROCESS INTEGRATION TESTS ===
 describe('[L1:INTEGRATION] Workspace lease lifecycle', () => {
   it('[L1:INTEGRATION] TEMP-L1-LEASE owns isolated private temp directories and rejects a symlinked reservation', async () => {
     const { lease, host } = service();

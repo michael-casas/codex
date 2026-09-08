@@ -30,14 +30,14 @@
     "test-l1": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "vitest run --config packages/workflows/vitest.config.ts --exclude '**/*.spec.ts'"
+        "command": "vitest run --config packages/workflows/vitest.config.ts src/application/commands/submit-workflow-source/__tests__/readable-title.test.ts src/application/commands/submit-workflow-source/__tests__/submit-workflow-source-handler.test.ts src/authoring/__tests__/agent-runtime-profile.test.ts src/authoring/__tests__/readable-output.test.ts src/authoring/authoring.test.ts src/authoring/execution-node.test.ts src/control/run-workflow.test.ts src/lib/fixtures.test.ts src/lib/planning.test.ts src/lib/repairs.test.ts"
       }
     },
     "test-l2": {
       "executor": "nx:run-commands",
       "cache": false,
       "options": {
-        "command": "vitest run --config packages/workflows/vitest.config.ts --exclude '**/*.test.ts'"
+        "command": "vitest run --config packages/workflows/vitest.config.ts src/infrastructure/workflow-source/__specs__/workflow-source-compiler.spec.ts"
       }
     },
     "test": {

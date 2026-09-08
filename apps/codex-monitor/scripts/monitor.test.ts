@@ -7,7 +7,8 @@ import {
   wakeText,
 } from './monitor-core.js';
 
-describe('monitor contract', () => {
+// === L1: UNIT TESTS ===
+describe('[L1:UNIT] monitor contract', () => {
   it('timed request receives Pi-compatible defaults', () => {
     const request = validateRequest({
       condition: { kind: 'timed', seconds: 5 },

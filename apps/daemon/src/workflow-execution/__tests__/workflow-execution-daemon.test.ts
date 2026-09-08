@@ -4,6 +4,7 @@ import type { ExecuteControlCommand } from '@codex/db';
 
 import * as daemon from '../../main.js';
 
+// === L1: UNIT TESTS ===
 describe('[L1:UNIT] remote workflow execution daemon', () => {
   it('CAS07-L1-COMMAND exposes one strict idempotent runWorkflow command', () => {
     expect(
@@ -143,6 +144,7 @@ describe('[L1:UNIT] remote workflow execution daemon', () => {
   });
 });
 
+// === L1: IN-PROCESS INTEGRATION TESTS ===
 describe('[L1:INTEGRATION] workflow delivery failure cleanup', () => {
   function setup() {
     const prepared = prepareWorkflowRun({

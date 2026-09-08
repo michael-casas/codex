@@ -9,6 +9,7 @@ const summary: VisibilityResult = {
   workflows: [],
 };
 
+// === L1: UNIT TESTS ===
 describe('[L1:UNIT] CAS-10 visibility session', () => {
   it('owns one wait and cancels prior selection generations', async () => {
     const calls: Array<{ name: string; args: Record<string, unknown> }> = [];

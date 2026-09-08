@@ -8,7 +8,8 @@ import { afterEach, describe, expect, it } from 'vitest';
 
 import { waitForCondition } from './monitor-conditions.js';
 
-describe('monitor process boundaries', () => {
+// === L2: REAL-BOUNDARY INTEGRATION TESTS ===
+describe('[L2:INTEGRATION] monitor process boundaries', () => {
   const directories: string[] = [];
   const syncMonitor = fileURLToPath(
     new URL('./sync-monitor.ts', import.meta.url),

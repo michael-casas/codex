@@ -153,6 +153,7 @@ const remoteHost: HostInput = {
   requiredCapabilities: ['thread-events'],
 };
 
+// === L1: UNIT TESTS ===
 describe('[L1:UNIT] HOSTR1 host message policy', () => {
   it('HOSTR1 propagates finite message budgets to bridge and client', async () => {
     const connector = vi.fn(async (input: ConnectorOptions) => {
@@ -346,6 +347,7 @@ describe('[L1:UNIT] App Server host admission', () => {
   });
 });
 
+// === L1: IN-PROCESS INTEGRATION TESTS ===
 describe('[L1:INTEGRATION] App Server host reconnect', () => {
   it('[L1:INTEGRATION] CAS02-L1-RECONNECT bounds overload retry and restores unique subscriptions after reconnect', async () => {
     const delays: number[] = [];

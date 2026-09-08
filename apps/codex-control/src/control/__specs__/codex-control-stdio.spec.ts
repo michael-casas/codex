@@ -6,6 +6,7 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { afterEach, describe, expect, it } from 'vitest';
 
+// === L2: END-TO-END TESTS ===
 describe('[L2:E2E] codex-control built stdio process', () => {
   let client: Client | undefined;
   let transport: StdioClientTransport | undefined;

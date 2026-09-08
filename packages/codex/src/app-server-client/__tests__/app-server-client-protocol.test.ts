@@ -152,6 +152,7 @@ async function waitFor(
   }
 }
 
+// === L1: UNIT TESTS ===
 describe('[L1:UNIT] App Server client protocol', () => {
   it('[L1:UNIT] CAS01-L1-INITIALIZE-VERSION initializes exactly once after exact CLI version admission', async () => {
     const connect = connector();

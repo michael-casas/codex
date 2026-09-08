@@ -4,6 +4,7 @@ import type { VisibilityResult } from '../types';
 
 afterEach(() => vi.useRealTimers());
 
+// === L1: UNIT TESTS ===
 describe('[L1:UNIT] visibility connection state', () => {
   it('UIR1-STATUS bounds reconnect attempts and retains last-known data while offline', async () => {
     vi.useFakeTimers();

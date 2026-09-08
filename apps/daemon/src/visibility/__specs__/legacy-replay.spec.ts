@@ -15,6 +15,7 @@ import {
 } from '@codex/process';
 import { createRuntimeVisibilityDaemon } from '../runtime-visibility-daemon.js';
 
+// === L2: REAL-BOUNDARY INTEGRATION TESTS ===
 it('[L2:INTEGRATION] R2-REPLAY-LEGACY-PERSISTENCE replays R1 payloads through unchanged 007 without weakening conflicts', async ({
   task,
 }) => {

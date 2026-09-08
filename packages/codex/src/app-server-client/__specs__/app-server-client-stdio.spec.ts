@@ -25,6 +25,7 @@ async function hostr1Client(scenario: string, maxMessageBytes?: number) {
   });
 }
 
+// === L2: REAL-BOUNDARY INTEGRATION TESTS ===
 describe('[L2:INTEGRATION] HOSTR1 synthetic finite framing', () => {
   it('keeps 2.25MiB events and responses usable within default budget', async () => {
     const client = await hostr1Client('hostr1-large');

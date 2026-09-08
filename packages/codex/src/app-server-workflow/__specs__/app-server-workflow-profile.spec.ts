@@ -4,6 +4,7 @@ import { connectAppServer } from '../../app-server-client/index.js';
 import type { AppServerJson } from '../../app-server-client/app-server-client.types.js';
 import { createAppServerWorkflowExecutor } from '../app-server-workflow.executor.js';
 
+// === L2: REAL-BOUNDARY INTEGRATION TESTS ===
 describe('[L2:INTEGRATION] CAS-RP-01 controlled stdio profile wire', () => {
   it('RP-WIRE forwards exact mixed profiles, rejects malformed input, and preserves provider rejection without fallback', async () => {
     const script = fileURLToPath(

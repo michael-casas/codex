@@ -220,8 +220,9 @@ const bindings: Record<string, (page: Page, state: State) => Promise<void>> = {
     ).toHaveCount(0);
   },
 };
+// === L2: END-TO-END TESTS ===
 for (const { pickle } of parsed.filterablePickles) {
-  test('@cas-ui-r1 ' + pickle.name, async ({ page }) => {
+  test('[L2:E2E] @cas-ui-r1 ' + pickle.name, async ({ page }) => {
     test.setTimeout(60_000);
     const state: State = {};
     try {

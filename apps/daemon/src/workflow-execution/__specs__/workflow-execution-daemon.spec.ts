@@ -13,6 +13,7 @@ import {
   runRemoteWorkflowScenario,
 } from '../support/remote-workflow.driver.js';
 
+// === L2: END-TO-END TESTS ===
 describe('[L2:E2E] remote workflow execution', () => {
   it('DELIVERY-EXHAUSTED-L2 marks failed only after real pg-boss retries and preserves replay after restart', async () => {
     const database = await createControlDatabaseFixture();
