@@ -154,6 +154,32 @@ const remoteHost: HostInput = {
 };
 
 // === L1: UNIT TESTS ===
+describe('[L1:UNIT] local CLI compatibility', () => {
+  it('admits exact local 0.153.2 without widening remote or unknown versions', async () => {
+    const connector = vi.fn<Connector>(async () => fakeClient());
+    const registry = factory()(options(connector));
+    registry.register({ ...localHost, expectedVersion: '0.153.2' });
+    await registry.connect(localHost.hostId);
+    expect(connector.mock.calls[0]?.[0]).toMatchObject({
+      expectedVersion: '0.153.2',
+    });
+    expectCode(
+      () => registry.register({ ...remoteHost, expectedVersion: '0.153.2' }),
+      'VERSION_MISMATCH',
+    );
+    expectCode(
+      () =>
+        registry.register({
+          ...localHost,
+          hostId: 'unknown',
+          expectedVersion: '0.154.0',
+        }),
+      'VERSION_MISMATCH',
+    );
+    await registry.disable(localHost.hostId);
+  });
+});
+
 describe('[L1:UNIT] HOSTR1 host message policy', () => {
   it('HOSTR1 propagates finite message budgets to bridge and client', async () => {
     const connector = vi.fn(async (input: ConnectorOptions) => {

@@ -163,7 +163,10 @@ function resolveOptions(options: AppServerClientOptions): ResolvedOptions {
   if (!isRecord(options) || !isRecord(options.clientInfo)) {
     throw error('INVALID_OPTIONS', 'Invalid App Server options');
   }
-  if (options.expectedVersion !== APP_SERVER_PROTOCOL_VERSION) {
+  if (
+    options.expectedVersion !== APP_SERVER_PROTOCOL_VERSION &&
+    options.expectedVersion !== '0.153.2'
+  ) {
     throw error('VERSION_MISMATCH', 'App Server protocol version mismatch', {
       expectedVersion: APP_SERVER_PROTOCOL_VERSION,
       actualVersion: options.expectedVersion,
