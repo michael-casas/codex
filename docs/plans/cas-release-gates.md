@@ -48,7 +48,7 @@ development branch. This ruling is implementation authority, not release
 acceptance: the paid three-stage Luna-low reproof, fresh Preflight, independent
 verification and judgment, and final promotion gates remain required.
 
-## Current candidate
+## Historical candidate and gate admission
 
 Founder reconciliation ruling: Codex Control/App Server supersedes Herdr as the
 primary agent-handoff and workflow backend. Preserve the requested Herdr source
@@ -59,10 +59,10 @@ CAS branch, excluding secrets and machine-local runtime data, then run the full
 
 Founder addition (2026-09-07): promotion is also blocked on the required
 [native-plugin clean-container installation gate](cas-native-plugin-container-gate.md).
-This gate is NOT RUN; source-level MCP tests or the earlier App Server container
+This gate was initially NOT RUN; source-level MCP tests or the earlier App Server container
 dogfood do not satisfy native Codex plugin installation and fresh-session use.
 
-CAS/CAS-BASE at b9dc01512975a8b11bc673b5ec906c818dd708f6 plus uncommitted
+The original candidate was CAS/CAS-BASE at b9dc01512975a8b11bc673b5ec906c818dd708f6 plus uncommitted
 implementation. The main checkout also has unrelated dirty state. Preserve
 that state; never merge into it blindly or stash ignored secrets. A scoped
 candidate inventory and final immutable checkpoint remain required.
