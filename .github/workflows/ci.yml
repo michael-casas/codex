@@ -83,13 +83,13 @@ jobs:
       - name: Credential-free integration and behavior suites
         run: >-
           bun nx run-many -t test
-          --projects=@codex/plugin-codex-control,@codex/codex-control,@codex/codex-monitor,@codex/workflows,@codex/testing,@codex/daemon-e2e,@codex/wiki-cli,@codex/daemon
+          --projects=@codex/plugin-codex-control,@codex/codex-control,@codex/codex-monitor,@codex/workflows,@codex/testing,@codex/daemon-e2e,@codex/wiki-cli
           --parallel=1 --skipNxCache --outputStyle=static
 
       - name: Credential-free persistence and process boundaries
         run: |
-          bun nx run-many -t test-l2 --projects=@codex/db,@codex/delivery --parallel=1 --skipNxCache --outputStyle=static
-          bun nx run @codex/process:test-l3 --skipNxCache --outputStyle=static
+          bun nx run-many -t test-l2 --projects=@codex/db,@codex/daemon --parallel=1 --skipNxCache --outputStyle=static
+          bun nx run-many -t test-visibility-l2,test-l2-delivery-failure --projects=@codex/daemon --parallel=1 --skipNxCache --outputStyle=static
       # Nx Cloud recommends fixes for failures to help you get CI green faster. Learn more: https://nx.dev/ci/features/self-healing-ci
       - run: bun nx fix-ci
         if: always()

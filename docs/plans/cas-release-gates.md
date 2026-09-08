@@ -6,7 +6,8 @@ Founder approved the release-test boundary: never upload Codex credentials to
 GitHub. Hosted CI owns affected lint/typecheck/build/L1 plus credential-free
 integration and behavior suites. Authenticated `@codex/codex`,
 `@codex/transport`, and `@codex/codex-workflows` aggregates, native-plugin live
-proof, and desktop/mobile acceptance remain mandatory local release gates.
+proof, daemon remote-workflow L3, delivery/intercom App Server tests, and
+desktop/mobile acceptance remain mandatory local release gates.
 They are not waived or claimed satisfied by hosted CI. Preserve their local
 evidence against the candidate; rerun affected live behavior when its source changes.
 PR #1 may merge to CAS/integration after repaired CI passes. PR #2 remains open,
