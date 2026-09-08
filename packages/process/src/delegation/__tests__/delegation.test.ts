@@ -39,7 +39,14 @@ function fixture(active = true) {
   return { calls, service, releases: () => releases };
 }
 
+// === L1: UNIT TESTS ===
 describe('[L1:UNIT] direct agent handoff', () => {
+  test('CAS-NET-GC1-004 rejects malformed network permission before lease or provider calls', async () => {
+    const f = fixture();
+    await expect(f.service.delegateAgent(command({ runtimeProfile: { ...command().runtimeProfile, networkAccess: 'false' } }))).rejects.toMatchObject({ code: 'DELEGATION_COMMAND_INVALID' });
+    expect(f.calls).toEqual([]);
+  });
+
   test('validates the one-call contract and keeps completion boundaries distinct', async () => {
     expect((api as any).createDelegationService, 'CAS-06 delegation behavior is not implemented').toBeTypeOf('function');
     const f = fixture();
@@ -56,7 +63,31 @@ describe('[L1:UNIT] direct agent handoff', () => {
   });
 });
 
+// === L1: IN-PROCESS INTEGRATION TESTS ===
 describe('[L1:INTEGRATION] direct agent handoff', () => {
+  test.each([['read-only', 'readOnly'], ['workspace-write', 'workspaceWrite'], ['danger-full-access', 'dangerFullAccess']])('normalizes existing sandbox alias %s for turn policy', async (sandbox, type) => {
+    const f = fixture();
+    await f.service.delegateAgent(command({ runtimeProfile: { ...command().runtimeProfile, sandbox } }));
+    expect(f.calls.find(([name]) => name === 'turn/start')?.[1]).toMatchObject({ sandboxPolicy: { type } });
+  });
+  test('CAS-NET-GC1-004 freezes omitted network access as enabled on the initial turn', async () => {
+    const f = fixture();
+    const handle = await f.service.delegateAgent(command());
+    const record = await f.service.readAgent(handle.delegationId);
+    expect(record.command.runtimeProfile.networkAccess).toBe(true);
+    expect(f.calls.find(([name]) => name === 'turn/start')?.[1]).toMatchObject({ sandboxPolicy: { type: 'workspaceWrite', writableRoots: ['/tmp/codex-local'], networkAccess: true, excludeTmpdirEnvVar: true, excludeSlashTmp: true } });
+  });
+
+  test('CAS-NET-GC1-004 preserves explicit denial on initial and resumed read-only turns', async () => {
+    const f = fixture(false);
+    const input = command({ runtimeProfile: { model: 'gpt-5.6-luna', reasoningEffort: 'high', sandbox: 'readOnly', approvalPolicy: 'never', networkAccess: false } });
+    const handle = await f.service.delegateAgent(input);
+    await f.service.continueAgent(handle.delegationId, 'Continue read-only.');
+    const turns = f.calls.filter(([name]) => name === 'turn/start').map(([, params]) => params);
+    expect(turns).toHaveLength(2);
+    for (const turn of turns) expect(turn).toMatchObject({ sandboxPolicy: { type: 'readOnly', networkAccess: false } });
+  });
+
   test('RP-DELEGATION forwards exact model/effort on initial and idle continuation without replay', async () => {
     const f = fixture(false);
     const input = command({ runtimeProfile: { model: 'gpt-5.6-luna', reasoningEffort: 'high', sandbox: 'readOnly', approvalPolicy: 'never' } });

@@ -90,7 +90,8 @@ async function installRecoveredFixture(page: Page) {
   });
 }
 
-test('R2-RECOVERY shows unavailable display beside an existing typed message without inventing a result', async ({
+// === L2: END-TO-END TESTS ===
+test('[L2:E2E] R2-RECOVERY shows unavailable display beside an existing typed message without inventing a result', async ({
   page,
 }) => {
   await installRecoveredFixture(page);
@@ -108,7 +109,7 @@ test('R2-RECOVERY shows unavailable display beside an existing typed message wit
   );
 });
 
-test('R2-PRESENTATION hides timestamps in a typed feed while preserving message content', async ({
+test('[L2:E2E] R2-PRESENTATION hides timestamps in a typed feed while preserving message content', async ({
   page,
 }) => {
   await installRecoveredFixture(page);
@@ -119,7 +120,7 @@ test('R2-PRESENTATION hides timestamps in a typed feed while preserving message 
   await expect(feed.locator('time')).toHaveCount(0, { timeout: 2000 });
 });
 
-test('R2-PRESENTATION hides timestamps in legacy fallback without inventing message identity', async ({
+test('[L2:E2E] R2-PRESENTATION hides timestamps in legacy fallback without inventing message identity', async ({
   page,
 }) => {
   await installControlFixture(page);

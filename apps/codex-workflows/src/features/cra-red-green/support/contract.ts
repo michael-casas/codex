@@ -1,63 +1,74 @@
 import { spawn } from 'node:child_process';
 import { createHash } from 'node:crypto';
-import { lstat, readFile, readdir, realpath } from 'node:fs/promises';
+import { lstat, readFile, readdir, realpath, stat } from 'node:fs/promises';
 import { isAbsolute, relative, resolve, sep } from 'node:path';
 
-export const CRA_AUDIT_CRITERIA = [
+export const BUN_REACT_AUDIT_CRITERIA = [
   {
-    id: 'CRA-AUDIT-001',
-    summary: 'Pinned Create React App package and scripts are present.',
+    id: 'BUN-REACT-AUDIT-001',
+    summary: 'Pinned Vite React package, bun.lock, and Bun-only scripts are present.',
   },
   {
-    id: 'CRA-AUDIT-002',
+    id: 'BUN-REACT-AUDIT-002',
     summary: 'The homepage renders the exact Workflow Proof heading.',
   },
   {
-    id: 'CRA-AUDIT-003',
+    id: 'BUN-REACT-AUDIT-003',
     summary: 'The homepage renders the exact audit-remediation status.',
   },
   {
-    id: 'CRA-AUDIT-004',
-    summary: 'The native App test asserts the remediation status.',
+    id: 'BUN-REACT-AUDIT-004',
+    summary: 'The native Bun App test asserts the remediation status.',
   },
   {
-    id: 'CRA-AUDIT-005',
-    summary: 'The native test and production build commands pass.',
+    id: 'BUN-REACT-AUDIT-005',
+    summary: 'Bun install, native test, and production build commands pass.',
   },
 ] as const;
 
-export type CraAuditCriterionId = (typeof CRA_AUDIT_CRITERIA)[number]['id'];
+export type BunReactAuditCriterionId =
+  (typeof BUN_REACT_AUDIT_CRITERIA)[number]['id'];
 
-export interface CraCommandValidation {
+export interface BunReactCommandValidation {
+  installExitCode: number;
   testExitCode: number;
   buildExitCode: number;
+  executable: 'bun';
+  installOutput?: string;
   testOutput?: string;
   buildOutput?: string;
 }
 
-export interface CraAuditFinding {
-  id: CraAuditCriterionId;
+export interface BunReactAuditFinding {
+  id: BunReactAuditCriterionId;
   status: 'PASS' | 'FAIL';
   summary: string;
 }
 
-export interface CraAuditResult {
+export interface BunReactAuditResult {
   verdict: 'RED' | 'GREEN';
   treeDigest: `sha256:${string}`;
-  findings: CraAuditFinding[];
+  findings: BunReactAuditFinding[];
 }
 
-export interface CraTreeSnapshot {
+export interface BunReactTreeSnapshot {
   digest: `sha256:${string}`;
   files: Record<string, `sha256:${string}`>;
 }
 
 const EXCLUDED_DIRECTORIES = new Set([
   '.git',
-  'build',
   'coverage',
+  'dist',
   'node_modules',
 ]);
+
+const FOREIGN_LOCKS = [
+  'package-lock.json',
+  'npm-shrinkwrap.json',
+  'pnpm-lock.yaml',
+  'yarn.lock',
+] as const;
 
 function digest(bytes: string | Uint8Array): `sha256:${string}` {
   return `sha256:${createHash('sha256').update(bytes).digest('hex')}`;
@@ -79,16 +90,16 @@ async function admittedProjectRoot(
   if (allowedRoot) {
     const allowed = await realpath(resolve(allowedRoot));
     if (!within(allowed, project) || project === allowed) {
-      throw new Error('CRA proof project escaped its admitted proof root.');
+      throw new Error('Bun React proof project escaped its admitted proof root.');
     }
   }
   return project;
 }
 
-export async function snapshotCraTree(
+export async function snapshotBunReactTree(
   projectRoot: string,
   allowedRoot?: string,
-): Promise<CraTreeSnapshot> {
+): Promise<BunReactTreeSnapshot> {
   const root = await admittedProjectRoot(projectRoot, allowedRoot);
   const files: Record<string, `sha256:${string}`> = {};
 
@@ -102,12 +113,11 @@ export async function snapshotCraTree(
       const metadata = await lstat(path);
       if (metadata.isSymbolicLink()) {
         throw new Error(
-          `CRA proof source must not contain symlinks: ${relativePath}`,
+          `Bun React proof source must not contain symlinks: ${relativePath}`,
         );
       }
       if (metadata.isDirectory()) await visit(path);
-      else if (metadata.isFile())
-        files[relativePath] = digest(await readFile(path));
+      else if (metadata.isFile()) files[relativePath] = digest(await readFile(path));
     }
   };
 
@@ -119,24 +129,39 @@ export async function snapshotCraTree(
   return { digest: digest(canonical), files };
 }
 
-function pinnedCraPackage(value: unknown): boolean {
+async function exists(path: string): Promise<boolean> {
+  try {
+    await stat(path);
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+function pinnedBunVitePackage(value: unknown): boolean {
   if (typeof value !== 'object' || value === null) return false;
   const source = value as Record<string, unknown>;
   const dependencies =
     typeof source.dependencies === 'object' && source.dependencies !== null
       ? (source.dependencies as Record<string, unknown>)
       : {};
+  const devDependencies =
+    typeof source.devDependencies === 'object' && source.devDependencies !== null
+      ? (source.devDependencies as Record<string, unknown>)
+      : {};
   const scripts =
     typeof source.scripts === 'object' && source.scripts !== null
       ? (source.scripts as Record<string, unknown>)
       : {};
   return (
+    source.packageManager === 'bun@1.4.2' &&
     typeof dependencies.react === 'string' &&
     typeof dependencies['react-dom'] === 'string' &&
-    dependencies['react-scripts'] === '5.0.1' &&
-    scripts.start === 'react-scripts start' &&
-    scripts.build === 'react-scripts build' &&
-    scripts.test === 'react-scripts test'
+    devDependencies.vite === '^8.2.2' &&
+    devDependencies['@vitejs/plugin-react'] === '^6.1.0' &&
+    scripts.dev === 'vite' &&
+    scripts.build === 'vite build' &&
+    scripts.test === 'bun test'
   );
 }
 
@@ -148,18 +173,21 @@ async function optionalText(root: string, path: string): Promise<string> {
   }
 }
 
-export async function auditCraProject(
+export async function auditBunReactProject(
   projectRoot: string,
-  commands: CraCommandValidation,
+  commands: BunReactCommandValidation,
   allowedRoot?: string,
-): Promise<CraAuditResult> {
+): Promise<BunReactAuditResult> {
   const root = await admittedProjectRoot(projectRoot, allowedRoot);
-  const [packageBytes, app, appTest, snapshot] = await Promise.all([
-    optionalText(root, 'package.json'),
-    optionalText(root, 'src/App.js'),
-    optionalText(root, 'src/App.test.js'),
-    snapshotCraTree(root, allowedRoot),
-  ]);
+  const [packageBytes, app, appTest, bunLock, foreignLocks, snapshot] =
+    await Promise.all([
+      optionalText(root, 'package.json'),
+      optionalText(root, 'src/App.jsx'),
+      optionalText(root, 'src/App.test.jsx'),
+      optionalText(root, 'bun.lock'),
+      Promise.all(FOREIGN_LOCKS.map((path) => exists(resolve(root, path)))),
+      snapshotBunReactTree(root, allowedRoot),
+    ]);
   let packageValue: unknown;
   try {
     packageValue = JSON.parse(packageBytes) as unknown;
@@ -167,20 +195,26 @@ export async function auditCraProject(
     packageValue = null;
   }
 
-  const passes: Record<CraAuditCriterionId, boolean> = {
-    'CRA-AUDIT-001': pinnedCraPackage(packageValue),
-    'CRA-AUDIT-002': /<h1>\s*Workflow Proof\s*<\/h1>/.test(app),
-    'CRA-AUDIT-003':
+  const passes: Record<BunReactAuditCriterionId, boolean> = {
+    'BUN-REACT-AUDIT-001':
+      pinnedBunVitePackage(packageValue) &&
+      bunLock.length > 0 &&
+      foreignLocks.every((present) => !present),
+    'BUN-REACT-AUDIT-002': /<h1>\s*Workflow Proof\s*<\/h1>/.test(app),
+    'BUN-REACT-AUDIT-003':
       /data-testid=["']audit-remediation-status["']/.test(app) &&
       /Audit findings resolved/.test(app),
-    'CRA-AUDIT-004':
+    'BUN-REACT-AUDIT-004':
       /audit-remediation-status/.test(appTest) &&
       /Audit findings resolved/.test(appTest) &&
       /expect\s*\(/.test(appTest),
-    'CRA-AUDIT-005':
-      commands.testExitCode === 0 && commands.buildExitCode === 0,
+    'BUN-REACT-AUDIT-005':
+      commands.executable === 'bun' &&
+      commands.installExitCode === 0 &&
+      commands.testExitCode === 0 &&
+      commands.buildExitCode === 0,
   };
-  const findings = CRA_AUDIT_CRITERIA.map((criterion) => ({
+  const findings = BUN_REACT_AUDIT_CRITERIA.map((criterion) => ({
     ...criterion,
     status: passes[criterion.id] ? ('PASS' as const) : ('FAIL' as const),
   }));
@@ -193,27 +227,27 @@ export async function auditCraProject(
   };
 }
 
-async function runCommand(
+async function runBun(
   projectRoot: string,
   args: string[],
   timeoutMs: number,
 ): Promise<{ exitCode: number; output: string }> {
   return new Promise((resolveResult, rejectResult) => {
     let output = '';
-    const child = spawn('npm', args, {
+    const child = spawn('bun', args, {
       cwd: projectRoot,
-      env: { ...process.env, CI: 'true' },
+      env: {
+        ...process.env,
+        CI: 'true',
+        BUN_INSTALL_CACHE_DIR: resolve(projectRoot, '..', 'bun-cache'),
+      },
       stdio: ['ignore', 'pipe', 'pipe'],
     });
     const timeout = setTimeout(() => child.kill('SIGTERM'), timeoutMs);
     child.stdout.setEncoding('utf8');
     child.stderr.setEncoding('utf8');
-    child.stdout.on('data', (chunk: string) => {
-      output += chunk;
-    });
-    child.stderr.on('data', (chunk: string) => {
-      output += chunk;
-    });
+    child.stdout.on('data', (chunk: string) => { output += chunk; });
+    child.stderr.on('data', (chunk: string) => { output += chunk; });
     child.once('error', rejectResult);
     child.once('close', (code) => {
       clearTimeout(timeout);
@@ -222,32 +256,29 @@ async function runCommand(
   });
 }
 
-export async function validateCraCommands(
+export async function validateBunReactCommands(
   projectRoot: string,
   timeoutMs = 300_000,
-): Promise<CraCommandValidation> {
-  const test = await runCommand(
-    projectRoot,
-    ['test', '--', '--watchAll=false', '--watchman=false'],
-    timeoutMs,
-  );
-  const build = await runCommand(projectRoot, ['run', 'build'], timeoutMs);
+): Promise<BunReactCommandValidation> {
+  const install = await runBun(projectRoot, ['install', '--frozen-lockfile'], timeoutMs);
+  const test = await runBun(projectRoot, ['test'], timeoutMs);
+  const build = await runBun(projectRoot, ['run', 'build'], timeoutMs);
   return {
+    executable: 'bun',
+    installExitCode: install.exitCode,
     testExitCode: test.exitCode,
     buildExitCode: build.exitCode,
+    installOutput: install.output,
     testOutput: test.output,
     buildOutput: build.output,
   };
 }
 
 export function changedSourcePaths(
-  before: CraTreeSnapshot,
-  after: CraTreeSnapshot,
+  before: BunReactTreeSnapshot,
+  after: BunReactTreeSnapshot,
 ): string[] {
-  const paths = new Set([
-    ...Object.keys(before.files),
-    ...Object.keys(after.files),
-  ]);
+  const paths = new Set([...Object.keys(before.files), ...Object.keys(after.files)]);
   return [...paths]
     .filter((path) => before.files[path] !== after.files[path])
     .sort();

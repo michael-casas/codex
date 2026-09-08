@@ -2,6 +2,7 @@ import { describe, expect, test } from 'vitest';
 import { createDelegationService, type DelegationRepository } from '@codex/process';
 import { createControlledWssAppServer } from '../../agent-messaging/support/controlled-wss-app-server.js';
 
+// === L2: REAL-BOUNDARY INTEGRATION TESTS ===
 describe('[L2:INTEGRATION] controlled authenticated WSS delegation', () => {
   test('starts and cancels one bound turn through the public handoff seam', async () => {
     const remote = await createControlledWssAppServer();
@@ -17,7 +18,7 @@ describe('[L2:INTEGRATION] controlled authenticated WSS delegation', () => {
       workspaces: { acquire: async () => ({ workspaceRef: `workspace:${'c'.repeat(64)}` }), resolve: async () => ({ cwd: process.cwd() }), release: async () => void (released += 1) },
     });
     try {
-      const handle = await service.delegateAgent({ idempotencyKey: 'cas06-controlled-wss', assignmentRef: 'CAS-06', assignmentDigest: `sha256:${'a'.repeat(64)}`, hostId: 'cas05-controlled-remote', workspace: { repositoryId: 'codex', baseRevision: 'b'.repeat(40), assignmentId: 'CAS-06' }, runtimeProfile: { model: 'gpt-5.6-sol', reasoningEffort: 'medium', sandbox: 'readOnly', approvalPolicy: 'never' }, completionBoundary: 'runtime-settled', prompt: 'Reply with OK only.' });
+      const handle = await service.delegateAgent({ idempotencyKey: 'cas06-controlled-wss', assignmentRef: 'CAS-06', assignmentDigest: `sha256:${'a'.repeat(64)}`, hostId: 'cas05-controlled-remote', workspace: { repositoryId: 'codex', baseRevision: 'b'.repeat(40), assignmentId: 'CAS-06' }, runtimeProfile: { model: 'gpt-5.6-luna', reasoningEffort: 'low', sandbox: 'readOnly', approvalPolicy: 'never' }, completionBoundary: 'runtime-settled', prompt: 'Reply with OK only.' });
       expect(handle).toMatchObject({ hostId: 'cas05-controlled-remote', threadId: expect.any(String) });
       await service.cancelAgent(handle.delegationId); expect(released).toBe(1);
     } finally { await remote.close(); }

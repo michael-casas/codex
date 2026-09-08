@@ -7,7 +7,7 @@
   "targets": {
     "build": {
       "executor": "@nx/esbuild:esbuild",
-      "dependsOn": ["@codex/codex:build"],
+      "dependsOn": ["^build"],
       "outputs": ["{options.outputPath}"],
       "defaultConfiguration": "production",
       "options": {
@@ -125,6 +125,12 @@
         "command": "vitest run --config apps/codex-workflows/vitest.config.ts src/features/cra-red-green/cra-red-green.test.ts --testNamePattern='L1:UNIT'"
       }
     },
+    "test-l1-bun-react-red-green": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "vitest run --config apps/codex-workflows/vitest.config.ts src/features/cra-red-green/cra-red-green.test.ts --testNamePattern='L1:UNIT'"
+      }
+    },
     "test-l1-integration": {
       "executor": "nx:run-commands",
       "options": {
@@ -161,6 +167,14 @@
       }
     },
     "test-l2-cra-red-green": {
+      "executor": "nx:run-commands",
+      "cache": false,
+      "dependsOn": ["build"],
+      "options": {
+        "command": "vitest run --config apps/codex-workflows/vitest.config.ts src/features/cra-red-green/cra-red-green.spec.ts --testNamePattern='L2:E2E'"
+      }
+    },
+    "test-l2-bun-react-red-green": {
       "executor": "nx:run-commands",
       "cache": false,
       "dependsOn": ["build"],
@@ -205,6 +219,17 @@
       ],
       "options": {
         "command": "bun packages/testing/src/cli.ts verify-cucumber apps/codex-workflows/src/features/cra-red-green/cra-red-green.feature apps/codex-workflows/out-tsc/cucumber/features/cra-red-green/index.steps.js test-output/cucumber/codex-workflows-cra-red-green.json"
+      }
+    },
+    "test-l3-bun-react-red-green": {
+      "executor": "nx:run-commands",
+      "cache": false,
+      "dependsOn": ["materialize-workspace-bin", "test-pre-build"],
+      "outputs": [
+        "{workspaceRoot}/test-output/cucumber/codex-workflows-bun-react-red-green.json"
+      ],
+      "options": {
+        "command": "bun packages/testing/src/cli.ts verify-cucumber apps/codex-workflows/src/features/cra-red-green/cra-red-green.feature apps/codex-workflows/out-tsc/cucumber/features/cra-red-green/index.steps.js test-output/cucumber/codex-workflows-bun-react-red-green.json"
       }
     },
     "test": {

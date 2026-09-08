@@ -20,6 +20,23 @@ const message = {
 
 // === L2: REAL-BOUNDARY INTEGRATION TESTS ===
 describe('[L2:INTEGRATION] pg-boss App Server message delivery', () => {
+  it('settles a rejected controlled WSS prerequisite without leaking its listener', async () => {
+    const activeListeners = () =>
+      process
+        .getActiveResourcesInfo()
+        .filter((resource) => resource === 'TCPServerWrap').length;
+    const listenersBefore = activeListeners();
+    const startedAt = Date.now();
+
+    await expect(
+      createControlledWssAppServer({ credential: 'invalid-fixture-token' }),
+    ).rejects.toThrow('App Server host authentication failed');
+    await expect
+      .poll(activeListeners, { timeout: 2_000, interval: 25 })
+      .toBe(listenersBefore);
+    expect(Date.now() - startedAt).toBeLessThan(5_000);
+  }, 10_000);
+
   it('CAS05-L2-DELIVERY persists one pg-boss job and routes active delivery through expected-turn steer', async () => {
     const runtimeCandidate = (deliveryPackage as Record<string, unknown>)
       .AgentMessageDeliveryRuntime;
@@ -222,7 +239,7 @@ describe('[L2:INTEGRATION] pg-boss App Server message delivery', () => {
     const fixture = await createControlledWssAppServer();
     try {
       const thread = await fixture.connection.startThread({
-        model: 'gpt-5.6-sol',
+        model: 'gpt-5.6-luna',
         cwd: process.cwd(),
         approvalPolicy: 'never',
         sandbox: 'readOnly',
@@ -312,7 +329,7 @@ describe('[L2:INTEGRATION] pg-boss App Server message delivery', () => {
     try {
       await runtime.start();
       const thread = await wss.connection.startThread({
-        model: 'gpt-5.6-sol',
+        model: 'gpt-5.6-luna',
         cwd: process.cwd(),
         approvalPolicy: 'never',
         sandbox: 'readOnly',

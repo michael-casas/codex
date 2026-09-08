@@ -60,6 +60,7 @@ function fixture(events: ReturnType<typeof source>[]) {
   return { daemon: createRuntimeVisibilityDaemon(repository, options), stored };
 }
 
+// === L1: IN-PROCESS INTEGRATION TESTS ===
 describe('[L1:INTEGRATION] production control-event visibility projection', () => {
   it('UIR1-L1-PROGRESS replays accepted, node and terminal events with stable progress and labels', async () => {
     const events = [

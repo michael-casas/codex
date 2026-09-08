@@ -2,6 +2,7 @@ import { describe, expect, it, vi } from 'vitest';
 
 import { createCodexControlPlane } from '../codex-control.module.js';
 
+// === L1: IN-PROCESS INTEGRATION TESTS ===
 describe('[L1:INTEGRATION] codex-control accepted seam composition', () => {
   it('submits one workflow command through the package-owned durable client', async () => {
     const execute = vi.fn(async () => ({

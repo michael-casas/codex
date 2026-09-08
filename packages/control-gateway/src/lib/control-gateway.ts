@@ -324,6 +324,7 @@ export function createCodexControlServer(
         reasoningEffort: z.string().regex(/^[a-z][a-z0-9-]{0,63}$/),
         sandbox: id,
         approvalPolicy: id,
+        networkAccess: z.boolean().optional(),
         completionBoundary: z.enum([
           'runtime-settled',
           'output-validated',
@@ -352,6 +353,9 @@ export function createCodexControlServer(
                 reasoningEffort: input.reasoningEffort,
                 sandbox: input.sandbox,
                 approvalPolicy: input.approvalPolicy,
+                ...(input.networkAccess === undefined
+                  ? {}
+                  : { networkAccess: input.networkAccess }),
               },
               completionBoundary: input.completionBoundary,
               prompt: input.prompt,

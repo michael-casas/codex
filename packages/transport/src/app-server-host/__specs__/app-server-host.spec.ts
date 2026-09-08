@@ -34,6 +34,7 @@ import { afterEach, describe, expect, it } from 'vitest';
 import * as transport from '../../index.js';
 import { runUnixBridgeFixture } from '../support/host-message-limit.fixture.js';
 
+// === L2: REAL-BOUNDARY INTEGRATION TESTS ===
 describe('[L2:INTEGRATION] HOSTR1 synthetic Unix framing', () => {
   it.each([undefined, '1024'])(
     'HOSTR1 synthetic TLS WSS observes shared budget %s',

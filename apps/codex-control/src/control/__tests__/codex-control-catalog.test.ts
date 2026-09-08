@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { codexControlToolCatalog } from '../codex-control.gateway.js';
 
+// === L1: UNIT TESTS ===
 describe('[L1:UNIT] codex-control tool contract', () => {
   it('publishes the one-call task API with accurate safety annotations', () => {
     expect(codexControlToolCatalog).toEqual([

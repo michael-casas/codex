@@ -22,6 +22,7 @@ const command = () =>
     idempotencyKey: 'cas07-run-1',
   }) as const;
 
+// === L1: UNIT TESTS ===
 describe('[L1:UNIT] run_workflow command', () => {
   it('creates one stable run identity for exact replay and fingerprints conflicts', () => {
     const first = prepareWorkflowRun(command());

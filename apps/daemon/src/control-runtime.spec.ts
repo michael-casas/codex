@@ -12,6 +12,7 @@ import {
   type ProductionControlConfig,
 } from './main.js';
 
+// === L2: END-TO-END TESTS ===
 describe('[L2:E2E] CAS-09.R2 production runtime restart', () => {
   it('serves one loopback snapshot across a bounded daemon restart and cleans both listeners', async () => {
     const fixture = await createRuntimeVisibilityDatabaseFixture();

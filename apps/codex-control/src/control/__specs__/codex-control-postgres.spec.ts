@@ -8,6 +8,7 @@ import { describe, expect, it } from 'vitest';
 import { createCodexControlServer } from '../codex-control.gateway.js';
 import { createCodexControlPlane } from '../codex-control.module.js';
 
+// === L2: END-TO-END TESTS ===
 describe('[L2:E2E] codex-control durable workflow boundary', () => {
   it('submits once, replays exactly, and rejects a conflict with no extra write', async () => {
     const fixture = await createControlDatabaseFixture();

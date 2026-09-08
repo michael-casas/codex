@@ -98,6 +98,7 @@ function fixture(observer?: (event: Record<string, unknown>) => Promise<void>) {
   return { executor, calls, run };
 }
 
+// === L1: IN-PROCESS INTEGRATION TESTS ===
 describe('[L1:INTEGRATION] scoped workflow visibility callback', () => {
   it('UIR1-PROVIDER supplies attributed text and image metadata, never private reasoning or image bytes', async () => {
     const seen: Record<string, unknown>[] = [];

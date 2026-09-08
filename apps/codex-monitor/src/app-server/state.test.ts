@@ -6,7 +6,8 @@ import { afterEach, describe, expect, it } from 'vitest';
 
 import { MonitorState } from './state.js';
 
-describe('MonitorState', () => {
+// === L1: UNIT TESTS ===
+describe('[L1:UNIT] MonitorState', () => {
   const directories: string[] = [];
 
   afterEach(() => {

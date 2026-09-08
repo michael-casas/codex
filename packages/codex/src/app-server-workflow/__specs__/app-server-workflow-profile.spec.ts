@@ -4,6 +4,7 @@ import { connectAppServer } from '../../app-server-client/index.js';
 import type { AppServerJson } from '../../app-server-client/app-server-client.types.js';
 import { createAppServerWorkflowExecutor } from '../app-server-workflow.executor.js';
 
+// === L2: REAL-BOUNDARY INTEGRATION TESTS ===
 describe('[L2:INTEGRATION] CAS-RP-01 controlled stdio profile wire', () => {
   it('RP-WIRE forwards exact mixed profiles, rejects malformed input, and preserves provider rejection without fallback', async () => {
     const script = fileURLToPath(
@@ -34,8 +35,17 @@ describe('[L2:INTEGRATION] CAS-RP-01 controlled stdio profile wire', () => {
       sandbox: 'readOnly',
       approvalPolicy: 'never',
     });
-    const request = (model: string, reasoning: string) => ({
-      node: { id: 'profile-wire', model, reasoning },
+    const request = (
+      model: string,
+      reasoning: string,
+      networkAccess?: boolean,
+    ) => ({
+      node: {
+        id: 'profile-wire',
+        model,
+        reasoning,
+        ...(networkAccess === undefined ? {} : { networkAccess }),
+      },
       model,
       reasoning,
       prompt: 'Inspect only',
@@ -45,13 +55,20 @@ describe('[L2:INTEGRATION] CAS-RP-01 controlled stdio profile wire', () => {
       },
     });
     try {
-      for (const [model, effort] of [
-        ['gpt-5.6-luna', 'high'],
-        ['gpt-5.6-sol', 'medium'],
-        ['o3', 'xhigh'],
+      for (const [model, effort, networkAccess] of [
+        ['gpt-5.6-luna', 'high', undefined],
+        ['gpt-5.6-sol', 'medium', false],
+        ['o3', 'xhigh', true],
       ] as const) {
-        const response = await executor.executeAgent(request(model, effort));
-        expect(JSON.parse(response.finalResponse)).toEqual({ model, effort });
+        const response = await executor.executeAgent(
+          request(model, effort, networkAccess),
+        );
+        expect(JSON.parse(response.finalResponse)).toEqual({
+          model,
+          effort,
+          networkAccess: networkAccess ?? true,
+          sandboxType: 'readOnly',
+        });
       }
       await expect(
         executor.executeAgent(request('gpt-5.6-luna', 'bad effort') as never),
@@ -60,13 +77,29 @@ describe('[L2:INTEGRATION] CAS-RP-01 controlled stdio profile wire', () => {
         executor.executeAgent(request('gpt-5.6-luna', 'unsupported') as never),
       ).rejects.toMatchObject({ code: 'REQUEST_FAILED', providerCode: -32602 });
       const calls = await client.request<
-        Array<{ method: string; params: { effort?: string } }>
+        Array<{
+          method: string;
+          params: {
+            effort?: string;
+            sandboxPolicy?: { networkAccess?: boolean; type?: string };
+          };
+        }>
       >('test/calls', {});
       expect(
         calls
           .filter(({ method }) => method === 'turn/start')
           .map(({ params }) => params.effort),
       ).toEqual(['high', 'medium', 'xhigh', 'unsupported']);
+      expect(
+        calls
+          .filter(({ method }) => method === 'turn/start')
+          .map(({ params }) => params.sandboxPolicy),
+      ).toEqual([
+        { type: 'readOnly', networkAccess: true },
+        { type: 'readOnly', networkAccess: false },
+        { type: 'readOnly', networkAccess: true },
+        { type: 'readOnly', networkAccess: true },
+      ]);
     } finally {
       await executor.close();
       await client.close();

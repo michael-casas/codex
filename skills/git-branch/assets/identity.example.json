@@ -1,0 +1,10 @@
+{
+  "schemaVersion": 1,
+  "department": "estimating",
+  "employeeDisplayName": "CJ",
+  "employeeSlug": "cj",
+  "interactionMode": "nontechnical",
+  "homeBranch": "estimating/cj",
+  "departmentIntegrationBranch": "estimating/integration",
+  "manageGitAutomatically": true
+}

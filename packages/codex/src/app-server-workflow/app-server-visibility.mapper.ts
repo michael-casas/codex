@@ -45,6 +45,20 @@ export function mapAppServerVisibility(
     ...binding,
     ...record(message.params),
   };
+  if (message.method === 'turn/completed') {
+    const turn = record(params.turn);
+    const rawStatus =
+      typeof turn.status === 'string' ? turn.status.toLowerCase() : 'unknown';
+    if (rawStatus === 'completed') return undefined;
+    const status = ['failed', 'interrupted', 'cancelled'].includes(rawStatus)
+      ? rawStatus
+      : 'unknown';
+    return {
+      kind: 'turn.failed',
+      status,
+      detail: { type: 'status', body: `turn: ${status}` },
+    };
+  }
   const deltaType =
     message.method === 'item/agentMessage/delta'
       ? 'message'

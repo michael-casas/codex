@@ -32,6 +32,7 @@ function events(title?: string): VisibilitySourceEvent[] {
   }));
 }
 
+// === L1: IN-PROCESS INTEGRATION TESTS ===
 describe('[L1:INTEGRATION] legacy workflow visibility title replay', () => {
   it('R2-REPLAY-LEGACY-TITLE preserves historic source reference payload and stable event IDs', () => {
     const source = events();

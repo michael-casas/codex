@@ -7,6 +7,7 @@ import {
   type CodexControlPlane,
 } from '../codex-control.gateway.js';
 
+// === L2: REAL-BOUNDARY INTEGRATION TESTS ===
 describe('[L2:INTEGRATION] codex-control MCP behavior', () => {
   const close: Array<() => Promise<void>> = [];
   afterEach(async () => {

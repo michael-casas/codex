@@ -1,5 +1,5 @@
 import { createHash } from 'node:crypto';
-import { chmod, readdir, readFile } from 'node:fs/promises';
+import { chmod, mkdir, readdir, readFile, realpath } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { mkdtemp, rm } from 'node:fs/promises';
@@ -59,6 +59,32 @@ async function journalApi(): Promise<JournalApi> {
 // === L1: IN-PROCESS INTEGRATION TESTS ===
 
 describe('[L1:INTEGRATION] bounded local workflow journal', () => {
+  test('[L1:INTEGRATION] DF-GC1-012 confines an explicitly selected agent working directory to the workflow workspace', async () => {
+    const root = await mkdtemp(join(tmpdir(), 'codex-workflows-agent-cwd-'));
+    const owned = join(root, '.agent/testing/workflows/proof');
+    const outside = await mkdtemp(join(tmpdir(), 'codex-workflows-outside-'));
+    try {
+      await mkdir(owned, { recursive: true });
+      const runtime = (await import('./agent-working-directory.js')) as {
+        resolveAgentWorkingDirectory: (
+          workspace: string,
+          selected?: string,
+        ) => Promise<string>;
+      };
+      await expect(
+        runtime.resolveAgentWorkingDirectory(root, owned),
+      ).resolves.toBe(await realpath(owned));
+      await expect(
+        runtime.resolveAgentWorkingDirectory(root, outside),
+      ).rejects.toEqual(
+        expect.objectContaining({ code: 'WORKFLOW_DEFINITION_INVALID' }),
+      );
+    } finally {
+      await rm(root, { force: true, recursive: true });
+      await rm(outside, { force: true, recursive: true });
+    }
+  });
+
   test('[L1:INTEGRATION] TS-GC2-006 atomically journals stable redacted state and persists bounded artifacts', async () => {
     const root = await mkdtemp(join(tmpdir(), 'codex-workflows-journal-'));
     try {

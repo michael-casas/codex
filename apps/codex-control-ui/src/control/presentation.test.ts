@@ -5,6 +5,7 @@ import {
   parseControlRoute,
 } from './presentation';
 
+// === L1: UNIT TESTS ===
 describe('[L1:UNIT] CAS-10 presentation contract', () => {
   it('creates one secret-free local, MCP Apps, and mobile descriptor', () => {
     expect(

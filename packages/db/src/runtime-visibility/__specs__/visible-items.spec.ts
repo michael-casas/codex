@@ -5,6 +5,7 @@ import {normalizeVisibilityObservation} from '@codex/process';
 import {PostgresRuntimeVisibilityRepository} from '../postgres-runtime-visibility.repository.js';
 import {createRuntimeVisibilityDatabaseFixture} from '../testing/runtime-visibility-database-fixture.js';
 
+// === L2: REAL-BOUNDARY INTEGRATION TESTS ===
 describe('[L2:INTEGRATION] durable readable items',()=>{
   it('R2-PERSISTENCE replays one complete logical item and isolates selection with explicit evaluation retention',async()=>{
     const fixture=await createRuntimeVisibilityDatabaseFixture();

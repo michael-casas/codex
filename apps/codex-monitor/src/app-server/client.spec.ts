@@ -14,7 +14,8 @@ import { afterEach, describe, expect, it } from 'vitest';
 
 import { AmbiguousDisconnect, AppServerClient } from './client.js';
 
-describe('App Server boundary', () => {
+// === L2: REAL-BOUNDARY INTEGRATION TESTS ===
+describe('[L2:INTEGRATION] App Server boundary', () => {
   const directories: string[] = [];
   const fixture = fileURLToPath(
     new URL('../../tests/fake-app-server.ts', import.meta.url),

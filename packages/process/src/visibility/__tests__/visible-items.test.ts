@@ -6,6 +6,7 @@ const event=(overrides:Record<string,unknown>={})=>({eventId:'event-a',source:'a
 type Item=Record<string,unknown>;
 function reducer(){const fn=(visibility as Record<string,unknown>).reduceVisibleItem;expect(fn).toBeTypeOf('function');return fn as (previous:Item|undefined, event:ReturnType<typeof visibility.normalizeVisibilityObservation>,revision:string)=>Item;}
 
+// === L1: IN-PROCESS INTEGRATION TESTS ===
 describe('[L1:INTEGRATION] readable visibility items',()=>{
   it('R2-ITEM-METADATA preserves scoped owner/lifecycle/phase and excludes reasoning and secrets',()=>{
     const normalized=visibility.normalizeVisibilityObservation(event()) as unknown as {item?:Item};

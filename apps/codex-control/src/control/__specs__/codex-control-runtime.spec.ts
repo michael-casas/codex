@@ -26,6 +26,7 @@ type ClientFactory = (options: {
   scopes: string[];
 }) => CodexControlPlane;
 
+// === L2: END-TO-END TESTS ===
 describe('[L2:E2E] CAS-09.R2 loopback control runtime', () => {
   const cleanups: Array<() => Promise<void>> = [];
   afterEach(async () => {

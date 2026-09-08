@@ -2,7 +2,8 @@ import { expect, test } from '@playwright/test';
 
 import { installControlFixture } from './control.fixture.js';
 
-test.describe('@cas10-l2 rendered visibility', () => {
+// === L2: END-TO-END TESTS ===
+test.describe('[L2:E2E] @cas10-l2 rendered visibility', () => {
   test.beforeEach(async ({ page }) => {
     await installControlFixture(page);
   });
@@ -80,7 +81,7 @@ test.describe('@cas10-l2 rendered visibility', () => {
   });
 });
 
-test('@cas10-l2 renders an empty state', async ({ page }) => {
+test('[L2:E2E] @cas10-l2 renders an empty state', async ({ page }) => {
   await installControlFixture(page, 'empty');
   await page.goto('/workflows/estimate-research');
   await expect(page.getByText('No Workflows Running')).toBeVisible({
@@ -88,7 +89,7 @@ test('@cas10-l2 renders an empty state', async ({ page }) => {
   });
 });
 
-test('@cas10-l2 renders a bounded gateway error', async ({ page }) => {
+test('[L2:E2E] @cas10-l2 renders a bounded gateway error', async ({ page }) => {
   await installControlFixture(page, 'error');
   await page.goto('/workflows/estimate-research');
   await expect(page.getByRole('alert')).toContainText(
@@ -100,7 +101,9 @@ test('@cas10-l2 renders a bounded gateway error', async ({ page }) => {
   });
 });
 
-test('@cas10-l2 reconnects one interrupted summary wait', async ({ page }) => {
+test('[L2:E2E] @cas10-l2 reconnects one interrupted summary wait', async ({
+  page,
+}) => {
   await installControlFixture(page, 'reconnect');
   await page.goto('/workflows/estimate-research');
   await expect(page.getByText(/reconnecting/i)).toBeVisible({

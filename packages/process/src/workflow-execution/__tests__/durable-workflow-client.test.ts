@@ -94,6 +94,7 @@ function fixture() {
   return { client, events, jobs };
 }
 
+// === L1: UNIT TESTS ===
 describe('[L1:UNIT] durable workflow command client', () => {
   it('returns one stable handle for exact replay and rejects conflicting reuse', async () => {
     const { client, jobs } = fixture();

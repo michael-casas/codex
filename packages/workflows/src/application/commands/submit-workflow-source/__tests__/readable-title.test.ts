@@ -1,6 +1,7 @@
 import {describe,expect,it} from 'vitest';
 import {createWorkflowSourceSubmission} from '../submit-workflow-source.handler.js';
 
+// === L1: IN-PROCESS INTEGRATION TESTS ===
 describe('[L1:INTEGRATION] admitted readable title',()=>{
   it('R2-TITLE-ADMISSION carries compiler-derived display title without additional agent-facing arguments',async()=>{
     const submitted:unknown[]=[];

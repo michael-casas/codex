@@ -207,8 +207,9 @@ function percentiles(values: number[]) {
 }
 
 // Explicit registration preserves the frozen four-scenario selector, whose grep includes paths.
+// === L2: END-TO-END TESTS ===
 if (process.env['CAS_UI_R2_PERFORMANCE'] === '1') {
-  test('R2-PERFORMANCE requested assets and bounded changed-content latency', async ({
+  test('[L2:E2E] R2-PERFORMANCE requested assets and bounded changed-content latency', async ({
     page,
   }, info) => {
     test.setTimeout(180_000);

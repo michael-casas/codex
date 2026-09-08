@@ -202,6 +202,7 @@ function observations(events: readonly ControlEvent[]) {
     .map((event) => event.payload.observation as Record<string, unknown>);
 }
 
+// === L1: IN-PROCESS INTEGRATION TESTS ===
 describe('[L1:INTEGRATION] recovery output and display independence', () => {
   it.each([undefined, 'commentary' as const])(
     'R2-RECOVERY-DISPLAY-UNAVAILABLE preserves validated output with %s provenance',

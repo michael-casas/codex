@@ -1,0 +1,4 @@
+interface:
+  display_name: "Seam"
+  short_description: "Classify and execute clean behavior seams"
+  default_prompt: "Use $seam to classify this work seam and choose the leanest clean path."

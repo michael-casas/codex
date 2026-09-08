@@ -174,6 +174,39 @@ survives Herdr client detach, but it is not a login item or reboot service: a
 full Herdr server stop or host restart ends the guardian, and the binding must
 be invoked again after Herdr is available.
 
+### Headless Linux and ChatGPT Remote
+
+Remote Linux hosts do not run ChatGPT Desktop. ChatGPT Remote starts
+`codex app-server proxy` over SSH, so use the headless Herdr guardian and put
+the repository proxy wrapper first in the remote `PATH`:
+
+```sh
+mkdir -p "$HOME/.local/libexec/codex-herdr" "$HOME/.local/bin"
+install -m 755 "$CODEX_HOME/scripts/codex-herdr-proxy" \
+  "$CODEX_HOME/scripts/codex-herdr-context-guardian" \
+  "$CODEX_HOME/scripts/launch-codex-app-server-in-herdr" \
+  "$HOME/.local/libexec/codex-herdr/"
+ln -sfn "$HOME/.local/libexec/codex-herdr/codex-herdr-proxy" \
+  "$HOME/.local/bin/codex"
+ln -sfn "$HOME/.local/libexec/codex-herdr/launch-codex-app-server-in-herdr" \
+  "$HOME/.local/bin/codex-app-herdr"
+codex-app-herdr start
+codex-app-herdr status
+```
+
+The launcher starts the named `codex-host` Herdr server, creates one anchor
+pane, and runs `codex-herdr-context-guardian` there. The guardian publishes an
+owner-only live context lease under `$XDG_STATE_HOME/codex-herdr/` (or
+`~/.local/state/codex-herdr/`). The `codex` wrapper passes ordinary commands to
+the real executable unchanged; for `app-server proxy`, it validates the live
+lease and injects the five `HERDR_*` caller variables. On Linux it also starts
+or reconciles the guardian automatically when a new proxy finds no live lease.
+
+An already-running SSH proxy retains its original environment. Reconnect the
+ChatGPT Remote target after installation so the next proxy traverses the
+wrapper. Never print or commit the lease; it contains machine-local Herdr
+context and must remain mode `600`.
+
 ## Governing authority
 
 Cross-project durable doctrine lives in the read-only Agent Wiki note

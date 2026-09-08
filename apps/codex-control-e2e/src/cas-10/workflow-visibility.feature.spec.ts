@@ -92,8 +92,9 @@ if (parseErrors.length > 0) throw new Error('CAS-10 Gherkin parse failed.');
 if (pickles.length !== 1)
   throw new Error('CAS-10 must select exactly one scenario.');
 
+// === L2: END-TO-END TESTS ===
 for (const pickle of pickles) {
-  test(`@cas10-l3 ${pickle.name}`, async ({ page }) => {
+  test(`[L2:E2E] @cas10-l3 ${pickle.name}`, async ({ page }) => {
     expect(pickle.tags.map(({ name }) => name)).toContain('@BATDD-CAS-10-001');
     for (const step of pickle.steps) {
       const binding = bindings[step.text];

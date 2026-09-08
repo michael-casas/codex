@@ -2,6 +2,7 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import { createBrowserControlClient } from './http-client';
 
+// === L1: UNIT TESTS ===
 describe('[L1:UNIT] CAS-09.R2 browser control client', () => {
   afterEach(() => vi.unstubAllGlobals());
 

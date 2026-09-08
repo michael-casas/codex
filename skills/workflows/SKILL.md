@@ -46,7 +46,7 @@ Every security audit assignment and every security fix/remediation assignment
 MUST use exactly `gpt-5.5` with `high` reasoning. The separate security-role
 routing requirement remains in force even though `agent()` now permits explicit
 reasoning. Do not relabel security work to bypass that authority boundary.
-Route each role to a separate authorized `codex exec --model gpt-5.5` assignment
-with `model_reasoning_effort="high"`; keep auditor and fixer identities separate.
+Route each role to a separate authorized Codex Control assignment with
+`model="gpt-5.5"` and `reasoningEffort="high"`; keep auditor and fixer identities separate.
 If the exact seat is unavailable, fail closed. Never downgrade, substitute,
 fallback, or treat a general-review node as security evidence.

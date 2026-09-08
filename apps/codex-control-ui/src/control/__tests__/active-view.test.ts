@@ -2,6 +2,7 @@ import {describe,expect,it,vi} from 'vitest';
 import {createControlSession} from '../session';
 import type {VisibilityResult} from '../types';
 
+// === L1: IN-PROCESS INTEGRATION TESTS ===
 describe('[L1:INTEGRATION] current workflow view',()=>{
   it('R2-CANCELLED-VIEW removes authoritative cancellation, clears its selection and preserves other work',async()=>{
     const received:VisibilityResult[]=[];const waits:Record<string,unknown>[]=[];
