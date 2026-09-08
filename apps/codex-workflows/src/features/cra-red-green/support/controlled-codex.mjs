@@ -63,7 +63,7 @@ if (stage === 'builder' && projectPath && launcherPath) {
     type: 'item.completed',
     item: {
       id: 'controlled-bun-react-scaffold-command',
-      type: 'command_execution',
+      type: 'commandExecution',
       command: launcherPath,
       aggregated_output: '',
       exit_code: 0,
@@ -75,7 +75,7 @@ if (stage === 'builder' && projectPath && launcherPath) {
       type: 'item.completed',
       item: {
         id: 'controlled-bun-react-extra-scaffold-command',
-        type: 'command_execution',
+        type: 'commandExecution',
         command: `bun create vite@9.2.0 ${projectPath} --template react`,
         aggregated_output: '',
         exit_code: 0,

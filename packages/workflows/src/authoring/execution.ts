@@ -407,7 +407,8 @@ function deriveCommandEvidence(
     .filter(
       (event) =>
         event.type === 'item.completed' &&
-        event.item?.type === 'command_execution' &&
+        (event.item?.type === 'commandExecution' ||
+          event.item?.type === 'command_execution') &&
         typeof event.item.command === 'string',
     )
     .map((event) => event.item?.command ?? '');
