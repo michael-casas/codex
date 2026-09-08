@@ -21965,6 +21965,7 @@ function createCodexControlServer(options = {
       reasoningEffort: string2().regex(/^[a-z][a-z0-9-]{0,63}$/),
       sandbox: id,
       approvalPolicy: id,
+      networkAccess: boolean2().optional(),
       completionBoundary: _enum([
         "runtime-settled",
         "output-validated",
@@ -21987,7 +21988,8 @@ function createCodexControlServer(options = {
       model: input.model,
       reasoningEffort: input.reasoningEffort,
       sandbox: input.sandbox,
-      approvalPolicy: input.approvalPolicy
+      approvalPolicy: input.approvalPolicy,
+      ...input.networkAccess === void 0 ? {} : { networkAccess: input.networkAccess }
     },
     completionBoundary: input.completionBoundary,
     prompt: input.prompt
