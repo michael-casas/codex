@@ -28,6 +28,7 @@
         "lintFilePatterns": [
           "plugins/codex-control/src/**/*.ts",
           "plugins/codex-control/scripts/**/*.ts",
+          "plugins/codex-control/scripts/**/*.mjs",
           "plugins/codex-control/vitest.config.ts",
           "plugins/codex-control/package.json",
           "plugins/codex-control/generators.json"
@@ -43,7 +44,7 @@
     "test-l1": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "vitest run --config plugins/codex-control/vitest.config.ts src/__tests__/canonical-plugin.test.ts src/generators/init/generator.test.ts"
+        "command": "vitest run --config plugins/codex-control/vitest.config.ts src/__tests__/canonical-plugin.test.ts src/__tests__/native-plugin-gate.test.ts src/generators/init/generator.test.ts"
       }
     },
     "test-l2": {
@@ -60,6 +61,22 @@
       "dependsOn": ["build"],
       "options": {
         "command": "bun plugins/codex-control/scripts/generator-e2e.ts"
+      }
+    },
+    "native-plugin-smoke": {
+      "executor": "nx:run-commands",
+      "cache": false,
+      "dependsOn": ["build"],
+      "options": {
+        "command": "bun plugins/codex-control/scripts/native-plugin-gate.ts"
+      }
+    },
+    "native-plugin-live": {
+      "executor": "nx:run-commands",
+      "cache": false,
+      "dependsOn": ["build"],
+      "options": {
+        "command": "bun plugins/codex-control/scripts/native-plugin-gate.ts --live"
       }
     },
     "test": {
