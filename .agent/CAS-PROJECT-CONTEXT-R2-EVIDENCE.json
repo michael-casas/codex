@@ -279,7 +279,9 @@
     "nativeInstall": true,
     "reinstall": true,
     "persistedAfterRestart": true,
-    "cleanup": "owned-container-absent"
+    "cleanup": "owned-container-absent",
+    "packageSha256": "0ba4ed2899376818d349429bd780f93c9d112c4364a875ce6295f8d23d0d1f21",
+    "log": "/tmp/cas-project-context-native-final.log"
   },
   "plumbingAfterFreeze": [
     "Prettier formatting without assertion, title, value or scenario changes",
@@ -298,5 +300,7 @@
     "remainingProjectFixtures": 0,
     "canonicalCheckoutClean": true,
     "leaseRetained": true
-  }
+  },
+  "productCommit": "083330b111aa0f9f280f5cfcbe38ae175a6e9001",
+  "pullRequest": "https://github.com/michael-casas/codex/pull/6"
 }
