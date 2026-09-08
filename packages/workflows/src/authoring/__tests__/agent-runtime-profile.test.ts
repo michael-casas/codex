@@ -24,6 +24,137 @@ const command = (model = 'gpt-5.6-luna', reasoningEffort = 'high') => ({
 
 // === L1: IN-PROCESS INTEGRATION TESTS ===
 describe('[L1:INTEGRATION] CAS-RP-01 agent runtime profiles', () => {
+  it('CAS-NET-GC1-001 freezes and forwards omitted network access as enabled', async () => {
+    const events: unknown[] = [];
+    let executionRequest: Record<string, unknown> | undefined;
+    await executeWorkflow(
+      defineWorkflow({
+        id: 'network-default',
+        run: () =>
+          agent({
+            label: 'Default network',
+            model: 'gpt-5.6-luna',
+            reasoning: 'low',
+            prompt: 'Inspect only.',
+          }),
+      }),
+      {},
+      {
+        runId: 'network-default',
+        async executeAgent(request) {
+          executionRequest = request as unknown as Record<string, unknown>;
+          return {
+            threadId: 'thread-default',
+            finalResponse: 'done',
+            usage: null,
+          };
+        },
+        async writeArtifact() {
+          throw new Error('Unexpected artifact');
+        },
+        onEvent(event) {
+          events.push(event);
+        },
+      },
+    );
+
+    expect(executionRequest).toMatchObject({
+      networkAccess: true,
+      node: { networkAccess: true },
+    });
+    expect(events).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          type: 'node.frozen',
+          node: expect.objectContaining({ networkAccess: true }),
+        }),
+      ]),
+    );
+  });
+
+  it('CAS-NET-GC1-002 freezes and forwards explicit network denial', async () => {
+    let executionRequest: Record<string, unknown> | undefined;
+    await executeWorkflow(
+      defineWorkflow({
+        id: 'network-deny',
+        run: () =>
+          agent({
+            label: 'Denied network',
+            model: 'gpt-5.6-luna',
+            reasoning: 'low',
+            networkAccess: false,
+            prompt: 'Inspect only.',
+          } as never),
+      }),
+      {},
+      {
+        runId: 'network-deny',
+        async executeAgent(request) {
+          executionRequest = request as unknown as Record<string, unknown>;
+          return {
+            threadId: 'thread-deny',
+            finalResponse: 'done',
+            usage: null,
+          };
+        },
+        async writeArtifact() {
+          throw new Error('Unexpected artifact');
+        },
+        onEvent() {
+          return undefined;
+        },
+      },
+    );
+
+    expect(executionRequest).toMatchObject({
+      networkAccess: false,
+      node: { networkAccess: false },
+    });
+  });
+
+  it.each(['false', 0, null, {}])(
+    'CAS-NET-GC1-003 rejects malformed network access %j before freeze or launch',
+    async (networkAccess) => {
+      let calls = 0;
+      const events: Array<{ type: string }> = [];
+      await expect(
+        executeWorkflow(
+          defineWorkflow({
+            id: 'invalid-network',
+            run: () =>
+              agent({
+                label: 'Invalid network',
+                model: 'gpt-5.6-luna',
+                reasoning: 'low',
+                networkAccess,
+                prompt: 'Never launch.',
+              } as never),
+          }),
+          {},
+          {
+            runId: 'invalid-network',
+            async executeAgent() {
+              calls += 1;
+              return {
+                threadId: 'forbidden',
+                finalResponse: 'done',
+                usage: null,
+              };
+            },
+            async writeArtifact() {
+              throw new Error('Unexpected artifact');
+            },
+            onEvent(event) {
+              events.push(event);
+            },
+          },
+        ),
+      ).rejects.toMatchObject({ code: 'WORKFLOW_DEFINITION_INVALID' });
+      expect(calls).toBe(0);
+      expect(events.some(({ type }) => type === 'node.frozen')).toBe(false);
+    },
+  );
+
   it('RP-AUTHORING freezes and forwards independent model/effort pairs unchanged', async () => {
     const profiles = [
       ['gpt-5.6-luna', 'high'],

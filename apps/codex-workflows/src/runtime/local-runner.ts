@@ -138,6 +138,7 @@ export async function runLocalWorkflow(
             id: agentRequest.node.id,
             model: agentRequest.model,
             reasoning: agentRequest.reasoning,
+            networkAccess: agentRequest.node.networkAccess,
           },
           prompt: agentRequest.prompt,
           model: agentRequest.model,

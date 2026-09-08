@@ -1,5 +1,10 @@
 import { describe, expect, it, vi } from 'vitest';
-import { artifact, defineWorkflow, prepareWorkflowRun } from '@codex/workflows';
+import {
+  agent,
+  artifact,
+  defineWorkflow,
+  prepareWorkflowRun,
+} from '@codex/workflows';
 import type { ExecuteControlCommand } from '@codex/db';
 
 import * as daemon from '../../main.js';
@@ -146,6 +151,141 @@ describe('[L1:UNIT] remote workflow execution daemon', () => {
 
 // === L1: IN-PROCESS INTEGRATION TESTS ===
 describe('[L1:INTEGRATION] workflow delivery failure cleanup', () => {
+  it('CAS-NET-GC1-006 preserves effective network permission through durable execution and events', async () => {
+    const prepared = prepareWorkflowRun({
+      workflowRef: 'network.workflow',
+      sourceDigest: `sha256:${'a'.repeat(64)}`,
+      input: {},
+      hostId: 'controlled',
+      workspace: {
+        repositoryId: 'fixture',
+        baseRevision: 'b'.repeat(40),
+        assignmentId: 'network-default',
+      },
+      runtimeProfile: {
+        model: 'gpt-5.6-luna',
+        reasoningEffort: 'low',
+        sandbox: 'readOnly',
+        approvalPolicy: 'never',
+      },
+      idempotencyKey: 'network-default',
+    });
+    const events: Array<{
+      streamId: string;
+      sequence: bigint;
+      eventId: string;
+      idempotencyKey: string;
+      kind: string;
+      payload: Record<string, unknown>;
+      payloadSha256: `sha256:${string}`;
+    }> = [];
+    const handlers = new Map<
+      string,
+      (data: Readonly<Record<string, unknown>>) => Promise<void>
+    >();
+    const requests: Array<Record<string, unknown>> = [];
+    const release = vi.fn(async () => undefined);
+    const close = vi.fn(async () => undefined);
+    const service = daemon.createWorkflowExecutionDaemon({
+      store: {
+        async events(streamId) {
+          return events.filter((event) => event.streamId === streamId) as never;
+        },
+        async execute(command) {
+          for (const event of command.events)
+            events.push({
+              streamId: command.streamId,
+              sequence: BigInt(events.length + 1),
+              eventId: event.eventId,
+              idempotencyKey: command.idempotencyKey,
+              kind: event.kind,
+              payload: event.payload,
+              payloadSha256: `sha256:${'0'.repeat(64)}`,
+            });
+          return {} as never;
+        },
+      },
+      delivery: {
+        start: async () => undefined,
+        stop: async () => undefined,
+        ensureQueue: async () => undefined,
+        work: async (queue, handler) => {
+          handlers.set(queue, handler);
+          return queue;
+        },
+      },
+      hosts: { connect: async () => ({}) },
+      workspaces: {
+        acquire: async () => ({ workspaceRef: 'network-workspace' }),
+        resolve: async () => ({
+          cwd: '/network-workspace',
+          tempDirectory: '/network-workspace/.tmp',
+        }),
+        release,
+      },
+      resolveWorkflow: async () => ({
+        sourceDigest: prepared.command.sourceDigest,
+        definition: defineWorkflow({
+          id: 'network-workflow',
+          run: async () => {
+            await agent({
+              label: 'Default network',
+              model: 'gpt-5.6-luna',
+              reasoning: 'low',
+              prompt: 'Inspect.',
+            });
+            return agent({
+              label: 'Denied network',
+              model: 'gpt-5.6-luna',
+              reasoning: 'low',
+              networkAccess: false,
+              prompt: 'Inspect.',
+            } as never);
+          },
+        }),
+      }),
+      createExecutor: () => ({
+        async executeAgent(request) {
+          requests.push(request as unknown as Record<string, unknown>);
+          return {
+            threadId: `thread-${requests.length}`,
+            finalResponse: 'done',
+            usage: null,
+          };
+        },
+        close,
+      }),
+    });
+    await service.start();
+    try {
+      const execute = handlers.get('workflow-execution');
+      if (!execute) throw new Error('MISSING_WORKFLOW_HANDLER');
+      await execute({ runId: prepared.runId, command: prepared.command });
+      expect(requests).toEqual([
+        expect.objectContaining({
+          networkAccess: true,
+          node: expect.objectContaining({ networkAccess: true }),
+        }),
+        expect.objectContaining({
+          networkAccess: false,
+          node: expect.objectContaining({ networkAccess: false }),
+        }),
+      ]);
+      expect(
+        events
+          .filter((event) => event.kind === 'node.frozen')
+          .map(
+            (event) =>
+              (event.payload.node as { networkAccess?: unknown }).networkAccess,
+          ),
+      ).toEqual([true, false]);
+    } finally {
+      await service.stop();
+    }
+    expect(close).toHaveBeenCalledOnce();
+    expect(release).toHaveBeenCalledOnce();
+  });
+
   function setup() {
     const prepared = prepareWorkflowRun({
       workflowRef: 'failure.check',

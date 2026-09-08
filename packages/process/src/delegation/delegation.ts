@@ -14,7 +14,7 @@ export interface DelegateAgentCommand {
   readonly assignmentDigest: `sha256:${string}`;
   readonly hostId: string;
   readonly workspace: { readonly repositoryId: string; readonly baseRevision: string; readonly assignmentId: string };
-  readonly runtimeProfile: { readonly model: string; readonly reasoningEffort: string; readonly sandbox: string; readonly approvalPolicy: string };
+  readonly runtimeProfile: { readonly model: string; readonly reasoningEffort: string; readonly sandbox: string; readonly approvalPolicy: string; readonly networkAccess?: boolean };
   readonly completionBoundary: CompletionBoundary;
   readonly prompt: string;
 }
@@ -57,11 +57,11 @@ function validate(value: unknown): DelegateAgentCommand {
   const c = value as unknown as DelegateAgentCommand;
   if (!ID.test(c.idempotencyKey) || !ID.test(c.assignmentRef) || !DIGEST.test(c.assignmentDigest) || !ID.test(c.hostId) ||
       !exact(value.workspace, ['repositoryId', 'baseRevision', 'assignmentId']) || !ID.test(c.workspace.repositoryId) || !REVISION.test(c.workspace.baseRevision) || !ID.test(c.workspace.assignmentId) ||
-      !exact(value.runtimeProfile, ['model', 'reasoningEffort', 'sandbox', 'approvalPolicy']) || typeof c.runtimeProfile.model !== 'string' || !/^[A-Za-z0-9][A-Za-z0-9._:-]{0,253}$/.test(c.runtimeProfile.model) || typeof c.runtimeProfile.reasoningEffort !== 'string' || !/^[a-z][a-z0-9-]{0,63}$/.test(c.runtimeProfile.reasoningEffort) || !ID.test(c.runtimeProfile.sandbox) || !ID.test(c.runtimeProfile.approvalPolicy) ||
+      !exact(value.runtimeProfile, ['model', 'reasoningEffort', 'sandbox', 'approvalPolicy', ...('networkAccess' in value.runtimeProfile ? ['networkAccess'] : [])]) || typeof c.runtimeProfile.model !== 'string' || !/^[A-Za-z0-9][A-Za-z0-9._:-]{0,253}$/.test(c.runtimeProfile.model) || typeof c.runtimeProfile.reasoningEffort !== 'string' || !/^[a-z][a-z0-9-]{0,63}$/.test(c.runtimeProfile.reasoningEffort) || !ID.test(c.runtimeProfile.sandbox) || !ID.test(c.runtimeProfile.approvalPolicy) || (c.runtimeProfile.networkAccess !== undefined && typeof c.runtimeProfile.networkAccess !== 'boolean') ||
       !['runtime-settled', 'output-validated', 'ready-for-audit'].includes(c.completionBoundary) || typeof c.prompt !== 'string' || c.prompt.trim().length === 0 || Buffer.byteLength(c.prompt, 'utf8') > 65_536) {
     throw new DelegationError('DELEGATION_COMMAND_INVALID', 'Invalid delegation command.');
   }
-  return c;
+  return { ...c, runtimeProfile: { ...c.runtimeProfile, networkAccess: c.runtimeProfile.networkAccess ?? true } };
 }
 
 function fingerprint(command: DelegateAgentCommand) { return `sha256:${createHash('sha256').update(JSON.stringify(command)).digest('hex')}`; }
@@ -73,6 +73,7 @@ function providerAmbiguous(error: unknown) { return object(error) && (error.ambi
 function threadReadFallback(error: unknown) { return object(error) && (error.providerCode === -32_601 || error.providerCode === -32_603); }
 function providerApproval(value: string) { return value === 'onRequest' ? 'on-request' : value; }
 function providerSandbox(value: string) { return value === 'readOnly' ? 'read-only' : value === 'workspaceWrite' ? 'workspace-write' : value === 'dangerFullAccess' ? 'danger-full-access' : value; }
+function providerSandboxPolicy(command: DelegateAgentCommand, cwd: string) { const { networkAccess = true } = command.runtimeProfile; const sandbox = ({ 'read-only': 'readOnly', 'workspace-write': 'workspaceWrite', 'danger-full-access': 'dangerFullAccess' } as Record<string, string>)[command.runtimeProfile.sandbox] ?? command.runtimeProfile.sandbox; return sandbox === 'workspaceWrite' ? { type: 'workspaceWrite', writableRoots: [cwd], networkAccess, excludeTmpdirEnvVar: true, excludeSlashTmp: true } : sandbox === 'readOnly' ? { type: 'readOnly', networkAccess } : { type: sandbox }; }
 
 async function readThread(connection: Connection, threadId: string, activeTurnId?: string) {
   try { return await connection.request<{ thread?: { status?: { type?: string }; turns?: Array<{ id?: string; status?: string }> } }>('thread/read', { threadId, includeTurns: true }); }
@@ -109,7 +110,7 @@ export function createDelegationService(deps: DelegationServiceDependencies) {
           model: command.runtimeProfile.model, cwd, approvalPolicy: providerApproval(command.runtimeProfile.approvalPolicy), sandbox: providerSandbox(command.runtimeProfile.sandbox), serviceName: 'codex-control-daemon',
         });
         providerAccepted = true;
-        const turn = await connection.request<{ turn: { id: string } }>('turn/start', { threadId: started.thread.id, model: command.runtimeProfile.model, effort: command.runtimeProfile.reasoningEffort, input: [{ type: 'text', text: command.prompt }] });
+        const turn = await connection.request<{ turn: { id: string } }>('turn/start', { threadId: started.thread.id, model: command.runtimeProfile.model, effort: command.runtimeProfile.reasoningEffort, sandboxPolicy: providerSandboxPolicy(command, cwd), input: [{ type: 'text', text: command.prompt }] });
         const bound = await deps.repository.bind(reserved.record.delegationId, { hostId: command.hostId, workspaceRef: lease.workspaceRef, threadId: started.thread.id, sessionId: started.thread.sessionId ?? started.thread.id, activeTurnId: turn.turn.id });
         return handle(bound);
       } catch (error) {
@@ -129,9 +130,10 @@ export function createDelegationService(deps: DelegationServiceDependencies) {
       const record = await deps.repository.read(delegationId); if (!record?.threadId) throw new DelegationError('DELEGATION_NOT_FOUND', 'Delegation not found.');
       if (record.state === 'cancelled') throw new DelegationError('DELEGATION_CANCELLED', 'Delegation is cancelled.');
       const connection = await deps.hosts.connect(record.command.hostId);
+      const cwd = record.workspaceRef ? (await deps.workspaces.resolve(record.workspaceRef)).cwd : undefined;
       const snapshot = await readThread(connection, record.threadId, record.activeTurnId);
       const active = snapshot.thread?.status?.type === 'active' ? [...(snapshot.thread.turns ?? [])].reverse().find((turn) => turn.status === 'inProgress')?.id : undefined;
-      const turnId = active ? (await connection.request<{ turnId: string }>('turn/steer', { threadId: record.threadId, input: [{ type: 'text', text: input }], expectedTurnId: active })).turnId : (await (async () => { await connection.request('thread/resume', { threadId: record.threadId }); return connection.request<{ turn: { id: string } }>('turn/start', { threadId: record.threadId, model: record.command.runtimeProfile.model, effort: record.command.runtimeProfile.reasoningEffort, input: [{ type: 'text', text: input }] }); })()).turn.id;
+      const turnId = active ? (await connection.request<{ turnId: string }>('turn/steer', { threadId: record.threadId, input: [{ type: 'text', text: input }], expectedTurnId: active })).turnId : (await (async () => { await connection.request('thread/resume', { threadId: record.threadId }); return connection.request<{ turn: { id: string } }>('turn/start', { threadId: record.threadId, model: record.command.runtimeProfile.model, effort: record.command.runtimeProfile.reasoningEffort, ...(cwd ? { sandboxPolicy: providerSandboxPolicy(record.command, cwd) } : {}), input: [{ type: 'text', text: input }] }); })()).turn.id;
       await deps.repository.transition(delegationId, 'running', turnId); return handle(record);
     },
     async cancelAgent(delegationId: string) {

@@ -1,0 +1,57 @@
+{
+  "$schema": "../assignment.schema.json",
+  "schemaVersion": "1.0.0",
+  "assignmentId": "CAS-AGENT-NETWORK-DEFAULT-R1",
+  "status": "active",
+  "dispatchable": true,
+  "role": "worker",
+  "objective": "Make omitted CAS agent network permission resolve to enabled while preserving explicit false across direct delegation and local or durable workflow execution, with the effective per-agent value frozen and sent on every App Server turn.",
+  "completionScope": "vertical-slice",
+  "mayReportFeatureComplete": true,
+  "feature": "apps/codex-workflows/src/features/cra-red-green/FEATURE.md",
+  "requiredLayers": {
+    "l1": { "status": "required" },
+    "l2": { "status": "required" },
+    "l3": {
+      "status": "not-applicable",
+      "reason": "This permission propagation repair is proven at deterministic and real App Server protocol boundaries; the separate paid Bun three-stage L3 reproof remains coordinator-owned by the Founder charter."
+    }
+  },
+  "writeSurface": [
+    ".agents/batdd/assignments/CAS-AGENT-NETWORK-DEFAULT-R1.json",
+    "packages/testing/evidence/cas-agent-network-default-r1-*.json",
+    "packages/workflows/src/authoring/**",
+    "apps/codex-workflows/src/runtime/**",
+    "packages/codex/src/app-server-workflow/**",
+    "packages/process/src/delegation/**",
+    "apps/daemon/src/workflow-execution/**",
+    "packages/control-gateway/src/lib/control-gateway.ts",
+    "apps/codex-control/src/control/__specs__/codex-control-protocol.spec.ts",
+    ".agent/CAS-AGENT-NETWORK-DEFAULT-R1-HANDOFF.md"
+  ],
+  "baseRevision": "efe2f25aeb3782dbb72139b5a6eb30457a2743e0",
+  "stopBoundary": "READY-FOR-AUDIT",
+  "greenContract": {
+    "id": "CAS-AGENT-NETWORK-DEFAULT-R1-GC-1",
+    "strategy": "basic-then-adversarial",
+    "redPolicy": "all-new-or-changed-contract-rows",
+    "adversarialRequired": true
+  },
+  "commitAuthority": { "allowed": false, "maxCommits": 0 },
+  "dependencies": [
+    "CDX.BUN-REACT-RED-GREEN.W1",
+    "CAS-BUN-LIVE-REPAIR-R1:DNSResolveFailed-diagnosis"
+  ],
+  "evidence": [
+    "default-network-enabled",
+    "explicit-network-deny-preserved",
+    "invalid-network-input-rejected-before-launch",
+    "effective-per-agent-permission-frozen-and-journaled",
+    "local-and-durable-workflow-propagation",
+    "direct-handoff-initial-and-adjacent-turn-propagation",
+    "read-only-filesystem-semantics-independent-from-network",
+    "real-no-model-app-server-boundary",
+    "zero-unexpected-resource-delta",
+    "ready-for-review-stop"
+  ]
+}

@@ -208,6 +208,118 @@ describe('[L1:INTEGRATION] HOSTR1 stop obligations', () => {
 });
 
 describe('[L1:INTEGRATION] App Server workflow executor', () => {
+  it('CAS-NET-GC1-005 rejects malformed permission before creating a thread', async () => {
+    let calls = 0;
+    const executor = createAppServerWorkflowExecutor({
+      cwd: '/workspace',
+      tempDirectory: '/workspace/.codex-workspace-tmp',
+      sandbox: 'readOnly',
+      approvalPolicy: 'never',
+      connection: {
+        async request() {
+          calls += 1;
+          throw new Error('Unexpected provider call');
+        },
+        async *messages() {
+          yield* [];
+        },
+        async respond() {
+          return undefined;
+        },
+        async reconnect() {
+          return undefined;
+        },
+      },
+    });
+    await expect(
+      executor.executeAgent({
+        node: {
+          id: 'invalid-network',
+          model: 'gpt-5.6-sol',
+          reasoning: 'low',
+          networkAccess: 'false',
+        } as never,
+        model: 'gpt-5.6-sol',
+        reasoning: 'low',
+        prompt: 'synthetic',
+        signal: new AbortController().signal,
+        onRuntimeEvent() {
+          return undefined;
+        },
+      }),
+    ).rejects.toMatchObject({ code: 'WORKFLOW_DEFINITION_INVALID' });
+    expect(calls).toBe(0);
+    await executor.close();
+  });
+
+  it('CAS-NET-GC1-005 keeps read-only filesystem semantics while enabling network', async () => {
+    const feed = new Feed();
+    let turnParams: unknown;
+    const executor = createAppServerWorkflowExecutor({
+      cwd: '/workspace',
+      tempDirectory: '/workspace/.codex-workspace-tmp',
+      sandbox: 'readOnly',
+      approvalPolicy: 'never',
+      connection: {
+        async request(method, params) {
+          if (method === 'thread/start')
+            return { thread: { id: 'thread-read-only' } } as never;
+          if (method === 'turn/start') {
+            turnParams = params;
+            return { turn: { id: 'turn-read-only' } } as never;
+          }
+          return {} as never;
+        },
+        messages: ({ signal } = {}) => feed.read(signal),
+        async respond() {
+          return undefined;
+        },
+        async reconnect() {
+          return undefined;
+        },
+      },
+    });
+    const result = executor.executeAgent({
+      node: {
+        id: 'read-only-network',
+        model: 'gpt-5.6-sol',
+        reasoning: 'low',
+        networkAccess: true,
+      } as never,
+      model: 'gpt-5.6-sol',
+      reasoning: 'low',
+      prompt: 'synthetic',
+      signal: new AbortController().signal,
+      onRuntimeEvent() {
+        return undefined;
+      },
+    });
+    await Promise.resolve();
+    await Promise.resolve();
+    feed.push({
+      kind: 'notification',
+      method: 'item/completed',
+      params: {
+        threadId: 'thread-read-only',
+        item: { type: 'agentMessage', text: 'done' },
+      },
+    });
+    feed.push({
+      kind: 'notification',
+      method: 'turn/completed',
+      params: {
+        threadId: 'thread-read-only',
+        turn: { id: 'turn-read-only', status: 'completed' },
+      },
+    });
+    await expect(result).resolves.toMatchObject({ finalResponse: 'done' });
+    expect(turnParams).toMatchObject({
+      sandboxPolicy: { type: 'readOnly', networkAccess: true },
+    });
+    expect(turnParams).not.toHaveProperty('sandboxPolicy.writableRoots');
+    await executor.close();
+  });
+
   it('preserves exact placement/model/effort and completes concurrent bound turns', async () => {
     const feed = new Feed();
     const calls: Array<{ method: string; params?: unknown }> = [];
@@ -247,16 +359,21 @@ describe('[L1:INTEGRATION] App Server workflow executor', () => {
       approvalPolicy: 'never',
     });
     const events: unknown[] = [];
-    const run = (id: string) =>
+    const run = (id: string, networkAccess?: boolean) =>
       executor.executeAgent({
-        node: { id, model: 'gpt-5.6-sol', reasoning: 'medium' },
+        node: {
+          id,
+          model: 'gpt-5.6-sol',
+          reasoning: 'medium',
+          ...(networkAccess === undefined ? {} : { networkAccess }),
+        },
         model: 'gpt-5.6-sol',
         reasoning: 'medium',
         prompt: id,
         signal: new AbortController().signal,
         onRuntimeEvent: (event) => void events.push(event),
       });
-    const results = [run('node-a'), run('node-b')];
+    const results = [run('node-a'), run('node-b', false)];
     await Promise.resolve();
     await Promise.resolve();
     for (const index of [1, 2]) {
@@ -322,14 +439,29 @@ describe('[L1:INTEGRATION] App Server workflow executor', () => {
     expect(
       calls
         .filter(({ method }) => method === 'turn/start')
-        .every(
-          ({ params }) =>
-            typeof params === 'object' &&
-            params !== null &&
-            'effort' in params &&
-            params.effort === 'medium',
-        ),
-    ).toBe(true);
+        .map(({ params }) => params),
+    ).toEqual([
+      expect.objectContaining({
+        effort: 'medium',
+        sandboxPolicy: expect.objectContaining({
+          type: 'workspaceWrite',
+          networkAccess: true,
+          writableRoots: ['/workspace', '/workspace/.codex-workspace-tmp'],
+          excludeTmpdirEnvVar: true,
+          excludeSlashTmp: true,
+        }),
+      }),
+      expect.objectContaining({
+        effort: 'medium',
+        sandboxPolicy: expect.objectContaining({
+          type: 'workspaceWrite',
+          networkAccess: false,
+          writableRoots: ['/workspace', '/workspace/.codex-workspace-tmp'],
+          excludeTmpdirEnvVar: true,
+          excludeSlashTmp: true,
+        }),
+      }),
+    ]);
     expect(events).toEqual(
       expect.arrayContaining([
         expect.objectContaining({ type: 'turn.completed', nodeId: 'node-a' }),
