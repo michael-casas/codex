@@ -85,6 +85,15 @@ stable rule IDs, private command substrings, and exact expected occurrence
 counts. The local host evaluates completed SDK command items, fails the node if
 any count differs, and retains only policy/command digests plus rule counts—not
 raw commands or command output.
+
+As an explicit alternative to `model` and `reasoning`, an agent may adopt one
+existing thread with `existingThread: { hostId, threadId, activeTurn }`.
+`activeTurn` is either `{ behavior: 'reject' }` or
+`{ behavior: 'steer', expectedTurnId }`. Runtime overrides, including
+networkAccess, are forbidden on adopted nodes so the thread keeps its current
+settings. A workflow may claim a host/thread pair only once; duplicate claims
+fail before a second execution. Adoption never authorizes cleanup of the
+external workspace or App Server process.
 `WorkflowModel` and `WorkflowReasoning` are explicit per-agent strings.
 Models are safe identifiers of 1–254 characters; reasoning is a lowercase
 identifier of 1–64 characters. Runtime admission rejects malformed inputs,

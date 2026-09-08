@@ -5,6 +5,7 @@
 
   export let label = 'Agent activity';
   export let selected = false;
+  export let ownership: 'managed' | 'adopted' | undefined = undefined;
   export let details: VisibilityResult['details'];
   export let limits: VisibilityResult['evaluationLimits'];
   export let onClose: () => void;
@@ -66,7 +67,7 @@
 
 <aside class="feed" aria-labelledby="feed-title">
   <div class="feed-heading">
-    <h2 id="feed-title">{label}</h2>
+    <div><h2 id="feed-title">{label}</h2>{#if ownership === 'adopted'}<small class="ownership-detail">Adopted</small>{/if}</div>
     {#if selected}<button class="quiet-button" type="button" on:click={onClose}>Close agent feed</button>{/if}
   </div>
   <!-- svelte-ignore a11y_no_noninteractive_tabindex (Scrollable message regions need keyboard focus.) -->

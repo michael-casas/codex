@@ -539,4 +539,45 @@ describe('[L1:INTEGRATION] App Server workflow executor', () => {
     );
     await executor.close();
   });
+
+  it('CAS-ETH-L1-007 adopts an idle workflow thread without thread/start or settings overrides', async () => {
+    const feed = new Feed();
+    const calls: Array<{ method: string; params?: unknown }> = [];
+    const executor = createAppServerWorkflowExecutor({
+      connection: {
+        async request(method, params) {
+          calls.push({ method, params });
+          if (method === 'thread/read') return { thread: { id: 'thread-existing', cwd: '/workspace', status: { type: 'idle' }, turns: [] } } as never;
+          if (method === 'thread/resume') return { thread: { id: 'thread-existing', sessionId: 'session-existing' } } as never;
+          if (method === 'turn/start') return { turn: { id: 'turn-adopted' } } as never;
+          return {} as never;
+        },
+        messages: ({ signal } = {}) => feed.read(signal),
+        async respond() { return undefined; },
+        async reconnect() { return undefined; },
+      },
+      cwd: '/workspace',
+      tempDirectory: '/workspace/.codex-workspace-tmp',
+      sandbox: 'workspaceWrite',
+      approvalPolicy: 'never',
+    });
+    const result = executor.executeAgent({
+      node: {
+        id: 'node-adopted',
+        existingThread: { hostId: 'local', threadId: 'thread-existing', activeTurn: { behavior: 'reject' } },
+      },
+      existingThread: { hostId: 'local', threadId: 'thread-existing', activeTurn: { behavior: 'reject' } },
+      prompt: 'Continue the workflow.',
+      signal: new AbortController().signal,
+      onRuntimeEvent() { return undefined; },
+    } as never);
+    await Promise.resolve();
+    await Promise.resolve();
+    feed.push({ kind: 'notification', method: 'item/completed', params: { threadId: 'thread-existing', turnId: 'turn-adopted', item: { id: 'item-adopted', type: 'agentMessage', text: 'done' } } });
+    feed.push({ kind: 'notification', method: 'turn/completed', params: { threadId: 'thread-existing', turn: { id: 'turn-adopted', status: 'completed' } } });
+    await expect(result).resolves.toMatchObject({ threadId: 'thread-existing', finalResponse: 'done' });
+    expect(calls.map(({ method }) => method)).toEqual(['thread/read', 'thread/resume', 'turn/start']);
+    expect(calls.at(-1)?.params).toEqual({ threadId: 'thread-existing', input: [{ type: 'text', text: 'Continue the workflow.' }] });
+    await executor.close();
+  });
 });

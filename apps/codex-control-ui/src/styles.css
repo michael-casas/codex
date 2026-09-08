@@ -289,6 +289,20 @@ details summary {
   text-transform: capitalize;
 }
 
+.ownership-summary,
+.ownership-detail {
+  color: var(--accent);
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+.ownership-detail {
+  display: block;
+  margin-top: 0.2rem;
+  font-size: 0.72rem;
+  text-transform: uppercase;
+}
+
 .support-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));

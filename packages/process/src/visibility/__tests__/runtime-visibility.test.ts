@@ -181,6 +181,7 @@ describe('[L1:UNIT] runtime visibility contracts', () => {
           title: 'Research agent',
           status: 'blocked',
           stateText: 'Waiting for approval',
+          ownership: 'adopted',
         },
       ],
     }) as Record<string, unknown>;
@@ -205,6 +206,7 @@ describe('[L1:UNIT] runtime visibility contracts', () => {
                   label: 'Research agent',
                   status: 'blocked',
                   stateText: 'Waiting for approval',
+                  ownership: 'adopted',
                 },
               ],
             },

@@ -49,6 +49,12 @@ interface LeaseService {
   resolve(
     workspaceRef: string,
   ): Promise<{ cwd: string; tempDirectory?: string }>;
+  authorizeExisting(input: {
+    hostId: string;
+    repositoryId: string;
+    baseRevision: string;
+    assignmentId: string;
+  }, cwd: string): Promise<{ cwd: string }>;
   release(workspaceRef: string): Promise<void>;
 }
 
@@ -397,5 +403,21 @@ describe('[L2:INTEGRATION] Workspace lease real boundary', () => {
       }),
     ).rejects.toMatchObject({ code: 'REVISION_MISMATCH' });
     expect(await readFile(join(foreign, 'keep.txt'), 'utf8')).toBe('keep\n');
+  });
+
+  it('[L2:INTEGRATION] CAS-ETH-L2-002 admits an existing worktree read-only and rejects a foreign cwd without mutation', async () => {
+    const repo = await repository('cas-eth-existing-');
+    const service = lease(await localClient(), repo.checkoutPath, repo.leaseRoot);
+    const before = await readFile(join(repo.checkoutPath, 'tracked.txt'), 'utf8');
+    const input = {
+      hostId: 'local-fixture',
+      repositoryId: 'repo-1',
+      baseRevision: repo.baseRevision,
+      assignmentId: 'CAS-EXISTING-THREAD-HANDOFF-R1',
+    };
+    await expect(service.authorizeExisting(input, repo.checkoutPath)).resolves.toEqual({ cwd: repo.checkoutPath });
+    await expect(service.authorizeExisting(input, repo.root)).rejects.toMatchObject({ code: 'WORKSPACE_ASSOCIATION_MISMATCH' });
+    expect(await readFile(join(repo.checkoutPath, 'tracked.txt'), 'utf8')).toBe(before);
+    expect((await exec('git', ['-C', repo.checkoutPath, 'worktree', 'list', '--porcelain'])).stdout).not.toContain(repo.leaseRoot);
   });
 });

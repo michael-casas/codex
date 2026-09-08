@@ -8,9 +8,16 @@ import { mapAppServerVisibility } from './app-server-visibility.mapper.js';
 
 export interface AppServerWorkflowNode {
   readonly id: string;
-  readonly model: string;
-  readonly reasoning: string;
+  readonly model?: string;
+  readonly reasoning?: string;
   readonly networkAccess?: boolean;
+  readonly existingThread?: AppServerExistingThreadTarget;
+}
+
+export interface AppServerExistingThreadTarget {
+  readonly hostId: string;
+  readonly threadId: string;
+  readonly activeTurn: { readonly behavior: 'reject' } | { readonly behavior: 'steer'; readonly expectedTurnId: string };
 }
 
 export interface AppServerWorkflowRuntimeEvent {
@@ -29,8 +36,9 @@ export interface AppServerWorkflowRuntimeEvent {
 
 export interface AppServerWorkflowRequest {
   readonly node: AppServerWorkflowNode;
-  readonly model: string;
-  readonly reasoning: string;
+  readonly model?: string;
+  readonly reasoning?: string;
+  readonly existingThread?: AppServerExistingThreadTarget;
   readonly prompt: string;
   readonly outputSchema?: Exclude<
     AppServerJson,
@@ -120,6 +128,7 @@ export interface AppServerWorkflowExecutorOptions {
   readonly onObservation?: (
     event: Record<string, unknown>,
   ) => void | Promise<void>;
+  readonly authorizeExisting?: (target: AppServerExistingThreadTarget, cwd: string) => Promise<void>;
 }
 
 interface ActiveTurn {
@@ -495,14 +504,10 @@ export function createAppServerWorkflowExecutor(
     async executeAgent(
       request: AppServerWorkflowRequest,
     ): Promise<AppServerWorkflowResult> {
-      if (
-        typeof request.model !== 'string' ||
-        !/^[A-Za-z0-9][A-Za-z0-9._:-]{0,253}$/.test(request.model) ||
-        typeof request.reasoning !== 'string' ||
-        !/^[a-z][a-z0-9-]{0,63}$/.test(request.reasoning) ||
-        (request.node.networkAccess !== undefined &&
-          typeof request.node.networkAccess !== 'boolean')
-      ) {
+      const target = request.existingThread ?? request.node.existingThread;
+      const validManaged = !target && typeof request.model === 'string' && /^[A-Za-z0-9][A-Za-z0-9._:-]{0,253}$/.test(request.model) && typeof request.reasoning === 'string' && /^[a-z][a-z0-9-]{0,63}$/.test(request.reasoning) && (request.node.networkAccess === undefined || typeof request.node.networkAccess === 'boolean');
+      const validAdopted = target && request.model === undefined && request.reasoning === undefined && request.node.networkAccess === undefined;
+      if (!validManaged && !validAdopted) {
         throw Object.assign(new Error('Invalid agent runtime profile.'), {
           code: 'WORKFLOW_DEFINITION_INVALID',
         });
@@ -512,27 +517,26 @@ export function createAppServerWorkflowExecutor(
           code: 'WORKFLOW_CANCELLED',
         });
       const networkAccess = request.node.networkAccess ?? true;
-      const started = await options.connection.request<{
-        thread: { id: string; sessionId?: string };
-      }>('thread/start', {
-        model: request.model,
-        cwd: options.cwd,
-        approvalPolicy: options.approvalPolicy,
-        sandbox:
-          options.sandbox === 'workspaceWrite'
-            ? 'workspace-write'
-            : 'read-only',
-        serviceName: 'codex-workflows',
-        config: {
-          shell_environment_policy: {
-            set: {
-              TMPDIR: options.tempDirectory,
-              TMP: options.tempDirectory,
-              TEMP: options.tempDirectory,
-            },
-          },
-        },
-      });
+      let threadId: string;
+      let adoptedActiveTurnId: string | undefined;
+      if (target) {
+        const snapshot = await options.connection.request<{ thread?: { id?: string; cwd?: string; status?: { type?: string }; turns?: Array<{ id?: string; status?: string }> } }>('thread/read', { threadId: target.threadId, includeTurns: true });
+        if (snapshot.thread?.id !== target.threadId || typeof snapshot.thread.cwd !== 'string') throw Object.assign(new Error('Existing workflow thread is unavailable.'), { code: 'WORKFLOW_RUNTIME_UNAVAILABLE' });
+        if (options.authorizeExisting) await options.authorizeExisting(target, snapshot.thread.cwd);
+        else if (snapshot.thread.cwd !== options.cwd) throw Object.assign(new Error('Existing workflow thread is outside the admitted workspace.'), { code: 'WORKFLOW_RUNTIME_UNAVAILABLE' });
+        adoptedActiveTurnId = snapshot.thread.status?.type === 'active' ? [...(snapshot.thread.turns ?? [])].reverse().find((turn) => turn.status === 'inProgress')?.id : undefined;
+        if (adoptedActiveTurnId && (target.activeTurn.behavior === 'reject' || target.activeTurn.expectedTurnId !== adoptedActiveTurnId)) throw Object.assign(new Error('Existing workflow thread has a conflicting active turn.'), { code: 'WORKFLOW_RUNTIME_UNAVAILABLE' });
+        if (!adoptedActiveTurnId && target.activeTurn.behavior === 'steer') throw Object.assign(new Error('Expected workflow turn is no longer active.'), { code: 'WORKFLOW_RUNTIME_UNAVAILABLE' });
+        if (!adoptedActiveTurnId) await options.connection.request('thread/resume', { threadId: target.threadId });
+        threadId = target.threadId;
+      } else {
+        const started = await options.connection.request<{ thread: { id: string; sessionId?: string } }>('thread/start', {
+          model: request.model as string, cwd: options.cwd, approvalPolicy: options.approvalPolicy,
+          sandbox: options.sandbox === 'workspaceWrite' ? 'workspace-write' : 'read-only', serviceName: 'codex-workflows',
+          config: { shell_environment_policy: { set: { TMPDIR: options.tempDirectory, TMP: options.tempDirectory, TEMP: options.tempDirectory } } },
+        });
+        threadId = started.thread.id;
+      }
       if (closing || feedFailed || request.signal.aborted)
         throw Object.assign(new Error('Workflow execution is unavailable.'), {
           code: 'WORKFLOW_CANCELLED',
@@ -540,16 +544,17 @@ export function createAppServerWorkflowExecutor(
       await request.onRuntimeEvent({
         type: 'thread.started',
         nodeId: request.node.id,
-        threadId: started.thread.id,
+        threadId,
       });
+      if (active.has(threadId)) throw Object.assign(new Error('Workflow thread is already active.'), { code: 'WORKFLOW_RUNTIME_UNAVAILABLE' });
       let state!: ActiveTurn;
       const result = new Promise<AppServerWorkflowResult>((resolve, reject) => {
         state = {
           request,
-          threadId: started.thread.id,
+          threadId,
           finalResponse: '',
           privateEvents: [
-            { type: 'thread.started', threadId: started.thread.id },
+            { type: 'thread.started', threadId },
           ],
           settled: false,
           resolve,
@@ -558,13 +563,16 @@ export function createAppServerWorkflowExecutor(
         active.set(state.threadId, state);
       });
       try {
-        const turn = await options.connection.request<{ turn: { id: string } }>(
-          'turn/start',
-          {
+        const turn = adoptedActiveTurnId
+          ? { turn: { id: (await options.connection.request<{ turnId: string }>('turn/steer', { threadId: state.threadId, input: [{ type: 'text', text: request.prompt }], expectedTurnId: adoptedActiveTurnId })).turnId } }
+          : await options.connection.request<{ turn: { id: string } }>('turn/start', target ? {
             threadId: state.threadId,
             input: [{ type: 'text', text: request.prompt }],
-            model: request.model,
-            effort: request.reasoning,
+          } : {
+            threadId: state.threadId,
+            input: [{ type: 'text', text: request.prompt }],
+            model: request.model as string,
+            effort: request.reasoning as string,
             sandboxPolicy:
               options.sandbox === 'workspaceWrite'
                 ? {
@@ -578,8 +586,7 @@ export function createAppServerWorkflowExecutor(
             ...(request.outputSchema
               ? { outputSchema: request.outputSchema }
               : {}),
-          },
-        );
+          });
         state.turnId = turn.turn.id;
         if (closing || feedFailed || request.signal.aborted) {
           await stop(

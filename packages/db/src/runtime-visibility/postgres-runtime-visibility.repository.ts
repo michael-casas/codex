@@ -73,6 +73,7 @@ export class PostgresRuntimeVisibilityRepository
         thread_id: string | null;
         state: string;
         title: string;
+        ownership?: 'managed' | 'adopted';
         updated_at: Date;
       }>(
         'SELECT * FROM process.read_visibility_delegations($1::uuid,1000,$2::uuid)',
@@ -84,6 +85,7 @@ export class PostgresRuntimeVisibilityRepository
         threadId: row.thread_id,
         status: row.state,
         title: row.title,
+        ownership: row.ownership ?? 'managed',
         occurredAt: row.updated_at.toISOString(),
       }));
     } finally {

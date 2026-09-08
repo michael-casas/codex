@@ -6,6 +6,7 @@ export interface DelegationVisibilitySnapshot {
   readonly agentId: string;
   readonly status: string;
   readonly title: string;
+  readonly ownership?: 'managed' | 'adopted';
   readonly occurredAt: string;
 }
 
@@ -24,6 +25,7 @@ export function projectDelegationVisibility(
     phase: 'Direct handoff',
     status: snapshot.status,
     title: snapshot.title,
+    ownership: snapshot.ownership ?? 'managed',
     occurredAt: snapshot.occurredAt,
   };
   return [

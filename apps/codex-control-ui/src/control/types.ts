@@ -13,6 +13,7 @@ export interface VisibilityAgent {
   readonly label: string;
   readonly status: VisibilityStatus;
   readonly stateText: string;
+  readonly ownership?: 'managed' | 'adopted';
   readonly errorText?: string;
 }
 

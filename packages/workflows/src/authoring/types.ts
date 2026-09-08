@@ -49,16 +49,24 @@ export interface WorkflowDefinition<Input = unknown, Output = unknown> {
   readonly run: (input: Input) => Promise<Output> | Output;
 }
 
-export interface AgentOptions<Input = unknown> {
+interface AgentOptionsBase<Input = unknown> {
   label: string;
-  model: WorkflowModel;
-  reasoning: WorkflowReasoning;
-  networkAccess?: boolean;
   prompt: string;
   input?: Input;
   outputSchema?: JsonSchema;
   commandEvidence?: AgentCommandEvidencePolicy;
 }
+
+export interface WorkflowExistingThreadTarget {
+  readonly hostId: string;
+  readonly threadId: string;
+  readonly activeTurn: { readonly behavior: 'reject' } | { readonly behavior: 'steer'; readonly expectedTurnId: string };
+}
+
+export type AgentOptions<Input = unknown> = AgentOptionsBase<Input> & (
+  | { model: WorkflowModel; reasoning: WorkflowReasoning; networkAccess?: boolean; existingThread?: never }
+  | { existingThread: WorkflowExistingThreadTarget; model?: never; reasoning?: never; networkAccess?: never }
+);
 
 export interface WorkflowArtifact {
   readonly name: string;
@@ -74,14 +82,13 @@ export interface ArtifactOptions<Value = unknown> {
   publishPath?: string;
 }
 
-export interface WorkflowAgentExecutionRequest<Input = unknown>
-  extends AgentOptions<Input> {
+export type WorkflowAgentExecutionRequest<Input = unknown> = AgentOptions<Input> & {
   readonly signal: AbortSignal;
   readonly node: FrozenWorkflowNode;
   readonly onRuntimeEvent: (
     event: WorkflowRuntimeEvent,
   ) => void | Promise<void>;
-}
+};
 
 export interface WorkflowRuntimeEvent {
   readonly type:
@@ -111,9 +118,10 @@ export interface FrozenWorkflowNode {
   readonly label: string;
   readonly phase?: string;
   readonly dependencies: readonly string[];
-  readonly model: WorkflowModel;
-  readonly reasoning: WorkflowReasoning;
-  readonly networkAccess: boolean;
+  readonly model?: WorkflowModel;
+  readonly reasoning?: WorkflowReasoning;
+  readonly networkAccess?: boolean;
+  readonly existingThread?: WorkflowExistingThreadTarget;
   readonly promptDigest: `sha256:${string}`;
   readonly inputDigest: `sha256:${string}`;
   readonly outputSchemaDigest?: `sha256:${string}`;

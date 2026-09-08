@@ -6,6 +6,7 @@ describe('[L1:UNIT] codex-control tool contract', () => {
   it('publishes the one-call task API with accurate safety annotations', () => {
     expect(codexControlToolCatalog).toEqual([
       { name: 'delegate_agent', readOnly: false, destructive: false },
+      { name: 'continue_agent', readOnly: false, destructive: false },
       { name: 'send_agent_message', readOnly: false, destructive: false },
       { name: 'ask_agent', readOnly: false, destructive: false },
       { name: 'reply_agent', readOnly: false, destructive: false },

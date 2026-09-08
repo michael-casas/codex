@@ -20,6 +20,7 @@ tables. Do not assume every backend operation has a public tool.
 Use one task-level Codex Control tool call for the requested intent:
 
 - `delegate_agent` for one local or remote Codex assignment.
+- `continue_agent` for a follow-up prompt on the exact thread already bound to a returned agent handle.
 - `run_workflow` for one trusted workflow source file or an accepted registered workflow.
 - `get_control_snapshot` or `wait_control_delta` for visibility without launch.
 - `send_agent_message`, `ask_agent`, or `reply_agent` for addressed durable
@@ -41,6 +42,29 @@ Preserve each workflow node's explicit model and reasoning. Never silently
 substitute medium or a different model. Provider support errors must remain
 visible. Named Codex configuration profiles are separate and are not supported
 by pretending their values are explicit settings.
+
+To adopt an existing Codex thread, call `delegate_agent` with the normal
+assignment/host/repository envelope and `existingThread` instead of model,
+reasoningEffort, sandbox, approvalPolicy, or networkAccess:
+
+```json
+{
+  "existingThread": {
+    "threadId": "thread-id",
+    "activeTurn": { "behavior": "reject" }
+  }
+}
+```
+
+Use `activeTurn: { "behavior": "steer", "expectedTurnId": "turn-id" }`
+only when intentionally steering that exact active turn. A stale or unknown
+turn is an explicit conflict; never retry by creating a fresh thread. The
+daemon verifies the host, thread access, and repository association before it
+prompts. Reuse the returned delegationId with `continue_agent`; include
+expectedTurnId when the adopted thread is active. An adopted handle owns only
+its prompt operation, not the external App Server process or workspace:
+cancellation may interrupt its exact bound turn but must not stop the runtime,
+delete the checkout, or release an external lease.
 
 Respect the user's concurrency and usage budget. For validation, use the
 approved low-cost model/effort and smallest useful run; do not turn an example

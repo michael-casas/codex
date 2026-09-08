@@ -314,6 +314,7 @@ export async function createProductionControlRuntime(
   const messenger = createAgentMessenger(messaging.store);
   const controlImplementation: CodexControlPlane = {
     delegateAgent: (command) => delegation.delegateAgent(command as never),
+    continueAgent: (command) => delegation.continueAgent(command as never),
     sendAgentMessage: (kind, command, authorization) =>
       messenger[kind](command as never, authorization),
     runWorkflow: (command, authorization) => {

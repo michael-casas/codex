@@ -16,6 +16,10 @@ export interface CodexControlPlane {
     command: unknown,
     authorization: ControlAuthorization,
   ): Promise<unknown>;
+  continueAgent?(
+    command: unknown,
+    authorization: ControlAuthorization,
+  ): Promise<unknown>;
   sendAgentMessage(
     kind: 'send' | 'ask' | 'reply',
     command: unknown,
@@ -62,6 +66,7 @@ export interface CodexControlServerOptions {
 
 export const codexControlToolCatalog = Object.freeze([
   { name: 'delegate_agent', readOnly: false, destructive: false },
+  { name: 'continue_agent', readOnly: false, destructive: false },
   { name: 'send_agent_message', readOnly: false, destructive: false },
   { name: 'ask_agent', readOnly: false, destructive: false },
   { name: 'reply_agent', readOnly: false, destructive: false },
@@ -140,6 +145,7 @@ const unavailable = async (): Promise<never> => {
 };
 const unconfigured: CodexControlPlane = {
   delegateAgent: unavailable,
+  continueAgent: unavailable,
   sendAgentMessage: unavailable,
   runWorkflow: unavailable,
   cancelAgent: unavailable,
@@ -320,17 +326,28 @@ export function createCodexControlServer(
         repositoryId: id,
         baseRevision: revision,
         assignmentId: id,
-        model: z.string().regex(/^[A-Za-z0-9][A-Za-z0-9._:-]{0,253}$/),
-        reasoningEffort: z.string().regex(/^[a-z][a-z0-9-]{0,63}$/),
-        sandbox: id,
-        approvalPolicy: id,
+        model: z.string().regex(/^[A-Za-z0-9][A-Za-z0-9._:-]{0,253}$/).optional(),
+        reasoningEffort: z.string().regex(/^[a-z][a-z0-9-]{0,63}$/).optional(),
+        sandbox: id.optional(),
+        approvalPolicy: id.optional(),
         networkAccess: z.boolean().optional(),
+        existingThread: z.strictObject({
+          threadId: id,
+          activeTurn: z.union([
+            z.strictObject({ behavior: z.literal('reject') }),
+            z.strictObject({ behavior: z.literal('steer'), expectedTurnId: id }),
+          ]),
+        }).optional(),
         completionBoundary: z.enum([
           'runtime-settled',
           'output-validated',
           'ready-for-audit',
         ]),
         prompt: z.string().min(1).max(65_536),
+      }).superRefine((input, context) => {
+        const runtime = input.model !== undefined && input.reasoningEffort !== undefined && input.sandbox !== undefined && input.approvalPolicy !== undefined;
+        const adopted = input.existingThread !== undefined && input.model === undefined && input.reasoningEffort === undefined && input.sandbox === undefined && input.approvalPolicy === undefined && input.networkAccess === undefined;
+        if (!runtime && !adopted) context.addIssue({ code: 'custom', message: 'Provide either a complete runtime profile or existingThread without runtime overrides.' });
       }),
       annotations: annotations(false, false),
     },
@@ -348,7 +365,7 @@ export function createCodexControlServer(
                 baseRevision: input.baseRevision,
                 assignmentId: input.assignmentId,
               },
-              runtimeProfile: {
+              ...(input.existingThread ? { existingThread: input.existingThread } : { runtimeProfile: {
                 model: input.model,
                 reasoningEffort: input.reasoningEffort,
                 sandbox: input.sandbox,
@@ -356,7 +373,7 @@ export function createCodexControlServer(
                 ...(input.networkAccess === undefined
                   ? {}
                   : { networkAccess: input.networkAccess }),
-              },
+              } }),
               completionBoundary: input.completionBoundary,
               prompt: input.prompt,
             },
@@ -369,6 +386,22 @@ export function createCodexControlServer(
           ),
         (value) => presentation(browserBaseUrl, 'agents', value, 'agentId'),
       ),
+  );
+
+  server.registerTool(
+    'continue_agent',
+    {
+      description: 'Continue one delegated agent on its bound thread and return the same stable handle.',
+      inputSchema: z.strictObject({ delegationId: id, prompt: z.string().min(1).max(65_536), expectedTurnId: id.optional() }),
+      annotations: annotations(false, false),
+    },
+    (input, extra) => invoke(
+      async () => {
+        if (!options.control.continueAgent) return unavailable();
+        return options.control.continueAgent(input, await authorization(options, 'continue_agent', extra, 'control:delegate'));
+      },
+      (value) => presentation(browserBaseUrl, 'agents', value, 'agentId'),
+    ),
   );
 
   for (const [tool, kind] of [

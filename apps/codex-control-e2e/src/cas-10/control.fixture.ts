@@ -2,7 +2,7 @@ import type { Page } from '@playwright/test';
 
 export async function installControlFixture(
   page: Page,
-  mode: 'ready' | 'empty' | 'error' | 'reconnect' = 'ready',
+  mode: 'ready' | 'empty' | 'error' | 'reconnect' | 'adopted' = 'ready',
 ) {
   await page.addInitScript(
     ({ fixtureMode }) => {
@@ -23,6 +23,7 @@ export async function installControlFixture(
                 label: 'Ada',
                 status: 'running',
                 stateText: 'Reviewing feeder schedules',
+                ...(fixtureMode === 'adopted' ? { ownership: 'adopted' } : {}),
               },
               {
                 id: 'agent-grace',

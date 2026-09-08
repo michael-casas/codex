@@ -18,19 +18,21 @@ describe('[L2:INTEGRATION] codex-control MCP behavior', () => {
     options: {
       authorize?: () => { actorAgentId: string; scopes: string[] };
       delegate?: CodexControlPlane['delegateAgent'];
+      continue?: (command: unknown, authorization: { actorAgentId: string; scopes: readonly string[] }) => Promise<unknown>;
       message?: CodexControlPlane['sendAgentMessage'];
       wait?: CodexControlPlane['wait'];
     } = {},
   ) {
-    const control: CodexControlPlane = {
+    const control = {
       delegateAgent: options.delegate ?? (async () => ({})),
+      continueAgent: options.continue ?? (async () => ({})),
       sendAgentMessage: options.message ?? (async () => ({})),
       runWorkflow: async () => ({}),
       cancelAgent: async () => ({}),
       cancelWorkflow: async () => ({}),
       snapshot: async () => ({ cursor: '0', changed: false }),
       wait: options.wait ?? (async () => ({ cursor: '0', changed: false })),
-    };
+    } as CodexControlPlane;
     const server = createCodexControlServer({
       control,
       authorize:
@@ -95,6 +97,36 @@ describe('[L2:INTEGRATION] codex-control MCP behavior', () => {
       hostId: 'local',
       threadId: 't',
     });
+  });
+
+  it('CAS-ETH-L1-004 advertises one-call adoption and continuation with a stable viewer handle', async () => {
+    const delegate = vi.fn(async () => ({
+      delegationId: 'adopted-delegation', executionId: 'adopted-execution', agentId: 'adopted-agent', hostId: 'local', threadId: 'thread-existing', ownership: 'adopted',
+    }));
+    const continued = vi.fn(async () => ({ delegationId: 'adopted-delegation', executionId: 'adopted-execution', agentId: 'adopted-agent', hostId: 'local', threadId: 'thread-existing', ownership: 'adopted' }));
+    const client = await connected({ delegate, continue: continued });
+    const advertised = (await client.listTools()).tools;
+    expect(advertised.find(({ name }) => name === 'delegate_agent')?.inputSchema.properties).toHaveProperty('existingThread');
+    expect(advertised.find(({ name }) => name === 'continue_agent')).toBeDefined();
+    const { model: _model, reasoningEffort: _effort, sandbox: _sandbox, approvalPolicy: _approval, ...base } = delegation;
+    const response = await client.callTool({
+      name: 'delegate_agent',
+      arguments: {
+        ...base,
+        existingThread: { threadId: 'thread-existing', activeTurn: { behavior: 'reject' } },
+      },
+    });
+    expect(response.isError, JSON.stringify(response.content)).not.toBe(true);
+    expect(delegate).toHaveBeenCalledWith(expect.objectContaining({
+      hostId: 'local',
+      existingThread: { threadId: 'thread-existing', activeTurn: { behavior: 'reject' } },
+    }), expect.anything());
+    const followUp = await client.callTool({
+      name: 'continue_agent',
+      arguments: { delegationId: 'adopted-delegation', prompt: 'One more change.', expectedTurnId: 'turn-current' },
+    });
+    expect(followUp.isError, JSON.stringify(followUp.content)).not.toBe(true);
+    expect(continued).toHaveBeenCalledWith({ delegationId: 'adopted-delegation', prompt: 'One more change.', expectedTurnId: 'turn-current' }, expect.anything());
   });
 
   it('rejects unknown fields and missing destructive confirmation without a write', async () => {

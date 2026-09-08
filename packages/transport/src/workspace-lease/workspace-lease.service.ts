@@ -42,6 +42,7 @@ export type WorkspaceLeaseErrorCode =
   | 'LEASE_OWNERSHIP_MISMATCH'
   | 'PROVIDER_FAILURE'
   | 'REVISION_MISMATCH'
+  | 'WORKSPACE_ASSOCIATION_MISMATCH'
   | 'UNSAFE_WORKSPACE';
 
 export class WorkspaceLeaseError extends Error {
@@ -75,6 +76,7 @@ async function providerRequest(
 
 export interface WorkspaceLeaseService {
   acquire(input: WorkspaceLeaseAcquire): Promise<WorkspaceLeaseResult>;
+  authorizeExisting(input: WorkspaceLeaseAcquire, cwd: string): Promise<{ readonly cwd: string }>;
   resolve(
     workspaceRef: WorkspaceRef,
   ): Promise<{ readonly cwd: string; readonly tempDirectory: string }>;
@@ -454,6 +456,22 @@ export function createWorkspaceLeaseService(
   }
 
   return {
+    async authorizeExisting(rawInput, rawCwd) {
+      const input = validateInput(rawInput);
+      const cwd = safePath(rawCwd);
+      const location = await options.resolveRepository({ hostId: input.hostId, repositoryId: input.repositoryId });
+      const checkoutPath = safePath(location.checkoutPath);
+      const host = await options.hosts.connect(input.hostId);
+      const [cwdMetadata, checkoutMetadata] = await Promise.all([metadata(host, cwd), metadata(host, checkoutPath)]);
+      if (!cwdMetadata.isDirectory || cwdMetadata.isSymlink || !checkoutMetadata.isDirectory || checkoutMetadata.isSymlink) throw fail('WORKSPACE_ASSOCIATION_MISMATCH', 'Existing workspace is not an admitted repository checkout');
+      const inspect = async (path: string) => command(host, ['git', '-C', path, 'rev-parse', '--show-toplevel', '--path-format=absolute', '--git-common-dir', `${input.baseRevision}^{commit}`], path);
+      const [candidate, configured] = await Promise.all([inspect(cwd), inspect(checkoutPath)]);
+      const candidateLines = candidate.stdout.trim().split('\n');
+      const configuredLines = configured.stdout.trim().split('\n');
+      if (candidate.exitCode !== 0 || configured.exitCode !== 0 || candidateLines.length !== 3 || configuredLines.length !== 3 || candidateLines[1] !== configuredLines[1] || candidateLines[2] !== input.baseRevision) throw fail('WORKSPACE_ASSOCIATION_MISMATCH', 'Existing workspace does not belong to the configured repository and revision');
+      return { cwd };
+    },
+
     async acquire(rawInput) {
       const input = validateInput(rawInput);
       const assignmentKey = `${input.hostId}\0${input.repositoryId}\0${input.assignmentId}`;

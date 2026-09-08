@@ -21,6 +21,7 @@ import type {
   WorkflowArtifact,
   WorkflowDefinition,
   WorkflowExecutionResult,
+  WorkflowAgentExecutionRequest,
   WorkflowNodeOutcome,
   WorkflowNodeResult,
   WorkflowPublicEvent,
@@ -33,6 +34,7 @@ import {
 } from '../domain/value-objects/agent-runtime-profile/agent-runtime-profile.schema.js';
 
 const MAX_PROMPT_LENGTH = 64_000;
+const AGENT_ID = /^[A-Za-z0-9][A-Za-z0-9._:-]{0,255}$/;
 const WORKFLOW_ERROR_CODES = new Set([
   'WORKFLOW_DEFINITION_INVALID',
   'WORKFLOW_INPUT_INVALID',
@@ -526,6 +528,7 @@ export async function executeWorkflow<Input, Output>(
   };
   const nodes: WorkflowNodeResult[] = [];
   const artifacts: WorkflowArtifact[] = [];
+  const existingThreadClaims = new Set<string>();
   let sequence = 0;
   let ordinal = 0;
   let currentPhase: string | undefined;
@@ -588,12 +591,18 @@ export async function executeWorkflow<Input, Output>(
     ): Promise<Result> {
       const finishActivity = activity.begin();
       try {
+        const target = request.existingThread;
+        const targetPolicy = target?.activeTurn;
+        const validTarget = target !== undefined && AGENT_ID.test(target.hostId) && AGENT_ID.test(target.threadId) && targetPolicy !== undefined && (
+          (targetPolicy.behavior === 'reject' && Object.keys(targetPolicy).length === 1) ||
+          (targetPolicy.behavior === 'steer' && Object.keys(targetPolicy).length === 2 && AGENT_ID.test(targetPolicy.expectedTurnId))
+        );
+        const validRuntime = target === undefined
+          ? validAgentModel(request.model) && validAgentReasoning(request.reasoning) && (request.networkAccess === undefined || typeof request.networkAccess === 'boolean')
+          : validTarget && request.model === undefined && request.reasoning === undefined && request.networkAccess === undefined;
         if (
           !request.label.trim() ||
-          !validAgentModel(request.model) ||
-          !validAgentReasoning(request.reasoning) ||
-          (request.networkAccess !== undefined &&
-            typeof request.networkAccess !== 'boolean') ||
+          !validRuntime ||
           !request.prompt ||
           request.prompt.length > MAX_PROMPT_LENGTH
         ) {
@@ -609,6 +618,11 @@ export async function executeWorkflow<Input, Output>(
         if (request.commandEvidence) {
           validateCommandEvidencePolicy(request.commandEvidence);
         }
+        if (target) {
+          const claim = `${target.hostId}\0${target.threadId}`;
+          if (existingThreadClaims.has(claim)) throw new WorkflowExecutionError('WORKFLOW_DEFINITION_INVALID', 'A workflow cannot claim one existing host/thread pair more than once.');
+          existingThreadClaims.add(claim);
+        }
         ordinal += 1;
         const nodeId = `${definition.id}:${String(ordinal).padStart(3, '0')}:${slug(request.label)}`;
         const dependencies = dependenciesFor(request.input, lineage);
@@ -619,9 +633,9 @@ export async function executeWorkflow<Input, Output>(
           label: request.label,
           ...(currentPhase ? { phase: currentPhase } : {}),
           dependencies,
-          model: request.model,
-          reasoning: request.reasoning,
-          networkAccess: request.networkAccess ?? true,
+          ...(request.model ? { model: request.model } : {}),
+          ...(request.reasoning ? { reasoning: request.reasoning } : {}),
+          ...(target ? { existingThread: target } : { networkAccess: request.networkAccess ?? true }),
           promptDigest: sha256(request.prompt),
           inputDigest: digest(request.input, 'Agent input'),
           ...(request.outputSchema
@@ -663,12 +677,12 @@ export async function executeWorkflow<Input, Output>(
               try {
                 response = await options.executeAgent({
                   ...request,
-                  networkAccess: frozen.networkAccess,
+                  ...(frozen.networkAccess === undefined ? {} : { networkAccess: frozen.networkAccess }),
                   prompt: effectivePrompt(request.prompt, request.input),
                   signal: operationController.signal,
                   node: frozen,
                   onRuntimeEvent: options.onRuntimeEvent ?? (() => undefined),
-                });
+                } as WorkflowAgentExecutionRequest);
               } finally {
                 controller.signal.removeEventListener('abort', relayAbort);
               }

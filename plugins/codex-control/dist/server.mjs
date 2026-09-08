@@ -21783,6 +21783,7 @@ var EMPTY_COMPLETION_RESULT = {
 // packages/control-gateway/dist/lib/control-gateway.js
 var codexControlToolCatalog = Object.freeze([
   { name: "delegate_agent", readOnly: false, destructive: false },
+  { name: "continue_agent", readOnly: false, destructive: false },
   { name: "send_agent_message", readOnly: false, destructive: false },
   { name: "ask_agent", readOnly: false, destructive: false },
   { name: "reply_agent", readOnly: false, destructive: false },
@@ -21848,6 +21849,7 @@ var unavailable = async () => {
 };
 var unconfigured = {
   delegateAgent: unavailable,
+  continueAgent: unavailable,
   sendAgentMessage: unavailable,
   runWorkflow: unavailable,
   cancelAgent: unavailable,
@@ -21961,17 +21963,29 @@ function createCodexControlServer(options = {
       repositoryId: id,
       baseRevision: revision,
       assignmentId: id,
-      model: string2().regex(/^[A-Za-z0-9][A-Za-z0-9._:-]{0,253}$/),
-      reasoningEffort: string2().regex(/^[a-z][a-z0-9-]{0,63}$/),
-      sandbox: id,
-      approvalPolicy: id,
+      model: string2().regex(/^[A-Za-z0-9][A-Za-z0-9._:-]{0,253}$/).optional(),
+      reasoningEffort: string2().regex(/^[a-z][a-z0-9-]{0,63}$/).optional(),
+      sandbox: id.optional(),
+      approvalPolicy: id.optional(),
       networkAccess: boolean2().optional(),
+      existingThread: strictObject({
+        threadId: id,
+        activeTurn: union([
+          strictObject({ behavior: literal("reject") }),
+          strictObject({ behavior: literal("steer"), expectedTurnId: id })
+        ])
+      }).optional(),
       completionBoundary: _enum([
         "runtime-settled",
         "output-validated",
         "ready-for-audit"
       ]),
       prompt: string2().min(1).max(65536)
+    }).superRefine((input, context) => {
+      const runtime = input.model !== void 0 && input.reasoningEffort !== void 0 && input.sandbox !== void 0 && input.approvalPolicy !== void 0;
+      const adopted = input.existingThread !== void 0 && input.model === void 0 && input.reasoningEffort === void 0 && input.sandbox === void 0 && input.approvalPolicy === void 0 && input.networkAccess === void 0;
+      if (!runtime && !adopted)
+        context.addIssue({ code: "custom", message: "Provide either a complete runtime profile or existingThread without runtime overrides." });
     }),
     annotations: annotations(false, false)
   }, (input, extra) => invoke(async () => options.control.delegateAgent({
@@ -21984,16 +21998,25 @@ function createCodexControlServer(options = {
       baseRevision: input.baseRevision,
       assignmentId: input.assignmentId
     },
-    runtimeProfile: {
+    ...input.existingThread ? { existingThread: input.existingThread } : { runtimeProfile: {
       model: input.model,
       reasoningEffort: input.reasoningEffort,
       sandbox: input.sandbox,
       approvalPolicy: input.approvalPolicy,
       ...input.networkAccess === void 0 ? {} : { networkAccess: input.networkAccess }
-    },
+    } },
     completionBoundary: input.completionBoundary,
     prompt: input.prompt
   }, await authorization(options, "delegate_agent", extra, "control:delegate")), (value) => presentation(browserBaseUrl, "agents", value, "agentId")));
+  server.registerTool("continue_agent", {
+    description: "Continue one delegated agent on its bound thread and return the same stable handle.",
+    inputSchema: strictObject({ delegationId: id, prompt: string2().min(1).max(65536), expectedTurnId: id.optional() }),
+    annotations: annotations(false, false)
+  }, (input, extra) => invoke(async () => {
+    if (!options.control.continueAgent)
+      return unavailable();
+    return options.control.continueAgent(input, await authorization(options, "continue_agent", extra, "control:delegate"));
+  }, (value) => presentation(browserBaseUrl, "agents", value, "agentId")));
   for (const [tool, kind] of [
     ["send_agent_message", "send"],
     ["ask_agent", "ask"],
@@ -22117,6 +22140,7 @@ function createControlHttpClient(options) {
   };
   const control2 = {
     delegateAgent: (command) => call("delegateAgent", command),
+    continueAgent: (command) => call("continueAgent", command),
     sendAgentMessage: (kind, command) => call(kind === "send" ? "sendAgentMessage" : kind === "ask" ? "askAgent" : "replyAgent", command),
     runWorkflow: (command) => call("runWorkflow", command),
     cancelAgent: (delegationId) => call("cancelAgent", { delegationId }),

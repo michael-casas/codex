@@ -178,6 +178,9 @@ async function invoke(
   switch (operation) {
     case 'delegateAgent':
       return control.delegateAgent(value, authorization);
+    case 'continueAgent':
+      if (control.continueAgent) return control.continueAgent(value, authorization);
+      throw new ControlHttpError('CONTROL_NOT_CONFIGURED', 503);
     case 'sendAgentMessage':
       return control.sendAgentMessage('send', value, authorization);
     case 'askAgent':
@@ -419,6 +422,7 @@ export function createControlHttpClient(
 
   const control: CodexControlPlane = {
     delegateAgent: (command) => call('delegateAgent', command),
+    continueAgent: (command) => call('continueAgent', command),
     sendAgentMessage: (kind, command) =>
       call(
         kind === 'send'

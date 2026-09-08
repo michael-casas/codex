@@ -186,6 +186,7 @@
                       <span>
                         <strong>{agent.label}</strong>
                         <small>{agent.stateText}</small>
+                        {#if agent.ownership === 'adopted'}<small class="ownership-summary">External · adopted</small>{/if}
                       </span>
                       <span class="agent-status">{agent.status}</span>
                     </button>
@@ -220,6 +221,7 @@
 
       {#key selectedAgentId}
         <ActivityFeed label={selectedAgent?.label ?? 'Agent activity'} selected={Boolean(selectedAgentId)}
+          ownership={selectedAgent?.ownership}
           details={selectedAgentId && result?.details?.agentId === selectedAgentId ? result.details : undefined}
           limits={result?.evaluationLimits} onClose={collapse}
           mobileUrl={presentation?.mobile.state === 'available' ? presentation.mobile.url : undefined} />

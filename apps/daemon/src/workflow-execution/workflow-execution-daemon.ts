@@ -57,6 +57,7 @@ export interface WorkflowExecutionDaemonDependencies {
     resolve(
       workspaceRef: string,
     ): Promise<{ cwd: string; tempDirectory: string }>;
+    authorizeExisting?(input: RunWorkflowCommand['workspace'] & { hostId: string }, cwd: string): Promise<{ cwd: string }>;
     release(workspaceRef: string): Promise<void>;
   };
   readonly resolveWorkflow: (workflowRef: string) => Promise<{
@@ -68,6 +69,8 @@ export interface WorkflowExecutionDaemonDependencies {
     cwd: string;
     tempDirectory: string;
     runtimeProfile: RunWorkflowCommand['runtimeProfile'];
+    hostId: string;
+    workspace: RunWorkflowCommand['workspace'];
     onObservation: (event: Record<string, unknown>) => Promise<void>;
   }) => WorkflowRuntimeExecutor;
 }
@@ -263,6 +266,8 @@ export function createWorkflowExecutionDaemon(
         cwd,
         tempDirectory,
         runtimeProfile: prepared.command.runtimeProfile,
+        hostId: prepared.command.hostId,
+        workspace: prepared.command.workspace,
         onObservation: observe,
       });
       const runtimeExecutor = executor;
@@ -577,6 +582,8 @@ export function createProductionWorkflowExecutionDaemon(
         cwd,
         tempDirectory,
         runtimeProfile,
+        hostId,
+        workspace,
         onObservation,
       }) {
         const executor = createAppServerWorkflowExecutor({
@@ -586,6 +593,10 @@ export function createProductionWorkflowExecutionDaemon(
           sandbox: runtimeProfile.sandbox,
           approvalPolicy: runtimeProfile.approvalPolicy,
           onObservation,
+          authorizeExisting: async (target, targetCwd) => {
+            if (target.hostId !== hostId || !dependencies.workspaces.authorizeExisting) throw Object.assign(new Error('Existing workflow target is not admitted.'), { code: 'WORKFLOW_RUNTIME_UNAVAILABLE' });
+            await dependencies.workspaces.authorizeExisting({ ...workspace, hostId }, targetCwd);
+          },
         });
         return {
           executeAgent: (request) => executor.executeAgent(request as never),

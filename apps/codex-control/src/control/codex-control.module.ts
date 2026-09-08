@@ -14,6 +14,7 @@ import type {
 export interface CodexControlServices {
   readonly delegation: {
     delegateAgent(command: unknown): Promise<unknown>;
+    continueAgent?(command: unknown): Promise<unknown>;
     cancelAgent(delegationId: string): Promise<unknown>;
   };
   readonly messaging: {
@@ -61,6 +62,9 @@ export function createCodexControlPlane(
 
   const control: CodexControlPlane = {
     delegateAgent: (command) => services.delegation.delegateAgent(command),
+    continueAgent: (command) => services.delegation.continueAgent
+      ? services.delegation.continueAgent(command)
+      : Promise.reject(Object.assign(new Error('Control continuation is not configured.'), { code: 'CONTROL_NOT_CONFIGURED' })),
     sendAgentMessage: (kind, command, authorization) =>
       services.messaging[kind](
         command as never,

@@ -47,6 +47,7 @@ export interface NormalizedVisibilityEvent {
   readonly itemId?: string;
   readonly status?: VisibilityStatus;
   readonly stateText?: string;
+  readonly ownership?: 'managed' | 'adopted';
   readonly errorText?: string;
   readonly title?: string;
   readonly phase?: string;
@@ -79,6 +80,7 @@ export interface VisibilitySummary {
   readonly agentId?: string;
   readonly status?: VisibilityStatus;
   readonly stateText?: string;
+  readonly ownership?: 'managed' | 'adopted';
   readonly errorText?: string;
   readonly title?: string;
   readonly phase?: string;
@@ -119,6 +121,7 @@ export interface VisibilityAgent {
   readonly label: string;
   readonly status: VisibilityStatus;
   readonly stateText: string;
+  readonly ownership?: 'managed' | 'adopted';
   readonly errorText?: string;
 }
 
@@ -344,6 +347,8 @@ export function normalizeVisibilityObservation(
   const title = safeText(value.title, 'title');
   const phase = safeText(value.phase, 'phase');
   const stateText = safeText(value.stateText, 'stateText');
+  const ownership = safeText(value.ownership, 'ownership');
+  if (ownership !== undefined && ownership !== 'managed' && ownership !== 'adopted') throw new RuntimeVisibilityError('VISIBILITY_EVENT_INVALID', 'ownership is invalid.');
   const errorText = safeText(value.errorText, 'errorText');
   const current = boundedNumber(value.current, 'current');
   const total = boundedNumber(value.total, 'total');
@@ -364,6 +369,7 @@ export function normalizeVisibilityObservation(
     ...(rawStatus
       ? { status, stateText: stateText ?? statusText(rawStatus, status) }
       : {}),
+    ...(ownership ? { ownership: ownership as 'managed' | 'adopted' } : {}),
     ...(title ? { title } : {}),
     ...(phase ? { phase } : {}),
     ...(errorText ? { errorText } : {}),
@@ -504,6 +510,7 @@ export function shapeVisibilityResult(input: {
                   stateText:
                     agent.stateText ??
                     statusText(undefined, agent.status ?? 'unknown'),
+                  ...(agent.ownership ? { ownership: agent.ownership } : {}),
                   ...(agent.errorText ? { errorText: agent.errorText } : {}),
                 })),
             })),
