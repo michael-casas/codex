@@ -1,0 +1,43 @@
+{
+  "schemaVersion": "1.0.0",
+  "artifactType": "codex-workflows-bun-react-red-green-red-evidence",
+  "assignmentId": "CDX.BUN-REACT-RED-GREEN.W1",
+  "contractId": "CDX-WF-BUN-REACT-RG-GC-1",
+  "contractRowsDigest": "sha256:38b98fa6da1cb32ec36c4bfde1d2ba8d716417e51407b1b87c926daa926b7cf2",
+  "baseRevision": "bb45998b90edbb56c7022a20a0c25aaf10b20388",
+  "workingDirectory": "/Users/mcasa_atlantis/.codex/worktrees/a4a6/.codex/.agent/artifacts/marketing-agency-demo/workspaces/9e2d5f33a05583fff4effea67b285e08e4ee2c59671dacda6fcaca1704683912",
+  "meaningfulRed": [
+    {
+      "rowId": "BUN-REACT-RG-GC1-001-FIXED-AUDIT-POLICY",
+      "command": "bun nx run @codex/codex-workflows:test-l1-cra-red-green --skip-nx-cache --outputStyle=static",
+      "runtime": "Vitest L1",
+      "sourceCount": 1,
+      "selectedCount": 6,
+      "executedCount": 6,
+      "failedCount": 1,
+      "passedCount": 5,
+      "exitCode": 1,
+      "decisiveFailure": "The fixed evaluator returned CRA-AUDIT-001 instead of BUN-REACT-AUDIT-001, proving the pinned Vite React Bun package/lock/command contract was absent while five retained audit behaviors stayed green."
+    },
+    {
+      "rowId": "BUN-REACT-RG-GC1-002-CONTROLLED-THREE-STAGE",
+      "command": "bun nx run @codex/codex-workflows:test-l2-cra-red-green --skip-nx-cache --outputStyle=static",
+      "runtime": "Vitest L2 through built public CLI and controlled App Server",
+      "sourceCount": 1,
+      "selectedCount": 3,
+      "executedCount": 3,
+      "failedCount": 1,
+      "passedCount": 2,
+      "exitCode": 1,
+      "decisiveFailure": "The host proof executable ended in /npx rather than /bun, proving the pinned Bun create-vite boundary was absent while cleanup and duplicate-scaffold rejection stayed green."
+    }
+  ],
+  "defectiveAttemptExcluded": {
+    "command": "bun nx run @codex/codex-workflows:test-l2-cra-red-green --skip-nx-cache --outputStyle=static",
+    "reason": "The first attempt could not resolve the unbuilt @codex/workflows package in the isolated checkout. It was harness setup failure, not RED, and was rerun only after Bun lockfile installation and the resolved dependency build."
+  },
+  "l3": {
+    "status": "not-run-by-worker",
+    "reason": "The charter reserves the single paid live workflow execution for the coordinator. The superseded live CRA/npm evidence is the meaningful predecessor disproof for the changed Bun-only L3 identity."
+  }
+}

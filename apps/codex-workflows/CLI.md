@@ -108,6 +108,9 @@ separate and remains blocked by the pinned App Server's native capability.
 
 Tested examples:
 
+- `examples/bun-react-red-green.workflow.ts` with
+  `examples/bun-react-red-green.input.json` (three-stage Bun/Vite React
+  build, immutable RED audit, and bounded remediation)
 - `examples/nestjs-resolver-factory-research.workflow.ts`
 - `examples/nestjs-resolver-factory-research.input.json`
 - `examples/canonical-review.workflow.json`

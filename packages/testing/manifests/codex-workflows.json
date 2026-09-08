@@ -102,7 +102,7 @@
       "artifact": "test-output/cucumber/codex-workflows-daily-facts.json"
     },
     {
-      "heading": "--- Founder CRA RED to GREEN Cucumber Behavioral Test ---",
+      "heading": "--- Founder Bun/Vite React RED to GREEN Cucumber Behavioral Test ---",
       "layer": "l3",
       "command": [
         "bun",
@@ -110,10 +110,10 @@
         "verify-cucumber",
         "apps/codex-workflows/src/features/cra-red-green/cra-red-green.feature",
         "apps/codex-workflows/out-tsc/cucumber/features/cra-red-green/index.steps.js",
-        "test-output/cucumber/codex-workflows-cra-red-green.json"
+        "test-output/cucumber/codex-workflows-bun-react-red-green.json"
       ],
       "expected": "cucumber-output",
-      "artifact": "test-output/cucumber/codex-workflows-cra-red-green.json"
+      "artifact": "test-output/cucumber/codex-workflows-bun-react-red-green.json"
     }
   ]
 }
