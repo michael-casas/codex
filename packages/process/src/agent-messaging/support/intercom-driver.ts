@@ -88,7 +88,7 @@ export async function runIntercomScenario(): Promise<IntercomScenarioResult> {
   try {
     await runtime.start();
     const remote = await wss.connection.startThread({
-      model: 'gpt-5.6-sol',
+      model: 'gpt-5.6-luna',
       cwd: process.cwd(),
       approvalPolicy: 'never',
       sandbox: 'readOnly',

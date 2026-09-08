@@ -239,7 +239,7 @@ describe('[L2:INTEGRATION] pg-boss App Server message delivery', () => {
     const fixture = await createControlledWssAppServer();
     try {
       const thread = await fixture.connection.startThread({
-        model: 'gpt-5.6-sol',
+        model: 'gpt-5.6-luna',
         cwd: process.cwd(),
         approvalPolicy: 'never',
         sandbox: 'readOnly',
@@ -329,7 +329,7 @@ describe('[L2:INTEGRATION] pg-boss App Server message delivery', () => {
     try {
       await runtime.start();
       const thread = await wss.connection.startThread({
-        model: 'gpt-5.6-sol',
+        model: 'gpt-5.6-luna',
         cwd: process.cwd(),
         approvalPolicy: 'never',
         sandbox: 'readOnly',

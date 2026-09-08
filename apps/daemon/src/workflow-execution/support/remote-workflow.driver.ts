@@ -80,8 +80,8 @@ export async function runRemoteWorkflowScenario(source?: {
           north: () =>
             agent<{ fact: string }>({
               label: 'North research',
-              model: 'gpt-5.6-sol',
-              reasoning: 'medium',
+              model: 'gpt-5.6-luna',
+              reasoning: 'low',
               prompt: 'Return JSON only: {"fact":"N"}.',
               outputSchema: {
                 type: 'object',
@@ -93,8 +93,8 @@ export async function runRemoteWorkflowScenario(source?: {
           south: () =>
             agent<{ fact: string }>({
               label: 'South research',
-              model: 'gpt-5.6-sol',
-              reasoning: 'medium',
+              model: 'gpt-5.6-luna',
+              reasoning: 'low',
               prompt: 'Return JSON only: {"fact":"X"}.',
               outputSchema: {
                 type: 'object',
@@ -108,8 +108,8 @@ export async function runRemoteWorkflowScenario(source?: {
       const implementation = await phase('implementation', () =>
         agent<{ result: string }, typeof research>({
           label: 'Implementation',
-          model: 'gpt-5.6-sol',
-          reasoning: 'medium',
+          model: 'gpt-5.6-luna',
+          reasoning: 'low',
           prompt:
             'Return JSON only with result equal to the concatenated input fact values.',
           input: research,
@@ -175,8 +175,8 @@ export async function runRemoteWorkflowScenario(source?: {
         assignmentId: 'CAS-07',
       },
       runtimeProfile: {
-        model: 'gpt-5.6-sol',
-        reasoningEffort: 'medium',
+        model: 'gpt-5.6-luna',
+        reasoningEffort: 'low',
         sandbox: 'workspaceWrite',
         approvalPolicy: 'never',
       },
@@ -351,8 +351,8 @@ export async function runRemoteWorkflowCancellationScenario() {
       await phase('active', () =>
         agent({
           label: 'Long running',
-          model: 'gpt-5.6-sol',
-          reasoning: 'medium',
+          model: 'gpt-5.6-luna',
+          reasoning: 'low',
           prompt:
             'Run the shell command `sleep 30` now. After it completes, reply DONE.',
         }),
@@ -360,8 +360,8 @@ export async function runRemoteWorkflowCancellationScenario() {
       return phase('forbidden', () =>
         agent({
           label: 'Forbidden downstream',
-          model: 'gpt-5.6-sol',
-          reasoning: 'medium',
+          model: 'gpt-5.6-luna',
+          reasoning: 'low',
           prompt: 'Reply SHOULD_NOT_START.',
         }),
       );
@@ -406,8 +406,8 @@ export async function runRemoteWorkflowCancellationScenario() {
         assignmentId: 'CAS-07',
       },
       runtimeProfile: {
-        model: 'gpt-5.6-sol',
-        reasoningEffort: 'medium',
+        model: 'gpt-5.6-luna',
+        reasoningEffort: 'low',
         sandbox: 'workspaceWrite',
         approvalPolicy: 'never',
       },

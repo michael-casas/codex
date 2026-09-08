@@ -142,7 +142,7 @@ interface RealClient {
     threadId: string;
     input: Array<{ type: 'text'; text: string }>;
     model: string;
-    effort: 'medium';
+    effort: 'low';
   }): Promise<{ turnId: string }>;
   interruptTurn(params: { threadId: string; turnId: string }): Promise<void>;
   close(): Promise<void>;
@@ -268,7 +268,7 @@ describe('[L2:INTEGRATION] real App Server stdio client', () => {
           },
         ],
         model: 'gpt-5.6-luna',
-        effort: 'medium',
+        effort: 'low',
       });
       const methods = await observeTurn(client, turn.turnId).completed;
       expect(methods).toContain('item/agentMessage/delta');
@@ -303,7 +303,7 @@ describe('[L2:INTEGRATION] real App Server stdio client', () => {
           },
         ],
         model: 'gpt-5.6-luna',
-        effort: 'medium',
+        effort: 'low',
       });
       const observation = observeTurn(client, turn.turnId);
       await observation.started;

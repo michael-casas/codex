@@ -167,6 +167,8 @@ export async function createControlledWssAppServer(
     'codex',
     [
       'app-server',
+      '-c',
+      'model_reasoning_effort="low"',
       '--listen',
       `ws://127.0.0.1:${port}`,
       '--ws-auth',

@@ -16,7 +16,7 @@ interface HandoffWorld {
 
 async function workspaceRoot() { let directory = process.cwd(); while (true) { try { if ((await stat(resolve(directory, 'packages/process/package.json'))).isFile()) return directory; } catch { /* An unavailable candidate does not stop the parent-directory search. */ } const parent = dirname(directory); if (parent === directory) throw new Error('WORKSPACE_NOT_FOUND'); directory = parent; } }
 const moduleAt = (root: string, path: string) => import(pathToFileURL(resolve(root, path)).href) as Promise<any>;
-const command = (hostId: string, key: string) => ({ idempotencyKey: key, assignmentRef: 'CAS-06', assignmentDigest: `sha256:${'a'.repeat(64)}`, hostId, workspace: { repositoryId: 'codex', baseRevision: 'b'.repeat(40), assignmentId: 'CAS-06' }, runtimeProfile: { model: 'gpt-5.6-luna', reasoningEffort: 'medium', sandbox: 'readOnly', approvalPolicy: 'never' }, completionBoundary: 'runtime-settled', prompt: 'Reply with OK only and do not call tools.' });
+const command = (hostId: string, key: string) => ({ idempotencyKey: key, assignmentRef: 'CAS-06', assignmentDigest: `sha256:${'a'.repeat(64)}`, hostId, workspace: { repositoryId: 'codex', baseRevision: 'b'.repeat(40), assignmentId: 'CAS-06' }, runtimeProfile: { model: 'gpt-5.6-luna', reasoningEffort: 'low', sandbox: 'readOnly', approvalPolicy: 'never' }, completionBoundary: 'runtime-settled', prompt: 'Reply with OK only and do not call tools.' });
 
 Given('admitted local and authenticated remote App Server hosts', async function (this: HandoffWorld) {
   const root = await workspaceRoot();
