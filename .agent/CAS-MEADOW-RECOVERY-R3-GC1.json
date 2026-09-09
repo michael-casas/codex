@@ -1,0 +1,69 @@
+{
+  "id": "CAS-MEADOW-RECOVERY-R3-GC1",
+  "base": "4d001ccf5a40601df1504436b9fc6b66e50a0fab",
+  "state": "frozen",
+  "strategy": "basic-then-adversarial",
+  "red": {
+    "l1": {
+      "target": "@codex/daemon:test-meadow-l1",
+      "selected": 8,
+      "failed": 8,
+      "exit": 1,
+      "artifact": "/tmp/meadow-r3-red-l1.log"
+    },
+    "l2": {
+      "target": "@codex/daemon:test-meadow-l2",
+      "selected": 2,
+      "failed": 2,
+      "exit": 1,
+      "artifact": "/tmp/meadow-r3-red-l2.log"
+    },
+    "l3": {
+      "target": "@codex/daemon:test-meadow-l3",
+      "selected": 2,
+      "failed": 2,
+      "exit": 1,
+      "artifact": "/tmp/meadow-r3-red-l3.log"
+    }
+  },
+  "hashes": {
+    "apps/daemon/src/workflow-execution/__tests__/meadow-workflow-execution-daemon.test.ts": "e21123f911e3f038ab7a83401801bffc39c7edbf384f113fceefeefdbe7fbed2",
+    "apps/daemon/src/workflow-execution/__specs__/meadow-recovery.spec.ts": "7ad2967b38f228146eeef864bf0da94087a0abc2c7f9d35efa9ef7013d18ff0b",
+    "apps/daemon/src/workflow-execution/meadow-recovery.feature": "6d055d7d04d9a62e83a831c5564c79c1a7ccb38581300af9e6f06c982c3d647e",
+    "apps/daemon/src/workflow-execution/meadow-recovery.steps.ts": "798f042d5bba65cf1211182c026d14800d347a4359b66a6c6906032830767ed4",
+    "apps/daemon/src/workflow-execution/support/meadow-recovery.driver.ts": "963ff3d744048d3ba07b233631e3926ec4a66c55f393e54aed3ab63aa0a173ac"
+  },
+  "cleanup": "Only generated fixture databases/roles and temporary repositories; preserve existing leases, Meadow and canonical checkout. Initial L3 harness cwd failure not valid RED; owned fixture codex_control_test_1389_1788919407739_58029714 removed. Corrected L3 fails at MESSAGE_UNAUTHORIZED and INVALID_LEASE.",
+  "boundary": "Implementer evidence only; READY-FOR-AUDIT requires affected gates and fresh verification.",
+  "supplements": [
+    {
+      "id": "GC1-VISIBILITY",
+      "file": "apps/daemon/src/workflow-execution/__tests__/meadow-visibility.test.ts",
+      "sha256": "0fa2c9d5baf6503b14bec5ad4cd3e8a16fcfb261663a748f867d6b3336d62b73",
+      "red": "/tmp/meadow-r3-red-visibility.log",
+      "selected": 1,
+      "failed": 1,
+      "reason": "Required safe diagnostic visibility; source investigation showed projector drops setup/cleanup events. Existing frozen rows unchanged."
+    },
+    {
+      "id": "GC1-BOUND-RETRY",
+      "file": "apps/daemon/src/workflow-execution/__tests__/meadow-retry.test.ts",
+      "sha256": "72c8bff4b34ad2a1e70d2bb4c96a33bcaa44b166ad5d5aed369413ffcdee5196",
+      "red": "/tmp/meadow-r3-red-retry.log",
+      "selected": 1,
+      "failed": 1,
+      "reason": "Bound ambiguous attempt released its workspace before pg-boss retry. Preserve custody for reconciliation."
+    }
+  ],
+  "finalHashes": {
+    "apps/daemon/src/workflow-execution/__tests__/meadow-workflow-execution-daemon.test.ts": "5ad4aeb96c5f9330833a2b67d7a3c0289e7a12481838a484ca73b451da689271",
+    "apps/daemon/src/workflow-execution/__specs__/meadow-recovery.spec.ts": "7e38b95e623270532f4d807623fe3e60a79963771818473469a8646fe2bf3241",
+    "apps/daemon/src/workflow-execution/meadow-recovery.feature": "6d055d7d04d9a62e83a831c5564c79c1a7ccb38581300af9e6f06c982c3d647e",
+    "apps/daemon/src/workflow-execution/meadow-recovery.steps.ts": "ba7cc566c985c22c997ad7f2b897d1272e381ebfb6ac2a5f1f75a1acdd71b47d",
+    "apps/daemon/src/workflow-execution/support/meadow-recovery.driver.ts": "0860bff84276c0935d23b2a20253b27f654a26973d8622fed6d9ca94ff40ef2f"
+  },
+  "plumbingChanges": [
+    "Nx formatting and explicit undefined returns for fixture no-ops; assertions/scenario meanings preserved.",
+    "Legacy SETUP-CLEANUP no-event expectation superseded by charter-required attempted/error diagnostics; meaningful RED in MEADOW-L1-ATTEMPT before implementation."
+  ]
+}

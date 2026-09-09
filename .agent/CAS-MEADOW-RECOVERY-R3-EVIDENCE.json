@@ -1,0 +1,126 @@
+{
+  "assignmentId": "CAS-MEADOW-RECOVERY-R3",
+  "contractId": "CAS-MEADOW-RECOVERY-R3-GC1",
+  "baseRevision": "4d001ccf5a40601df1504436b9fc6b66e50a0fab",
+  "candidate": "baf5729c2608473f94e3c91a0f113f0c63645735",
+  "status": "worker-evidence-not-independent-acceptance",
+  "cwd": "/Users/mcasa_atlantis/.codex/.agent/workspaces/1c7e1e233e9e315292728dc8ef30ab3241772d833544ce84199514b5761c519d",
+  "packageManager": "bun 1.4.2",
+  "focused": {
+    "l1": {
+      "target": "@codex/daemon:test-meadow-l1",
+      "passed": 10
+    },
+    "l2": {
+      "target": "@codex/daemon:test-meadow-l2",
+      "passed": 4
+    },
+    "l3": {
+      "target": "@codex/daemon:test-meadow-l3",
+      "passed": 2
+    }
+  },
+  "standing": {
+    "affectedL1Projects": 12,
+    "affectedL1Passed": 324,
+    "affectedLintTypecheckBuildProjects": 17,
+    "postgresL2Passed": 13,
+    "transportL2Passed": 13,
+    "transportCli": "/Users/mcasa_atlantis/.local/opt/codex-0.151.0/node_modules/.bin/codex"
+  },
+  "supplementalCoverage": "Migration repeatability, legacy compatibility, role denial, historical ownership fail-closed, outbox rollback and workflow admission ownership were additional GREEN characterization checks, not claimed as pre-implementation RED rows.",
+  "excluded": "Paid-provider standing suites were inspected but not launched; no coordinator paid-turn admission. Independent verification and live dogfood remain coordinator-owned.",
+  "custody": {
+    "originalMeadow": "Only allowed submission-status.json read; no workflow launched or files changed.",
+    "canonicalCheckout": "User config.toml edit remains; no writes made.",
+    "existingLeaseMarker": "Untracked .codex-workspace-lease.json retained.",
+    "fixtures": "Generated databases/roles, temporary repositories and test listeners closed. Exact initial L3 failed-initialization fixture removed; no existing resources deleted.",
+    "resourcesRetained": "Session SQLite, local dependency/build caches and ignored evidence reports."
+  },
+  "artifacts": [
+    {
+      "path": ".agent/meadow-r3-evidence/meadow-r3-red-l1.log",
+      "sha256": "d2fd69da782e4cad2cfc9e46697a84c47a2e18309fec28a6de930e192393edd6"
+    },
+    {
+      "path": ".agent/meadow-r3-evidence/meadow-r3-red-l2.log",
+      "sha256": "3392118058b606c700b6b3fc8b4325068dc9e1f6a8f8b04552bcd9194f2d1013"
+    },
+    {
+      "path": ".agent/meadow-r3-evidence/meadow-r3-red-l3.log",
+      "sha256": "f44ed2e4a97f54e4a8314802aafc30425fa39bca84b2c84e0862c583563d33c2"
+    },
+    {
+      "path": ".agent/meadow-r3-evidence/meadow-r3-red-visibility.log",
+      "sha256": "a5b5f0296d9d07da604687ceb29b810c987f8f2755305f4804983e51f2cb5d67"
+    },
+    {
+      "path": ".agent/meadow-r3-evidence/meadow-r3-red-retry.log",
+      "sha256": "1db2a73e2b9fee86f6571c6308752babba83e2b9abea213c2fe9594b678ea08d"
+    },
+    {
+      "path": ".agent/meadow-r3-evidence/meadow-r3-final-l1.log",
+      "sha256": "792cec02ec94a3e1512218618eef949b2a7bd10b44ae08c6537c82c5ba284206"
+    },
+    {
+      "path": ".agent/meadow-r3-evidence/meadow-r3-final-l2.log",
+      "sha256": "99c03dfda6526b4debdaf1c86a00e2519ebd7373ef14b6474a1a0948a56d78b4"
+    },
+    {
+      "path": ".agent/meadow-r3-evidence/meadow-r3-final-l3.log",
+      "sha256": "049e1fb219b9a39edd3be69057f1a09f87cd5035918f439001469e7619aa140e"
+    },
+    {
+      "path": ".agent/meadow-r3-evidence/meadow-r3-affected-l1.log",
+      "sha256": "df031e71907da93b658a4ae5276365d1650cf29d94f98021b4eef4733fc1db97"
+    },
+    {
+      "path": ".agent/meadow-r3-evidence/meadow-r3-affected-gates.log",
+      "sha256": "fc8ca23091a087cc1e67d26ba287165823e2063a567b9dd2f72592294f5fb96d"
+    },
+    {
+      "path": ".agent/meadow-r3-evidence/meadow-r3-standing-transport-l2.log",
+      "sha256": "70405cd9e95bdb5f7d50473a641e8724afb060628583f53ea00bb73554c31361"
+    },
+    {
+      "path": ".agent/meadow-r3-evidence/meadow-r3-standing-db-l2.log",
+      "sha256": "66f9962b8f23031205ccccc839074a1707a37d2ff47e8a3dce734f734cdae678"
+    },
+    {
+      "path": ".agent/meadow-r3-evidence/meadow-r3-policy.log",
+      "sha256": "df6d912043823fba008f96490e0ea2d47c1c68432536ef61a751076b144740cd"
+    },
+    {
+      "path": ".agent/meadow-r3-evidence/meadow-r3-typecheck-final.log",
+      "sha256": "a96b60993b478adbb829ad2cdaa2cbfd1e865c77be6069d99aa75b136732578a"
+    },
+    {
+      "path": ".agent/meadow-r3-evidence/meadow-r3-final-build.log",
+      "sha256": "9c7f94e38f765d0075cdc0811ad62df3a133a56e7117e3a9348ea83698b8b93c"
+    },
+    {
+      "path": ".agent/meadow-r3-evidence/meadow-r3-final-lint.log",
+      "sha256": "7576ac839e8b3fa9dcfbdd386d5a99c564ad7feca68cb9cef1c6ab9f265668e0"
+    },
+    {
+      "path": ".agent/meadow-r3-evidence/l1.json",
+      "sha256": "f2d86a50119246bebe879b0b8a9bb80712a6ec148cd896a917c1c7f0e95c7e69"
+    },
+    {
+      "path": ".agent/meadow-r3-evidence/l2.json",
+      "sha256": "9fd7f5950a333e92ee22b4cf50811b89a1365da9cade486d24dec08b46e9268d"
+    },
+    {
+      "path": ".agent/meadow-r3-evidence/cucumber.json",
+      "sha256": "5f9b43573b288710849ddc6480ae797855f120d443f5cf2741e872bc41b23278"
+    }
+  ],
+  "pr": "https://github.com/michael-casas/codex/pull/7",
+  "focusedCandidate": "baf5729c2608473f94e3c91a0f113f0c63645735",
+  "testPolicy": {
+    "selected": 122,
+    "standingTargets": 13,
+    "status": "passed"
+  },
+  "lintWarnings": "Three non-fatal non-null-assertion warnings (two pre-existing in control-runtime tests, one in the new fixture)."
+}
