@@ -1,8 +1,14 @@
 # CAS-MEADOW-OBSERVATION-R2
 
-Status: implementation and selected proof complete; GitHub delivery in progress.
+Status: READY-FOR-REVIEW (worker stop boundary: READY-FOR-AUDIT).
 The worker does not certify acceptance. Coordinator owns independent review,
 merge, deployment, viewer and any origin continuation.
+
+PR: https://github.com/michael-casas/codex/pull/8 into `CAS/integration`.
+Product/test head: `2bfde8e07ed913b8b8d89dbf84340fff3fa1963f`.
+The closeout commit changes evidence/handoff only; its exact delivery head is
+recorded in the final SQLite checkpoint and worker response. GitHub CI is running
+and is not claimed green. No merge or deployment was performed.
 
 ## Demonstrated causes and scope
 
@@ -47,6 +53,9 @@ Formatting and fixture-import/cleanup plumbing preserve frozen semantics.
   database L2 13. The affected L1 closure executes 244 tests over its selected suites.
 - Nx selected 12 affected projects for lint, typecheck, build and L1. All except
   initial fixture-import lint passed; the import was corrected and lint rerun green.
+- The commit hook's staged affected validation task completed successfully. Its
+  artifact-restaging step warned about newly force-added ignored `.agent` evidence;
+  Git exited zero and the committed evidence was verified. No hook was bypassed.
 - Real L2/L3 boundaries: disposable PostgreSQL listener termination/reconnection,
   public HTTP errors/recovery, immutable source history and projection replay,
   controlled stdio interrupted turn, no replacement start, provider-child cleanup.

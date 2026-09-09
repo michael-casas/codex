@@ -1,7 +1,7 @@
 {
   "assignment": "CAS-MEADOW-OBSERVATION-R2",
   "baseRevision": "df34fd6ba897e7a5e82d5429b8caac26f1b52ad0",
-  "candidate": "owning product commit; final head recorded in handoff",
+  "candidate": "2bfde8e07ed913b8b8d89dbf84340fff3fa1963f",
   "contract": "CAS-MEADOW-OBSERVATION-R2-GC1",
   "red": {
     "observer": {
@@ -39,7 +39,7 @@
       "build",
       "test-l1"
     ],
-    "status": "passed except initial fixture-import lint failure; daemon lint repaired and rerun green",
+    "status": "All selected validation passed after fixture import plumbing correction; staged affected hook task completed successfully",
     "initialExit": 1,
     "remainingFailures": 0,
     "baselineWarnings": "Existing non-null assertion/unused warnings; no errors retained"
@@ -71,5 +71,18 @@
   "historicalAttribution": {
     "observer": "UNKNOWN (unretained exception)",
     "architecture": "Coordinator supplied interrupted turn metadata; synthetic bound-turn fixture confirms adapter path. Interrupter unknown."
+  },
+  "delivery": {
+    "pr": "https://github.com/michael-casas/codex/pull/8",
+    "base": "CAS/integration",
+    "remote": "github (verified GitHub delivery remote)",
+    "ci": "in_progress at closeout; not claimed green",
+    "merge": false,
+    "deployment": false
+  },
+  "commitHook": {
+    "gitExit": 0,
+    "validationTask": "completed",
+    "warning": "lint-staged artifact restaging reported newly force-added ignored .agent evidence; committed files verified; no hooks bypassed"
   }
 }
