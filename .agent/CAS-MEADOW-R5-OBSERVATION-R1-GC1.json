@@ -1,0 +1,58 @@
+{
+  "id": "CAS-MEADOW-R5-OBSERVATION-R1-GC1",
+  "base": "99b3cf499d1dec25725deb03c6484388efd8e77f",
+  "status": "frozen",
+  "layers": {
+    "l1": {
+      "target": "@codex/daemon:test-observation-l1",
+      "selected": 21,
+      "redFailed": 8,
+      "redPassed": 13,
+      "rows": [
+        "R5-L1-DUPLICATE",
+        "R5-L1-PERMANENT (23514,42501)",
+        "R5-L1-RESOURCE (53300,40001,40P01)",
+        "R5-L1-REDACT",
+        "R5-L1-PRIMARY"
+      ],
+      "characterization": [
+        "R5-L1-LATE",
+        "R5-L1-OLD"
+      ]
+    },
+    "l2": {
+      "target": "@codex/daemon:test-observation-l2",
+      "selected": 4,
+      "redFailed": 1,
+      "redPassed": 3,
+      "rows": [
+        "R5-L2-LONG"
+      ]
+    },
+    "l3": {
+      "target": "@codex/daemon:test-observation-l3",
+      "selected": 4,
+      "redFailed": 1,
+      "redPassed": 3,
+      "feature": "apps/daemon/src/visibility/observation-recovery.feature"
+    }
+  },
+  "guarantees": [
+    "No duplicate ingestion for verified recent source events",
+    "Unknown late source events rebuild ordered projection",
+    "Conflicts remain permanent and immutable",
+    "Safe primary code/class/source cursor/UUID/time, no source or exception text",
+    "Three bounded transient recovery attempts, permanent failures no retries",
+    "Workflow observation persistence retains primary safe diagnostic and rethrows original failure without duplicate execution",
+    "Owned disposable DB roles and processes cleaned, production untouched"
+  ],
+  "web": "N/A: backend observation through public HTTP, no rendering claim",
+  "mobile": "N/A: no mobile surface",
+  "frozenFiles": {
+    "apps/daemon/src/visibility/__tests__/observer-recovery.test.ts": "527ade45af4591eb4571923e1450dea9372105dd10e0ad242dc279163858f263",
+    "apps/daemon/src/visibility/__specs__/observation-recovery.spec.ts": "906b49f575f112736fb388238fc74c6aeb46edd63d715e51413afeb2fe8e76bf",
+    "apps/daemon/src/visibility/observation-recovery.feature": "da3a001f3b2ee0ca41529aec101f24c6d861de6dcf4af9f736ac9501b1066e54",
+    "apps/daemon/src/visibility/observation-recovery.steps.ts": "66d7ffc10ace77c738b3bf9008513db633100aad76671dcfd41790136179b733",
+    "apps/daemon/src/workflow-execution/__tests__/readable-recovery.test.ts": "e47f65b1c62f87bd6cdeaabe65329c895d71527568177e8851f4d0cd69d58e86"
+  }
+}

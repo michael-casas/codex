@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import { agent, defineWorkflow } from '@codex/workflows';
 import type { ControlEvent } from '@codex/process';
 import {
@@ -14,6 +14,7 @@ function fixture(
     invalidSchema?: boolean;
     phase?: 'commentary' | 'final_answer';
     failResultWrite?: boolean;
+    storeError?: Error;
   } = {},
 ) {
   const events: ControlEvent[] = [];
@@ -37,7 +38,7 @@ function fixture(
         );
         if (options.failResultWrite && resultWrite) {
           failedWrites++;
-          throw Error('SYNTHETIC_STORE_FAILURE');
+          throw options.storeError ?? Error('SYNTHETIC_STORE_FAILURE');
         }
         const replayed = commands.has(command.idempotencyKey);
         if (!replayed) {
@@ -269,4 +270,33 @@ describe('[L1:INTEGRATION] recovery output and display independence', () => {
       await f.service.stop();
     }
   });
+});
+
+// === L1: IN-PROCESS INTEGRATION TESTS ===
+it('[L1:INTEGRATION] R5-L1-PRIMARY retains observation storage failure before cleanup without a duplicate execution', async () => {
+  const log = vi.spyOn(console, 'error').mockImplementation(() => undefined);
+  const error = Object.assign(Error('private credentials'), { code: '23514' });
+  const f = fixture({
+    phase: 'final_answer',
+    failResultWrite: true,
+    storeError: error,
+  });
+  try {
+    await expect(f.execute()).rejects.toBe(error);
+    expect(
+      log.mock.calls.map(([line]) => JSON.parse(String(line))),
+    ).toContainEqual(
+      expect.objectContaining({
+        event: 'workflow.observation.failure',
+        causeCode: '23514',
+        errorClass: 'Error',
+        stage: 'persist',
+      }),
+    );
+    expect(JSON.stringify(log.mock.calls)).not.toMatch(/private|credentials/);
+    expect(f.failedWrites).toBe(1);
+  } finally {
+    await f.service.stop();
+    log.mockRestore();
+  }
 });

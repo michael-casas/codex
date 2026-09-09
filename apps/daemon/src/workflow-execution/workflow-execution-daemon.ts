@@ -1,3 +1,4 @@
+import { classifyObservationError } from '../visibility/observation-error.js';
 import { createHash } from 'node:crypto';
 
 import {
@@ -222,17 +223,34 @@ export function createWorkflowExecutionDaemon(
     let observationOrdinal = 0;
     const observations = createRuntimeVisibilityIngestor({
       async ingest(event) {
-        await append(
-          prepared.runId,
-          `attempt-${attempt}-visibility-${++visibilityOrdinal}`,
-          'workflow.visibility.observed',
-          {
-            observation: {
-              ...event,
-              nodeId: observationNodes.get(event.agentId ?? ''),
+        try {
+          await append(
+            prepared.runId,
+            `attempt-${attempt}-visibility-${++visibilityOrdinal}`,
+            'workflow.visibility.observed',
+            {
+              observation: {
+                ...event,
+                nodeId: observationNodes.get(event.agentId ?? ''),
+              },
             },
-          },
-        );
+          );
+        } catch (error) {
+          // Preserve the first persistence cause even if subsequent diagnostic writes
+          // also fail. The provider stop path still receives the original error.
+          console.error(
+            JSON.stringify({
+              event: 'workflow.observation.failure',
+              runId: prepared.runId,
+              attempt,
+              stage: 'persist',
+              observationOrdinal: visibilityOrdinal,
+              occurredAt: new Date().toISOString(),
+              ...classifyObservationError(error),
+            }),
+          );
+          throw error;
+        }
         return String(visibilityOrdinal);
       },
     });
