@@ -12,7 +12,12 @@ import {
 const exec = promisify(execFile);
 export async function projectContextFixture() {
   const root = await realpath(
-    await mkdtemp(join(tmpdir(), 'cas-project-context-')),
+    await mkdtemp(
+      join(
+        process.platform === 'darwin' ? '/tmp' : tmpdir(),
+        'cas-project-context-',
+      ),
+    ),
   );
   const runtimeProfile = {
     model: 'gpt-5.6-luna',
@@ -70,6 +75,7 @@ export async function projectContextFixture() {
       );
     }
     await mkdir(join(root, 'ui'));
+    await mkdir(join(root, 'codex-home'), { mode: 0o700 });
     await writeFile(join(root, 'token'), token, { mode: 0o600 });
     const canonical = projects[0];
     const config = {
@@ -77,6 +83,7 @@ export async function projectContextFixture() {
         {
           hostId: 'local',
           transport: 'local-proxy',
+          codexHome: join(root, 'codex-home'),
           expectedVersion: '0.151.0',
         },
       ],

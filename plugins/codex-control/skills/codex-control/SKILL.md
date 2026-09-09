@@ -74,7 +74,8 @@ Direct `delegate_agent` uses the returned `hostId`, `repositoryId`, and `baseRev
 plus the actual `assignmentId`, `assignmentRef`, `assignmentDigest`, `idempotencyKey`,
 `model`, `reasoningEffort`, `sandbox`, `approvalPolicy`, `completionBoundary`, and
 `prompt` from the approved charter. Do not invent a digest. The admitted policy limits
-the sandbox; local admission does not grant network access. No existing thread is adopted.
+the sandbox. Direct agents retain network access by default; explicit
+`networkAccess: false` opts out. No existing thread is adopted.
 
 Leases contain the selected committed revision. Dirty files, untracked inputs, and
 charters are not automatically copied. Preserve their custody: use explicitly approved
