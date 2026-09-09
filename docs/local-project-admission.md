@@ -66,8 +66,11 @@ For direct `delegate_agent`, supply the returned `hostId`, `repositoryId`, and
 `approvalPolicy`, `completionBoundary`, and `prompt` from the authorized assignment.
 The MCP fields are flat. The HTTP `delegateAgent` form nests repository/base/assignment
 under `workspace`, and model/reasoning/sandbox/approval under `runtimeProfile`.
-Admission's sandbox ceiling applies and does not grant network access. Another
-actor cannot delegate into the dynamic binding.
+Admission's sandbox ceiling applies, including equivalent CLI sandbox aliases;
+workspaceWrite never authorizes dangerFullAccess. Direct agents retain the
+Founder-approved network default: omitted networkAccess means true, explicit
+true is supported, and explicit false remains an opt-out. Another actor cannot
+delegate into the dynamic binding.
 
 The HTTP equivalents are authenticated POST operations at `/api/control/admitProject`,
 `/api/control/runWorkflow`, and `/api/control/delegateAgent`. Authentication and
