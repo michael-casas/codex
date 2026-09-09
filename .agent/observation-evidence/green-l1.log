@@ -1,0 +1,62 @@
+
+> nx run @codex/daemon:test-observation-l1
+
+> vitest run --config apps/daemon/vitest.config.ts src/visibility/__tests__/observer-recovery.test.ts --reporter=default --reporter=json --outputFile=test-output/observation/l1.json
+
+(node:62462) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+
+ RUN  v4.1.10 /Users/mcasa_atlantis/.codex/.agent/workspaces/a6af660bc1aaabc125dd01f1ae284c274f8032918332a80b359812822ae49091/apps/daemon
+
+(node:62463) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+stderr | src/visibility/__tests__/observer-recovery.test.ts > [L1:INTEGRATION] observer recovery > OBS-L1-PARTIAL retries partial ingestion from clean projection without losing the failed observation
+{"event":"visibility.observer.failure","code":"VISIBILITY_SOURCE_UNAVAILABLE","retryable":true,"stage":"reconcile","cursor":"1","occurredAt":"2026-09-09T03:31:09.967Z","recoveryAttempt":0}
+
+stderr | src/visibility/__tests__/observer-recovery.test.ts > [L1:INTEGRATION] observer recovery > OBS-L1-LISTENER reconnects and catches missed terminal events with retained redacted diagnostics
+{"event":"visibility.observer.failure","code":"VISIBILITY_SOURCE_UNAVAILABLE","retryable":true,"stage":"listener","cursor":"1","occurredAt":"2026-09-09T03:31:09.970Z","recoveryAttempt":0}
+
+stderr | src/visibility/__tests__/observer-recovery.test.ts > [L1:INTEGRATION] observer recovery > OBS-L1-BOUND exhausts three recovery attempts and remains unavailable
+{"event":"visibility.observer.failure","code":"VISIBILITY_SOURCE_UNAVAILABLE","retryable":true,"stage":"reconcile","cursor":"1","occurredAt":"2026-09-09T03:31:09.971Z","recoveryAttempt":0}
+
+stderr | src/visibility/__tests__/observer-recovery.test.ts > [L1:INTEGRATION] observer recovery > OBS-L1-BOUND exhausts three recovery attempts and remains unavailable
+{"event":"visibility.observer.failure","code":"VISIBILITY_SOURCE_UNAVAILABLE","retryable":true,"stage":"reconcile","cursor":"0","occurredAt":"2026-09-09T03:31:10.971Z","recoveryAttempt":1}
+
+stderr | src/visibility/__tests__/observer-recovery.test.ts > [L1:INTEGRATION] observer recovery > OBS-L1-BOUND exhausts three recovery attempts and remains unavailable
+{"event":"visibility.observer.failure","code":"VISIBILITY_SOURCE_UNAVAILABLE","retryable":true,"stage":"reconcile","cursor":"0","occurredAt":"2026-09-09T03:31:12.971Z","recoveryAttempt":2}
+
+stderr | src/visibility/__tests__/observer-recovery.test.ts > [L1:INTEGRATION] observer recovery > OBS-L1-BOUND exhausts three recovery attempts and remains unavailable
+{"event":"visibility.observer.failure","code":"VISIBILITY_SOURCE_UNAVAILABLE","retryable":true,"stage":"reconcile","cursor":"0","occurredAt":"2026-09-09T03:31:16.971Z","recoveryAttempt":3}
+
+stderr | src/visibility/__tests__/observer-recovery.test.ts > [L1:INTEGRATION] observer recovery > OBS-L1-CONFLICT detects changed identities on rewind and never silently skips them
+{"event":"visibility.observer.failure","code":"VISIBILITY_EVENT_CONFLICT","retryable":false,"stage":"reconcile","cursor":"0","occurredAt":"2026-09-09T03:31:09.971Z","recoveryAttempt":0}
+
+stderr | src/visibility/__tests__/observer-recovery.test.ts > [L1:INTEGRATION] observer recovery > OBS-L1-INVALID fails closed on invalid source sequence without retry
+{"event":"visibility.observer.failure","code":"VISIBILITY_OBSERVER_FAILED","retryable":false,"stage":"reconcile","cursor":"1","occurredAt":"2026-09-09T03:31:09.983Z","recoveryAttempt":0}
+
+stderr | src/visibility/__tests__/observer-recovery.test.ts > [L1:INTEGRATION] observer recovery > OBS-L1-STOP cancels scheduled recovery and rejects stopped observer reads
+{"event":"visibility.observer.failure","code":"VISIBILITY_SOURCE_UNAVAILABLE","retryable":true,"stage":"listener","cursor":"1","occurredAt":"2026-09-09T03:31:09.983Z","recoveryAttempt":0}
+
+ ✓ src/visibility/__tests__/observer-recovery.test.ts (7 tests) 17ms
+
+ Test Files  1 passed (1)
+      Tests  7 passed (7)
+   Start at  23:31:09
+   Duration  147ms (transform 57ms, setup 0ms, import 69ms, tests 17ms, environment 0ms)
+
+JSON report written to /Users/mcasa_atlantis/.codex/.agent/workspaces/a6af660bc1aaabc125dd01f1ae284c274f8032918332a80b359812822ae49091/apps/daemon/test-output/observation/l1.json
+
+
+
+ NX   Successfully ran target test-observation-l1 for project @codex/daemon
+
+
+  Run duration:      402ms
+  Cache:             Skipped (--skip-nx-cache)
+  Critical path:     391ms (1 task)
+  Recoverable time:  <1ms
+
+  Recommendations:
+    - Cache: drop --skip-nx-cache to restore unchanged tasks instantly.
+    - Speed up or split the longest tasks on the critical path:
+        @codex/daemon:test-observation-l1    391ms

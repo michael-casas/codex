@@ -1,0 +1,75 @@
+{
+  "assignment": "CAS-MEADOW-OBSERVATION-R2",
+  "baseRevision": "df34fd6ba897e7a5e82d5429b8caac26f1b52ad0",
+  "candidate": "owning product commit; final head recorded in handoff",
+  "contract": "CAS-MEADOW-OBSERVATION-R2-GC1",
+  "red": {
+    "observer": {
+      "failed": 6,
+      "characterizationPassed": 1
+    },
+    "adapter": {
+      "failed": 3,
+      "standingPassed": 22
+    },
+    "l2": {
+      "failed": 3
+    },
+    "l3": {
+      "failed": 3,
+      "assertionFailures": 3
+    }
+  },
+  "green": {
+    "observerL1": 7,
+    "adapterL1": 25,
+    "l2": 3,
+    "l3Scenarios": 3,
+    "l3StepsIncludingHooks": 12,
+    "standingDaemonL1": 32,
+    "standingVisibilityL2": 3,
+    "standingDatabaseL2": 13,
+    "affectedL1Total": 244,
+    "affectedProjects": 12
+  },
+  "affectedGate": {
+    "targets": [
+      "lint",
+      "typecheck",
+      "build",
+      "test-l1"
+    ],
+    "status": "passed except initial fixture-import lint failure; daemon lint repaired and rerun green",
+    "initialExit": 1,
+    "remainingFailures": 0,
+    "baselineWarnings": "Existing non-null assertion/unused warnings; no errors retained"
+  },
+  "contractIntegrity": "Original GC1 hashes preserved modulo recorded Prettier-only formatting; driver import and cleanup plumbing fixed without assertion changes",
+  "artifacts": {
+    ".agent/observation-evidence/green-l1.log": "7e4bc4ad6394f09123edb6e31f2c293e818be71c306f940568cfa70d8bfba0bd",
+    ".agent/observation-evidence/green-l2.log": "d5465a5f9040016e030d11288e3b27e339bd04a7b25874255ae0cbbba75707a6",
+    ".agent/observation-evidence/green-l3.log": "200588abff1b95d91537164454a8d071a939ec5a1498d354280bfef4785297d2",
+    ".agent/observation-evidence/green-adapter.log": "62a53e5f084e60469db7d4ccb5efb0103faf2cf87143c5884d40576880296f05",
+    ".agent/observation-evidence/standing-daemon-l1.log": "79f448258f60cd76df0f65d393bc8157a844d11ead25ed6b42788ba80301e6f6",
+    ".agent/observation-evidence/standing-visibility-l2.log": "003257da440caa0d7206414ea583cdeb5e8caa7bb3a9e0478f885035bb78d83d",
+    ".agent/observation-evidence/standing-db-l2.log": "58c4b8bb0ec44f77bd8bb579b3ef3436e8d8beb8cc9f5ba5c7e44225f93c3e6c",
+    ".agent/observation-evidence/affected-checks.log": "4d140950cc5bcf287eedcffaa8980cb03138dbc05620a4c26f5d2f1d7e9a6c23",
+    ".agent/observation-evidence/lint-fixed.log": "638df7709a1a9284151f4b67b34159be3ad45190edbe60dab27f5eb7033a73ac",
+    ".agent/observation-evidence/final-typecheck.log": "0f146973ae4d2794d5c0c428c3edc99796715a14295c15e05d0a2c10a471b2fe",
+    ".agent/observation-evidence/green-l1.json": "17f53523d6f25bb292d5d6d1a4816d68ac53fa386e5d55ad971c5da0847e1fdc",
+    ".agent/observation-evidence/green-l2.json": "1b40b07d7727c24d57d0efcc24b36358de19a546990c6ea6e36fca4a6b8c6460",
+    ".agent/observation-evidence/green-l3.json": "a4e0a89331bd364d2b12170c8b773d4f5efdfc5a1e624bcb2e3b04db54d22abe"
+  },
+  "resources": {
+    "productionWrites": 0,
+    "originalWorkflowReplays": 0,
+    "paidProviderTests": 0,
+    "subagents": 0,
+    "fixtureCleanup": "Assertions cover listener close counts, absent database and roles, exited child, zero pending requests; HTTP servers stop in finally",
+    "setupFailure": "One owned fixture database from initial L3 wrong-cwd failure was removed by exact PID-scoped name and reported; no role was created"
+  },
+  "historicalAttribution": {
+    "observer": "UNKNOWN (unretained exception)",
+    "architecture": "Coordinator supplied interrupted turn metadata; synthetic bound-turn fixture confirms adapter path. Interrupter unknown."
+  }
+}

@@ -152,13 +152,13 @@
       "test-l1-integration": {
         "executor": "nx:run-commands",
         "options": {
-          "command": "vitest run --config apps/daemon/vitest.config.ts src/control-runtime.test.ts src/visibility/__tests__/control-visibility.test.ts src/workflow-execution/__tests__/workflow-execution-daemon.test.ts src/workflow-execution/__tests__/readable-recovery.test.ts src/visibility/__tests__/legacy-title-replay.test.ts src/workflow-execution/__tests__/meadow-workflow-execution-daemon.test.ts src/workflow-execution/__tests__/meadow-visibility.test.ts src/workflow-execution/__tests__/meadow-retry.test.ts --testNamePattern='L1:INTEGRATION'"
+          "command": "vitest run --config apps/daemon/vitest.config.ts src/control-runtime.test.ts src/visibility/__tests__/control-visibility.test.ts src/workflow-execution/__tests__/workflow-execution-daemon.test.ts src/workflow-execution/__tests__/readable-recovery.test.ts src/visibility/__tests__/legacy-title-replay.test.ts src/workflow-execution/__tests__/meadow-workflow-execution-daemon.test.ts src/workflow-execution/__tests__/meadow-visibility.test.ts src/workflow-execution/__tests__/meadow-retry.test.ts src/visibility/__tests__/observer-recovery.test.ts --testNamePattern='L1:INTEGRATION'"
         }
       },
       "test-l1": {
         "executor": "nx:run-commands",
         "options": {
-          "command": "vitest run --config apps/daemon/vitest.config.ts src/main.test.ts src/control-runtime.test.ts src/visibility/__tests__/control-visibility.test.ts src/workflow-execution/__tests__/workflow-execution-daemon.test.ts src/workflow-execution/__tests__/readable-recovery.test.ts src/visibility/__tests__/legacy-title-replay.test.ts src/workflow-execution/__tests__/meadow-workflow-execution-daemon.test.ts src/workflow-execution/__tests__/meadow-visibility.test.ts src/workflow-execution/__tests__/meadow-retry.test.ts"
+          "command": "vitest run --config apps/daemon/vitest.config.ts src/main.test.ts src/control-runtime.test.ts src/visibility/__tests__/control-visibility.test.ts src/workflow-execution/__tests__/workflow-execution-daemon.test.ts src/workflow-execution/__tests__/readable-recovery.test.ts src/visibility/__tests__/legacy-title-replay.test.ts src/workflow-execution/__tests__/meadow-workflow-execution-daemon.test.ts src/workflow-execution/__tests__/meadow-visibility.test.ts src/workflow-execution/__tests__/meadow-retry.test.ts src/visibility/__tests__/observer-recovery.test.ts"
         }
       },
       "test-visibility-l1": {
@@ -188,7 +188,7 @@
       "test-l2": {
         "executor": "nx:run-commands",
         "options": {
-          "command": "vitest run --config apps/daemon/vitest.config.ts src/workflow-execution/__specs__/project-context.spec.ts && vitest run --config apps/daemon/vitest.config.ts src/control-runtime.spec.ts src/agent-messaging/__specs__/agent-messaging-daemon.spec.ts src/delegation/__specs__/delegation-daemon.spec.ts src/visibility/__specs__/runtime-visibility-daemon.spec.ts src/visibility/__specs__/control-visibility.spec.ts --testNamePattern='L2:E2E' && bun nx test-l2-e2e @codex/daemon-e2e --outputStyle=static && vitest run --config apps/daemon/vitest.config.ts src/workflow-execution/__specs__/meadow-recovery.spec.ts src/workflow-execution/__specs__/meadow-ownership.spec.ts"
+          "command": "vitest run --config apps/daemon/vitest.config.ts src/workflow-execution/__specs__/project-context.spec.ts && vitest run --config apps/daemon/vitest.config.ts src/control-runtime.spec.ts src/agent-messaging/__specs__/agent-messaging-daemon.spec.ts src/delegation/__specs__/delegation-daemon.spec.ts src/visibility/__specs__/runtime-visibility-daemon.spec.ts src/visibility/__specs__/control-visibility.spec.ts --testNamePattern='L2:E2E' && bun nx test-l2-e2e @codex/daemon-e2e --outputStyle=static && vitest run --config apps/daemon/vitest.config.ts src/workflow-execution/__specs__/meadow-recovery.spec.ts src/workflow-execution/__specs__/meadow-ownership.spec.ts && vitest run --config apps/daemon/vitest.config.ts src/visibility/__specs__/observation-recovery.spec.ts --reporter=default --reporter=json --outputFile=test-output/observation/l2.json"
         }
       },
       "test-pre-build": {
@@ -210,7 +210,7 @@
           "{workspaceRoot}/test-output/cucumber/daemon-remote-workflow.json"
         ],
         "options": {
-          "command": "bun packages/testing/src/cli.ts verify-cucumber apps/daemon/src/workflow-execution/remote-workflow-execution.feature apps/daemon/out-tsc/cucumber/workflow-execution/index.steps.js test-output/cucumber/daemon-remote-workflow.json && bun packages/testing/src/cli.ts verify-cucumber apps/daemon/src/workflow-execution/project-context.feature apps/daemon/out-tsc/cucumber/workflow-execution/project-context.steps.js test-output/cucumber/project-context.json && bun packages/testing/src/cli.ts verify-cucumber apps/daemon/src/workflow-execution/meadow-recovery.feature apps/daemon/out-tsc/cucumber/workflow-execution/meadow-recovery.steps.js test-output/cucumber/meadow-recovery.json"
+          "command": "bun packages/testing/src/cli.ts verify-cucumber apps/daemon/src/workflow-execution/remote-workflow-execution.feature apps/daemon/out-tsc/cucumber/workflow-execution/index.steps.js test-output/cucumber/daemon-remote-workflow.json && bun packages/testing/src/cli.ts verify-cucumber apps/daemon/src/workflow-execution/project-context.feature apps/daemon/out-tsc/cucumber/workflow-execution/project-context.steps.js test-output/cucumber/project-context.json && bun packages/testing/src/cli.ts verify-cucumber apps/daemon/src/workflow-execution/meadow-recovery.feature apps/daemon/out-tsc/cucumber/workflow-execution/meadow-recovery.steps.js test-output/cucumber/meadow-recovery.json && bun packages/testing/src/cli.ts verify-cucumber apps/daemon/src/visibility/observation-recovery.feature apps/daemon/out-tsc/cucumber/visibility/observation-recovery.steps.js test-output/cucumber/observation-recovery.json"
         }
       },
       "docker:build": {
@@ -270,6 +270,41 @@
         "options": {
           "command": "bun packages/testing/src/cli.ts verify-cucumber apps/daemon/src/workflow-execution/meadow-recovery.feature apps/daemon/out-tsc/cucumber/workflow-execution/meadow-recovery.steps.js test-output/cucumber/meadow-recovery.json"
         }
+      },
+      "test-observation-l1": {
+        "executor": "nx:run-commands",
+        "options": {
+          "command": "vitest run --config apps/daemon/vitest.config.ts src/visibility/__tests__/observer-recovery.test.ts --reporter=default --reporter=json --outputFile=test-output/observation/l1.json"
+        },
+        "outputs": [
+          "{projectRoot}/test-output/observation/l1.json"
+        ]
+      },
+      "test-observation-l2": {
+        "executor": "nx:run-commands",
+        "cache": false,
+        "dependsOn": [
+          "^build"
+        ],
+        "options": {
+          "command": "vitest run --config apps/daemon/vitest.config.ts src/visibility/__specs__/observation-recovery.spec.ts --reporter=default --reporter=json --outputFile=test-output/observation/l2.json"
+        },
+        "outputs": [
+          "{projectRoot}/test-output/observation/l2.json"
+        ]
+      },
+      "test-observation-l3": {
+        "executor": "nx:run-commands",
+        "cache": false,
+        "dependsOn": [
+          "test-pre-build"
+        ],
+        "options": {
+          "command": "bun packages/testing/src/cli.ts verify-cucumber apps/daemon/src/visibility/observation-recovery.feature apps/daemon/out-tsc/cucumber/visibility/observation-recovery.steps.js test-output/cucumber/observation-recovery.json"
+        },
+        "outputs": [
+          "{workspaceRoot}/test-output/cucumber/observation-recovery.json"
+        ]
       }
     }
   },

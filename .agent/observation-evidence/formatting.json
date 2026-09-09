@@ -1,0 +1,74 @@
+[
+  {
+    "path": "apps/daemon/package.json",
+    "before": "87d368b94c73c4ec03a7967668cfc0859dce8276eeeb83021e4fb78933846e14",
+    "after": "87d368b94c73c4ec03a7967668cfc0859dce8276eeeb83021e4fb78933846e14",
+    "change": "prettier-only"
+  },
+  {
+    "path": "apps/daemon/src/visibility/runtime-visibility-daemon.ts",
+    "before": "60525c939a860f6354adcb6573329746990d0ad8573214a99c8102dfbca6b1b1",
+    "after": "c3af342e5f51fbf4bea2ca009d5e77de48ed4efb861376a725c7b91e2d3cb2a5",
+    "change": "prettier-only"
+  },
+  {
+    "path": "packages/codex/src/app-server-workflow/__tests__/readable-recovery.test.ts",
+    "before": "2cd4afc33ad81abe5b4233a834eaee938a3b74ba5b9ef5c9d025311d6fc00ea9",
+    "after": "61ebada92a2ed4db07f5bab156719eb1e8477b286e6327a2259fd16742f7d7a6",
+    "change": "prettier-only"
+  },
+  {
+    "path": "packages/codex/src/app-server-workflow/app-server-workflow.executor.ts",
+    "before": "b37fecff7f03dcf082c7e450e3c51f8ce2e1ac46ec684fb284cecac0b1a1d756",
+    "after": "43041ea4274fad7ab8e6572ac3b943842451b4e730759c19861ec0971e84062f",
+    "change": "prettier-only"
+  },
+  {
+    "path": "packages/control-gateway/src/lib/control-gateway.ts",
+    "before": "4f0434595f97d646defc1fc3824d6d1125c15461cc39b085225adc386553c977",
+    "after": "4f0434595f97d646defc1fc3824d6d1125c15461cc39b085225adc386553c977",
+    "change": "prettier-only"
+  },
+  {
+    "path": "packages/control-gateway/src/lib/control-http.ts",
+    "before": "b9936e9c265bed2827ff3edb3614c1a96aad19a14f3b6c3a216e77818df48943",
+    "after": "b9936e9c265bed2827ff3edb3614c1a96aad19a14f3b6c3a216e77818df48943",
+    "change": "prettier-only"
+  },
+  {
+    "path": "packages/db/src/runtime-visibility/postgres-runtime-visibility.repository.ts",
+    "before": "6e49b434c90ff34916bed45698725af39c761ab7051c909d80b165449e7e2e5a",
+    "after": "2c0fe36f5f58170c66ae999a13a424bcb070296b489092220bab9c032538e0d3",
+    "change": "prettier-only"
+  },
+  {
+    "path": "apps/daemon/src/visibility/__specs__/observation-recovery.spec.ts",
+    "before": "671d35d8663e5e00922651042ac55fe72a2911253401b3e10b127d8128123f07",
+    "after": "9e5f934ffafe81f0f4ff7d276bf1f1802321e495c8d8682d5521828263012a3f",
+    "change": "prettier-only"
+  },
+  {
+    "path": "apps/daemon/src/visibility/__tests__/observer-recovery.test.ts",
+    "before": "9de62c4e71f83d9a13150b38a33cf39a5704c47111b70306c33a7ffe809028f4",
+    "after": "90cd7fb2d43efa3767d53bc89fa09b9b03d0efdff7809d7ea69b3041f5e86cc5",
+    "change": "prettier-only"
+  },
+  {
+    "path": "apps/daemon/src/visibility/observation-recovery.steps.ts",
+    "before": "fb07ca1a965847d187bf797cdfe90d151fa9b89ffcfff294d91b71ace12c3185",
+    "after": "dbb7e8f6665c744cb2a41720073a592d2bdafb1531311b0040520fd4a5ffb484",
+    "change": "prettier-only"
+  },
+  {
+    "path": "apps/daemon/src/visibility/support/interrupted-app-server.fixture.mjs",
+    "before": "b016905dc641bc89fac71491404e4ab6db0238cdb632e9ec0bf98839f299b926",
+    "after": "74cab5c7e983fb50abecb63a4868b98f6ce9611d6a9f860e6eec67fe1eb1d909",
+    "change": "prettier-only"
+  },
+  {
+    "path": "apps/daemon/src/visibility/support/observation-recovery.driver.ts",
+    "before": "a5f6889100ea08ce0d17d722ba52fa68751db4b8c102d14ffedf60361954faca",
+    "after": "4773e4eefbbab721602da48845055a2d6a09c46bc7ef96bd510504d4afc68d8a",
+    "change": "prettier-only"
+  }
+]

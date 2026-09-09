@@ -152,9 +152,38 @@ function identifiers(params: unknown): { threadId?: string; turnId?: string } {
   };
 }
 
-function finalAgentResponse(value: unknown): string | undefined {
+function bindingFailure(code: string): Error {
+  return Object.assign(new Error(code), {
+    code,
+    retryable: false,
+    ambiguous: false,
+  });
+}
+
+function boundTurnFailure(value: unknown, turnId?: string): Error | undefined {
+  const turns = record(value)?.turns;
+  const turn =
+    Array.isArray(turns) && turnId
+      ? turns.map(record).find((candidate) => candidate?.id === turnId)
+      : undefined;
+  if (turn?.status === 'interrupted')
+    return bindingFailure('WORKFLOW_TURN_INTERRUPTED');
+  if (turn?.status === 'failed') return bindingFailure('WORKFLOW_TURN_FAILED');
+  return undefined;
+}
+
+function finalAgentResponse(
+  value: unknown,
+  turnId?: string,
+): string | undefined {
   const root = record(value);
-  const turns = Array.isArray(root?.turns) ? root.turns : [];
+  const allTurns = Array.isArray(root?.turns) ? root.turns : [];
+  const matching = turnId
+    ? allTurns.filter((turn) => record(turn)?.id === turnId)
+    : [];
+  // Preserve legacy snapshots without turn identity, but never borrow another
+  // turn's output when the bound turn is present.
+  const turns = matching.length ? matching : allTurns;
   for (const rawTurn of [...turns].reverse()) {
     const items = Array.isArray(record(rawTurn)?.items)
       ? (record(rawTurn)?.items as unknown[])
@@ -445,17 +474,15 @@ export function createAppServerWorkflowExecutor(
           thread?: { status?: { type?: string }; turns?: unknown[] };
         }>('thread/read', { threadId: state.threadId, includeTurns: true }),
       );
-      const finalResponse = finalAgentResponse(response.thread);
+      const terminalFailure = boundTurnFailure(response.thread, state.turnId);
+      if (terminalFailure) {
+        settle(state, undefined, terminalFailure);
+        continue;
+      }
+      const finalResponse = finalAgentResponse(response.thread, state.turnId);
       if (finalResponse !== undefined)
         settle(state, { threadId: state.threadId, finalResponse, usage: null });
-      else
-        settle(
-          state,
-          undefined,
-          new Error(
-            'App Server reconnect could not reconcile the bound workflow turn.',
-          ),
-        );
+      else settle(state, undefined, bindingFailure('WORKFLOW_OUTPUT_MISSING'));
     }
     return active.size > 0;
   }
@@ -636,14 +663,15 @@ export function createAppServerWorkflowExecutor(
         threadId: binding.threadId,
         ...(binding.turnId ? { turnId: binding.turnId } : {}),
       });
+      const terminalFailure = boundTurnFailure(snapshot.thread, binding.turnId);
+      if (terminalFailure) throw terminalFailure;
       const recoveredItem = recoveredFinalItem(snapshot.thread, binding);
       const recovered =
-        recoveredItem?.text ?? finalAgentResponse(snapshot.thread);
+        recoveredItem?.text ??
+        finalAgentResponse(snapshot.thread, binding.turnId);
       if (snapshot.thread?.status?.type !== 'active') {
         if (recovered === undefined)
-          throw new Error(
-            'App Server workflow binding has no completed output.',
-          );
+          throw bindingFailure('WORKFLOW_OUTPUT_MISSING');
         if (recoveredItem && binding.turnId && options.onObservation) {
           const observation = mapAppServerVisibility({
             kind: 'notification',

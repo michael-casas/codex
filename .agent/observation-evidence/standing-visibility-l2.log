@@ -1,0 +1,35 @@
+
+> nx run @codex/daemon:test-visibility-l2
+
+> vitest run --config apps/daemon/vitest.config.ts src/visibility/__specs__/control-visibility.spec.ts src/visibility/__specs__/legacy-replay.spec.ts
+
+(node:61883) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+
+ RUN  v4.1.10 /Users/mcasa_atlantis/.codex/.agent/workspaces/a6af660bc1aaabc125dd01f1ae284c274f8032918332a80b359812822ae49091/apps/daemon
+
+(node:61884) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:61885) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+
+ Test Files  2 passed (2)
+      Tests  3 passed (3)
+   Start at  23:29:44
+   Duration  2.32s (transform 262ms, setup 0ms, import 628ms, tests 2.73s, environment 0ms)
+
+
+
+
+ NX   Successfully ran target test-visibility-l2 for project @codex/daemon
+
+
+  Run duration:      2.6s
+  Cache:             Skipped (--skip-nx-cache)
+  Critical path:     2.5s (1 task)
+  Recoverable time:  <1ms
+
+  Recommendations:
+    - Cache: drop --skip-nx-cache to restore unchanged tasks instantly.
+    - Speed up or split the longest tasks on the critical path:
+        @codex/daemon:test-visibility-l2    2.5s

@@ -1,0 +1,32 @@
+
+> nx run @codex/daemon:lint
+
+> eslint .
+
+(node:64301) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+[0m[0m
+[0m[4m/Users/mcasa_atlantis/.codex/.agent/workspaces/a6af660bc1aaabc125dd01f1ae284c274f8032918332a80b359812822ae49091/apps/daemon/src/workflow-execution/__specs__/project-context.spec.ts[24m[0m
+[0m  [2m30:22[22m  [33mwarning[39m  Forbidden non-null assertion  [2m@typescript-eslint/no-non-null-assertion[22m[0m
+[0m  [2m43:26[22m  [33mwarning[39m  Forbidden non-null assertion  [2m@typescript-eslint/no-non-null-assertion[22m[0m
+[0m[0m
+[0m[4m/Users/mcasa_atlantis/.codex/.agent/workspaces/a6af660bc1aaabc125dd01f1ae284c274f8032918332a80b359812822ae49091/apps/daemon/src/workflow-execution/support/meadow-recovery.driver.ts[24m[0m
+[0m  [2m180:11[22m  [33mwarning[39m  Forbidden non-null assertion  [2m@typescript-eslint/no-non-null-assertion[22m[0m
+[0m[0m
+[0m[33m[1m✖ 3 problems (0 errors, 3 warnings)[22m[39m[0m
+[0m[33m[1m[22m[39m[0m
+
+
+
+ NX   Successfully ran target lint for project @codex/daemon
+
+
+  Run duration:      1.0s
+  Cache:             Skipped (--skip-nx-cache)
+  Critical path:     990ms (1 task)
+  Recoverable time:  <1ms
+
+  Recommendations:
+    - Cache: drop --skip-nx-cache to restore unchanged tasks instantly.
+    - Speed up or split the longest tasks on the critical path:
+        @codex/daemon:lint    990ms

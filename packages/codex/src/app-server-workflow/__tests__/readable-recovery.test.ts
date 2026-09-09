@@ -276,3 +276,36 @@ describe('[L1:INTEGRATION] recovered final display provenance', () => {
     }
   });
 });
+
+// === L1: IN-PROCESS INTEGRATION TESTS ===
+describe('[L1:INTEGRATION] interrupted binding classification', () => {
+  it.each([
+    ['interrupted', 'WORKFLOW_TURN_INTERRUPTED'],
+    ['failed', 'WORKFLOW_TURN_FAILED'],
+    ['completed', 'WORKFLOW_OUTPUT_MISSING'],
+  ])(
+    'OBS-L1-BINDING classifies %s without restarting or borrowing output',
+    async (status, code) => {
+      const value = snapshot();
+      value.thread.turns = [
+        { id: 'turn-a', status, items: [] },
+        { id: 'unrelated-turn', status: 'completed', items: [finalItem()] },
+      ];
+      const f = fixture(value);
+      try {
+        await expect(f.recover()).rejects.toMatchObject({
+          code,
+          retryable: false,
+          ambiguous: false,
+        });
+        expect(f.observations).toEqual([]);
+        expect(f.calls.map((call) => call.method)).toEqual([
+          'thread/resume',
+          'thread/read',
+        ]);
+      } finally {
+        await f.executor.close();
+      }
+    },
+  );
+});

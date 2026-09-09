@@ -96,12 +96,13 @@ function secureEqual(left: string, right: string): boolean {
 }
 
 function writeJson(response: ServerResponse, status: number, value: unknown) {
+  const body = JSON.stringify(value);
   response.writeHead(status, {
     'cache-control': 'no-store',
     'content-type': 'application/json; charset=utf-8',
     'x-content-type-options': 'nosniff',
   });
-  response.end(JSON.stringify(value));
+  response.end(body);
 }
 
 async function readJson(request: IncomingMessage): Promise<unknown> {
@@ -213,7 +214,8 @@ function code(error: unknown): string {
   return error &&
     typeof error === 'object' &&
     'code' in error &&
-    typeof error.code === 'string'
+    typeof error.code === 'string' &&
+    /^[A-Z][A-Z0-9_]{0,79}$/.test(error.code)
     ? error.code
     : 'CONTROL_OPERATION_FAILED';
 }

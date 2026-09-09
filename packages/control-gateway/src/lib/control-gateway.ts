@@ -242,7 +242,8 @@ async function invoke(
       error &&
       typeof error === 'object' &&
       'code' in error &&
-      typeof error.code === 'string'
+      typeof error.code === 'string' &&
+      /^[A-Z][A-Z0-9_]{0,79}$/.test(error.code)
         ? error.code
         : 'CONTROL_OPERATION_FAILED';
     return {

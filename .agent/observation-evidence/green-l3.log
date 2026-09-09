@@ -1,0 +1,76 @@
+
+ NX   Running target test-observation-l3 for project @codex/daemon and 8 tasks it depends on:
+
+
+
+> nx run @codex/codex:build
+
+> tsc --build packages/codex/tsconfig.runtime.json
+
+
+> nx run @codex/control-gateway:build
+
+> tsc --build tsconfig.lib.json
+
+
+> nx run @codex/process:build
+
+> tsc --build tsconfig.lib.json
+
+
+> nx run @codex/transport:build
+
+> tsc --build tsconfig.lib.json
+
+
+> nx run @codex/workflows:build
+
+> tsc --build tsconfig.lib.json
+
+
+> nx run @codex/db:build
+
+> tsc --build tsconfig.lib.json
+
+
+> nx run @codex/delivery:build
+
+> tsc --build tsconfig.lib.json
+
+
+> nx run @codex/daemon:test-pre-build
+
+> tsc -p apps/daemon/tsconfig.cucumber.json
+
+
+> nx run @codex/daemon:test-observation-l3
+
+> bun packages/testing/src/cli.ts verify-cucumber apps/daemon/src/visibility/observation-recovery.feature apps/daemon/out-tsc/cucumber/visibility/observation-recovery.steps.js test-output/cucumber/observation-recovery.json
+
+[32m.[39m[32m.[39m[32m.[39m[32m.[39m[32m.[39m[32m.[39m[32m.[39m[32m.[39m[32m.[39m[32m.[39m[32m.[39m[32m.[39m
+
+3 scenarios ([32m3 passed[39m)
+12 steps ([32m12 passed[39m)
+0m 1.731s (0m 1.726s executing your code)
+(node:64865) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+{"event":"visibility.observer.failure","code":"VISIBILITY_SOURCE_UNAVAILABLE","retryable":true,"stage":"listener","cursor":"1","occurredAt":"2026-09-09T03:34:58.970Z","recoveryAttempt":0}
+{"event":"visibility.observer.failure","code":"VISIBILITY_SOURCE_UNAVAILABLE","retryable":true,"stage":"listener","cursor":"1","occurredAt":"2026-09-09T03:34:58.977Z","recoveryAttempt":0}
+{"event":"visibility.observer.failure","code":"VISIBILITY_SOURCE_UNAVAILABLE","retryable":true,"stage":"listener","cursor":"1","occurredAt":"2026-09-09T03:34:58.977Z","recoveryAttempt":0}
+
+
+
+ NX   Successfully ran target test-observation-l3 for project @codex/daemon and 8 tasks it depends on
+
+
+  Run duration:      3.4s
+  Cache:             Skipped (--skip-nx-cache)
+  Critical path:     3.2s (5 tasks)
+  Recoverable time:  <1ms
+
+  Recommendations:
+    - Cache: drop --skip-nx-cache to restore unchanged tasks instantly.
+    - Speed up or split the longest tasks on the critical path:
+        @codex/daemon:test-observation-l3     2.1s
+        @codex/daemon:test-pre-build         906ms
+        @codex/process:build                 126ms

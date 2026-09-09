@@ -1,0 +1,570 @@
+
+ NX   Running targets lint, typecheck, build, test-l1 for 12 projects and 2 tasks they depend on:
+
+- @codex/daemon
+- @codex/daemon-e2e
+- @codex/codex
+- @codex/codex-workflows
+- @codex/codex-control
+- @codex/plugin-codex-control
+- @codex/codex-monitor
+- @codex/transport
+- @codex/workflows
+- @codex/control-gateway
+- @codex/db
+- @codex/delivery
+
+
+
+> nx run @codex/control-gateway:build
+
+> tsc --build tsconfig.lib.json
+
+
+> nx run @codex/process:build
+
+> tsc --build tsconfig.lib.json
+
+
+> nx run @codex/codex:build
+
+> tsc --build packages/codex/tsconfig.runtime.json
+
+
+> nx run @codex/process:typecheck
+
+> tsc --build tsconfig.json --emitDeclarationOnly
+
+
+> nx run @codex/db:build
+
+> tsc --build tsconfig.lib.json
+
+
+> nx run @codex/codex:typecheck
+
+> tsc --build tsconfig.json --emitDeclarationOnly
+
+
+> nx run @codex/workflows:build
+
+> tsc --build tsconfig.lib.json
+
+
+> nx run @codex/db:typecheck
+
+> tsc --build tsconfig.json --emitDeclarationOnly
+
+
+> nx run @codex/delivery:build
+
+> tsc --build tsconfig.lib.json
+
+
+> nx run @codex/control-gateway:typecheck
+
+> tsc --build tsconfig.json --emitDeclarationOnly
+
+
+> nx run @codex/transport:build
+
+> tsc --build tsconfig.lib.json
+
+
+> nx run @codex/workflows:typecheck
+
+> tsc --build tsconfig.json --emitDeclarationOnly
+
+
+> nx run @codex/delivery:typecheck
+
+> tsc --build tsconfig.json --emitDeclarationOnly
+
+
+> nx run @codex/transport:typecheck
+
+> tsc --build tsconfig.json --emitDeclarationOnly
+
+
+> nx run @codex/codex-control:build
+
+(node:63138) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+
+> nx run @codex/plugin-codex-control:build
+
+> bun plugins/codex-control/scripts/build.ts
+
+
+> nx run @codex/daemon:typecheck
+
+> tsc --build tsconfig.json --emitDeclarationOnly
+
+
+> nx run @codex/codex:lint
+
+> eslint .
+
+(node:63151) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+
+> nx run @codex/workflows:test-l1
+
+> vitest run --config packages/workflows/vitest.config.ts src/application/commands/submit-workflow-source/__tests__/readable-title.test.ts src/application/commands/submit-workflow-source/__tests__/submit-workflow-source-handler.test.ts src/authoring/__tests__/agent-runtime-profile.test.ts src/authoring/__tests__/readable-output.test.ts src/authoring/authoring.test.ts src/authoring/execution-node.test.ts src/control/run-workflow.test.ts src/lib/fixtures.test.ts src/lib/planning.test.ts src/lib/repairs.test.ts
+
+(node:63363) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+
+ RUN  v4.1.10 /Users/mcasa_atlantis/.codex/.agent/workspaces/a6af660bc1aaabc125dd01f1ae284c274f8032918332a80b359812822ae49091/packages/workflows
+
+(node:63387) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:63386) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:63389) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:63392) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:63394) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:63390) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:63391) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:63393) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:63388) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+ ✓ src/application/commands/submit-workflow-source/__tests__/readable-title.test.ts (1 test) 2ms
+ ✓ src/control/run-workflow.test.ts (2 tests) 2ms
+(node:63395) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+ ✓ src/authoring/__tests__/agent-runtime-profile.test.ts (14 tests) 6ms
+ ✓ src/application/commands/submit-workflow-source/__tests__/submit-workflow-source-handler.test.ts (6 tests) 10ms
+ ✓ src/authoring/__tests__/readable-output.test.ts (2 tests) 51ms
+ ✓ src/authoring/execution-node.test.ts (1 test) 4ms
+ ✓ src/lib/planning.test.ts (3 tests) 80ms
+ ✓ src/lib/fixtures.test.ts (13 tests) 90ms
+ ✓ src/lib/repairs.test.ts (5 tests) 93ms
+ ✓ src/authoring/authoring.test.ts (38 tests) 212ms
+
+ Test Files  10 passed (10)
+      Tests  85 passed (85)
+   Start at  23:32:10
+   Duration  488ms (transform 434ms, setup 0ms, import 1.29s, tests 551ms, environment 0ms)
+
+
+> nx run @codex/workflows:lint
+
+> eslint .
+
+(node:63362) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+
+> nx run @codex/db:lint
+
+> eslint .
+
+(node:63398) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+
+> nx run @codex/control-gateway:lint
+
+> eslint .
+
+(node:63399) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+
+> nx run @codex/codex:test-l1
+
+> vitest run --config packages/codex/vitest.config.ts src/app-server-client/__tests__/app-server-client-protocol.test.ts src/app-server-workflow/__tests__/app-server-workflow-executor.test.ts src/app-server-workflow/__tests__/app-server-visibility.test.ts src/app-server-workflow/__tests__/readable-provider.test.ts src/app-server-workflow/__tests__/readable-recovery.test.ts src/app-server-workflow/__tests__/workspace-temp-policy.test.ts
+
+(node:63178) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+
+ RUN  v4.1.10 /Users/mcasa_atlantis/.codex/.agent/workspaces/a6af660bc1aaabc125dd01f1ae284c274f8032918332a80b359812822ae49091/packages/codex
+
+(node:63189) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:63188) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:63190) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:63187) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:63191) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:63192) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+ ✓ src/app-server-workflow/__tests__/workspace-temp-policy.test.ts (2 tests) 7ms
+ ✓ src/app-server-workflow/__tests__/app-server-visibility.test.ts (2 tests) 7ms
+ ✓ src/app-server-workflow/__tests__/readable-recovery.test.ts (11 tests) 6ms
+ ✓ src/app-server-workflow/__tests__/readable-provider.test.ts (2 tests) 7ms
+ ✓ src/app-server-client/__tests__/app-server-client-protocol.test.ts (10 tests) 687ms
+ ✓ src/app-server-workflow/__tests__/app-server-workflow-executor.test.ts (8 tests) 2010ms
+     ✓ HOSTR1 bounds four unavailable stop obligations and rejects new work on a dead feed  2004ms
+
+ Test Files  6 passed (6)
+      Tests  35 passed (35)
+   Start at  23:32:09
+   Duration  2.41s (transform 459ms, setup 0ms, import 658ms, tests 2.72s, environment 0ms)
+
+
+> nx run @codex/transport:test-l1
+
+> vitest run --config packages/transport/vitest.config.ts src/app-server-host/__tests__/app-server-host.test.ts src/workspace-lease/__tests__/workspace-lease.test.ts
+
+(node:63446) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+
+ RUN  v4.1.10 /Users/mcasa_atlantis/.codex/.agent/workspaces/a6af660bc1aaabc125dd01f1ae284c274f8032918332a80b359812822ae49091
+
+(node:63495) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:63496) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+
+ Test Files  2 passed (2)
+      Tests  17 passed (17)
+   Start at  23:32:11
+   Duration  204ms (transform 141ms, setup 0ms, import 189ms, tests 16ms, environment 0ms)
+
+
+> nx run @codex/delivery:lint
+
+> eslint .
+
+(node:63444) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+[0m[0m
+[0m[4m/Users/mcasa_atlantis/.codex/.agent/workspaces/a6af660bc1aaabc125dd01f1ae284c274f8032918332a80b359812822ae49091/packages/delivery/src/agent-delegation/__specs__/agent-delegation.spec.ts[24m[0m
+[0m   [2m9:37[22m  [33mwarning[39m  Unexpected any. Specify a different type  [2m@typescript-eslint/no-explicit-any[22m[0m
+[0m  [2m11:30[22m  [33mwarning[39m  Unexpected any. Specify a different type  [2m@typescript-eslint/no-explicit-any[22m[0m
+[0m  [2m12:39[22m  [33mwarning[39m  Unexpected any. Specify a different type  [2m@typescript-eslint/no-explicit-any[22m[0m
+[0m[0m
+[0m[33m[1m✖ 3 problems (0 errors, 3 warnings)[22m[39m[0m
+[0m[33m[1m[22m[39m[0m
+
+> nx run @codex/transport:lint
+
+> eslint .
+
+(node:63445) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+
+> nx run @codex/codex-control:lint
+
+> eslint .
+
+(node:63516) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+
+> nx run @codex/daemon:lint
+
+> eslint .
+
+(node:63513) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+[0m[0m
+[0m[4m/Users/mcasa_atlantis/.codex/.agent/workspaces/a6af660bc1aaabc125dd01f1ae284c274f8032918332a80b359812822ae49091/apps/daemon/src/control-runtime.spec.ts[24m[0m
+[0m  [2m6:1[22m  [31merror[39m  Static imports of lazy-loaded libraries are forbidden.[0m
+[0m[0m
+[0mLibrary "@codex/codex" is lazy-loaded in these files:[0m
+[0m- apps/daemon/src/visibility/support/observation-recovery.driver.ts  [2m@nx/enforce-module-boundaries[22m[0m
+[0m[0m
+[0m[4m/Users/mcasa_atlantis/.codex/.agent/workspaces/a6af660bc1aaabc125dd01f1ae284c274f8032918332a80b359812822ae49091/apps/daemon/src/control-runtime.ts[24m[0m
+[0m  [2m6:1[22m  [31merror[39m  Static imports of lazy-loaded libraries are forbidden.[0m
+[0m[0m
+[0mLibrary "@codex/codex" is lazy-loaded in these files:[0m
+[0m- apps/daemon/src/visibility/support/observation-recovery.driver.ts  [2m@nx/enforce-module-boundaries[22m[0m
+[0m[0m
+[0m[4m/Users/mcasa_atlantis/.codex/.agent/workspaces/a6af660bc1aaabc125dd01f1ae284c274f8032918332a80b359812822ae49091/apps/daemon/src/delegation/delegation-observation.service.ts[24m[0m
+[0m  [2m1:1[22m  [31merror[39m  Static imports of lazy-loaded libraries are forbidden.[0m
+[0m[0m
+[0mLibrary "@codex/codex" is lazy-loaded in these files:[0m
+[0m- apps/daemon/src/visibility/support/observation-recovery.driver.ts  [2m@nx/enforce-module-boundaries[22m[0m
+[0m[0m
+[0m[4m/Users/mcasa_atlantis/.codex/.agent/workspaces/a6af660bc1aaabc125dd01f1ae284c274f8032918332a80b359812822ae49091/apps/daemon/src/visibility/support/observation-recovery.driver.ts[24m[0m
+[0m  [2m130:28[22m  [31merror[39m  Unsafe usage of ThrowStatement  [2mno-unsafe-finally[22m[0m
+[0m[0m
+[0m[4m/Users/mcasa_atlantis/.codex/.agent/workspaces/a6af660bc1aaabc125dd01f1ae284c274f8032918332a80b359812822ae49091/apps/daemon/src/workflow-execution/__specs__/project-context.spec.ts[24m[0m
+[0m  [2m30:22[22m  [33mwarning[39m  Forbidden non-null assertion  [2m@typescript-eslint/no-non-null-assertion[22m[0m
+[0m  [2m43:26[22m  [33mwarning[39m  Forbidden non-null assertion  [2m@typescript-eslint/no-non-null-assertion[22m[0m
+[0m[0m
+[0m[4m/Users/mcasa_atlantis/.codex/.agent/workspaces/a6af660bc1aaabc125dd01f1ae284c274f8032918332a80b359812822ae49091/apps/daemon/src/workflow-execution/support/meadow-recovery.driver.ts[24m[0m
+[0m  [2m180:11[22m  [33mwarning[39m  Forbidden non-null assertion  [2m@typescript-eslint/no-non-null-assertion[22m[0m
+[0m[0m
+[0m[4m/Users/mcasa_atlantis/.codex/.agent/workspaces/a6af660bc1aaabc125dd01f1ae284c274f8032918332a80b359812822ae49091/apps/daemon/src/workflow-execution/workflow-execution-daemon.ts[24m[0m
+[0m  [2m3:1[22m  [31merror[39m  Static imports of lazy-loaded libraries are forbidden.[0m
+[0m[0m
+[0mLibrary "@codex/codex" is lazy-loaded in these files:[0m
+[0m- apps/daemon/src/visibility/support/observation-recovery.driver.ts  [2m@nx/enforce-module-boundaries[22m[0m
+[0m[0m
+[0m[31m[1m✖ 8 problems (5 errors, 3 warnings)[22m[39m[0m
+[0m[31m[1m[22m[39m[0m
+Warning: command "eslint ." exited with non-zero status code
+> nx run @codex/daemon:build:production
+
+(node:63497) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+
+> nx run @codex/daemon:test-l1
+
+> vitest run --config apps/daemon/vitest.config.ts src/main.test.ts src/control-runtime.test.ts src/visibility/__tests__/control-visibility.test.ts src/workflow-execution/__tests__/workflow-execution-daemon.test.ts src/workflow-execution/__tests__/readable-recovery.test.ts src/visibility/__tests__/legacy-title-replay.test.ts src/workflow-execution/__tests__/meadow-workflow-execution-daemon.test.ts src/workflow-execution/__tests__/meadow-visibility.test.ts src/workflow-execution/__tests__/meadow-retry.test.ts src/visibility/__tests__/observer-recovery.test.ts
+
+(node:63561) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+
+ RUN  v4.1.10 /Users/mcasa_atlantis/.codex/.agent/workspaces/a6af660bc1aaabc125dd01f1ae284c274f8032918332a80b359812822ae49091/apps/daemon
+
+(node:63567) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:63563) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:63565) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:63568) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:63570) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:63564) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:63562) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:63566) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:63569) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:63574) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+
+ Test Files  10 passed (10)
+      Tests  39 passed (39)
+   Start at  23:32:13
+   Duration  639ms (transform 1.33s, setup 0ms, import 2.58s, tests 157ms, environment 0ms)
+
+
+> nx run @codex/codex-control:test-l1
+
+> vitest run --config apps/codex-control/vitest.config.ts src/control/__tests__/codex-control-catalog.test.ts src/control/__tests__/codex-control-runtime.test.ts
+
+(node:63573) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+
+ RUN  v4.1.10 /Users/mcasa_atlantis/.codex/.agent/workspaces/a6af660bc1aaabc125dd01f1ae284c274f8032918332a80b359812822ae49091/apps/codex-control
+
+(node:63576) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:63575) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+
+ Test Files  2 passed (2)
+      Tests  4 passed (4)
+   Start at  23:32:13
+   Duration  200ms (transform 69ms, setup 0ms, import 225ms, tests 13ms, environment 0ms)
+
+
+> nx run @codex/codex-control:typecheck
+
+> tsc --build tsconfig.json --emitDeclarationOnly
+
+
+> nx run @codex/codex-workflows:typecheck
+
+> tsc --build tsconfig.json --emitDeclarationOnly
+
+
+> nx run @codex/codex-workflows:lint
+
+> eslint .
+
+(node:63577) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+[0m[0m
+[0m[4m/Users/mcasa_atlantis/.codex/.agent/workspaces/a6af660bc1aaabc125dd01f1ae284c274f8032918332a80b359812822ae49091/apps/codex-workflows/src/features/daily-facts/daily-facts.test.ts[24m[0m
+[0m  [2m155:5[22m   [33mwarning[39m  Forbidden non-null assertion  [2m@typescript-eslint/no-non-null-assertion[22m[0m
+[0m  [2m155:5[22m   [33mwarning[39m  Forbidden non-null assertion  [2m@typescript-eslint/no-non-null-assertion[22m[0m
+[0m  [2m155:41[22m  [33mwarning[39m  Forbidden non-null assertion  [2m@typescript-eslint/no-non-null-assertion[22m[0m
+[0m  [2m155:41[22m  [33mwarning[39m  Forbidden non-null assertion  [2m@typescript-eslint/no-non-null-assertion[22m[0m
+[0m  [2m157:12[22m  [33mwarning[39m  Forbidden non-null assertion  [2m@typescript-eslint/no-non-null-assertion[22m[0m
+[0m  [2m157:12[22m  [33mwarning[39m  Forbidden non-null assertion  [2m@typescript-eslint/no-non-null-assertion[22m[0m
+[0m  [2m158:10[22m  [33mwarning[39m  Forbidden non-null assertion  [2m@typescript-eslint/no-non-null-assertion[22m[0m
+[0m  [2m158:10[22m  [33mwarning[39m  Forbidden non-null assertion  [2m@typescript-eslint/no-non-null-assertion[22m[0m
+[0m  [2m228:5[22m   [33mwarning[39m  Forbidden non-null assertion  [2m@typescript-eslint/no-non-null-assertion[22m[0m
+[0m  [2m228:5[22m   [33mwarning[39m  Forbidden non-null assertion  [2m@typescript-eslint/no-non-null-assertion[22m[0m
+[0m  [2m230:5[22m   [33mwarning[39m  Forbidden non-null assertion  [2m@typescript-eslint/no-non-null-assertion[22m[0m
+[0m  [2m230:5[22m   [33mwarning[39m  Forbidden non-null assertion  [2m@typescript-eslint/no-non-null-assertion[22m[0m
+[0m  [2m231:5[22m   [33mwarning[39m  Forbidden non-null assertion  [2m@typescript-eslint/no-non-null-assertion[22m[0m
+[0m  [2m231:5[22m   [33mwarning[39m  Forbidden non-null assertion  [2m@typescript-eslint/no-non-null-assertion[22m[0m
+[0m  [2m243:5[22m   [33mwarning[39m  Forbidden non-null assertion  [2m@typescript-eslint/no-non-null-assertion[22m[0m
+[0m  [2m243:5[22m   [33mwarning[39m  Forbidden non-null assertion  [2m@typescript-eslint/no-non-null-assertion[22m[0m
+[0m  [2m244:5[22m   [33mwarning[39m  Forbidden non-null assertion  [2m@typescript-eslint/no-non-null-assertion[22m[0m
+[0m  [2m244:5[22m   [33mwarning[39m  Forbidden non-null assertion  [2m@typescript-eslint/no-non-null-assertion[22m[0m
+[0m  [2m264:39[22m  [33mwarning[39m  Forbidden non-null assertion  [2m@typescript-eslint/no-non-null-assertion[22m[0m
+[0m  [2m267:12[22m  [33mwarning[39m  Forbidden non-null assertion  [2m@typescript-eslint/no-non-null-assertion[22m[0m
+[0m  [2m271:7[22m   [33mwarning[39m  Forbidden non-null assertion  [2m@typescript-eslint/no-non-null-assertion[22m[0m
+[0m  [2m289:8[22m   [33mwarning[39m  Forbidden non-null assertion  [2m@typescript-eslint/no-non-null-assertion[22m[0m
+[0m  [2m290:8[22m   [33mwarning[39m  Forbidden non-null assertion  [2m@typescript-eslint/no-non-null-assertion[22m[0m
+[0m  [2m291:8[22m   [33mwarning[39m  Forbidden non-null assertion  [2m@typescript-eslint/no-non-null-assertion[22m[0m
+[0m  [2m292:8[22m   [33mwarning[39m  Forbidden non-null assertion  [2m@typescript-eslint/no-non-null-assertion[22m[0m
+[0m  [2m297:23[22m  [33mwarning[39m  Forbidden non-null assertion  [2m@typescript-eslint/no-non-null-assertion[22m[0m
+[0m  [2m304:17[22m  [33mwarning[39m  Forbidden non-null assertion  [2m@typescript-eslint/no-non-null-assertion[22m[0m
+[0m  [2m314:28[22m  [33mwarning[39m  Forbidden non-null assertion  [2m@typescript-eslint/no-non-null-assertion[22m[0m
+[0m  [2m321:7[22m   [33mwarning[39m  Forbidden non-null assertion  [2m@typescript-eslint/no-non-null-assertion[22m[0m
+[0m  [2m322:7[22m   [33mwarning[39m  Forbidden non-null assertion  [2m@typescript-eslint/no-non-null-assertion[22m[0m
+[0m  [2m437:39[22m  [33mwarning[39m  Forbidden non-null assertion  [2m@typescript-eslint/no-non-null-assertion[22m[0m
+[0m  [2m470:23[22m  [33mwarning[39m  Forbidden non-null assertion  [2m@typescript-eslint/no-non-null-assertion[22m[0m
+[0m  [2m482:7[22m   [33mwarning[39m  Forbidden non-null assertion  [2m@typescript-eslint/no-non-null-assertion[22m[0m
+[0m  [2m488:7[22m   [33mwarning[39m  Forbidden non-null assertion  [2m@typescript-eslint/no-non-null-assertion[22m[0m
+[0m[0m
+[0m[4m/Users/mcasa_atlantis/.codex/.agent/workspaces/a6af660bc1aaabc125dd01f1ae284c274f8032918332a80b359812822ae49091/apps/codex-workflows/src/features/daily-facts/support/contract.ts[24m[0m
+[0m  [2m516:20[22m  [33mwarning[39m  Forbidden non-null assertion  [2m@typescript-eslint/no-non-null-assertion[22m[0m
+[0m[0m
+[0m[4m/Users/mcasa_atlantis/.codex/.agent/workspaces/a6af660bc1aaabc125dd01f1ae284c274f8032918332a80b359812822ae49091/apps/codex-workflows/src/runtime/local-runner.ts[24m[0m
+[0m  [2m124:18[22m  [33mwarning[39m  Forbidden non-null assertion  [2m@typescript-eslint/no-non-null-assertion[22m[0m
+[0m  [2m126:32[22m  [33mwarning[39m  Forbidden non-null assertion  [2m@typescript-eslint/no-non-null-assertion[22m[0m
+[0m  [2m127:36[22m  [33mwarning[39m  Forbidden non-null assertion  [2m@typescript-eslint/no-non-null-assertion[22m[0m
+[0m  [2m150:28[22m  [33mwarning[39m  Forbidden non-null assertion  [2m@typescript-eslint/no-non-null-assertion[22m[0m
+[0m[0m
+[0m[33m[1m✖ 39 problems (0 errors, 39 warnings)[22m[39m[0m
+[0m[33m[1m[22m[39m[0m
+
+> nx run @codex/plugin-codex-control:lint
+
+(node:63601) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+The `@nx/eslint:lint` executor is deprecated and will be removed in Nx v24. Run `nx g @nx/eslint:convert-to-inferred` to migrate to the `@nx/eslint/plugin` inferred targets. See https://nx.dev/docs/guides/tasks--caching/convert-to-inferred for details.
+
+Linting "@codex/plugin-codex-control"...
+
+✔ All files pass linting
+
+
+> nx run @codex/codex-monitor:lint
+
+> eslint apps/codex-monitor
+
+(node:63614) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+
+> nx run @codex/plugin-codex-control:typecheck
+
+> tsc --noEmit -p plugins/codex-control/tsconfig.json
+
+
+> nx run @codex/codex-workflows:build:production
+
+(node:63637) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+
+> nx run @codex/daemon-e2e:lint
+
+> eslint .
+
+(node:63636) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+
+> nx run @codex/codex-workflows:test-l1
+
+> vitest run --config apps/codex-workflows/vitest.config.ts src/cli/cli.test.ts src/runtime/journal.test.ts src/features/daily-facts/daily-facts.test.ts src/features/cra-red-green/cra-red-green.test.ts
+
+(node:63672) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+
+ RUN  v4.1.10 /Users/mcasa_atlantis/.codex/.agent/workspaces/a6af660bc1aaabc125dd01f1ae284c274f8032918332a80b359812822ae49091/apps/codex-workflows
+
+(node:63673) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:63676) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:63674) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:63675) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+ ✓ src/features/cra-red-green/cra-red-green.test.ts (8 tests) 37ms
+ ✓ src/features/daily-facts/daily-facts.test.ts (23 tests) 129ms
+ ✓ src/cli/cli.test.ts (8 tests) 2ms
+ ✓ src/runtime/journal.test.ts (7 tests) 156ms
+
+ Test Files  4 passed (4)
+      Tests  46 passed (46)
+   Start at  23:32:15
+   Duration  272ms (transform 250ms, setup 0ms, import 303ms, tests 324ms, environment 0ms)
+
+
+> nx run @codex/plugin-codex-control:test-l1
+
+> vitest run --config plugins/codex-control/vitest.config.ts src/__tests__/canonical-plugin.test.ts src/__tests__/native-plugin-gate.test.ts src/generators/init/generator.test.ts
+
+(node:63678) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+
+ RUN  v4.1.10 /Users/mcasa_atlantis/.codex/.agent/workspaces/a6af660bc1aaabc125dd01f1ae284c274f8032918332a80b359812822ae49091/plugins/codex-control
+
+(node:63682) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:63681) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:63683) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+
+ Test Files  3 passed (3)
+      Tests  10 passed (10)
+   Start at  23:32:15
+   Duration  182ms (transform 51ms, setup 0ms, import 100ms, tests 98ms, environment 0ms)
+
+
+> nx run @codex/codex-monitor:test-l1
+
+> vitest run --config apps/codex-monitor/vitest.config.ts scripts/monitor.test.ts src/app-server/state.test.ts
+
+(node:63684) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+
+ RUN  v4.1.10 /Users/mcasa_atlantis/.codex/.agent/workspaces/a6af660bc1aaabc125dd01f1ae284c274f8032918332a80b359812822ae49091/apps/codex-monitor
+
+(node:63738) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:63737) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+ ✓ scripts/monitor.test.ts (6 tests) 2ms
+ ✓ src/app-server/state.test.ts (2 tests) 4ms
+
+ Test Files  2 passed (2)
+      Tests  8 passed (8)
+   Start at  23:32:15
+   Duration  93ms (transform 36ms, setup 0ms, import 49ms, tests 7ms, environment 0ms)
+
+
+> nx run @codex/codex-monitor:typecheck
+
+> tsc --build apps/codex-monitor/tsconfig.json
+
+
+> nx run @codex/codex-monitor:build
+
+> tsc --build apps/codex-monitor/tsconfig.app.json
+
+
+> nx run @codex/daemon-e2e:typecheck
+
+> tsc --build tsconfig.json --emitDeclarationOnly
+
+
+
+
+ NX   Running targets lint, typecheck, build, test-l1 for 12 projects and 2 tasks they depend on failed
+
+Failed tasks:
+
+- @codex/daemon:lint
+
+  Run duration:      10.6s
+  Cache:             Skipped (--skip-nx-cache)
+  Critical path:     4.0s (5 tasks)
+  Recoverable time:  6.6s (62% of the run)
+
+  Recommendations:
+    - Increase parallelism to recover up to 6.6s → https://nx.dev/docs/concepts/ci-concepts/parallelization-distribution?utm_source=nx-cli&utm_medium=cli&utm_campaign=performance-report&utm_content=parallelization.
+    - Cache: drop --skip-nx-cache to restore unchanged tasks instantly.
+error: "nx" exited with code 1
