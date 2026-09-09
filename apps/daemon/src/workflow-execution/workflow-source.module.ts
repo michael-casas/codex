@@ -1,3 +1,4 @@
+import type { AgentAuthorization } from '@codex/process';
 import { dirname, isAbsolute, join, relative } from 'node:path';
 import { realpath } from 'node:fs/promises';
 import {
@@ -79,7 +80,7 @@ export function parseWorkflowSourceRegistrations(
 export function createWorkflowSourceModule(
   registrations: readonly WorkflowSourceRegistration[],
   repositories: readonly Repository[],
-  submit: (command: RunWorkflowCommand) => Promise<unknown>,
+  submit: (command: RunWorkflowCommand, authorization?: AgentAuthorization) => Promise<unknown>,
 ) {
   const contexts = () =>
     registrations.map((registration) => {
@@ -115,7 +116,7 @@ export function createWorkflowSourceModule(
       };
     });
   contexts();
-  const submitSource = createWorkflowSourceSubmission({
+  const sourceSubmission = (authorization: AgentAuthorization) => createWorkflowSourceSubmission({
     async resolveContext(actorAgentId, hostId, repositoryId) {
       const matches = contexts().filter(
         (entry) =>
@@ -167,10 +168,10 @@ export function createWorkflowSourceModule(
       return match.context;
     },
     compileSource: compileWorkflowSource,
-    submit,
+    submit: (command) => submit(command, authorization),
   });
   return {
-    submitSource,
+    submitSource: (command: unknown, authorization: AgentAuthorization) => sourceSubmission(authorization)(command, authorization),
     async resolveSource(workflowRef: string) {
       for (const directory of new Set(
         contexts().map((entry) => entry.context.artifactDirectory),

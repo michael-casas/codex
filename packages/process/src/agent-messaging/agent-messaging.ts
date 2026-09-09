@@ -38,6 +38,14 @@ export interface AgentIncomingMessage extends AgentMessageHandle {
 
 export interface AgentMessageRepository {
   submit(input: AgentMessageSubmission): Promise<AgentMessageHandle>;
+  submitCoordinator?(
+    input: AgentMessageSubmission,
+    actorAgentId: string,
+  ): Promise<AgentMessageHandle>;
+  ownsRecipient?(
+    actorAgentId: string,
+    recipientAgentId: string,
+  ): Promise<boolean>;
   pending(agentId: string): Promise<readonly AgentIncomingMessage[]>;
 }
 
@@ -154,6 +162,26 @@ export function createAgentMessenger(repository: AgentMessageRepository) {
     authorization: AgentAuthorization,
   ) => {
     const command = { ...input, kind };
+    if (authorization.scopes.includes('control:message')) {
+      if (
+        authorization.actorAgentId !== command.fromAgentId ||
+        !repository.submitCoordinator ||
+        !(await repository.ownsRecipient?.(
+          authorization.actorAgentId,
+          command.toAgentId,
+        ))
+      )
+        throw new AgentMessageError(
+          'MESSAGE_UNAUTHORIZED',
+          'Agent message is not authorized.',
+        );
+      // Translate only after authenticated sender equality and authoritative ownership.
+      validate(command, {
+        actorAgentId: authorization.actorAgentId,
+        scopes: ['agent:message'],
+      });
+      return repository.submitCoordinator(command, authorization.actorAgentId);
+    }
     validate(command, authorization);
     return repository.submit(command);
   };

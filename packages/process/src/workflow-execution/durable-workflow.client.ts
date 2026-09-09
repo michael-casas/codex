@@ -214,9 +214,11 @@ export function createDurableWorkflowClient(
 ) {
   const runWorkflow = async (
     command: unknown,
+    ownerAgentId?: string,
   ): Promise<DurableWorkflowRunHandle> => {
     const prepared = preparedRun(dependencies.prepare(command));
     const accepted = {
+      ...(ownerAgentId ? { ownerAgentId } : {}),
       runId: prepared.runId,
       requestFingerprint: prepared.requestFingerprint,
       workflowRef: prepared.command.workflowRef,

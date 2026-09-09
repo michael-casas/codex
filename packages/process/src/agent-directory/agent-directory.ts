@@ -4,7 +4,7 @@ export interface AgentRuntimeRegistration {
   readonly agentId: string;
   readonly hostId: string;
   readonly threadId: string;
-  readonly sessionId: string;
+  readonly sessionId?: string;
 }
 
 export interface AgentAuthorization {
@@ -51,7 +51,7 @@ export function createAgentDirectory(repository: AgentDirectoryRepository) {
         !validId(input.agentId) ||
         !validId(input.hostId) ||
         !validId(input.threadId) ||
-        !validId(input.sessionId)
+        (input.sessionId !== undefined && !validId(input.sessionId))
       ) {
         throw new AgentDirectoryError(
           'DIRECTORY_IDENTITY_INVALID',

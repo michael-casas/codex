@@ -35,6 +35,7 @@ interface AgentDisplay {
 /** Deterministic projection of existing durable events; never orchestration authority. */
 export function createControlVisibilityProjector() {
   const titles = new Map<string, string>();
+  const statuses = new Map<string, string>();
   const agents = new Map<string, AgentDisplay>();
   const sequences = new Map<string, bigint>();
   return (
@@ -105,7 +106,10 @@ export function createControlVisibilityProjector() {
           : {}),
       };
     } else {
-      const status = {
+      const diagnostic =
+        event.kind === 'workflow.execution.error' ||
+        event.kind === 'workflow.cleanup.error';
+      const lifecycleStatus = {
         'workflow.accepted': 'queued',
         'workflow.started': 'running',
         'workflow.execution.started': 'running',
@@ -113,7 +117,11 @@ export function createControlVisibilityProjector() {
         'workflow.failed': 'failed',
         'workflow.cancelled': 'cancelled',
       }[event.kind];
+      const status =
+        lifecycleStatus ??
+        (diagnostic ? (statuses.get(runId) ?? 'queued') : undefined);
       if (!status) return [];
+      if (lifecycleStatus) statuses.set(runId, lifecycleStatus);
       const display = record(event.payload.display);
       if (typeof display.title === 'string') titles.set(runId, display.title);
       else if (typeof display.id === 'string')
@@ -131,6 +139,9 @@ export function createControlVisibilityProjector() {
         source: 'workflow',
         status,
         title: titles.get(runId) ?? 'Workflow',
+        ...(diagnostic
+          ? { errorText: safeWorkflowDiagnostic(event.kind, event.payload) }
+          : {}),
         ...(typeof event.payload.diagnostic === 'string'
           ? { errorText: event.payload.diagnostic }
           : {}),
@@ -140,4 +151,46 @@ export function createControlVisibilityProjector() {
     sequences.set(key, BigInt(event.sequence));
     return normalized ? [normalized] : [];
   };
+}
+
+function safeWorkflowDiagnostic(
+  kind: string,
+  payload: Record<string, unknown>,
+): string {
+  const codes = new Set([
+    'INVALID_LEASE',
+    'LEASE_CONFLICT',
+    'LEASE_NOT_FOUND',
+    'LEASE_OWNERSHIP_MISMATCH',
+    'PROVIDER_FAILURE',
+    'REVISION_MISMATCH',
+    'UNSAFE_WORKSPACE',
+    'WORKFLOW_SOURCE_DIGEST_MISMATCH',
+    'WORKFLOW_SETUP_FAILED',
+    'WORKFLOW_CLEANUP_FAILED',
+  ]);
+  const code =
+    typeof payload.code === 'string' && codes.has(payload.code)
+      ? payload.code
+      : 'WORKFLOW_SETUP_FAILED';
+  const stages = [
+    'acquire',
+    'resolve',
+    'executor',
+    'cancellation-watch',
+    'observations',
+    'release',
+  ];
+  const stage =
+    typeof payload.stage === 'string' && stages.includes(payload.stage)
+      ? payload.stage
+      : 'setup';
+  const action = [
+    'LEASE_OWNERSHIP_MISMATCH',
+    'UNSAFE_WORKSPACE',
+    'LEASE_CONFLICT',
+  ].includes(code)
+    ? 'Operator must verify retained lease ownership before retry; preserve existing evidence.'
+    : 'Inspect host availability and retained attempt diagnostics before a fresh run.';
+  return `${kind === 'workflow.cleanup.error' ? 'Cleanup' : 'Setup'} ${stage}: ${code}. ${action}`;
 }

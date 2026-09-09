@@ -383,7 +383,7 @@ describe('[L1:INTEGRATION] workflow delivery failure cleanup', () => {
       await expect(execute(f.job)).rejects.toThrow('SYNTHETIC_ACQUIRE_FAILURE');
       expect(f.signal()?.aborted).toBe(true);
       expect(f.release).not.toHaveBeenCalled();
-      expect(f.events).toEqual([]);
+      expect(f.events.map(({ kind }) => kind)).toEqual(['workflow.execution.attempted', 'workflow.execution.error']);
     } finally {
       await f.service.stop();
     }

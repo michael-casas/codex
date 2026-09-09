@@ -51,12 +51,12 @@ export class PostgresAgentMessageStore
         agent_id: string;
         host_id: string;
         thread_id: string;
-        session_id: string;
+        session_id: string | null;
       }>('SELECT * FROM process.register_agent_runtime($1,$2,$3,$4)', [
         input.agentId,
         input.hostId,
         input.threadId,
-        input.sessionId,
+        input.sessionId ?? null,
       ]);
       const row = result.rows[0];
       if (!row) throw new Error('AGENT_RUNTIME_RESULT_INVALID');
@@ -64,7 +64,7 @@ export class PostgresAgentMessageStore
         agentId: row.agent_id,
         hostId: row.host_id,
         threadId: row.thread_id,
-        sessionId: row.session_id,
+        ...(row.session_id ? { sessionId: row.session_id } : {}),
       };
     } finally {
       await client.end();
@@ -79,7 +79,7 @@ export class PostgresAgentMessageStore
         agent_id: string;
         host_id: string;
         thread_id: string;
-        session_id: string;
+        session_id: string | null;
       }>(
         'SELECT agent_id, host_id, thread_id, session_id FROM process.list_agent_runtimes() WHERE agent_id = $1',
         [agentId],
@@ -90,7 +90,7 @@ export class PostgresAgentMessageStore
             agentId: row.agent_id,
             hostId: row.host_id,
             threadId: row.thread_id,
-            sessionId: row.session_id,
+            ...(row.session_id ? { sessionId: row.session_id } : {}),
           }
         : undefined;
     } finally {
@@ -106,7 +106,7 @@ export class PostgresAgentMessageStore
         agent_id: string;
         host_id: string;
         thread_id: string;
-        session_id: string;
+        session_id: string | null;
       }>(
         'SELECT agent_id, host_id, thread_id, session_id FROM process.list_agent_runtimes()',
       );
@@ -114,18 +114,86 @@ export class PostgresAgentMessageStore
         agentId: row.agent_id,
         hostId: row.host_id,
         threadId: row.thread_id,
-        sessionId: row.session_id,
+        ...(row.session_id ? { sessionId: row.session_id } : {}),
       }));
     } finally {
       await client.end();
     }
   }
 
-  async submit(input: AgentMessageSubmission): Promise<AgentMessageHandle> {
+  async registerOwned(
+    input: {
+      agentId: string;
+      hostId: string;
+      threadId: string;
+      sessionId?: string;
+    },
+    ownerAgentId: string,
+  ): Promise<void> {
+    const client = new Client({ connectionString: this.connectionString });
+    await client.connect();
+    try {
+      await client.query(
+        'SELECT process.register_owned_agent_runtime($1,$2,$3,$4,$5)',
+        [
+          input.agentId,
+          input.hostId,
+          input.threadId,
+          input.sessionId ?? null,
+          ownerAgentId,
+        ],
+      );
+    } finally {
+      await client.end();
+    }
+  }
+
+  async ownsRecipient(
+    actorAgentId: string,
+    recipientAgentId: string,
+  ): Promise<boolean> {
+    const client = new Client({ connectionString: this.connectionString });
+    await client.connect();
+    try {
+      return (
+        (
+          await client.query(
+            'SELECT process.coordinator_owns_recipient($1,$2) AS allowed',
+            [actorAgentId, recipientAgentId],
+          )
+        ).rows[0]?.allowed === true
+      );
+    } finally {
+      await client.end();
+    }
+  }
+
+  submitCoordinator(
+    input: AgentMessageSubmission,
+    actorAgentId: string,
+  ): Promise<AgentMessageHandle> {
+    return this.submit(input, actorAgentId);
+  }
+
+  async submit(
+    input: AgentMessageSubmission,
+    coordinatorActor?: string,
+  ): Promise<AgentMessageHandle> {
     const client = new Client({ connectionString: this.connectionString });
     await client.connect();
     try {
       await client.query('BEGIN');
+      if (
+        coordinatorActor !== undefined &&
+        (input.fromAgentId !== coordinatorActor ||
+          (
+            await client.query(
+              'SELECT process.coordinator_owns_recipient($1,$2) AS allowed',
+              [coordinatorActor, input.toAgentId],
+            )
+          ).rows[0]?.allowed !== true)
+      )
+        throw new Error('MESSAGE_UNAUTHORIZED');
       const result = await client.query<{
         message_id: string;
         correlation_id: string;
