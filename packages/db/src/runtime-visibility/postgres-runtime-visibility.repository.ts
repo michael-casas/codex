@@ -96,7 +96,27 @@ export class PostgresRuntimeVisibilityRepository
     onError: (error: unknown) => void,
   ) {
     const client = new Client({ connectionString: this.connectionString });
-    client.on('error', onError);
+    let closing = false;
+    client.on('error', (error: Error) => {
+      if (!closing)
+        onError(
+          error.message === 'Connection terminated unexpectedly'
+            ? new RuntimeVisibilityError(
+                'VISIBILITY_SOURCE_DISCONNECTED',
+                'Visibility source listener disconnected.',
+              )
+            : error,
+        );
+    });
+    client.on('end', () => {
+      if (!closing)
+        onError(
+          new RuntimeVisibilityError(
+            'VISIBILITY_SOURCE_DISCONNECTED',
+            'Visibility source listener disconnected.',
+          ),
+        );
+    });
     client.on('notification', (notification) => {
       if (notification.channel !== 'process_control_event') return;
       try {
@@ -116,10 +136,12 @@ export class PostgresRuntimeVisibilityRepository
       await client.connect();
       await client.query('LISTEN process_control_event');
     } catch (error) {
+      closing = true;
       await client.end();
       throw error;
     }
     return async () => {
+      closing = true;
       await client.end();
     };
   }

@@ -1,0 +1,191 @@
+
+ NX   Running target test-observation-l3 for project @codex/daemon and 8 tasks it depends on:
+
+
+
+> nx run @codex/process:build
+
+> tsc --build tsconfig.lib.json
+
+
+> nx run @codex/codex:build
+
+> tsc --build packages/codex/tsconfig.runtime.json
+
+
+> nx run @codex/control-gateway:build
+
+> tsc --build tsconfig.lib.json
+
+
+> nx run @codex/db:build
+
+> tsc --build tsconfig.lib.json
+
+
+> nx run @codex/workflows:build
+
+> tsc --build tsconfig.lib.json
+
+
+> nx run @codex/transport:build
+
+> tsc --build tsconfig.lib.json
+
+
+> nx run @codex/delivery:build
+
+> tsc --build tsconfig.lib.json
+
+
+> nx run @codex/daemon:test-pre-build
+
+> tsc -p apps/daemon/tsconfig.cucumber.json
+
+
+> nx run @codex/daemon:test-observation-l3
+
+> bun packages/testing/src/cli.ts verify-cucumber apps/daemon/src/visibility/observation-recovery.feature apps/daemon/out-tsc/cucumber/visibility/observation-recovery.steps.js test-output/cucumber/observation-recovery.json
+
+[32m.[39m[32m.[39m[31mF[39m[32m.[39m[32m.[39m[32m.[39m[31mF[39m[32m.[39m[32m.[39m[32m.[39m[31mF[39m[32m.[39m
+
+[31mFailed scenarios:[39m
+  1) Recover observation without replaying execution [90m# observation-recovery.feature:2[39m
+       [31m[1mThen [22mpublic reads report degradation and recover the unchanged terminal history[39m [90m# ../../out-tsc/cucumber/visibility/observation-recovery.steps.js:7[39m
+           [31mAssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:[39m
+           [31m[32m+ actual[31m [31m- expected[39m[39m
+           [31m[39m
+           [31m[31m  {[39m
+           [31m[32m+[31m   degradedCode: 'CONTROL_OPERATION_FAILED',[39m
+           [31m[31m-[31m   degradedCode: 'VISIBILITY_OBSERVER_UNAVAILABLE',[39m
+           [31m[31m    degradedStatus: 500,[39m
+           [31m[31m    eventCount: 2,[39m
+           [31m[31m    historyPreserved: true,[39m
+           [31m[31m    replayTerminal: true,[39m
+           [31m[31m    sourceCount: 2,[39m
+           [31m[32m+[31m   terminal: false[39m
+           [31m[31m-[31m   terminal: true[39m
+           [31m[31m  }[39m
+           [31m[39m
+           [31m    + expected - actual[39m
+           [31m[39m
+           [31m     {[39m
+           [31m    -  "degradedCode": "CONTROL_OPERATION_FAILED"[39m
+           [31m    +  "degradedCode": "VISIBILITY_OBSERVER_UNAVAILABLE"[39m
+           [31m       "degradedStatus": 500[39m
+           [31m       "eventCount": 2[39m
+           [31m       "historyPreserved": true[39m
+           [31m       "replayTerminal": true[39m
+           [31m       "sourceCount": 2[39m
+           [31m    -  "terminal": false[39m
+           [31m    +  "terminal": true[39m
+           [31m     }[39m
+           [31m[39m
+           [31m    at World.<anonymous> (file:///Users/mcasa_atlantis/.codex/.agent/workspaces/a6af660bc1aaabc125dd01f1ae284c274f8032918332a80b359812822ae49091/apps/daemon/out-tsc/cucumber/visibility/observation-recovery.steps.js:7:105)[39m
+  2) Safe observation error responses [90m# observation-recovery.feature:6[39m
+       [31m[1mThen [22mboth public operations return well-formed safe error JSON[39m [90m# ../../out-tsc/cucumber/visibility/observation-recovery.steps.js:9[39m
+           [31mAssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:[39m
+           [31m[32m+ actual[31m [31m- expected[39m[39m
+           [31m[39m
+           [31m[31m  {[39m
+           [31m[31m    snapshot: {[39m
+           [31m[32m+[31m     body: 'invalid response',[39m
+           [31m[32m+[31m     status: 0[39m
+           [31m[31m-[31m     body: {[39m
+           [31m[31m-[31m       code: 'CONTROL_OPERATION_FAILED'[39m
+           [31m[31m-[31m     },[39m
+           [31m[31m-[31m     status: 500[39m
+           [31m[31m    },[39m
+           [31m[31m    wait: {[39m
+           [31m[31m      body: {[39m
+           [31m[32m+[31m       code: 'secret /Users/private token=value'[39m
+           [31m[31m-[31m       code: 'CONTROL_OPERATION_FAILED'[39m
+           [31m[31m      },[39m
+           [31m[31m      status: 500[39m
+           [31m[31m    }[39m
+           [31m[31m  }[39m
+           [31m[39m
+           [31m    + expected - actual[39m
+           [31m[39m
+           [31m     {[39m
+           [31m       "snapshot": {[39m
+           [31m    -    "body": "invalid response"[39m
+           [31m    -    "status": 0[39m
+           [31m    +    "body": {[39m
+           [31m    +      "code": "CONTROL_OPERATION_FAILED"[39m
+           [31m    +    }[39m
+           [31m    +    "status": 500[39m
+           [31m       }[39m
+           [31m       "wait": {[39m
+           [31m         "body": {[39m
+           [31m    -      "code": "secret /Users/private token=value"[39m
+           [31m    +      "code": "CONTROL_OPERATION_FAILED"[39m
+           [31m         }[39m
+           [31m         "status": 500[39m
+           [31m       }[39m
+           [31m     }[39m
+           [31m[39m
+           [31m    at World.<anonymous> (file:///Users/mcasa_atlantis/.codex/.agent/workspaces/a6af660bc1aaabc125dd01f1ae284c274f8032918332a80b359812822ae49091/apps/daemon/out-tsc/cucumber/visibility/observation-recovery.steps.js:9:88)[39m
+  3) Preserve an interrupted execution binding [90m# observation-recovery.feature:10[39m
+       [31m[1mThen [22mreconciliation reports a terminal interruption without starting another agent[39m [90m# ../../out-tsc/cucumber/visibility/observation-recovery.steps.js:11[39m
+           [31mAssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:[39m
+           [31m[32m+ actual[31m [31m- expected[39m[39m
+           [31m[39m
+           [31m[31m  {[39m
+           [31m[32m+[31m   ambiguous: undefined,[39m
+           [31m[31m-[31m   ambiguous: false,[39m
+           [31m[31m    childExited: true,[39m
+           [31m[32m+[31m   code: undefined,[39m
+           [31m[31m-[31m   code: 'WORKFLOW_TURN_INTERRUPTED',[39m
+           [31m[31m    pendingRequests: 0,[39m
+           [31m[31m    reads: 1,[39m
+           [31m[32m+[31m   retryable: undefined,[39m
+           [31m[31m-[31m   retryable: false,[39m
+           [31m[31m    starts: 0[39m
+           [31m[31m  }[39m
+           [31m[39m
+           [31m    + expected - actual[39m
+           [31m[39m
+           [31m     {[39m
+           [31m    -  "ambiguous": [undefined][39m
+           [31m    +  "ambiguous": false[39m
+           [31m       "childExited": true[39m
+           [31m    -  "code": [undefined][39m
+           [31m    +  "code": "WORKFLOW_TURN_INTERRUPTED"[39m
+           [31m       "pendingRequests": 0[39m
+           [31m       "reads": 1[39m
+           [31m    -  "retryable": [undefined][39m
+           [31m    +  "retryable": false[39m
+           [31m       "starts": 0[39m
+           [31m     }[39m
+           [31m[39m
+           [31m    at World.<anonymous> (file:///Users/mcasa_atlantis/.codex/.agent/workspaces/a6af660bc1aaabc125dd01f1ae284c274f8032918332a80b359812822ae49091/apps/daemon/out-tsc/cucumber/visibility/observation-recovery.steps.js:11:108)[39m
+
+3 scenarios ([31m3 failed[39m)
+12 steps ([32m9 passed[39m, [31m3 failed[39m)
+0m 5.252s (0m 5.242s executing your code)
+(node:59661) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+Warning: command "bun packages/testing/src/cli.ts verify-cucumber apps/daemon/src/visibility/observation-recovery.feature apps/daemon/out-tsc/cucumber/visibility/observation-recovery.steps.js test-output/cucumber/observation-recovery.json" exited with non-zero status code
+
+
+ NX   Running target test-observation-l3 for project @codex/daemon and 8 tasks it depends on failed
+
+Failed tasks:
+
+- @codex/daemon:test-observation-l3
+
+Hint: run the command with --verbose for more details.
+
+  Run duration:      6.9s
+  Cache:             Skipped (--skip-nx-cache)
+  Critical path:     6.7s (5 tasks)
+  Recoverable time:  <1ms
+
+  Recommendations:
+    - Cache: drop --skip-nx-cache to restore unchanged tasks instantly.
+    - Speed up or split the longest tasks on the critical path:
+        @codex/daemon:test-observation-l3     5.6s
+        @codex/daemon:test-pre-build         931ms
+        @codex/process:build                  96ms
+error: "nx" exited with code 1

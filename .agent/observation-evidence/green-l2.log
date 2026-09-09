@@ -1,0 +1,84 @@
+
+ NX   Running target test-observation-l2 for project @codex/daemon and 7 tasks it depends on:
+
+
+
+> nx run @codex/codex:build
+
+> tsc --build packages/codex/tsconfig.runtime.json
+
+
+> nx run @codex/control-gateway:build
+
+> tsc --build tsconfig.lib.json
+
+
+> nx run @codex/process:build
+
+> tsc --build tsconfig.lib.json
+
+
+> nx run @codex/workflows:build
+
+> tsc --build tsconfig.lib.json
+
+
+> nx run @codex/transport:build
+
+> tsc --build tsconfig.lib.json
+
+
+> nx run @codex/db:build
+
+> tsc --build tsconfig.lib.json
+
+
+> nx run @codex/delivery:build
+
+> tsc --build tsconfig.lib.json
+
+
+> nx run @codex/daemon:test-observation-l2
+
+> vitest run --config apps/daemon/vitest.config.ts src/visibility/__specs__/observation-recovery.spec.ts --reporter=default --reporter=json --outputFile=test-output/observation/l2.json
+
+(node:64640) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+
+ RUN  v4.1.10 /Users/mcasa_atlantis/.codex/.agent/workspaces/a6af660bc1aaabc125dd01f1ae284c274f8032918332a80b359812822ae49091/apps/daemon
+
+(node:64641) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+stderr | src/visibility/__specs__/observation-recovery.spec.ts > [L2:E2E] OBS-L2-RECOVERY recovers public observation with real PostgreSQL listener and immutable history
+{"event":"visibility.observer.failure","code":"VISIBILITY_SOURCE_UNAVAILABLE","retryable":true,"stage":"listener","cursor":"1","occurredAt":"2026-09-09T03:34:13.275Z","recoveryAttempt":0}
+
+stderr | src/visibility/__specs__/observation-recovery.spec.ts > [L2:E2E] OBS-L2-RECOVERY recovers public observation with real PostgreSQL listener and immutable history
+{"event":"visibility.observer.failure","code":"VISIBILITY_SOURCE_UNAVAILABLE","retryable":true,"stage":"listener","cursor":"1","occurredAt":"2026-09-09T03:34:13.277Z","recoveryAttempt":0}
+{"event":"visibility.observer.failure","code":"VISIBILITY_SOURCE_UNAVAILABLE","retryable":true,"stage":"listener","cursor":"1","occurredAt":"2026-09-09T03:34:13.277Z","recoveryAttempt":0}
+
+ ✓ src/visibility/__specs__/observation-recovery.spec.ts (3 tests) 1836ms
+   ✓ [L2:E2E] OBS-L2-RECOVERY recovers public observation with real PostgreSQL listener and immutable history  1743ms
+
+ Test Files  1 passed (1)
+      Tests  3 passed (3)
+   Start at  23:34:12
+   Duration  2.09s (transform 84ms, setup 0ms, import 198ms, tests 1.84s, environment 0ms)
+
+JSON report written to /Users/mcasa_atlantis/.codex/.agent/workspaces/a6af660bc1aaabc125dd01f1ae284c274f8032918332a80b359812822ae49091/apps/daemon/test-output/observation/l2.json
+
+
+
+ NX   Successfully ran target test-observation-l2 for project @codex/daemon and 7 tasks it depends on
+
+
+  Run duration:      2.6s
+  Cache:             Skipped (--skip-nx-cache)
+  Critical path:     2.5s (4 tasks)
+  Recoverable time:  <1ms
+
+  Recommendations:
+    - Cache: drop --skip-nx-cache to restore unchanged tasks instantly.
+    - Speed up or split the longest tasks on the critical path:
+        @codex/daemon:test-observation-l2    2.3s
+        @codex/process:build                 69ms
+        @codex/delivery:build                50ms

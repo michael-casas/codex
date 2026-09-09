@@ -1,0 +1,93 @@
+
+> nx run @codex/codex:test-l1-integration
+
+> vitest run --config packages/codex/vitest.config.ts src/app-server-workflow/__tests__/app-server-workflow-executor.test.ts src/app-server-workflow/__tests__/app-server-visibility.test.ts src/app-server-workflow/__tests__/readable-provider.test.ts src/app-server-workflow/__tests__/readable-recovery.test.ts src/app-server-workflow/__tests__/workspace-temp-policy.test.ts --testNamePattern='L1:INTEGRATION'
+
+(node:58316) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+
+ RUN  v4.1.10 /Users/mcasa_atlantis/.codex/.agent/workspaces/a6af660bc1aaabc125dd01f1ae284c274f8032918332a80b359812822ae49091/packages/codex
+
+(node:58320) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:58317) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:58318) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:58319) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:58321) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+ ✓ src/app-server-workflow/__tests__/readable-provider.test.ts (2 tests) 4ms
+ ✓ src/app-server-workflow/__tests__/app-server-visibility.test.ts (2 tests) 5ms
+ ✓ src/app-server-workflow/__tests__/workspace-temp-policy.test.ts (2 tests) 6ms
+ ❯ src/app-server-workflow/__tests__/readable-recovery.test.ts (11 tests | 3 failed) 7ms
+     ✓ R2-RECOVERY-VERIFIED maps one actual matching final without live notifications or media leakage 2ms
+     ✓ R2-RECOVERY-BOUND-TURN chooses the matching final instead of a later unrelated turn 0ms
+     ✓ R2-RECOVERY-UNVERIFIED preserves prior valid output but emits no verified item for missing thread id 0ms
+     ✓ R2-RECOVERY-UNVERIFIED preserves prior valid output but emits no verified item for wrong thread id 0ms
+     ✓ R2-RECOVERY-UNVERIFIED preserves prior valid output but emits no verified item for missing turn id 0ms
+     ✓ R2-RECOVERY-UNVERIFIED preserves prior valid output but emits no verified item for wrong turn id 0ms
+     ✓ R2-RECOVERY-UNVERIFIED preserves prior valid output but emits no verified item for missing item id 0ms
+     ✓ R2-RECOVERY-PROVIDER-ERROR does not degrade a genuine provider rejection into output 0ms
+     × OBS-L1-BINDING classifies interrupted without restarting or borrowing output 3ms
+     × OBS-L1-BINDING classifies failed without restarting or borrowing output 0ms
+     × OBS-L1-BINDING classifies completed without restarting or borrowing output 0ms
+ ✓ src/app-server-workflow/__tests__/app-server-workflow-executor.test.ts (8 tests) 2022ms
+     ✓ HOSTR1 bounds four unavailable stop obligations and rejects new work on a dead feed  2008ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 3 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/app-server-workflow/__tests__/readable-recovery.test.ts > [L1:INTEGRATION] interrupted binding classification > OBS-L1-BINDING classifies interrupted without restarting or borrowing output
+ FAIL  src/app-server-workflow/__tests__/readable-recovery.test.ts > [L1:INTEGRATION] interrupted binding classification > OBS-L1-BINDING classifies failed without restarting or borrowing output
+ FAIL  src/app-server-workflow/__tests__/readable-recovery.test.ts > [L1:INTEGRATION] interrupted binding classification > OBS-L1-BINDING classifies completed without restarting or borrowing output
+AssertionError: promise resolved "{ threadId: 'thread-a', …(2) }" instead of rejecting
+
+- Expected
++ Received
+
+- Error {
+-   "message": "rejected promise",
++ {
++   "finalResponse": "{\"answer\":\"RECOVERED_PAYLOAD\"}",
++   "threadId": "thread-a",
++   "usage": null,
+  }
+
+ ❯ src/app-server-workflow/__tests__/readable-recovery.test.ts:294:32
+    292|     const f = fixture(value);
+    293|     try {
+    294|       await expect(f.recover()).rejects.toMatchObject({ code, retryabl…
+       |                                ^
+    295|       expect(f.observations).toEqual([]);
+    296|       expect(f.calls.map(call => call.method)).toEqual(['thread/resume…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/3]⎯
+
+
+ Test Files  1 failed | 4 passed (5)
+      Tests  3 failed | 22 passed (25)
+   Start at  23:19:53
+   Duration  2.12s (transform 112ms, setup 0ms, import 151ms, tests 2.04s, environment 0ms)
+
+Warning: command "vitest run --config packages/codex/vitest.config.ts src/app-server-workflow/__tests__/app-server-workflow-executor.test.ts src/app-server-workflow/__tests__/app-server-visibility.test.ts src/app-server-workflow/__tests__/readable-provider.test.ts src/app-server-workflow/__tests__/readable-recovery.test.ts src/app-server-workflow/__tests__/workspace-temp-policy.test.ts --testNamePattern='L1:INTEGRATION'" exited with non-zero status code
+
+
+ NX   Running target test-l1-integration for project @codex/codex failed
+
+Failed tasks:
+
+- @codex/codex:test-l1-integration
+
+Hint: run the command with --verbose for more details.
+
+  Run duration:      2.3s
+  Cache:             Skipped (--skip-nx-cache)
+  Critical path:     2.3s (1 task)
+  Recoverable time:  <1ms
+
+  Recommendations:
+    - Cache: drop --skip-nx-cache to restore unchanged tasks instantly.
+    - Speed up or split the longest tasks on the critical path:
+        @codex/codex:test-l1-integration    2.3s
+error: "nx" exited with code 1

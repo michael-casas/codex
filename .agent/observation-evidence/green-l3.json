@@ -1,0 +1,172 @@
+[
+  {
+    "description": "",
+    "elements": [
+      {
+        "description": "",
+        "id": "truthful-observation-during-source-outages;recover-observation-without-replaying-execution",
+        "keyword": "Scenario",
+        "line": 2,
+        "name": "Recover observation without replaying execution",
+        "steps": [
+          {
+            "keyword": "Before",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 153042
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "When ",
+            "line": 3,
+            "name": "an observer loses its fixture database listener before a workflow fails",
+            "match": {
+              "location": "../../out-tsc/cucumber/visibility/observation-recovery.steps.js:6"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 1654608291
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 4,
+            "name": "public reads report degradation and recover the unchanged terminal history",
+            "match": {
+              "location": "../../out-tsc/cucumber/visibility/observation-recovery.steps.js:9"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 557000
+            }
+          },
+          {
+            "keyword": "After",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 50124
+            }
+          }
+        ],
+        "tags": [],
+        "type": "scenario"
+      },
+      {
+        "description": "",
+        "id": "truthful-observation-during-source-outages;safe-observation-error-responses",
+        "keyword": "Scenario",
+        "line": 6,
+        "name": "Safe observation error responses",
+        "steps": [
+          {
+            "keyword": "Before",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 139625
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "When ",
+            "line": 7,
+            "name": "fixture snapshot serialization and wait operations fail",
+            "match": {
+              "location": "../../out-tsc/cucumber/visibility/observation-recovery.steps.js:20"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 9063959
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 8,
+            "name": "both public operations return well-formed safe error JSON",
+            "match": {
+              "location": "../../out-tsc/cucumber/visibility/observation-recovery.steps.js:23"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 125624
+            }
+          },
+          {
+            "keyword": "After",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 63625
+            }
+          }
+        ],
+        "tags": [],
+        "type": "scenario"
+      },
+      {
+        "description": "",
+        "id": "truthful-observation-during-source-outages;preserve-an-interrupted-execution-binding",
+        "keyword": "Scenario",
+        "line": 10,
+        "name": "Preserve an interrupted execution binding",
+        "steps": [
+          {
+            "keyword": "Before",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 108750
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "When ",
+            "line": 11,
+            "name": "the provider reports the bound fixture turn was interrupted without output",
+            "match": {
+              "location": "../../out-tsc/cucumber/visibility/observation-recovery.steps.js:29"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 61082499
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 12,
+            "name": "reconciliation reports a terminal interruption without starting another agent",
+            "match": {
+              "location": "../../out-tsc/cucumber/visibility/observation-recovery.steps.js:33"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 49459
+            }
+          },
+          {
+            "keyword": "After",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 23959
+            }
+          }
+        ],
+        "tags": [],
+        "type": "scenario"
+      }
+    ],
+    "id": "truthful-observation-during-source-outages",
+    "line": 1,
+    "keyword": "Feature",
+    "name": "Truthful observation during source outages",
+    "tags": [],
+    "uri": "observation-recovery.feature"
+  }
+]

@@ -21915,7 +21915,7 @@ async function invoke(operation, present = (value) => value) {
   try {
     return result(present(await operation()));
   } catch (error2) {
-    const code2 = error2 && typeof error2 === "object" && "code" in error2 && typeof error2.code === "string" ? error2.code : "CONTROL_OPERATION_FAILED";
+    const code2 = error2 && typeof error2 === "object" && "code" in error2 && typeof error2.code === "string" && /^[A-Z][A-Z0-9_]{0,79}$/.test(error2.code) ? error2.code : "CONTROL_OPERATION_FAILED";
     return {
       isError: true,
       content: [{ type: "text", text: JSON.stringify({ code: code2 }) }]
@@ -22107,7 +22107,7 @@ function loopbackOrigin(value) {
   return url.origin;
 }
 function code(error2) {
-  return error2 && typeof error2 === "object" && "code" in error2 && typeof error2.code === "string" ? error2.code : "CONTROL_OPERATION_FAILED";
+  return error2 && typeof error2 === "object" && "code" in error2 && typeof error2.code === "string" && /^[A-Z][A-Z0-9_]{0,79}$/.test(error2.code) ? error2.code : "CONTROL_OPERATION_FAILED";
 }
 function createControlHttpClient(options) {
   const origin2 = loopbackOrigin(options.origin);

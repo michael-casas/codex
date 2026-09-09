@@ -1,0 +1,96 @@
+
+ NX   Running target typecheck for project @codex/daemon and 14 tasks it depends on:
+
+
+
+> nx run @codex/codex:build
+
+> tsc --build packages/codex/tsconfig.runtime.json
+
+
+> nx run @codex/control-gateway:build
+
+> tsc --build tsconfig.lib.json
+
+
+> nx run @codex/process:build
+
+> tsc --build tsconfig.lib.json
+
+
+> nx run @codex/codex:typecheck
+
+> tsc --build tsconfig.json --emitDeclarationOnly
+
+
+> nx run @codex/process:typecheck
+
+> tsc --build tsconfig.json --emitDeclarationOnly
+
+
+> nx run @codex/db:build
+
+> tsc --build tsconfig.lib.json
+
+
+> nx run @codex/workflows:build
+
+> tsc --build tsconfig.lib.json
+
+
+> nx run @codex/control-gateway:typecheck
+
+> tsc --build tsconfig.json --emitDeclarationOnly
+
+
+> nx run @codex/db:typecheck
+
+> tsc --build tsconfig.json --emitDeclarationOnly
+
+
+> nx run @codex/delivery:build
+
+> tsc --build tsconfig.lib.json
+
+
+> nx run @codex/workflows:typecheck
+
+> tsc --build tsconfig.json --emitDeclarationOnly
+
+
+> nx run @codex/transport:build
+
+> tsc --build tsconfig.lib.json
+
+
+> nx run @codex/delivery:typecheck
+
+> tsc --build tsconfig.json --emitDeclarationOnly
+
+
+> nx run @codex/transport:typecheck
+
+> tsc --build tsconfig.json --emitDeclarationOnly
+
+
+> nx run @codex/daemon:typecheck
+
+> tsc --build tsconfig.json --emitDeclarationOnly
+
+
+
+
+ NX   Successfully ran target typecheck for project @codex/daemon and 14 tasks it depends on
+
+
+  Run duration:      1.9s
+  Cache:             Skipped (--skip-nx-cache)
+  Critical path:     1.5s (5 tasks)
+  Recoverable time:  1ms (0% of the run)
+
+  Recommendations:
+    - Cache: drop --skip-nx-cache to restore unchanged tasks instantly.
+    - Speed up or split the longest tasks on the critical path:
+        @codex/daemon:typecheck       1.3s
+        @codex/process:build         114ms
+        @codex/delivery:typecheck     52ms

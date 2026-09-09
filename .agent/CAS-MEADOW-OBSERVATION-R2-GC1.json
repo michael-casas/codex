@@ -1,0 +1,67 @@
+{
+  "id": "CAS-MEADOW-OBSERVATION-R2-GC1",
+  "base": "df34fd6ba897e7a5e82d5429b8caac26f1b52ad0",
+  "state": "frozen-before-product-write",
+  "scope": "vertical-slice",
+  "authority": "CAS-MEADOW-OBSERVATION-R2.md revised proof boundary",
+  "files": {
+    "apps/daemon/src/visibility/__tests__/observer-recovery.test.ts": "9de62c4e71f83d9a13150b38a33cf39a5704c47111b70306c33a7ffe809028f4",
+    "apps/daemon/src/visibility/__specs__/observation-recovery.spec.ts": "671d35d8663e5e00922651042ac55fe72a2911253401b3e10b127d8128123f07",
+    "apps/daemon/src/visibility/observation-recovery.feature": "2e8893c29f45b36e85c101ae49af147498c1749a3bd73846dfc9c97e67882f88",
+    "apps/daemon/src/visibility/observation-recovery.steps.ts": "fb07ca1a965847d187bf797cdfe90d151fa9b89ffcfff294d91b71ace12c3185",
+    "packages/codex/src/app-server-workflow/__tests__/readable-recovery.test.ts": "2cd4afc33ad81abe5b4233a834eaee938a3b74ba5b9ef5c9d025311d6fc00ea9"
+  },
+  "rows": {
+    "l1": {
+      "target": "@codex/daemon:test-observation-l1",
+      "changedRows": 6,
+      "red": 6,
+      "characterizationGreen": 1,
+      "behaviors": [
+        "partial-ingest replay",
+        "listener reconnect",
+        "three-attempt bound",
+        "immutable conflict rewind",
+        "invalid event fail closed",
+        "stop recovery cleanup"
+      ]
+    },
+    "adapter": {
+      "target": "@codex/codex:test-l1-integration",
+      "changedRows": 3,
+      "red": 3,
+      "standingGreen": 22,
+      "behaviors": [
+        "interrupted",
+        "failed",
+        "missing-output binding with unrelated output"
+      ]
+    },
+    "l2": {
+      "target": "@codex/daemon:test-observation-l2",
+      "changedRows": 3,
+      "red": 3,
+      "boundaries": [
+        "real HTTP serialization and safe errors",
+        "real PostgreSQL listener termination/reconnect with immutable terminal history and replay",
+        "real stdio interrupted binding no new agent child cleanup"
+      ]
+    },
+    "l3": {
+      "target": "@codex/daemon:test-observation-l3",
+      "sourceScenarios": 3,
+      "selected": 3,
+      "executed": 3,
+      "red": 3,
+      "runner": "repository Cucumber physical feature",
+      "generated": "not applicable (direct physical Gherkin)"
+    }
+  },
+  "cleanup": "close owned HTTP/listeners/provider process and fixture database/roles; zero live product mutations",
+  "limitations": [
+    "Historical observer exception unknown",
+    "No UI claim; API/daemon repair only",
+    "No mobile product",
+    "No paid model tests or original workflow retry"
+  ]
+}

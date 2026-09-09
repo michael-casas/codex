@@ -1,0 +1,47 @@
+
+> nx run @codex/codex:test-l1-integration
+
+> vitest run --config packages/codex/vitest.config.ts src/app-server-workflow/__tests__/app-server-workflow-executor.test.ts src/app-server-workflow/__tests__/app-server-visibility.test.ts src/app-server-workflow/__tests__/readable-provider.test.ts src/app-server-workflow/__tests__/readable-recovery.test.ts src/app-server-workflow/__tests__/workspace-temp-policy.test.ts --testNamePattern='L1:INTEGRATION'
+
+(node:61189) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+
+ RUN  v4.1.10 /Users/mcasa_atlantis/.codex/.agent/workspaces/a6af660bc1aaabc125dd01f1ae284c274f8032918332a80b359812822ae49091/packages/codex
+
+(node:61193) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:61191) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:61195) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:61192) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:61194) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+ ✓ src/app-server-workflow/__tests__/readable-recovery.test.ts (11 tests) 4ms
+ ✓ src/app-server-workflow/__tests__/readable-provider.test.ts (2 tests) 4ms
+ ✓ src/app-server-workflow/__tests__/workspace-temp-policy.test.ts (2 tests) 6ms
+ ✓ src/app-server-workflow/__tests__/app-server-visibility.test.ts (2 tests) 7ms
+ ✓ src/app-server-workflow/__tests__/app-server-workflow-executor.test.ts (8 tests) 2021ms
+     ✓ HOSTR1 bounds four unavailable stop obligations and rejects new work on a dead feed  2009ms
+
+ Test Files  5 passed (5)
+      Tests  25 passed (25)
+   Start at  23:28:07
+   Duration  2.22s (transform 287ms, setup 0ms, import 412ms, tests 2.04s, environment 0ms)
+
+
+
+
+ NX   Successfully ran target test-l1-integration for project @codex/codex
+
+
+  Run duration:      2.5s
+  Cache:             Skipped (--skip-nx-cache)
+  Critical path:     2.4s (1 task)
+  Recoverable time:  <1ms
+
+  Recommendations:
+    - Cache: drop --skip-nx-cache to restore unchanged tasks instantly.
+    - Speed up or split the longest tasks on the critical path:
+        @codex/codex:test-l1-integration    2.4s

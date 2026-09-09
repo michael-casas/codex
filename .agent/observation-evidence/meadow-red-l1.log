@@ -1,0 +1,174 @@
+
+> nx run @codex/daemon:test-observation-l1
+
+> vitest run --config apps/daemon/vitest.config.ts src/visibility/__tests__/observer-recovery.test.ts --reporter=default --reporter=json --outputFile=test-output/observation/l1.json
+
+(node:59092) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+
+ RUN  v4.1.10 /Users/mcasa_atlantis/.codex/.agent/workspaces/a6af660bc1aaabc125dd01f1ae284c274f8032918332a80b359812822ae49091/apps/daemon
+
+(node:59097) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+ ❯ src/visibility/__tests__/observer-recovery.test.ts (7 tests | 6 failed) 21ms
+     × OBS-L1-PARTIAL retries partial ingestion from clean projection without losing the failed observation 6ms
+     × OBS-L1-LISTENER reconnects and catches missed terminal events with retained redacted diagnostics 1ms
+     × OBS-L1-BOUND exhausts three recovery attempts and remains unavailable 0ms
+     × OBS-L1-CONFLICT detects changed identities on rewind and never silently skips them 1ms
+     ✓ OBS-L1-REWIND retains identical payloads through replay and late independent events 12ms
+     × OBS-L1-INVALID fails closed on invalid source sequence without retry 1ms
+     × OBS-L1-STOP cancels scheduled recovery and rejects stopped observer reads 0ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 6 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/visibility/__tests__/observer-recovery.test.ts > [L1:INTEGRATION] observer recovery > OBS-L1-PARTIAL retries partial ingestion from clean projection without losing the failed observation
+AssertionError: expected Error: secret connection string { …(1) } to match object { Object (code) }
+
+- Expected
++ Received
+
+- {
+-   "code": "VISIBILITY_OBSERVER_UNAVAILABLE",
++ Error {
++   "code": "ECONNRESET",
+  }
+
+ ❯ src/visibility/__tests__/observer-recovery.test.ts:34:68
+     32|       await f.daemon.start(); f.events.push(source(2, 'workflow.failed…
+     33|       f.ingest.mockRejectedValueOnce(transient()); f.notify('2'); awai…
+     34|       await expect(Promise.resolve().then(()=>f.daemon.snapshot())).re…
+       |                                                                    ^
+     35|       await vi.advanceTimersByTimeAsync(10_000);
+     36|       expect(f.stored.get('source:event-2')?.status).toBe('failed');
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/6]⎯
+
+ FAIL  src/visibility/__tests__/observer-recovery.test.ts > [L1:INTEGRATION] observer recovery > OBS-L1-LISTENER reconnects and catches missed terminal events with retained redacted diagnostics
+AssertionError: expected Error: secret connection string { …(1) } to match object { Object (code) }
+
+- Expected
++ Received
+
+- {
+-   "code": "VISIBILITY_OBSERVER_UNAVAILABLE",
++ Error {
++   "code": "ECONNRESET",
+  }
+
+ ❯ src/visibility/__tests__/observer-recovery.test.ts:45:90
+     43|     try {
+     44|       await f.daemon.start(); f.fail(transient()); f.events.push(sourc…
+     45|       await expect(Promise.resolve().then(()=>f.daemon.wait({afterCurs…
+       |                                                                                          ^
+     46|       await vi.advanceTimersByTimeAsync(10_000);
+     47|       expect(f.listen).toHaveBeenCalledTimes(2); expect(f.close).toHav…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/6]⎯
+
+ FAIL  src/visibility/__tests__/observer-recovery.test.ts > [L1:INTEGRATION] observer recovery > OBS-L1-BOUND exhausts three recovery attempts and remains unavailable
+AssertionError: expected "vi.fn()" to be called 6 times, but got 3 times
+ ❯ src/visibility/__tests__/observer-recovery.test.ts:58:22
+     56|       await f.daemon.start(); f.page.mockRejectedValue(transient()); f…
+     57|       await vi.advanceTimersByTimeAsync(60_000);
+     58|       expect(f.page).toHaveBeenCalledTimes(6);
+       |                      ^
+     59|       expect(status(f.daemon)).toMatchObject({state:'failed', recovery…
+     60|       await expect(Promise.resolve().then(()=>f.daemon.snapshot())).re…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/6]⎯
+
+ FAIL  src/visibility/__tests__/observer-recovery.test.ts > [L1:INTEGRATION] observer recovery > OBS-L1-CONFLICT detects changed identities on rewind and never silently skips them
+AssertionError: promise resolved "{ cursor: '1', changed: true }" instead of rejecting
+
+- Expected
++ Received
+
+- Error {
+-   "message": "rejected promise",
++ {
++   "changed": true,
++   "cursor": "1",
+  }
+
+ ❯ src/visibility/__tests__/observer-recovery.test.ts:68:68
+     66|     try {
+     67|       await f.daemon.start(); f.events[0]=source(1,'workflow.failed');…
+     68|       await expect(Promise.resolve().then(()=>f.daemon.snapshot())).re…
+       |                                                                    ^
+     69|       expect(status(f.daemon)).toMatchObject({state:'failed', recovery…
+     70|       expect(f.stored.get('source:event-1')?.status).toBe('running');
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/6]⎯
+
+ FAIL  src/visibility/__tests__/observer-recovery.test.ts > [L1:INTEGRATION] observer recovery > OBS-L1-INVALID fails closed on invalid source sequence without retry
+AssertionError: expected SyntaxError: Cannot convert not-a-sequenc… to match object { code: 'VISIBILITY_OBSERVER_FAILED' }
+
+- Expected
++ Received
+
+- {
+-   "code": "VISIBILITY_OBSERVER_FAILED",
++ SyntaxError {
++   "message": "Cannot convert not-a-sequence to a BigInt",
+  }
+
+ ❯ src/visibility/__tests__/observer-recovery.test.ts:88:68
+     86|       await f.daemon.start(); f.page.mockResolvedValue([{...source(2),…
+     87|       await vi.advanceTimersByTimeAsync(60_000);
+     88|       await expect(Promise.resolve().then(()=>f.daemon.snapshot())).re…
+       |                                                                    ^
+     89|       expect(status(f.daemon)).toMatchObject({state:'failed',recoveryA…
+     90|       expect(f.stored.size).toBe(1);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/6]⎯
+
+ FAIL  src/visibility/__tests__/observer-recovery.test.ts > [L1:INTEGRATION] observer recovery > OBS-L1-STOP cancels scheduled recovery and rejects stopped observer reads
+AssertionError: expected Error: secret connection string { …(1) } to match object { Object (code) }
+
+- Expected
++ Received
+
+- {
+-   "code": "VISIBILITY_OBSERVER_UNAVAILABLE",
++ Error {
++   "code": "ECONNRESET",
+  }
+
+ ❯ src/visibility/__tests__/observer-recovery.test.ts:99:68
+     97|       await vi.advanceTimersByTimeAsync(60_000);
+     98|       expect(f.listen).toHaveBeenCalledTimes(1); expect(f.close).toHav…
+     99|       await expect(Promise.resolve().then(()=>f.daemon.snapshot())).re…
+       |                                                                    ^
+    100|     } finally {vi.useRealTimers();}
+    101|   });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[6/6]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  6 failed | 1 passed (7)
+   Start at  23:21:41
+   Duration  149ms (transform 49ms, setup 0ms, import 62ms, tests 21ms, environment 0ms)
+
+JSON report written to /Users/mcasa_atlantis/.codex/.agent/workspaces/a6af660bc1aaabc125dd01f1ae284c274f8032918332a80b359812822ae49091/apps/daemon/test-output/observation/l1.json
+Warning: command "vitest run --config apps/daemon/vitest.config.ts src/visibility/__tests__/observer-recovery.test.ts --reporter=default --reporter=json --outputFile=test-output/observation/l1.json" exited with non-zero status code
+
+
+ NX   Running target test-observation-l1 for project @codex/daemon failed
+
+Failed tasks:
+
+- @codex/daemon:test-observation-l1
+
+Hint: run the command with --verbose for more details.
+
+  Run duration:      370ms
+  Cache:             Skipped (--skip-nx-cache)
+  Critical path:     350ms (1 task)
+  Recoverable time:  <1ms
+
+  Recommendations:
+    - Cache: drop --skip-nx-cache to restore unchanged tasks instantly.
+    - Speed up or split the longest tasks on the critical path:
+        @codex/daemon:test-observation-l1    350ms
+error: "nx" exited with code 1
