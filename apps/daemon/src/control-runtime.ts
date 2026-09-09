@@ -283,7 +283,7 @@ export async function createProductionControlRuntime(
   const sourceModule = createWorkflowSourceModule(
     projects.workflowSources,
     projects.repositories,
-    (command) => workflows.runWorkflow(command),
+    (command, authorization) => workflows.runWorkflow(command, authorization),
   );
   const workflows = createProductionWorkflowExecutionDaemon(
     processDatabaseUrl,
@@ -291,6 +291,7 @@ export async function createProductionControlRuntime(
     {
       hosts,
       workspaces,
+      registerRuntime: (runtime, ownerAgentId) => messaging.store.registerOwned(runtime, ownerAgentId),
       resolveWorkflow: (workflowRef) =>
         workflowRef.startsWith('source.')
           ? sourceModule.resolveSource(workflowRef)
@@ -337,6 +338,7 @@ export async function createProductionControlRuntime(
     delegateAgent: async (command, authorization) =>
       delegation.delegateAgent(
         (await projects.authorizeCommand(command, authorization)) as never,
+        authorization,
       ),
     sendAgentMessage: (kind, command, authorization) =>
       messenger[kind](command as never, authorization),
@@ -356,6 +358,7 @@ export async function createProductionControlRuntime(
         );
       return workflows.runWorkflow(
         (await projects.authorizeCommand(command, authorization)) as never,
+        authorization,
       );
     },
     cancelAgent: (delegationId) => delegation.cancelAgent(delegationId),

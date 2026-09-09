@@ -9,6 +9,7 @@ import { PgBossDeliveryRuntime } from '@codex/delivery';
 import {
   createDurableWorkflowClient,
   createRuntimeVisibilityIngestor,
+  type AgentAuthorization,
 } from '@codex/process';
 import {
   executeWorkflow,
@@ -52,7 +53,10 @@ export interface WorkflowExecutionDaemonDependencies {
   readonly hosts: { connect(hostId: string): Promise<unknown> };
   readonly workspaces: {
     acquire(
-      input: RunWorkflowCommand['workspace'] & { hostId: string },
+      input: RunWorkflowCommand['workspace'] & {
+        hostId: string;
+        executionId?: string;
+      },
     ): Promise<{ workspaceRef: string }>;
     resolve(
       workspaceRef: string,
@@ -63,6 +67,10 @@ export interface WorkflowExecutionDaemonDependencies {
     definition: WorkflowDefinition;
     sourceDigest: `sha256:${string}`;
   }>;
+  readonly registerRuntime?: (
+    runtime: { agentId: string; hostId: string; threadId: string },
+    ownerAgentId: string,
+  ) => Promise<void>;
   readonly createExecutor: (input: {
     connection: unknown;
     cwd: string;
@@ -157,7 +165,7 @@ export function createWorkflowExecutionDaemon(
   ): Promise<void> {
     const prepared = prepareWorkflowRun(data.command);
     if (data.runId !== prepared.runId) throw new Error('WORKFLOW_JOB_INVALID');
-    const prior = await deps.store.events(prepared.streamId, '0');
+    const prior = await deps.store.events(`workflow:${prepared.runId}`, '0');
     if (prior.some(({ kind }) => terminal(kind))) return;
     if (prior.some(({ kind }) => kind === 'workflow.cancel.requested')) {
       await append(prepared.runId, 'cancelled', 'workflow.cancelled', {
@@ -167,8 +175,20 @@ export function createWorkflowExecutionDaemon(
     }
 
     const attempt =
-      prior.filter(({ kind }) => kind === 'workflow.execution.started').length +
-      1;
+      prior.reduce((latest, event) => {
+        const value = event.payload.attempt;
+        return (event.kind === 'workflow.execution.attempted' ||
+          event.kind === 'workflow.execution.started') &&
+          typeof value === 'number' &&
+          Number.isSafeInteger(value)
+          ? Math.max(latest, value)
+          : latest;
+      }, 0) + 1;
+    const admission = await deps.store.events(prepared.streamId, '0');
+    const ownerAgentId = admission.find(
+      ({ kind }) => kind === 'workflow.accepted',
+    )?.payload.ownerAgentId;
+    const registeredThreads = new Set<string>();
     const bindings = new Map<string, WorkflowRuntimeBinding>();
     for (const event of prior) {
       if (event.kind !== 'workflow.runtime.binding') continue;
@@ -186,12 +206,16 @@ export function createWorkflowExecutionDaemon(
     const controller = new AbortController();
     controllers.set(prepared.runId, controller);
     const cancellationWatchController = new AbortController();
+    let watchError: unknown;
     const cancellationWatch = watchCancellation(
       prepared.runId,
       prior.at(-1)?.sequence.toString() ?? '0',
       controller,
       cancellationWatchController.signal,
-    );
+    ).catch((error: unknown) => {
+      watchError = error;
+      controller.abort();
+    });
     let lease: { workspaceRef: string } | undefined;
     let executor: WorkflowRuntimeExecutor | undefined;
     let visibilityOrdinal = 0;
@@ -235,9 +259,48 @@ export function createWorkflowExecutionDaemon(
         occurredAt: new Date().toISOString(),
       });
     };
+    let stage = 'acquire';
+    let primaryError: unknown;
+    let cleanupError: unknown;
+    const diagnostic = async (kind: string, stage: string, error: unknown) => {
+      const code = payload(error).code;
+      const safeCodes = [
+        'INVALID_LEASE',
+        'LEASE_CONFLICT',
+        'LEASE_NOT_FOUND',
+        'LEASE_OWNERSHIP_MISMATCH',
+        'PROVIDER_FAILURE',
+        'REVISION_MISMATCH',
+        'UNSAFE_WORKSPACE',
+        'WORKFLOW_SOURCE_DIGEST_MISMATCH',
+      ];
+      await append(
+        prepared.runId,
+        `attempt-${attempt}-${kind}-${stage}`,
+        kind,
+        {
+          runId: prepared.runId,
+          attempt,
+          stage,
+          code:
+            typeof code === 'string' && safeCodes.includes(code)
+              ? code
+              : kind === 'workflow.cleanup.error'
+                ? 'WORKFLOW_CLEANUP_FAILED'
+                : 'WORKFLOW_SETUP_FAILED',
+        },
+      );
+    };
     try {
+      await append(
+        prepared.runId,
+        `attempt-${attempt}-attempted`,
+        'workflow.execution.attempted',
+        { runId: prepared.runId, attempt },
+      );
       lease = await deps.workspaces.acquire({
         ...prepared.command.workspace,
+        executionId: prepared.runId,
         hostId: prepared.command.hostId,
       });
       await append(
@@ -251,13 +314,20 @@ export function createWorkflowExecutionDaemon(
           workspaceRef: lease.workspaceRef,
         },
       );
+      if (controller.signal.aborted && !watchError)
+        throw new Error('WORKFLOW_SETUP_CANCELLED');
+      stage = 'resolve';
       const [{ cwd, tempDirectory }, source, connection] = await Promise.all([
         deps.workspaces.resolve(lease.workspaceRef),
         deps.resolveWorkflow(prepared.command.workflowRef),
         deps.hosts.connect(prepared.command.hostId),
       ]);
+      if (controller.signal.aborted && !watchError)
+        throw new Error('WORKFLOW_SETUP_CANCELLED');
+      if (watchError) throw watchError;
       if (source.sourceDigest !== prepared.command.sourceDigest)
         throw new Error('WORKFLOW_SOURCE_DIGEST_MISMATCH');
+      stage = 'executor';
       executor = deps.createExecutor({
         connection,
         cwd,
@@ -386,6 +456,24 @@ export function createWorkflowExecutionDaemon(
               const threadId = event.threadId ?? binding?.threadId;
               const turnId = event.turnId ?? binding?.turnId;
               if (threadId) {
+                if (
+                  typeof ownerAgentId === 'string' &&
+                  deps.registerRuntime &&
+                  !registeredThreads.has(threadId)
+                ) {
+                  await deps.registerRuntime(
+                    {
+                      agentId: workflowVisibilityAgentId(
+                        prepared.runId,
+                        event.nodeId,
+                      ),
+                      hostId: prepared.command.hostId,
+                      threadId,
+                    },
+                    ownerAgentId,
+                  );
+                  registeredThreads.add(threadId);
+                }
                 const next = {
                   nodeId: event.nodeId,
                   threadId,
@@ -476,6 +564,7 @@ export function createWorkflowExecutionDaemon(
           artifacts: result.artifacts,
         });
       } catch (error) {
+        if (watchError) throw watchError;
         if (controller.signal.aborted)
           await append(prepared.runId, 'cancelled', 'workflow.cancelled', {
             runId: prepared.runId,
@@ -487,24 +576,75 @@ export function createWorkflowExecutionDaemon(
             diagnostic: 'execution-failed',
           });
       }
+    } catch (error) {
+      primaryError = error;
+      await diagnostic('workflow.execution.error', stage, error).catch(
+        () => undefined,
+      );
+      if (controller.signal.aborted && !watchError) {
+        await append(prepared.runId, 'cancelled', 'workflow.cancelled', {
+          runId: prepared.runId,
+        });
+      } else throw error;
     } finally {
       cancellationWatchController.abort();
       await cancellationWatch;
       controllers.delete(prepared.runId);
-      try {
-        await executor?.close();
-      } finally {
+      for (const [cleanupStage, cleanup] of [
+        [
+          'cancellation-watch',
+          async () => {
+            if (watchError) throw watchError;
+          },
+        ],
+        ['executor', async () => executor?.close()],
+        ['observations', async () => observations.stop()],
+        [
+          'release',
+          async () => {
+            if (!lease) return;
+            if (
+              primaryError &&
+              bindings.size > 0 &&
+              (!controller.signal.aborted || watchError)
+            ) {
+              await append(
+                prepared.runId,
+                `attempt-${attempt}-lease-retained`,
+                'workflow.workspace.retained',
+                {
+                  runId: prepared.runId,
+                  attempt,
+                  reason: 'runtime-reconciliation-required',
+                },
+              );
+              return;
+            }
+            await deps.workspaces.release(lease.workspaceRef);
+          },
+        ],
+      ] as const) {
         try {
-          await observations.stop();
-        } finally {
-          if (lease) await deps.workspaces.release(lease.workspaceRef);
+          await cleanup();
+        } catch (error) {
+          cleanupError ??= error;
+          await diagnostic('workflow.cleanup.error', cleanupStage, error).catch(
+            () => undefined,
+          );
         }
       }
     }
+    if (!primaryError && cleanupError) throw cleanupError;
   }
 
-  const runWorkflow = (command: RunWorkflowCommand) =>
-    commandClient.runWorkflow(command);
+  const runWorkflow = async (
+    command: RunWorkflowCommand,
+    authorization?: AgentAuthorization,
+  ) => {
+    if (authorization && !authorization.scopes.includes('control:workflow'))
+      throw new Error('WORKFLOW_UNAUTHORIZED');
+    return commandClient.runWorkflow(command, authorization?.actorAgentId);
+  };
 
   return {
     runWorkflow,
@@ -535,7 +675,10 @@ export function createWorkflowExecutionDaemon(
         const prepared = prepareWorkflowRun(data.command);
         if (data.runId !== prepared.runId)
           throw new Error('WORKFLOW_JOB_INVALID');
-        const prior = await deps.store.events(prepared.streamId, '0');
+        const prior = await deps.store.events(
+          `workflow:${prepared.runId}`,
+          '0',
+        );
         if (prior.some(({ kind }) => terminal(kind))) return;
         await append(prepared.runId, 'delivery-exhausted', 'workflow.failed', {
           runId: prepared.runId,

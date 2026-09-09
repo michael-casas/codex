@@ -1,3 +1,4 @@
+import type { AgentAuthorization } from '../agent-directory/agent-directory.js';
 import { createHash } from 'node:crypto';
 
 const ID = /^[A-Za-z0-9][A-Za-z0-9._:-]{0,255}$/;
@@ -24,12 +25,12 @@ export interface AgentHandle { readonly delegationId: string; readonly execution
 export interface DelegationRecord {
   readonly delegationId: string; readonly executionId: string; readonly agentId: string; readonly fingerprint: string;
   readonly command: DelegateAgentCommand; readonly state: DelegationState; readonly workspaceRef?: string; readonly threadId?: string;
-  readonly sessionId?: string; readonly activeTurnId?: string;
+  readonly sessionId?: string; readonly activeTurnId?: string; readonly ownerAgentId?: string;
 }
 
 export interface DelegationRepository {
-  reserve(command: DelegateAgentCommand, fingerprint: string): Promise<{ record: DelegationRecord; replayed: boolean }>;
-  bind(delegationId: string, binding: { hostId: string; workspaceRef: string; threadId: string; sessionId: string; activeTurnId: string }): Promise<DelegationRecord>;
+  reserve(command: DelegateAgentCommand, fingerprint: string, ownerAgentId?: string): Promise<{ record: DelegationRecord; replayed: boolean }>;
+  bind(delegationId: string, binding: { hostId: string; workspaceRef: string; threadId: string; sessionId?: string; activeTurnId: string }): Promise<DelegationRecord>;
   read(delegationId: string): Promise<DelegationRecord | undefined>;
   transition(delegationId: string, state: DelegationState, activeTurnId?: string): Promise<DelegationRecord>;
 }
@@ -96,11 +97,13 @@ export function reduceDelegationEvent(current: DelegationState, event: { type: s
 
 export function createDelegationService(deps: DelegationServiceDependencies) {
   const inFlight = new Map<string, Promise<AgentHandle>>();
-  const delegateAgent = async (raw: DelegateAgentCommand): Promise<AgentHandle> => {
+  const delegateAgent = async (raw: DelegateAgentCommand, authorization?: AgentAuthorization): Promise<AgentHandle> => {
+    if (authorization && !authorization.scopes.includes('control:delegate')) throw new DelegationError('DELEGATION_UNAUTHORIZED', 'Delegation is not authorized.');
     const command = validate(raw), digest = fingerprint(command);
-    const active = inFlight.get(command.idempotencyKey); if (active) return active;
+    const flightKey = JSON.stringify([command.idempotencyKey, digest, authorization?.actorAgentId]);
+    const active = inFlight.get(flightKey); if (active) return active;
     const operation = (async () => {
-      const reserved = await deps.repository.reserve(command, digest);
+      const reserved = await deps.repository.reserve(command, digest, authorization?.actorAgentId);
       if (reserved.replayed && reserved.record.threadId) return handle(reserved.record);
       const lease = await deps.workspaces.acquire({ ...command.workspace, hostId: command.hostId });
       let providerAccepted = false;
@@ -111,7 +114,7 @@ export function createDelegationService(deps: DelegationServiceDependencies) {
         });
         providerAccepted = true;
         const turn = await connection.request<{ turn: { id: string } }>('turn/start', { threadId: started.thread.id, model: command.runtimeProfile.model, effort: command.runtimeProfile.reasoningEffort, sandboxPolicy: providerSandboxPolicy(command, cwd), input: [{ type: 'text', text: command.prompt }] });
-        const bound = await deps.repository.bind(reserved.record.delegationId, { hostId: command.hostId, workspaceRef: lease.workspaceRef, threadId: started.thread.id, sessionId: started.thread.sessionId ?? started.thread.id, activeTurnId: turn.turn.id });
+        const bound = await deps.repository.bind(reserved.record.delegationId, { hostId: command.hostId, workspaceRef: lease.workspaceRef, threadId: started.thread.id, ...(started.thread.sessionId ? { sessionId: started.thread.sessionId } : {}), activeTurnId: turn.turn.id });
         return handle(bound);
       } catch (error) {
         if (providerAccepted || providerAmbiguous(error)) await deps.repository.transition(reserved.record.delegationId, 'ambiguous');
@@ -119,8 +122,8 @@ export function createDelegationService(deps: DelegationServiceDependencies) {
         throw error;
       }
     })();
-    inFlight.set(command.idempotencyKey, operation);
-    try { return await operation; } finally { inFlight.delete(command.idempotencyKey); }
+    inFlight.set(flightKey, operation);
+    try { return await operation; } finally { inFlight.delete(flightKey); }
   };
 
   return {

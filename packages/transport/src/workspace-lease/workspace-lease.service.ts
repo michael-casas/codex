@@ -16,6 +16,7 @@ export interface WorkspaceLeaseAcquire {
   readonly repositoryId: string;
   readonly baseRevision: string;
   readonly assignmentId: string;
+  readonly executionId?: string;
 }
 
 export interface WorkspaceLeaseResult {
@@ -104,6 +105,7 @@ const INPUT_KEYS = new Set([
   'repositoryId',
   'baseRevision',
   'assignmentId',
+  'executionId',
 ]);
 
 const fail = (code: WorkspaceLeaseErrorCode, message: string) =>
@@ -123,6 +125,8 @@ function validateInput(value: WorkspaceLeaseAcquire): WorkspaceLeaseAcquire {
     !IDENTITY.test(String(input.hostId ?? '')) ||
     !IDENTITY.test(String(input.repositoryId ?? '')) ||
     !IDENTITY.test(String(input.assignmentId ?? '')) ||
+    (input.executionId !== undefined &&
+      !IDENTITY.test(String(input.executionId))) ||
     !REVISION.test(String(input.baseRevision ?? ''))
   ) {
     throw fail('INVALID_LEASE', 'Invalid workspace lease identity');
@@ -149,6 +153,7 @@ function digest(input: WorkspaceLeaseAcquire): string {
         input.repositoryId,
         input.baseRevision,
         input.assignmentId,
+        ...(input.executionId ? [input.executionId] : []),
       ]),
     )
     .digest('hex');
@@ -211,6 +216,9 @@ function marker(recordValue: LeaseRecord): string {
     repositoryId: recordValue.repositoryId,
     baseRevision: recordValue.baseRevision,
     assignmentId: recordValue.assignmentId,
+    ...(recordValue.executionId
+      ? { executionId: recordValue.executionId }
+      : {}),
   });
 }
 
@@ -360,17 +368,9 @@ export function createWorkspaceLeaseService(
     const workspacePath = join(leaseRoot, hash);
     const metadataPath = join(leaseRoot, `${hash}.git`);
     const tempDirectory = join(workspacePath, '.codex-workspace-tmp');
-    if (
-      relative(leaseRoot, workspacePath).startsWith('..') ||
-      (await pathExists(host, leaseRoot, hash)) ||
-      (await pathExists(host, leaseRoot, `${hash}.git`))
-    ) {
-      throw fail('UNSAFE_WORKSPACE', 'Workspace path is not empty');
-    }
-
     const lease: LeaseRecord = {
       ...input,
-      assignmentKey: `${input.hostId}\0${input.repositoryId}\0${input.assignmentId}`,
+      assignmentKey: `${input.hostId}\0${input.repositoryId}\0${input.assignmentId}${input.executionId ? `\0${input.executionId}` : ''}`,
       checkoutPath,
       leaseRoot,
       metadataPath,
@@ -379,6 +379,55 @@ export function createWorkspaceLeaseService(
       workspaceRef,
       host,
     };
+    if (relative(leaseRoot, workspacePath).startsWith('..'))
+      throw fail('UNSAFE_WORKSPACE', 'Unsafe workspace location');
+    const existingWorkspace = await pathExists(host, leaseRoot, hash);
+    const existingMetadata = await pathExists(host, leaseRoot, `${hash}.git`);
+    if (existingWorkspace || existingMetadata) {
+      // Only execution-scoped leases have an admitted retry identity. Never adopt legacy paths.
+      if (!input.executionId || !existingWorkspace || !existingMetadata)
+        throw fail('UNSAFE_WORKSPACE', 'Workspace path is not empty');
+      for (const path of [workspacePath, metadataPath, tempDirectory]) {
+        const info = await metadata(host, path);
+        if (!info.isDirectory || info.isSymlink)
+          throw fail(
+            'LEASE_OWNERSHIP_MISMATCH',
+            'Workspace ownership mismatch',
+          );
+      }
+      const markerPath = join(workspacePath, '.codex-workspace-lease.json');
+      const info = await metadata(host, markerPath);
+      if (info.isSymlink || info.isDirectory)
+        throw fail('LEASE_OWNERSHIP_MISMATCH', 'Workspace marker unsafe');
+      const contents = record(
+        await providerRequest(host, 'fs/readFile', { path: markerPath }),
+      );
+      if (
+        typeof contents?.dataBase64 !== 'string' ||
+        Buffer.from(contents.dataBase64, 'base64').toString() !== marker(lease)
+      )
+        throw fail('LEASE_OWNERSHIP_MISMATCH', 'Workspace marker mismatch');
+      const common = await command(
+        host,
+        [
+          'git',
+          '-C',
+          workspacePath,
+          'rev-parse',
+          '--path-format=absolute',
+          '--git-common-dir',
+        ],
+        leaseRoot,
+      );
+      if (common.exitCode !== 0 || common.stdout.trim() !== metadataPath)
+        throw fail(
+          'LEASE_OWNERSHIP_MISMATCH',
+          'Workspace repository ownership mismatch',
+        );
+      if (!(await verifyWorkspace(lease)))
+        throw fail('REVISION_MISMATCH', 'Workspace revision mismatch');
+      return lease;
+    }
     let created = false;
     try {
       const cloned = await command(
@@ -456,7 +505,7 @@ export function createWorkspaceLeaseService(
   return {
     async acquire(rawInput) {
       const input = validateInput(rawInput);
-      const assignmentKey = `${input.hostId}\0${input.repositoryId}\0${input.assignmentId}`;
+      const assignmentKey = `${input.hostId}\0${input.repositoryId}\0${input.assignmentId}${input.executionId ? `\0${input.executionId}` : ''}`;
       const fingerprint = digest(input);
       const active = activeByAssignment.get(assignmentKey);
       if (active) {

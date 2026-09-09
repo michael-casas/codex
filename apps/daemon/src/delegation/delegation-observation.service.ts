@@ -202,8 +202,8 @@ export function createDelegationObservation(
   }
 
   const observedRepository: DelegationRepository = {
-    async reserve(command, fingerprint) {
-      const reserved = await repository.reserve(command, fingerprint);
+    async reserve(command, fingerprint, ownerAgentId) {
+      const reserved = await repository.reserve(command, fingerprint, ownerAgentId);
       await publish(reserved.record);
       return reserved;
     },

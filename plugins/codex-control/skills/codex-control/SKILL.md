@@ -145,6 +145,9 @@ labels. Pass actual upstream outputs through `input`; prose claiming a handoff
 does not establish one. Keep final artifact export inside the workflow before
 lease release, using only its exact owned paths. A model-authored filesystem
 path is not a download URL or a published preview.
+An `artifact.path` beginning `control://` is an opaque archive reference, not a
+local filename. Keep it as provenance; use approved original filesystem inputs
+when an agent must read local files.
 
 ## Open the viewer
 
