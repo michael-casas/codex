@@ -554,5 +554,13 @@
     ],
     "readback": true,
     "integrityCheck": "ok"
+  },
+  "candidateRevision": "92364df4a95df37a6c7d74cd88be298e53ce0855",
+  "pullRequest": "https://github.com/michael-casas/codex/pull/9",
+  "hooks": {
+    "commitExitCode": 0,
+    "bypassed": false,
+    "affectedTask": "completed",
+    "note": "lint-staged emitted ignored .agent restaging warning; commit succeeded; staged file and frozen hash readback verified"
   }
 }
