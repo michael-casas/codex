@@ -1,3 +1,5 @@
+import { createHash } from 'node:crypto';
+import { classifyObservationError } from './observation-error.js';
 import type { RuntimeVisibilityRepository } from '@codex/process';
 import {
   RuntimeVisibilityError,
@@ -11,46 +13,29 @@ import {
 
 type ObserverFailure = {
   readonly code: string;
+  readonly causeCode: string;
+  readonly errorClass: string;
+  readonly sourceCursor?: string;
+  readonly sourceEventId?: string;
   readonly stage: 'listener' | 'reconcile';
   readonly cursor: string;
   readonly occurredAt: string;
   readonly retryable: boolean;
 };
 
-// Only known connection failures are transient. Invalid data and unknown defects
-// remain fail-closed; retrying them must not silently skip an immutable event.
-function classify(error: unknown): Pick<ObserverFailure, 'code' | 'retryable'> {
-  const code =
-    error && typeof error === 'object' && 'code' in error
-      ? error.code
-      : undefined;
-  if (
-    typeof code === 'string' &&
-    [
-      'ECONNRESET',
-      'ECONNREFUSED',
-      'ETIMEDOUT',
-      'EPIPE',
-      'EAI_AGAIN',
-      '08000',
-      '08001',
-      '08003',
-      '08006',
-      '57P01',
-      '57P02',
-      '57P03',
-      'VISIBILITY_SOURCE_DISCONNECTED',
-    ].includes(code)
-  )
-    return { code: 'VISIBILITY_SOURCE_UNAVAILABLE', retryable: true };
-  return {
-    code:
-      code === 'VISIBILITY_EVENT_CONFLICT' ||
-      code === 'VISIBILITY_EVENT_INVALID'
-        ? code
-        : 'VISIBILITY_OBSERVER_FAILED',
-    retryable: false,
-  };
+// Source fingerprints are private, bounded, and independent of projector display context.
+function fingerprint(event: VisibilitySourceEvent): string {
+  return createHash('sha256')
+    .update(
+      JSON.stringify(event, (_key, value) =>
+        value && typeof value === 'object' && !Array.isArray(value)
+          ? Object.fromEntries(
+              Object.entries(value).sort(([a], [b]) => a.localeCompare(b)),
+            )
+          : value,
+      ),
+    )
+    .digest('hex');
 }
 
 export function createRuntimeVisibilityDaemon(
@@ -71,6 +56,8 @@ export function createRuntimeVisibilityDaemon(
   const service = createRuntimeVisibilityService(repository);
   let project = createControlVisibilityProjector();
   let cursor = '0';
+  const recent = new Map<string, string>();
+  let activeSource: VisibilitySourceEvent | undefined;
   let failure: ObserverFailure | undefined;
   let lastFailure: ObserverFailure | undefined;
   let failureVersion = 0;
@@ -85,6 +72,7 @@ export function createRuntimeVisibilityDaemon(
   let dirty = false;
   let earliest: string | undefined;
   const resetProjection = () => {
+    recent.clear();
     cursor = '0';
     project = createControlVisibilityProjector();
   };
@@ -92,12 +80,45 @@ export function createRuntimeVisibilityDaemon(
     if (!options.sourcePage || closed) return;
     // Stateful display context must be rebuilt in source order on rewind. Reusing
     // its sequence guard hides changed identities and partially failed ingestion.
-    if (hint && BigInt(hint) <= BigInt(cursor)) resetProjection();
+    if (hint && BigInt(hint) <= BigInt(cursor)) {
+      // Verify source bytes before skipping work. Missing/evicted sequences require
+      // the conservative replay, including late commits coalesced behind a duplicate.
+      let checked = (BigInt(hint) - 1n).toString();
+      while (BigInt(checked) < BigInt(cursor)) {
+        activeSource = undefined;
+        const before = checked;
+        const page = await options.sourcePage(checked);
+        let replay = !page.length;
+        for (const event of page) {
+          if (BigInt(event.sequence) > BigInt(cursor)) break;
+          activeSource = event;
+          const known = recent.get(event.sequence);
+          if (!known) {
+            replay = true;
+            break;
+          }
+          if (known !== fingerprint(event))
+            throw new RuntimeVisibilityError(
+              'VISIBILITY_EVENT_CONFLICT',
+              'Visibility source identity changed.',
+            );
+          if (BigInt(event.sequence) <= BigInt(checked))
+            throw new Error('Invalid visibility source sequence.');
+          checked = event.sequence;
+        }
+        if (replay || checked === before) {
+          resetProjection();
+          break;
+        }
+      }
+    }
     let after = cursor;
     while (!closed) {
+      activeSource = undefined;
       const events = await options.sourcePage(after);
       if (!events.length) return;
       for (const event of events) {
+        activeSource = event;
         if (
           !/^[1-9]\d*$/.test(event.sequence) ||
           BigInt(event.sequence) <= BigInt(after)
@@ -105,6 +126,8 @@ export function createRuntimeVisibilityDaemon(
           throw new Error('Invalid visibility source sequence.');
         for (const observation of project(event))
           await repository.ingest(observation);
+        recent.set(event.sequence, fingerprint(event));
+        if (recent.size > 4096) recent.delete(recent.keys().next().value!);
         after = event.sequence;
         cursor = after;
       }
@@ -126,7 +149,19 @@ export function createRuntimeVisibilityDaemon(
     if (failure && !failure.retryable) return;
     if (!failure) recoveryAttempts = 0;
     failure = {
-      ...classify(error),
+      ...classifyObservationError(error),
+      ...(stage === 'reconcile' &&
+      activeSource &&
+      /^[1-9]\d*$/.test(activeSource.sequence)
+        ? {
+            sourceCursor: activeSource.sequence,
+            ...(/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(
+              activeSource.eventId,
+            )
+              ? { sourceEventId: activeSource.eventId }
+              : {}),
+          }
+        : {}),
       stage,
       cursor,
       occurredAt: new Date().toISOString(),

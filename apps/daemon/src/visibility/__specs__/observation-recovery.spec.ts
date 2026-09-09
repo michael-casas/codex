@@ -36,3 +36,28 @@ it('[L2:INTEGRATION] OBS-L2-INTERRUPTED classifies an interrupted binding over r
     pendingRequests: 0,
   });
 });
+it('[L2:E2E] R5-L2-LONG bounds duplicate ingestion and retains a real SQL constraint failure', async () => {
+  const { longObservationScenario } = await import(
+    '../support/observation-recovery.driver.js'
+  );
+  const result = await longObservationScenario();
+  expect(result).toMatchObject({
+    duplicateWrites: 0,
+    terminal: true,
+    eventCount: 2101,
+    failedStatus: 500,
+    publicError: { code: 'VISIBILITY_OBSERVER_FAILED' },
+    failure: {
+      state: 'failed',
+      cursor: '2101',
+      recoveryAttempts: 0,
+      lastFailure: {
+        causeCode: '23514',
+        errorClass: 'DatabaseError',
+        sourceCursor: '2102',
+        sourceEventId: result.sourceId,
+      },
+    },
+  });
+  expect(JSON.stringify(result.failure)).not.toMatch(/private|credentials/);
+}, 60_000);

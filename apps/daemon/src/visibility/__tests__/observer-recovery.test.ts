@@ -227,3 +227,153 @@ describe('[L1:INTEGRATION] observer recovery', () => {
     }
   });
 });
+
+// === L1: IN-PROCESS INTEGRATION TESTS ===
+describe('[L1:INTEGRATION] R5 bounded replay and primary diagnostics', () => {
+  it('R5-L1-DUPLICATE does not reingest a verified duplicate in a long stream', async () => {
+    vi.useFakeTimers();
+    const f = fixture();
+    f.events.push(...Array.from({ length: 2099 }, (_, i) => source(i + 2)));
+    try {
+      await f.daemon.start();
+      const writes = f.ingest.mock.calls.length;
+      f.notify('2099');
+      await vi.advanceTimersByTimeAsync(0);
+      expect(f.ingest.mock.calls.length).toBe(writes);
+      expect(f.page.mock.calls.slice(2).every(([after]) => after !== '0')).toBe(
+        true,
+      );
+      expect(status(f.daemon).state).toBe('healthy');
+    } finally {
+      await f.daemon.stop();
+      vi.useRealTimers();
+    }
+  });
+  it.each(['23514', '42501'])(
+    'R5-L1-PERMANENT retains safe SQLSTATE %s and failing source without retry',
+    async (code) => {
+      vi.useFakeTimers();
+      const log = vi
+        .spyOn(console, 'error')
+        .mockImplementation(() => undefined);
+      const f = fixture();
+      try {
+        await f.daemon.start();
+        f.events.push(source(2));
+        f.ingest.mockRejectedValueOnce(
+          Object.assign(Error('private /Users/secret credentials'), { code }),
+        );
+        f.notify('2');
+        await vi.advanceTimersByTimeAsync(60_000);
+        expect(status(f.daemon)).toMatchObject({
+          state: 'failed',
+          recoveryAttempts: 0,
+          lastFailure: {
+            causeCode: code,
+            errorClass: 'Error',
+            stage: 'reconcile',
+            cursor: '1',
+            sourceCursor: '2',
+          },
+        });
+        expect(JSON.stringify(log.mock.calls)).not.toMatch(
+          /private|credentials|secret/,
+        );
+      } finally {
+        await f.daemon.stop();
+        log.mockRestore();
+        vi.useRealTimers();
+      }
+    },
+  );
+  it.each(['53300', '40001', '40P01'])(
+    'R5-L1-RESOURCE bounds recovery for transient %s',
+    async (code) => {
+      vi.useFakeTimers();
+      const f = fixture();
+      try {
+        await f.daemon.start();
+        f.page.mockRejectedValue(Object.assign(Error('private'), { code }));
+        f.notify('2');
+        await vi.advanceTimersByTimeAsync(60_000);
+        expect(status(f.daemon)).toMatchObject({
+          state: 'failed',
+          recoveryAttempts: 3,
+          lastFailure: { causeCode: code, retryable: true },
+        });
+        const calls = f.page.mock.calls.length;
+        await vi.advanceTimersByTimeAsync(60_000);
+        expect(f.page.mock.calls.length).toBe(calls);
+      } finally {
+        await f.daemon.stop();
+        vi.useRealTimers();
+      }
+    },
+  );
+  it('R5-L1-REDACT rejects arbitrary error code and class text', async () => {
+    vi.useFakeTimers();
+    const f = fixture();
+    try {
+      await f.daemon.start();
+      f.fail({
+        code: 'SECRET_TOKEN',
+        name: 'PrivateProviderError',
+        message: 'private',
+      });
+      expect(status(f.daemon)).toMatchObject({
+        lastFailure: { causeCode: 'UNKNOWN', errorClass: 'UnknownError' },
+      });
+      expect(JSON.stringify(status(f.daemon))).not.toMatch(
+        /SECRET|Private|private/,
+      );
+    } finally {
+      await f.daemon.stop();
+      vi.useRealTimers();
+    }
+  });
+});
+
+// === L1: IN-PROCESS INTEGRATION TESTS ===
+describe('[L1:INTEGRATION] R5 locked reconciliation guarantees', () => {
+  it('R5-L1-LATE reconciles an unseen lower sequence without dropping later history', async () => {
+    vi.useFakeTimers();
+    const f = fixture();
+    f.events.push(source(3));
+    try {
+      await f.daemon.start();
+      f.events.splice(1, 0, {
+        ...source(2),
+        streamId: 'workflow:workflow_late',
+        payload: { runId: 'workflow_late' },
+      });
+      f.notify('2');
+      await vi.advanceTimersByTimeAsync(0);
+      expect(status(f.daemon).state).toBe('healthy');
+      expect(f.stored.size).toBe(3);
+      expect(f.stored.get('source:event-2')?.workflowId).toBe('workflow_late');
+      expect(f.stored.has('source:event-3')).toBe(true);
+    } finally {
+      await f.daemon.stop();
+      vi.useRealTimers();
+    }
+  });
+  it('R5-L1-OLD detects an immutable conflict even beyond the bounded recent window', async () => {
+    vi.useFakeTimers();
+    const f = fixture();
+    f.events.push(...Array.from({ length: 4200 }, (_, i) => source(i + 2)));
+    try {
+      await f.daemon.start();
+      f.events[0] = source(1, 'workflow.failed');
+      f.notify('1');
+      await vi.advanceTimersByTimeAsync(0);
+      expect(status(f.daemon)).toMatchObject({
+        state: 'failed',
+        lastFailure: { code: 'VISIBILITY_EVENT_CONFLICT' },
+      });
+      expect(f.stored.get('source:event-1')?.status).toBe('running');
+    } finally {
+      await f.daemon.stop();
+      vi.useRealTimers();
+    }
+  });
+});

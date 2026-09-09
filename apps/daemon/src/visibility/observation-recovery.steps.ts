@@ -76,3 +76,35 @@ Before(function () {
 After(function () {
   process.chdir(this.originalDirectory);
 });
+
+When(
+  'a long synthetic stream repeats a notification and storage rejects its next event',
+  { timeout: 60000 },
+  async function () {
+    const { longObservationScenario } = await import(
+      './support/observation-recovery.driver.js'
+    );
+    this.result = await longObservationScenario();
+  },
+);
+Then(
+  'observation preserves terminal history and retains the safe primary storage diagnostic',
+  function () {
+    const result = this.result;
+    assert.equal(result.duplicateWrites, 0);
+    assert.equal(result.terminal, true);
+    assert.equal(result.eventCount, 2101);
+    assert.equal(result.failedStatus, 500);
+    assert.deepEqual(result.publicError, {
+      code: 'VISIBILITY_OBSERVER_FAILED',
+    });
+    assert.equal(result.failure.state, 'failed');
+    assert.equal(result.failure.cursor, '2101');
+    assert.equal(result.failure.recoveryAttempts, 0);
+    assert.equal(result.failure.lastFailure.causeCode, '23514');
+    assert.equal(result.failure.lastFailure.errorClass, 'DatabaseError');
+    assert.equal(result.failure.lastFailure.sourceCursor, '2102');
+    assert.equal(result.failure.lastFailure.sourceEventId, result.sourceId);
+    assert.doesNotMatch(JSON.stringify(result.failure), /private|credentials/);
+  },
+);

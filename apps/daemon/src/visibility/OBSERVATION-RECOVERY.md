@@ -8,12 +8,12 @@ The existing wrong-turn case now asserts rejection rather than unverified succes
 other legacy cases retain their assertions. This is an intentional correctness
 contract amendment under the Founder-approved Level 1 repair authority.
 
-The observer fails reads while its source is unavailable. It retries only known
-connection failures, at 1, 2, and 4 seconds, for at most three recovery attempts.
+The observer fails reads while its source is unavailable. It retries known connection, transaction-contention and transient resource
+failures, at 1, 2, and 4 seconds, for at most three recovery attempts.
 Listener recovery reconnects before replay. Recovery and late-sequence rewind
 rebuild projector context from source sequence zero so a partially ingested event
 is not lost behind the projector's sequence guard. Existing event identities and
-payload hashes remain immutable. Invalid events, unknown defects, and conflicts
+payload hashes remain immutable. Invalid events, unknown defects, and immutable conflicts
 fail closed; no cursor is advanced past a failed write to fabricate health.
 
 Snapshot and wait check observer health before and after repository reads. A fault
@@ -23,10 +23,17 @@ before writing headers, so an unencodable result can still return an error envel
 
 `visibility.diagnostics()` retains the last safe failure after recovery. Structured
 `visibility.observer.failure` daemon log records retain its timestamp, stage,
-cursor, classification and recovery attempt. They exclude original exceptions,
+last committed source cursor, failing source cursor/UUID when available,
+allowlisted error class, validated underlying code/SQLSTATE, classification and
+recovery attempt. They exclude original exceptions,
 provider text, credentials and source payloads. Exhaustion leaves reads unavailable
-until an operator repairs the cause and restarts/reconstructs the observer. Full
-replay costs O(retained source history); it is intentionally conservative.
+until an operator repairs the cause and restarts/reconstructs the observer. Recovery replay costs O(retained source history). A duplicate notification first
+reads and checks the source suffix against at most 4,096 recently committed source
+fingerprints. Matching events avoid projection and database ingestion. Unseen late
+commits and evicted fingerprints still rebuild ordered context from zero; changed
+fingerprints fail closed. The cache contains hashes, never source bodies, and is
+cleared on reconstruction. This bounds duplicate write/connection amplification
+without replacing repository ownership or pooling semantics.
 
 Bound provider turns reported interrupted or failed produce respectively
 `WORKFLOW_TURN_INTERRUPTED` or `WORKFLOW_TURN_FAILED`. Inactive bindings without
@@ -71,3 +78,41 @@ No R4 or other retry is authorized here. Any future intentional run requires a
 separate coordinator authorization after review, deployment, terminal-history and
 retained-resource reconciliation. A new authorized run needs a new idempotency key;
 old keys remain used terminal identities.
+
+## R5 reliability repair
+
+R5's original underlying exception was not retained and remains unknown. A
+synthetic 2,100-event durable PostgreSQL stream reproduced 2,100 redundant
+visibility ingestions from one duplicate hint. After repair that hint causes zero
+repeat ingestions. A disposable database trigger rejecting ingestion with SQLSTATE
+23514 proves safe primary diagnostics at the real storage and public HTTP boundary.
+This demonstrates amplification and diagnostic defects; it does not establish
+historical connection exhaustion, deadlock, or the cause of the compiler interrupt.
+
+The public snapshot/wait error envelope remains bounded. Operator diagnostics use
+`causeCode` (`UNKNOWN` for unrecognized tokens), `errorClass`, `sourceCursor`, and
+`sourceEventId` (UUID only), alongside the existing stage, cursor and time. No raw
+exception, SQL, provider text, source body, path, or credential is emitted.
+Connection failures plus 53300, 53200, 53400, 40001, 40P01 and 55P03 use the existing
+three-attempt 1/2/4-second recovery budget; permanent constraint/authorization
+failures do not retry. Exhaustion keeps observation unavailable.
+
+Source observation persistence is distinct from the derived observer: the workflow
+ingestor appends `workflow.visibility.observed`; a failure propagates to the App
+Server adapter, which stops the bound turn and rejects the original error. The
+derived observer listens independently and cannot launch/restart agents. New
+`workflow.observation.failure` logs retain the safe primary persistence code/class,
+run, attempt, ordinal and time before cleanup or subsequent diagnostic writes can
+fail. No replacement execution or retry authority is introduced. Existing typed
+interrupted-turn and artifact behavior is preserved.
+
+After review and deployment, the coordinator should perform one bounded read-only
+snapshot and wait probe at the retained R5 cursor, allowing at most the existing
+three recovery attempts. Capture only the safe diagnostic fields and timestamps;
+verify failed terminal history and unchanged retained resources. If degraded, stop
+and retain the first new underlying classification rather than repeating the
+workload. A bounded disposable synthetic long-stream probe may then exercise
+storage pressure under the same deployed binary, separately authorized by the
+coordinator. Do not run R6 or reconstruct original compiler output as part of this
+repair. Rollback restores previous binaries, requires no migration, and preserves
+source/derived history and diagnostic evidence.

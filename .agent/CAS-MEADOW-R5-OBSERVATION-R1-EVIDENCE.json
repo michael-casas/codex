@@ -1,0 +1,104 @@
+{
+  "assignment": "CAS-MEADOW-R5-OBSERVATION-R1",
+  "base": "99b3cf499d1dec25725deb03c6484388efd8e77f",
+  "workingDirectory": "/Users/mcasa_atlantis/.codex/.agent/workspaces/50d4c7d3001cd3269488da8d8674b88e01cc21c6ac5690160b5360dc2bcfdff9",
+  "authority": "Compiled assignment and profile validated with Ajv2020; skill 2.0.0 meets minimum 1.1.0",
+  "runtime": {
+    "bun": "1.4.2",
+    "node": "24.15.0",
+    "standingCodexPath": "/Users/mcasa_atlantis/.local/opt/codex-0.151.0/node_modules/.bin"
+  },
+  "commands": [
+    {
+      "command": "bun nx run @codex/daemon:test-observation-l1 --skipNxCache",
+      "redExit": 1,
+      "greenExit": 0
+    },
+    {
+      "command": "bun nx run @codex/daemon:test-observation-l2 --skipNxCache",
+      "redExit": 1,
+      "greenExit": 0
+    },
+    {
+      "command": "bun nx run @codex/daemon:test-observation-l3 --skipNxCache",
+      "redExit": 1,
+      "greenExit": 0
+    }
+  ],
+  "otherChecks": {
+    "daemon:test-l1": {
+      "exit": 0,
+      "executed": 54
+    },
+    "daemon:test": {
+      "exit": 0,
+      "report": ".agent/r5-observation-evidence/standing.json"
+    },
+    "daemon:lint,typecheck": {
+      "exit": 0
+    },
+    "testing:test-policy": {
+      "exit": 0,
+      "selected": 128,
+      "standingTargets": 13
+    }
+  },
+  "resourceAccounting": {
+    "paidModelCalls": 0,
+    "subagents": 0,
+    "productionQueries": 0,
+    "productionWrites": 0,
+    "migrations": "Disposable fixture migrations only; no new migration",
+    "focusedDatabaseFixturesCreatedAndClosed": 12,
+    "focusedOwnedRolesCreatedAndDropped": 24,
+    "fixtureCleanup": "Each driver stops HTTP/observer and closes clients; verifies owned database and login roles removed. Interrupted stdio provider asserts child exited and zero pending requests. Standing native fixture cleanup retained.",
+    "replayMetric": {
+      "syntheticSourceRows": 2100,
+      "duplicateIngestionsBefore": 2100,
+      "duplicateIngestionsAfter": 0,
+      "newTerminalRows": 1,
+      "rejectedRows": 1,
+      "storedRowsAfterRejection": 2101,
+      "recentFingerprintLimit": 4096
+    }
+  },
+  "limitations": [
+    "Original R5 exception remains unknown; no historical exhaustion/deadlock attribution.",
+    "Long storage fixture uses synthetic workflow lifecycle source events; typed item compatibility covered by unchanged standing visibility tests.",
+    "Recent window is bounded; older/unseen late events and recovery still replay all retained history.",
+    "Worker evidence is not independent verification or acceptance."
+  ],
+  "freeze": {
+    "originalHashes": {
+      "apps/daemon/src/visibility/__tests__/observer-recovery.test.ts": "527ade45af4591eb4571923e1450dea9372105dd10e0ad242dc279163858f263",
+      "apps/daemon/src/visibility/__specs__/observation-recovery.spec.ts": "906b49f575f112736fb388238fc74c6aeb46edd63d715e51413afeb2fe8e76bf",
+      "apps/daemon/src/visibility/observation-recovery.feature": "da3a001f3b2ee0ca41529aec101f24c6d861de6dcf4af9f736ac9501b1066e54",
+      "apps/daemon/src/visibility/observation-recovery.steps.ts": "66d7ffc10ace77c738b3bf9008513db633100aad76671dcfd41790136179b733",
+      "apps/daemon/src/workflow-execution/__tests__/readable-recovery.test.ts": "e47f65b1c62f87bd6cdeaabe65329c895d71527568177e8851f4d0cd69d58e86"
+    },
+    "postFormattingHashes": {
+      "apps/daemon/src/visibility/__tests__/observer-recovery.test.ts": "fffb60a6f3b07e9db67ac4cdcbf8d9dc2186eb1daa0ff54c5c3e421ea3315ed4",
+      "apps/daemon/src/visibility/__specs__/observation-recovery.spec.ts": "83216c6cb834b0c10bfc92eaaa9892881be319b6d0fd3034f15a0a5ddcc85abb",
+      "apps/daemon/src/visibility/observation-recovery.feature": "da3a001f3b2ee0ca41529aec101f24c6d861de6dcf4af9f736ac9501b1066e54",
+      "apps/daemon/src/visibility/observation-recovery.steps.ts": "8c312e07cdea1e6ba9e39e7f6d966842eb401580d33aac25664cfdd81cfe89f5",
+      "apps/daemon/src/workflow-execution/__tests__/readable-recovery.test.ts": "46d4e573e9578d7cfd33a72a29dfd1b23defcec8f944f3984e10708995d451c8"
+    },
+    "note": "Prettier-only formatting after freeze; test identity, assertions, expected values and feature semantics unchanged."
+  },
+  "artifacts": {
+    ".agent/r5-observation-evidence/green-l3.json": "c567bcd99e0b6e9c450dea7908f6d9f0cbe43d39448dfd875ccc4e988e8d0978",
+    ".agent/r5-observation-evidence/standing.json": "3d06e180c19ae443b4e38ff4aed6e6a317af4d54b119791d2a44b5f6af872ad6",
+    ".agent/r5-observation-evidence/green-l2.json": "ca6fb8c4057f661c65500081a700b737fabcd385aa5fd23bda1d66776227a5e8",
+    ".agent/r5-observation-evidence/red-l1.json": "31c97f769142942d12b0efd5eb119d2cdf8abe446997cf289aa306568458269a",
+    ".agent/r5-observation-evidence/red-l2.json": "f5bb17058eda472739559df14dadcc09ef82484b4917816d2a8096353f47c2d3",
+    ".agent/r5-observation-evidence/red-l3.json": "87a297c23b51d9e36fc5dbbfd94ca7c08cacd8c1797a85e3017bfb6594172ec6",
+    ".agent/r5-observation-evidence/green-l1.json": "31ed2f3508f8084cc10f150664f9526e9708fd7ccec082fae01503f7eef0e473"
+  },
+  "implementationHead": "842a94618a51b24f886adb41129cfa1f521984a1",
+  "pullRequest": "https://github.com/michael-casas/codex/pull/10",
+  "hooks": {
+    "preCommit": "Affected lint/test-l1/typecheck completed; lint-staged emitted ignored .agent restaging warning; all committed report hashes verified",
+    "commitlint": "passed",
+    "bypassed": false
+  }
+}

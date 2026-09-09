@@ -1,0 +1,99 @@
+{
+  "schemaVersion": 1,
+  "project": "@codex/daemon",
+  "status": "passed",
+  "startedAt": "2026-09-09T05:34:26.350Z",
+  "durationMs": 46249,
+  "children": [
+    {
+      "artifact": "nx://@codex/daemon/test/l1-unit",
+      "command": "bun vitest run --config apps/daemon/vitest.config.ts src/main.test.ts src/workflow-execution/__tests__/workflow-execution-daemon.test.ts --testNamePattern=L1:UNIT",
+      "durationMs": 550,
+      "executed": 7,
+      "exitCode": 0,
+      "layer": "l1-unit",
+      "selected": 7,
+      "status": "passed"
+    },
+    {
+      "artifact": "nx://@codex/daemon/test/l1-integration",
+      "command": "bun vitest run --config apps/daemon/vitest.config.ts src/control-runtime.test.ts src/workflow-execution/__tests__/workflow-execution-daemon.test.ts src/visibility/__tests__/control-visibility.test.ts src/visibility/__tests__/legacy-title-replay.test.ts src/workflow-execution/__tests__/artifact-publication.test.ts --testNamePattern=L1:INTEGRATION",
+      "durationMs": 450,
+      "executed": 16,
+      "exitCode": 0,
+      "layer": "l1-integration",
+      "selected": 16,
+      "status": "passed"
+    },
+    {
+      "artifact": "nx://@codex/daemon/test/l2-legacy-replay",
+      "command": "bun vitest run --config apps/daemon/vitest.config.ts src/visibility/__specs__/legacy-replay.spec.ts src/workflow-execution/__specs__/project-context.spec.ts src/workflow-execution/__specs__/artifact-publication.spec.ts --testNamePattern=L2:INTEGRATION",
+      "durationMs": 4064,
+      "executed": 25,
+      "exitCode": 0,
+      "layer": "l2-integration",
+      "selected": 25,
+      "status": "passed"
+    },
+    {
+      "artifact": "nx://@codex/daemon/test/l2-runtime-e2e",
+      "command": "bun vitest run --config apps/daemon/vitest.config.ts src/control-runtime.spec.ts src/agent-messaging/__specs__/agent-messaging-daemon.spec.ts src/delegation/__specs__/delegation-daemon.spec.ts src/visibility/__specs__/runtime-visibility-daemon.spec.ts src/visibility/__specs__/control-visibility.spec.ts --testNamePattern=L2:E2E",
+      "durationMs": 2462,
+      "executed": 6,
+      "exitCode": 0,
+      "layer": "l2-e2e",
+      "selected": 6,
+      "status": "passed"
+    },
+    {
+      "artifact": "nx://@codex/daemon/test-l2-delivery-failure",
+      "command": "bun vitest run --config apps/daemon/vitest.config.ts src/workflow-execution/__specs__/workflow-execution-daemon.spec.ts --testNamePattern=DELIVERY-EXHAUSTED-L2",
+      "durationMs": 19202,
+      "executed": 1,
+      "exitCode": 0,
+      "layer": "l2-e2e",
+      "selected": 1,
+      "status": "passed"
+    },
+    {
+      "artifact": "nx://@codex/daemon-e2e/test/l2-e2e",
+      "command": "bun vitest run --config apps/daemon-e2e/vitest.config.ts src/daemon/daemon.spec.ts --testNamePattern=L2:E2E",
+      "durationMs": 1449,
+      "executed": 1,
+      "exitCode": 0,
+      "layer": "l2-e2e",
+      "selected": 1,
+      "status": "passed"
+    },
+    {
+      "artifact": "test-output/cucumber/daemon-remote-workflow.json",
+      "command": "bun packages/testing/src/cli.ts verify-cucumber apps/daemon/src/workflow-execution/remote-workflow-execution.feature apps/daemon/out-tsc/cucumber/workflow-execution/index.steps.js test-output/cucumber/daemon-remote-workflow.json",
+      "durationMs": 14469,
+      "executed": 1,
+      "exitCode": 0,
+      "layer": "l3",
+      "selected": 1,
+      "status": "passed"
+    },
+    {
+      "artifact": "test-output/cucumber/project-context.json",
+      "command": "bun packages/testing/src/cli.ts verify-cucumber apps/daemon/src/workflow-execution/project-context.feature apps/daemon/out-tsc/cucumber/workflow-execution/project-context.steps.js test-output/cucumber/project-context.json",
+      "durationMs": 584,
+      "executed": 1,
+      "exitCode": 0,
+      "layer": "l3",
+      "selected": 1,
+      "status": "passed"
+    },
+    {
+      "artifact": "test-output/cucumber/artifact-publication.json",
+      "command": "bun packages/testing/src/cli.ts verify-cucumber apps/daemon/src/workflow-execution/artifact-publication.feature apps/daemon/out-tsc/cucumber/workflow-execution/artifact-publication.steps.js test-output/cucumber/artifact-publication.json",
+      "durationMs": 3009,
+      "executed": 1,
+      "exitCode": 0,
+      "layer": "l3",
+      "selected": 1,
+      "status": "passed"
+    }
+  ]
+}

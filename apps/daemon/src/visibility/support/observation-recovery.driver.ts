@@ -273,3 +273,188 @@ export async function interruptedBindingScenario() {
     pendingRequests: client.metrics().pendingRequests,
   };
 }
+
+/** Synthetic durable source, real restricted reader/ingestor, and public HTTP. */
+export async function longObservationScenario() {
+  const database = await createRuntimeVisibilityDatabaseFixture();
+  const owner = new Client({ connectionString: database.ownerUrl });
+  const repository = new PostgresRuntimeVisibilityRepository(
+    database.daemonUrl,
+  );
+  const store = new PostgresControlStore(database.daemonUrl);
+  let notify!: (sequence: string) => void;
+  let writes = 0;
+  let emptyReads = 0;
+  const daemon = createRuntimeVisibilityDaemon(
+    {
+      ingest: async (event) => {
+        writes++;
+        return repository.ingest(event);
+      },
+      snapshot: (query) => repository.snapshot(query),
+      wait: (query, signal) => repository.wait(query, signal),
+    },
+    {
+      sourcePage: async (after) => {
+        const page = await repository.sourcePage(after);
+        if (!page.length) emptyReads++;
+        return page;
+      },
+      listenSource: async (listener) => {
+        notify = listener;
+        return async () => undefined;
+      },
+    },
+  );
+  const http = createControlHttpServer({
+    control: {
+      delegateAgent: async () => {
+        throw Error('UNEXPECTED_MUTATION');
+      },
+      sendAgentMessage: async () => {
+        throw Error('UNEXPECTED_MUTATION');
+      },
+      runWorkflow: async () => {
+        throw Error('UNEXPECTED_MUTATION');
+      },
+      cancelAgent: async () => {
+        throw Error('UNEXPECTED_MUTATION');
+      },
+      cancelWorkflow: async () => {
+        throw Error('UNEXPECTED_MUTATION');
+      },
+      snapshot: (q) => daemon.snapshot(q),
+      wait: (q, _a, s) => daemon.wait(q, s),
+    },
+    token: 'x'.repeat(32),
+    uiDirectory: process.cwd(),
+    port: 0,
+  });
+  const runId = `workflow_${'c'.repeat(64)}`;
+  await owner.connect();
+  try {
+    for (const file of [
+      '003_agent_messaging.sql',
+      '004_agent_delegation.sql',
+      '006_visibility_source_reads.sql',
+    ])
+      await owner.query(
+        await readFile(resolve('migrations/process', file), 'utf8'),
+      );
+    await store.execute({
+      commandId: randomUUID(),
+      idempotencyKey: randomUUID(),
+      streamId: `workflow:${runId}`,
+      kind: 'workflow.started',
+      payload: { runId },
+      events: Array.from({ length: 2100 }, () => ({
+        eventId: randomUUID(),
+        kind: 'workflow.started',
+        payload: { runId },
+      })),
+    });
+    await daemon.start();
+    const initialWrites = writes;
+    const { origin } = await http.start();
+    const emptyBefore = emptyReads;
+    notify('2099');
+    const duplicateDeadline = Date.now() + 30_000;
+    while (
+      emptyReads === emptyBefore &&
+      daemon.diagnostics().state === 'healthy' &&
+      Date.now() < duplicateDeadline
+    )
+      await new Promise((r) => setTimeout(r, 10));
+    assert.ok(emptyReads > emptyBefore, 'DUPLICATE_DRAIN_TIMEOUT');
+    await new Promise((r) => setTimeout(r, 0));
+    // Append only after the duplicate drain completes.
+    await store.execute({
+      commandId: randomUUID(),
+      idempotencyKey: randomUUID(),
+      streamId: `workflow:${runId}`,
+      kind: 'workflow.failed',
+      payload: { runId },
+      events: [
+        { eventId: randomUUID(), kind: 'workflow.failed', payload: { runId } },
+      ],
+    });
+    notify('2101');
+    const deadline = Date.now() + 20_000;
+    while (
+      daemon.diagnostics().cursor !== '2101' &&
+      daemon.diagnostics().state === 'healthy' &&
+      Date.now() < deadline
+    )
+      await new Promise((r) => setTimeout(r, 10));
+    const response = await fetch(`${origin}/api/control/snapshot`);
+    const body = (await response.json()) as {
+      workflows?: Array<{ status: string }>;
+    };
+    const duplicateWrites = writes - initialWrites - 1;
+    await owner.query(`CREATE FUNCTION process.fixture_reject_visibility() RETURNS trigger LANGUAGE plpgsql AS $$ BEGIN RAISE EXCEPTION 'private fixture source credentials' USING ERRCODE='23514'; END $$;
+      CREATE TRIGGER fixture_reject_visibility BEFORE INSERT ON process.runtime_visibility_event FOR EACH ROW EXECUTE FUNCTION process.fixture_reject_visibility()`);
+    const sourceId = randomUUID();
+    await store.execute({
+      commandId: randomUUID(),
+      idempotencyKey: randomUUID(),
+      streamId: `workflow:${runId}`,
+      kind: 'workflow.failed',
+      payload: { runId },
+      events: [
+        { eventId: sourceId, kind: 'workflow.failed', payload: { runId } },
+      ],
+    });
+    notify('2102');
+    const faultDeadline = Date.now() + 3000;
+    while (
+      daemon.diagnostics().state === 'healthy' &&
+      Date.now() < faultDeadline
+    )
+      await new Promise((r) => setTimeout(r, 10));
+    const failed = await fetch(`${origin}/api/control/snapshot`);
+    const failure = daemon.diagnostics();
+    return {
+      duplicateWrites,
+      terminal: response.ok && body.workflows?.[0]?.status === 'failed',
+      eventCount: await database.eventCount(),
+      failedStatus: failed.status,
+      publicError: await failed.json(),
+      failure,
+      sourceId,
+    };
+  } finally {
+    const closed = await Promise.allSettled([
+      http.stop(),
+      daemon.stop(),
+      owner.end(),
+    ]);
+    await database.close();
+    assert.ok(
+      closed.every((result) => result.status === 'fulfilled'),
+      'LONG_OBSERVER_SHUTDOWN_FAILED',
+    );
+    const inspect = new Client({
+      connectionString: process.env['POSTGRES_URL'],
+    });
+    await inspect.connect();
+    try {
+      const result = await inspect.query(
+        'SELECT count(*)::int AS count FROM pg_database WHERE datname=$1',
+        [database.databaseName],
+      );
+      assert.equal(result.rows[0].count, 0, 'LONG_OBSERVER_DATABASE_LEAK');
+      const roles = await inspect.query(
+        'SELECT count(*)::int AS count FROM pg_roles WHERE rolname=ANY($1::text[])',
+        [
+          [
+            new URL(database.daemonUrl).username,
+            new URL(database.readerUrl).username,
+          ],
+        ],
+      );
+      assert.equal(roles.rows[0].count, 0, 'LONG_OBSERVER_ROLE_LEAK');
+    } finally {
+      await inspect.end();
+    }
+  }
+}
