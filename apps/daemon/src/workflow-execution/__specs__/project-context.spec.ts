@@ -2,6 +2,7 @@ import { access, readFile, symlink } from 'node:fs/promises';
 import { join } from 'node:path';
 import { afterEach, describe, expect, it } from 'vitest';
 import { projectContextFixture } from '../support/project-context.fixture.js';
+import { createLocalProjectAdmission } from '../local-project-admission.js';
 
 // === L2: REAL-BOUNDARY INTEGRATION TESTS ===
 describe('[L2:INTEGRATION] admitted local project contexts', () => {
@@ -14,6 +15,64 @@ describe('[L2:INTEGRATION] admitted local project contexts', () => {
     cleanups.push(value.close);
     return value;
   }
+
+  it.each([
+    ['network granted', 'workspaceWrite', 'workspaceWrite', true, true],
+    ['network default', 'workspaceWrite', 'workspaceWrite', undefined, true],
+    ['network opt-out', 'workspaceWrite', 'workspaceWrite', false, true],
+    ['sandbox escalation', 'workspaceWrite', 'dangerFullAccess', false, false],
+    ['sandbox alias escalation', 'readOnly', 'workspace-write', false, false],
+    ['unknown sandbox', 'workspaceWrite', 'unknown', false, false],
+  ] as const)(
+    'PC-REVIEW-POLICY enforces %s',
+    async (_label, ceiling, sandbox, networkAccess, allowed) => {
+      const f = await fixture();
+      const policy = f.config.localProjectPolicies![0];
+      const admission = await createLocalProjectAdmission({
+        policies: [
+          {
+            ...policy,
+            runtimeProfile: {
+              ...policy.runtimeProfile,
+              sandbox: ceiling,
+            },
+          },
+        ],
+        hosts: f.config.hosts,
+        repositories: f.config.repositories,
+        workflowSources: f.config.workflowSources!,
+      });
+      const actor = {
+        actorAgentId: 'owner',
+        scopes: ['control:project', 'control:delegate'],
+      };
+      await admission.admitProject(f.command(1), actor);
+      const result = admission.authorizeCommand(
+        {
+          hostId: 'local',
+          idempotencyKey: 'policy-check',
+          workspace: {
+            repositoryId: f.projects[1].repositoryId,
+            baseRevision: f.projects[1].baseRevision,
+          },
+          runtimeProfile: {
+            model: 'gpt-5.6-luna',
+            reasoningEffort: 'low',
+            approvalPolicy: 'never',
+            sandbox,
+            ...(networkAccess === undefined ? {} : { networkAccess }),
+          },
+        },
+        actor,
+      );
+      if (allowed)
+        await expect(result).resolves.toHaveProperty('idempotencyKey');
+      else
+        await expect(result).rejects.toMatchObject({
+          code: 'PROJECT_ADMISSION_UNAUTHORIZED',
+        });
+    },
+  );
 
   it('PC-L2-COEXIST admits two external Git projects and selects each source without canonical contamination', async () => {
     const f = await fixture();
@@ -70,12 +129,49 @@ describe('[L2:INTEGRATION] admitted local project contexts', () => {
         200,
       );
       const project = f.projects[index];
-      const lease = await client.runtime.workspaces.acquire({
-        hostId: 'local',
-        repositoryId: project.repositoryId,
-        baseRevision: project.baseRevision,
-        assignmentId: `direct-${index}`,
-      });
+      const lease = await client.runtime.workspaces
+        .acquire({
+          hostId: 'local',
+          repositoryId: project.repositoryId,
+          baseRevision: project.baseRevision,
+          assignmentId: `direct-${index}`,
+        })
+        .catch(async (error: unknown) => {
+          const host = await client.runtime.hosts.connect('local');
+          const probe = await host.request<{
+            exitCode: number;
+            stdout: string;
+            stderr: string;
+          }>('command/exec', {
+            command: [
+              'git',
+              '-C',
+              project.checkoutPath,
+              'rev-parse',
+              '--show-toplevel',
+              'HEAD',
+              `${project.baseRevision}^{commit}`,
+            ],
+            cwd: project.checkoutPath,
+            timeoutMs: 5000,
+            sandboxPolicy: { type: 'readOnly', networkAccess: false },
+          });
+          // Fixture diagnostics expose classifications, never paths or raw stderr.
+          console.error('PC-L2-DIRECT diagnostic', {
+            exitCode: probe.exitCode,
+            revisionMatches:
+              probe.stdout.trim().split('\n')[2] === project.baseRevision,
+            sandboxDenied:
+              /bwrap|namespace|Operation not permitted|Permission denied/i.test(
+                probe.stderr,
+              ),
+            unsafeOwnership: /dubious ownership|safe.directory/i.test(
+              probe.stderr,
+            ),
+            notRepository: /not a git repository/i.test(probe.stderr),
+          });
+          throw error;
+        });
       try {
         const workspace = await client.runtime.workspaces.resolve(
           lease.workspaceRef,

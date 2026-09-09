@@ -494,11 +494,25 @@ export async function createLocalProjectAdmission(options: {
       if (!policy) return fail('PROJECT_ADMISSION_UNAUTHORIZED');
       await validate(registration.project, policy);
       const runtimeProfile = record(command.runtimeProfile);
+      const sandboxRanks: Record<string, number> = {
+        readOnly: 0,
+        'read-only': 0,
+        workspaceWrite: 1,
+        'workspace-write': 1,
+        dangerFullAccess: 2,
+        'danger-full-access': 2,
+      };
+      const requestedSandbox =
+        typeof runtimeProfile.sandbox === 'string' &&
+        Object.hasOwn(sandboxRanks, runtimeProfile.sandbox)
+          ? sandboxRanks[runtimeProfile.sandbox]
+          : undefined;
       if (
-        (policy.runtimeProfile.sandbox === 'readOnly' &&
-          runtimeProfile.sandbox !== 'readOnly') ||
+        requestedSandbox === undefined ||
+        requestedSandbox > sandboxRanks[policy.runtimeProfile.sandbox] ||
         runtimeProfile.approvalPolicy !== 'never' ||
-        runtimeProfile.networkAccess === true
+        (runtimeProfile.networkAccess !== undefined &&
+          typeof runtimeProfile.networkAccess !== 'boolean')
       )
         fail('PROJECT_ADMISSION_UNAUTHORIZED');
       if (workspace.baseRevision !== registration.project.baseRevision)
