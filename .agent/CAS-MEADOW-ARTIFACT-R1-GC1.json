@@ -1,0 +1,112 @@
+{
+  "id": "CAS-MEADOW-ARTIFACT-R1-GC1",
+  "baseRevision": "eb28fb541ec24494aa2660f400a301ba327e3cb5",
+  "status": "frozen",
+  "frozenAt": "2026-09-09T04:34:14.626778+00:00",
+  "sourceAuthority": "CAS-MEADOW-ARTIFACT-R1.md and companion schema-valid assignment",
+  "rows": [
+    {
+      "id": "ARTIFACT-L1-NAMES",
+      "form": "basic+adversarial",
+      "layer": "l1",
+      "runtime": "vitest/node",
+      "platform": "non-UI macOS service",
+      "target": "@codex/daemon:test-artifact-l1",
+      "required": true,
+      "expectedCount": 1,
+      "green": "exact names including case/path/label/160 characters; generic kind; same bytes/MIME/digest, distinct IDs and one registration per name",
+      "red": "kind is still request.name",
+      "cleanup": "owned disposable database and roles/service closed; no live runtime mutations"
+    },
+    {
+      "id": "ARTIFACT-L1-FAILURE",
+      "form": "adversarial",
+      "layer": "l1",
+      "runtime": "vitest/node",
+      "platform": "non-UI macOS service",
+      "target": "@codex/daemon:test-artifact-l1",
+      "required": true,
+      "expectedCount": 4,
+      "green": "only allowlisted storage codes 23514/42501 or UNKNOWN, artifact-failed, phase preserved, no raw publisher details or registration",
+      "red": "execution-failed loses storage classification",
+      "cleanup": "owned disposable database and roles/service closed; no live runtime mutations"
+    },
+    {
+      "id": "ARTIFACT-L2-REPRO",
+      "form": "characterization",
+      "layer": "l2",
+      "runtime": "vitest/node",
+      "platform": "non-UI macOS service",
+      "target": "@codex/daemon:test-artifact-l2",
+      "required": true,
+      "expectedCount": 1,
+      "green": "real migration002 rejects firstHalf.md and README.md kind with 23514 control_artifact_kind_check and transaction rollback",
+      "red": "GREEN reproduction of existing constraint; no manufactured RED",
+      "cleanup": "owned disposable database and roles/service closed; no live runtime mutations"
+    },
+    {
+      "id": "ARTIFACT-L2-NAMES",
+      "form": "basic+adversarial",
+      "layer": "l2",
+      "runtime": "vitest/node",
+      "platform": "non-UI macOS service",
+      "target": "@codex/daemon:test-artifact-l2",
+      "required": true,
+      "expectedCount": 1,
+      "green": "real persisted bytes, fixed generic kind, exact name-derived IDs/digests/URIs, same-name dedup, case distinction, historical kind/metadata/bytes unchanged on partial resume and terminal replay",
+      "red": "mixed-case writer publication fails",
+      "cleanup": "owned disposable database and roles/service closed; no live runtime mutations"
+    },
+    {
+      "id": "ARTIFACT-L2-FAILURE",
+      "form": "adversarial",
+      "layer": "l2",
+      "runtime": "vitest/node",
+      "platform": "non-UI macOS service",
+      "target": "@codex/daemon:test-artifact-l2",
+      "required": true,
+      "expectedCount": 1,
+      "green": "real empty-content 23514 rollback, no registered artifact, safe classification and phase",
+      "red": "execution-failed lacks storage code",
+      "cleanup": "owned disposable database and roles/service closed; no live runtime mutations"
+    },
+    {
+      "id": "ARTIFACT-L2-CONFLICT",
+      "form": "adversarial",
+      "layer": "l2",
+      "runtime": "vitest/node",
+      "platform": "non-UI macOS service",
+      "target": "@codex/daemon:test-artifact-l2",
+      "required": true,
+      "expectedCount": 1,
+      "green": "different JSON bytes under same name fail without overwriting original content or application/json MIME",
+      "red": "missing artifact-failed classification",
+      "cleanup": "owned disposable database and roles/service closed; no live runtime mutations"
+    },
+    {
+      "id": "ARTIFACT-L3-NAMES",
+      "form": "basic+adversarial",
+      "layer": "l3",
+      "runtime": "cucumber/node",
+      "platform": "non-UI macOS service",
+      "target": "@codex/daemon:test-artifact-l3",
+      "required": true,
+      "expectedCount": 1,
+      "green": "public runWorkflow with real PostgreSQL/pg-boss delivery, read after daemon recreation, metadata and duplicate submission stable, zero model turns",
+      "red": "observed failed instead of completed",
+      "cleanup": "owned disposable database and roles/service closed; no live runtime mutations"
+    }
+  ],
+  "notApplicable": {
+    "web": "No rendered UI changes or claims in assigned writer repair",
+    "mobile": "No mobile product surface per compiled profile"
+  },
+  "frozenFiles": {
+    "apps/daemon/src/workflow-execution/__tests__/artifact-publication.test.ts": "52f3ffdf6d7c0a8da474f31aac488c174a73d8f54af836d9f0b1d2d959e14b94",
+    "apps/daemon/src/workflow-execution/__specs__/artifact-publication.spec.ts": "05e5490d59db6e5b5c22cfb6eff3b586551c01522d0b5dda00c03fcd3b56660e",
+    "apps/daemon/src/workflow-execution/artifact-publication.feature": "8b5fa5daba6f6250bfc81eada63ff494e31a601c5b142a188e54a0dd372c8cf3",
+    "apps/daemon/src/workflow-execution/artifact-publication.steps.ts": "9f576f3d4752f81d510c0e92c06ccd51fde4f37757858c2642fa4f8138d8940e",
+    "apps/daemon/src/workflow-execution/support/artifact-publication.fixture.ts": "8bc53501676943c4af9d5dd8b80ff6166402ed26fc536253b1916e96ba435cac"
+  },
+  "stopBoundary": "READY-FOR-AUDIT (READY-FOR-REVIEW delivery, no self-certification)"
+}

@@ -33,6 +33,7 @@
         "src/workflow-execution/__tests__/workflow-execution-daemon.test.ts",
         "src/visibility/__tests__/control-visibility.test.ts",
         "src/visibility/__tests__/legacy-title-replay.test.ts",
+        "src/workflow-execution/__tests__/artifact-publication.test.ts",
         "--testNamePattern=L1:INTEGRATION"
       ],
       "expected": "vitest-output",
@@ -50,6 +51,7 @@
         "apps/daemon/vitest.config.ts",
         "src/visibility/__specs__/legacy-replay.spec.ts",
         "src/workflow-execution/__specs__/project-context.spec.ts",
+        "src/workflow-execution/__specs__/artifact-publication.spec.ts",
         "--testNamePattern=L2:INTEGRATION"
       ],
       "expected": "vitest-output",
@@ -132,6 +134,20 @@
       ],
       "expected": "cucumber-output",
       "artifact": "test-output/cucumber/project-context.json"
+    },
+    {
+      "heading": "--- Durable artifact names through PostgreSQL delivery ---",
+      "layer": "l3",
+      "command": [
+        "bun",
+        "packages/testing/src/cli.ts",
+        "verify-cucumber",
+        "apps/daemon/src/workflow-execution/artifact-publication.feature",
+        "apps/daemon/out-tsc/cucumber/workflow-execution/artifact-publication.steps.js",
+        "test-output/cucumber/artifact-publication.json"
+      ],
+      "expected": "cucumber-output",
+      "artifact": "test-output/cucumber/artifact-publication.json"
     }
   ]
 }
