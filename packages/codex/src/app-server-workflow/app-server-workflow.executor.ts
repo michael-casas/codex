@@ -181,9 +181,12 @@ function finalAgentResponse(
   const matching = turnId
     ? allTurns.filter((turn) => record(turn)?.id === turnId)
     : [];
-  // Preserve legacy snapshots without turn identity, but never borrow another
-  // turn's output when the bound turn is present.
-  const turns = matching.length ? matching : allTurns;
+  // Legacy snapshots omit turn IDs. Identified snapshots must match the binding,
+  // including when the requested turn is absent from the response.
+  const turns =
+    turnId && allTurns.some((turn) => typeof record(turn)?.id === 'string')
+      ? matching
+      : allTurns;
   for (const rawTurn of [...turns].reverse()) {
     const items = Array.isArray(record(rawTurn)?.items)
       ? (record(rawTurn)?.items as unknown[])

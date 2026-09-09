@@ -244,14 +244,19 @@ describe('[L1:INTEGRATION] recovered final display provenance', () => {
       },
     ],
   ])(
-    'R2-RECOVERY-UNVERIFIED preserves prior valid output but emits no verified item for %s',
-    async (_name, value) => {
+    'R2-RECOVERY-UNVERIFIED enforces the safe fallback policy for %s',
+    async (name, value) => {
       const f = fixture(value);
       try {
-        expect(await f.recover()).toMatchObject({
-          threadId: 'thread-a',
-          finalResponse: output,
-        });
+        if (name === 'wrong turn id') {
+          await expect(f.recover()).rejects.toMatchObject({
+            code: 'WORKFLOW_OUTPUT_MISSING',
+          });
+        } else
+          expect(await f.recover()).toMatchObject({
+            threadId: 'thread-a',
+            finalResponse: output,
+          });
         expect(f.observations).toEqual([]);
         expect(f.calls.some((call) => call.method === 'turn/start')).toBe(
           false,
@@ -279,6 +284,27 @@ describe('[L1:INTEGRATION] recovered final display provenance', () => {
 
 // === L1: IN-PROCESS INTEGRATION TESTS ===
 describe('[L1:INTEGRATION] interrupted binding classification', () => {
+  it('OBS-REVIEW-MISSING-TURN rejects output belonging only to another identified turn', async () => {
+    const value = snapshot();
+    value.thread.turns = [
+      { id: 'unrelated-turn', status: 'completed', items: [finalItem()] },
+    ];
+    const f = fixture(value);
+    try {
+      await expect(f.recover()).rejects.toMatchObject({
+        code: 'WORKFLOW_OUTPUT_MISSING',
+        retryable: false,
+        ambiguous: false,
+      });
+      expect(f.observations).toEqual([]);
+      expect(f.calls.map((call) => call.method)).toEqual([
+        'thread/resume',
+        'thread/read',
+      ]);
+    } finally {
+      await f.executor.close();
+    }
+  });
   it.each([
     ['interrupted', 'WORKFLOW_TURN_INTERRUPTED'],
     ['failed', 'WORKFLOW_TURN_FAILED'],

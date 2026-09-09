@@ -1,6 +1,6 @@
 {
   "name": "codex-control",
-  "version": "0.1.0+codex.20260908200100",
+  "version": "0.1.0+codex.20260909035203",
   "description": "Observe and control durable local and remote Codex workflows.",
   "author": {
     "name": "Michael Casas"

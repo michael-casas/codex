@@ -1,5 +1,13 @@
 # Observer recovery and interrupted bindings
 
+Coordinator review amendment: an older compatibility case accepted another
+explicitly identified turn's output when the bound turn was missing. That is now
+rejected with WORKFLOW_OUTPUT_MISSING; only ID-less legacy snapshots retain the
+fallback. OBS-REVIEW-MISSING-TURN reproduced the false success before correction.
+The existing wrong-turn case now asserts rejection rather than unverified success;
+other legacy cases retain their assertions. This is an intentional correctness
+contract amendment under the Founder-approved Level 1 repair authority.
+
 The observer fails reads while its source is unavailable. It retries only known
 connection failures, at 1, 2, and 4 seconds, for at most three recovery attempts.
 Listener recovery reconnects before replay. Recovery and late-sequence rewind
