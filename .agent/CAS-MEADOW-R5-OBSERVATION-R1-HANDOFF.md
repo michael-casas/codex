@@ -3,6 +3,8 @@
 Status: READY-FOR-REVIEW / READY-FOR-AUDIT, subject to fresh independent verification.
 Base: `99b3cf499d1dec25725deb03c6484388efd8e77f`.
 Branch: `CAS/CAS-BASE_meadow-r5-observation`; PR target: `CAS/integration`.
+PR: https://github.com/michael-casas/codex/pull/10
+Implementation head: `842a94618a51b24f886adb41129cfa1f521984a1`.
 No merge, deployment or R6 authority exercised.
 
 ## Evidence and limits
@@ -72,3 +74,8 @@ none was provided to this worker, and no viewer URL is fabricated.
 
 SQLite checkpoint: `.agent/sqlite/session-01a0849e-3889-74d2-9757-b9705bd08ee6.db`;
 checkpoint 2 read back and integrity check `ok` before delivery preparation.
+
+Pre-commit validation and commitlint completed. Lint-staged reported an ignored
+`.agent` restaging warning; all seven report hashes were verified directly from the
+commit, and the committed product/evidence files match the workspace. No hook was
+bypassed. The later handoff-only commit does not change tested product blobs.
