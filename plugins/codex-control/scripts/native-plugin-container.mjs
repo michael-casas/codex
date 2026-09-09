@@ -14,6 +14,7 @@ const turnTimeoutMs = Number(
   process.env.CAS_NATIVE_PLUGIN_TURN_TIMEOUT_MS ?? 120000,
 );
 const expectedTools = [
+  'admit_project',
   'ask_agent',
   'cancel_agent',
   'cancel_workflow',

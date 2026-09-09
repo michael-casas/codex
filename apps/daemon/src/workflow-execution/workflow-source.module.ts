@@ -1,4 +1,5 @@
-import { isAbsolute, join } from 'node:path';
+import { dirname, isAbsolute, join, relative } from 'node:path';
+import { realpath } from 'node:fs/promises';
 import {
   createWorkflowSourceSubmission,
   prepareWorkflowRun,
@@ -12,6 +13,7 @@ import {
 } from '@codex/workflows/source';
 
 export interface WorkflowSourceRegistration {
+  readonly projectScoped?: true;
   readonly actorAgentId: string;
   readonly hostId: string;
   readonly repositoryId: string;
@@ -79,39 +81,48 @@ export function createWorkflowSourceModule(
   repositories: readonly Repository[],
   submit: (command: RunWorkflowCommand) => Promise<unknown>,
 ) {
-  const contexts = registrations.map((registration) => {
-    const repository = repositories.find(
-      (candidate) =>
-        candidate.hostId === registration.hostId &&
-        candidate.repositoryId === registration.repositoryId,
-    );
-    if (!repository)
-      throw new WorkflowSourceAdmissionError(
-        'WORKFLOW_CONTEXT_REPOSITORY_MISSING',
+  const contexts = () =>
+    registrations.map((registration) => {
+      const repository = repositories.find(
+        (candidate) =>
+          candidate.hostId === registration.hostId &&
+          candidate.repositoryId === registration.repositoryId,
       );
+      if (!repository)
+        throw new WorkflowSourceAdmissionError(
+          'WORKFLOW_CONTEXT_REPOSITORY_MISSING',
+        );
     const context: WorkflowSourceContext = {
-      hostId: registration.hostId,
-      sourceRoot: registration.sourceRoot,
-      artifactDirectory: join(
-        registration.sourceRoot,
-        '.agent',
-        'workflow-modules',
-      ),
-      workspace: {
-        repositoryId: registration.repositoryId,
-        assignmentId: registration.assignmentId,
-        baseRevision: registration.baseRevision,
-      },
-      runtimeProfile: registration.runtimeProfile,
-    };
-    return { actorAgentId: registration.actorAgentId, context };
-  });
+      ...(registration.projectScoped ? { projectScoped: true as const } : {}),
+        hostId: registration.hostId,
+        sourceRoot: registration.sourceRoot,
+        artifactDirectory: join(
+          registration.sourceRoot,
+          '.agent',
+          'workflow-modules',
+        ),
+        workspace: {
+          repositoryId: registration.repositoryId,
+          assignmentId: registration.assignmentId,
+          baseRevision: registration.baseRevision,
+        },
+        runtimeProfile: registration.runtimeProfile,
+      };
+      return {
+        actorAgentId: registration.actorAgentId,
+        checkoutPath: repository.checkoutPath,
+        context,
+      };
+    });
+  contexts();
   const submitSource = createWorkflowSourceSubmission({
-    async resolveContext(actorAgentId, hostId) {
-      const matches = contexts.filter(
+    async resolveContext(actorAgentId, hostId, repositoryId) {
+      const matches = contexts().filter(
         (entry) =>
           entry.actorAgentId === actorAgentId &&
-          (hostId === undefined || entry.context.hostId === hostId),
+          (hostId === undefined || entry.context.hostId === hostId) &&
+          (repositoryId === undefined ||
+            entry.context.workspace.repositoryId === repositoryId),
       );
       const match = matches[0];
       if (matches.length !== 1 || !match)
@@ -120,6 +131,39 @@ export function createWorkflowSourceModule(
             ? 'WORKFLOW_CONTEXT_AMBIGUOUS'
             : 'WORKFLOW_CONTEXT_MISSING',
         );
+      let root: string;
+      let checkout: string;
+      try {
+        [root, checkout] = await Promise.all([
+          realpath(match.context.sourceRoot),
+          realpath(match.checkoutPath),
+        ]);
+      } catch {
+        throw new WorkflowSourceAdmissionError(
+          'WORKFLOW_CONTEXT_SOURCE_MISSING',
+        );
+      }
+      const suffix = relative(checkout, root);
+      if (suffix.startsWith('..') || isAbsolute(suffix))
+        throw new WorkflowSourceAdmissionError('WORKFLOW_SOURCE_OUTSIDE_ROOT');
+      let ancestor = match.context.artifactDirectory;
+      for (;;) {
+        try {
+          const target = relative(root, await realpath(ancestor));
+          if (target.startsWith('..') || isAbsolute(target))
+            throw new WorkflowSourceAdmissionError(
+              'WORKFLOW_SOURCE_OUTSIDE_ROOT',
+            );
+          break;
+        } catch (error) {
+          if (
+            (error as NodeJS.ErrnoException).code !== 'ENOENT' ||
+            ancestor === dirname(ancestor)
+          )
+            throw error;
+          ancestor = dirname(ancestor);
+        }
+      }
       return match.context;
     },
     compileSource: compileWorkflowSource,
@@ -129,7 +173,7 @@ export function createWorkflowSourceModule(
     submitSource,
     async resolveSource(workflowRef: string) {
       for (const directory of new Set(
-        contexts.map((entry) => entry.context.artifactDirectory),
+        contexts().map((entry) => entry.context.artifactDirectory),
       )) {
         try {
           return await loadCompiledWorkflowSource(directory, workflowRef);

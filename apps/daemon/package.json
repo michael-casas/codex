@@ -188,7 +188,7 @@
       "test-l2": {
         "executor": "nx:run-commands",
         "options": {
-          "command": "vitest run --config apps/daemon/vitest.config.ts src/control-runtime.spec.ts src/agent-messaging/__specs__/agent-messaging-daemon.spec.ts src/delegation/__specs__/delegation-daemon.spec.ts src/visibility/__specs__/runtime-visibility-daemon.spec.ts src/visibility/__specs__/control-visibility.spec.ts --testNamePattern='L2:E2E' && bun nx test-l2-e2e @codex/daemon-e2e --outputStyle=static"
+          "command": "vitest run --config apps/daemon/vitest.config.ts src/workflow-execution/__specs__/project-context.spec.ts && vitest run --config apps/daemon/vitest.config.ts src/control-runtime.spec.ts src/agent-messaging/__specs__/agent-messaging-daemon.spec.ts src/delegation/__specs__/delegation-daemon.spec.ts src/visibility/__specs__/runtime-visibility-daemon.spec.ts src/visibility/__specs__/control-visibility.spec.ts --testNamePattern='L2:E2E' && bun nx test-l2-e2e @codex/daemon-e2e --outputStyle=static"
         }
       },
       "test-pre-build": {
@@ -207,7 +207,7 @@
           "{workspaceRoot}/test-output/cucumber/daemon-remote-workflow.json"
         ],
         "options": {
-          "command": "bun packages/testing/src/cli.ts verify-cucumber apps/daemon/src/workflow-execution/remote-workflow-execution.feature apps/daemon/out-tsc/cucumber/workflow-execution/index.steps.js test-output/cucumber/daemon-remote-workflow.json"
+          "command": "bun packages/testing/src/cli.ts verify-cucumber apps/daemon/src/workflow-execution/remote-workflow-execution.feature apps/daemon/out-tsc/cucumber/workflow-execution/index.steps.js test-output/cucumber/daemon-remote-workflow.json && bun packages/testing/src/cli.ts verify-cucumber apps/daemon/src/workflow-execution/project-context.feature apps/daemon/out-tsc/cucumber/workflow-execution/project-context.steps.js test-output/cucumber/project-context.json"
         }
       },
       "docker:build": {
@@ -215,6 +215,26 @@
           "build",
           "prune"
         ]
+      },
+      "test-project-context-l2": {
+        "executor": "nx:run-commands",
+        "cache": false,
+        "dependsOn": [
+          "^build"
+        ],
+        "options": {
+          "command": "vitest run --config apps/daemon/vitest.config.ts src/workflow-execution/__specs__/project-context.spec.ts"
+        }
+      },
+      "test-project-context-l3": {
+        "executor": "nx:run-commands",
+        "cache": false,
+        "dependsOn": [
+          "test-pre-build"
+        ],
+        "options": {
+          "command": "bun packages/testing/src/cli.ts verify-cucumber apps/daemon/src/workflow-execution/project-context.feature apps/daemon/out-tsc/cucumber/workflow-execution/project-context.steps.js test-output/cucumber/project-context.json"
+        }
       }
     }
   },

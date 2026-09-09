@@ -19,7 +19,9 @@ const context = {
 } as const;
 
 function setup() {
-  const resolveContext = vi.fn(async () => context);
+  const resolveContext = vi.fn(
+    async (): Promise<workflows.WorkflowSourceContext> => context,
+  );
   const compileSource = vi.fn(async () => ({
     workflowRef: `source.${'b'.repeat(64)}`,
     sourceDigest: `sha256:${'b'.repeat(64)}` as const,
@@ -43,6 +45,66 @@ function setup() {
 
 // === L1: UNIT TESTS ===
 describe('[L1:UNIT] trusted workflow source admission', () => {
+  it('PC-L1-SELECT carries an explicit repository selector to actor-bound context resolution', async () => {
+    const { run, resolveContext, submit } = setup();
+    await run(
+      {
+        source: 'example.workflow.ts',
+        repositoryId: 'repo',
+        hostId: 'local',
+        idempotencyKey: 'project-request',
+      },
+      { actorAgentId: 'owner', scopes: ['control:workflow'] },
+    );
+    expect(resolveContext).toHaveBeenCalledWith('owner', 'local', 'repo');
+    expect(submit).toHaveBeenCalledOnce();
+  });
+
+  it('PC-L1-WRONG rejects a resolver returning another repository before compilation', async () => {
+    const { run, compileSource, submit } = setup();
+    await expect(
+      run(
+        {
+          source: 'example.workflow.ts',
+          repositoryId: 'other',
+          idempotencyKey: 'project-request',
+        },
+        { actorAgentId: 'owner', scopes: ['control:workflow'] },
+      ),
+    ).rejects.toMatchObject({ code: 'WORKFLOW_CONTEXT_INVALID' });
+    expect(compileSource).not.toHaveBeenCalled();
+    expect(submit).not.toHaveBeenCalled();
+  });
+
+  it('PC-L1-KEY isolates explicitly selected projects while preserving retry identity', async () => {
+    const { run, resolveContext, submit } = setup();
+    const authorization = {
+      actorAgentId: 'owner',
+      scopes: ['control:workflow'],
+    };
+    const command = {
+      source: 'example.workflow.ts',
+      repositoryId: 'repo',
+      idempotencyKey: 'same-key',
+    };
+    await run(command, authorization);
+    await run(command, authorization);
+    resolveContext.mockResolvedValueOnce({
+      ...context,
+      workspace: { ...context.workspace, repositoryId: 'second' },
+    });
+    await run({ ...command, repositoryId: 'second' }, authorization);
+    const commands = submit.mock.calls.map(
+      ([value]) => value as workflows.RunWorkflowCommand,
+    );
+    expect(commands).toHaveLength(3);
+    expect(commands[0].idempotencyKey).toBe(commands[1].idempotencyKey);
+    expect(commands[0].idempotencyKey).not.toBe(commands[2].idempotencyKey);
+    expect(workflows.prepareWorkflowRun(commands[0]).runId).not.toBe(
+      workflows.prepareWorkflowRun(commands[2]).runId,
+    );
+  });
+
   it('WA-L1-ENVELOPE composes one existing durable command from actor context', async () => {
     const { run, resolveContext, compileSource, submit } = setup();
     const authorization = {

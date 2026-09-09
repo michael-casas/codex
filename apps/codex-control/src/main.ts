@@ -16,6 +16,7 @@ const token = (await readFile(tokenFile, 'utf8')).trim();
 const actorAgentId =
   process.env.CODEX_CONTROL_ACTOR_AGENT_ID ?? 'codex-control-user';
 const scopes = [
+  'control:project',
   'control:delegate',
   'control:message',
   'control:workflow',

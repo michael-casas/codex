@@ -1,0 +1,306 @@
+{
+  "assignmentId": "CAS-PROJECT-CONTEXT-R2",
+  "baseRevision": "48bdb3eef84dd23a4eb6a20ed01a327133202417",
+  "contractId": "CAS-PROJECT-CONTEXT-R2-GC1",
+  "workerClaim": "READY-FOR-AUDIT; independent review required",
+  "artifacts": [
+    {
+      "path": "test-output/project-context-l1-red.json",
+      "sha256": "565bbf911b35b0b17fab42dcee41bed60475babd40acbbd3fb31553cfcbbdc9b",
+      "passed": 0,
+      "failed": 3
+    },
+    {
+      "path": "test-output/project-policy-l1-red.json",
+      "sha256": "e567b8f8f1b8036f7157a0b2d8407cd05e4c2200fd05a1ba7a932051c8e80d65",
+      "passed": 0,
+      "failed": 1
+    },
+    {
+      "path": "test-output/project-context-l2-red.json",
+      "sha256": "46fe3444e8bb3c82119721221d61875f534699f5e01f651ccd348f0e6f8e8a8b",
+      "passed": 0,
+      "failed": 14
+    },
+    {
+      "path": "test-output/cucumber/project-context-red.json",
+      "sha256": "c7e99cec8a6c89ffcab3e39b9da08dcd1d1df6c73b82b803e58601e58dc7cab6",
+      "scenarios": 1
+    },
+    {
+      "path": "test-output/project-context-l1-green.json",
+      "sha256": "76bce5cdabd89d017f01b1348a1399a09cd8f0bd7ea0422af278349b9b389016",
+      "passed": 6,
+      "failed": 0
+    },
+    {
+      "path": "test-output/project-policy-l1-green.json",
+      "sha256": "b5332b4dc6dbecffd12596b7879611863234347f1b72a9c28f92c64193a47991",
+      "passed": 3,
+      "failed": 0
+    },
+    {
+      "path": "test-output/project-context-l2-green.json",
+      "sha256": "af1099cec197f9960436db69ba97530c2711ecdd5137d403dae1df296cb683d4",
+      "passed": 14,
+      "failed": 0
+    },
+    {
+      "path": "test-output/cucumber/project-context.json",
+      "sha256": "da86c432437e2bf59010623d75e59a157a73dfd8bf3b27e4a905b6ac0fae6f4e",
+      "scenarios": 1
+    }
+  ],
+  "rows": [
+    {
+      "identity": "PC-L1-SELECT carries an explicit repository selector to actor-bound context resolution",
+      "layer": "L1:UNIT",
+      "target": "@codex/workflows:test-l1-unit",
+      "runtime": "Vitest 4.1.10",
+      "required": true,
+      "expectedRed": "WorkflowSourceAdmissionError: WORKFLOW_SOURCE_COMMAND_INVALID",
+      "green": "Exact frozen assertions in the named native test",
+      "cleanup": "Owned temporary Git roots, listeners, App Server hosts and leases removed"
+    },
+    {
+      "identity": "PC-L1-WRONG rejects a resolver returning another repository before compilation",
+      "layer": "L1:UNIT",
+      "target": "@codex/workflows:test-l1-unit",
+      "runtime": "Vitest 4.1.10",
+      "required": true,
+      "expectedRed": "Error: expected WorkflowSourceAdmissionError: WORKFLOW_SO… { code: '…' } to match object { code: 'WORKFLOW_CONTEXT_INVALID' }",
+      "green": "Exact frozen assertions in the named native test",
+      "cleanup": "Owned temporary Git roots, listeners, App Server hosts and leases removed"
+    },
+    {
+      "identity": "PC-L1-KEY isolates explicitly selected projects while preserving retry identity",
+      "layer": "L1:UNIT",
+      "target": "@codex/workflows:test-l1-unit",
+      "runtime": "Vitest 4.1.10",
+      "required": true,
+      "expectedRed": "WorkflowSourceAdmissionError: WORKFLOW_SOURCE_COMMAND_INVALID",
+      "green": "Exact frozen assertions in the named native test",
+      "cleanup": "Owned temporary Git roots, listeners, App Server hosts and leases removed"
+    },
+    {
+      "identity": "PC-L1-POLICY parses an explicit actor-bound local project policy without requiring per-project registration",
+      "layer": "L1:INTEGRATION",
+      "target": "@codex/daemon:test-l1-integration",
+      "runtime": "Vitest 4.1.10",
+      "required": true,
+      "expectedRed": "Error: CONTROL_CONFIG_INVALID",
+      "green": "Exact frozen assertions in the named native test",
+      "cleanup": "Owned temporary Git roots, listeners, App Server hosts and leases removed"
+    },
+    {
+      "identity": "PC-L2-COEXIST admits two external Git projects and selects each source without canonical contamination",
+      "layer": "L2:INTEGRATION",
+      "target": "@codex/daemon:test-project-context-l2",
+      "runtime": "Vitest 4.1.10",
+      "required": true,
+      "expectedRed": "AssertionError: explicit first-use admission: expected { status: 404, …(1) } to match object { status: 200, body: { …(2) } }",
+      "green": "Exact frozen assertions in the named native test",
+      "cleanup": "Owned temporary Git roots, listeners, App Server hosts and leases removed"
+    },
+    {
+      "identity": "PC-L2-RESTART retains admitted identity and rejects conflicting rebinding across runtime reconstruction",
+      "layer": "L2:INTEGRATION",
+      "target": "@codex/daemon:test-project-context-l2",
+      "runtime": "Vitest 4.1.10",
+      "required": true,
+      "expectedRed": "AssertionError: expected 404 to be 200 // Object.is equality",
+      "green": "Exact frozen assertions in the named native test",
+      "cleanup": "Owned temporary Git roots, listeners, App Server hosts and leases removed"
+    },
+    {
+      "identity": "PC-L2-DIRECT resolves admitted external repositories through the real direct-handoff workspace lease service",
+      "layer": "L2:INTEGRATION",
+      "target": "@codex/daemon:test-project-context-l2",
+      "runtime": "Vitest 4.1.10",
+      "required": true,
+      "expectedRed": "AssertionError: expected 404 to be 200 // Object.is equality",
+      "green": "Exact frozen assertions in the named native test",
+      "cleanup": "Owned temporary Git roots, listeners, App Server hosts and leases removed"
+    },
+    {
+      "identity": "PC-L2-DIRECT-ACTOR prevents another actor from delegating into an admitted project before persistence or launch",
+      "layer": "L2:INTEGRATION",
+      "target": "@codex/daemon:test-project-context-l2",
+      "runtime": "Vitest 4.1.10",
+      "required": true,
+      "expectedRed": "AssertionError: expected 404 to be 200 // Object.is equality",
+      "green": "Exact frozen assertions in the named native test",
+      "cleanup": "Owned temporary Git roots, listeners, App Server hosts and leases removed"
+    },
+    {
+      "identity": "PC-L2-BOUNDARY rejects actor before source execution",
+      "layer": "L2:INTEGRATION",
+      "target": "@codex/daemon:test-project-context-l2",
+      "runtime": "Vitest 4.1.10",
+      "required": true,
+      "expectedRed": "AssertionError: expected { code: 'CONTROL_OPERATION_UNKNOWN' } to deeply equal { Object (code) }",
+      "green": "Exact frozen assertions in the named native test",
+      "cleanup": "Owned temporary Git roots, listeners, App Server hosts and leases removed"
+    },
+    {
+      "identity": "PC-L2-BOUNDARY rejects host before source execution",
+      "layer": "L2:INTEGRATION",
+      "target": "@codex/daemon:test-project-context-l2",
+      "runtime": "Vitest 4.1.10",
+      "required": true,
+      "expectedRed": "AssertionError: expected { code: 'CONTROL_OPERATION_UNKNOWN' } to deeply equal { Object (code) }",
+      "green": "Exact frozen assertions in the named native test",
+      "cleanup": "Owned temporary Git roots, listeners, App Server hosts and leases removed"
+    },
+    {
+      "identity": "PC-L2-BOUNDARY rejects intent before source execution",
+      "layer": "L2:INTEGRATION",
+      "target": "@codex/daemon:test-project-context-l2",
+      "runtime": "Vitest 4.1.10",
+      "required": true,
+      "expectedRed": "AssertionError: expected { code: 'CONTROL_OPERATION_UNKNOWN' } to deeply equal { code: 'PROJECT_ADMISSION_INVALID' }",
+      "green": "Exact frozen assertions in the named native test",
+      "cleanup": "Owned temporary Git roots, listeners, App Server hosts and leases removed"
+    },
+    {
+      "identity": "PC-L2-BOUNDARY rejects revision before source execution",
+      "layer": "L2:INTEGRATION",
+      "target": "@codex/daemon:test-project-context-l2",
+      "runtime": "Vitest 4.1.10",
+      "required": true,
+      "expectedRed": "AssertionError: expected { code: 'CONTROL_OPERATION_UNKNOWN' } to deeply equal { code: 'PROJECT_REVISION_INVALID' }",
+      "green": "Exact frozen assertions in the named native test",
+      "cleanup": "Owned temporary Git roots, listeners, App Server hosts and leases removed"
+    },
+    {
+      "identity": "PC-L2-BOUNDARY rejects source before source execution",
+      "layer": "L2:INTEGRATION",
+      "target": "@codex/daemon:test-project-context-l2",
+      "runtime": "Vitest 4.1.10",
+      "required": true,
+      "expectedRed": "AssertionError: expected { code: 'CONTROL_OPERATION_UNKNOWN' } to deeply equal { code: 'PROJECT_SOURCE_OUTSIDE_ROOT' }",
+      "green": "Exact frozen assertions in the named native test",
+      "cleanup": "Owned temporary Git roots, listeners, App Server hosts and leases removed"
+    },
+    {
+      "identity": "PC-L2-BOUNDARY rejects symlink before source execution",
+      "layer": "L2:INTEGRATION",
+      "target": "@codex/daemon:test-project-context-l2",
+      "runtime": "Vitest 4.1.10",
+      "required": true,
+      "expectedRed": "AssertionError: expected { code: 'CONTROL_OPERATION_UNKNOWN' } to deeply equal { code: 'PROJECT_SOURCE_OUTSIDE_ROOT' }",
+      "green": "Exact frozen assertions in the named native test",
+      "cleanup": "Owned temporary Git roots, listeners, App Server hosts and leases removed"
+    },
+    {
+      "identity": "PC-L2-BOUNDARY rejects checkout before source execution",
+      "layer": "L2:INTEGRATION",
+      "target": "@codex/daemon:test-project-context-l2",
+      "runtime": "Vitest 4.1.10",
+      "required": true,
+      "expectedRed": "AssertionError: expected { code: 'CONTROL_OPERATION_UNKNOWN' } to deeply equal { code: 'PROJECT_ROOT_UNAUTHORIZED' }",
+      "green": "Exact frozen assertions in the named native test",
+      "cleanup": "Owned temporary Git roots, listeners, App Server hosts and leases removed"
+    },
+    {
+      "identity": "PC-L2-BOUNDARY rejects git before source execution",
+      "layer": "L2:INTEGRATION",
+      "target": "@codex/daemon:test-project-context-l2",
+      "runtime": "Vitest 4.1.10",
+      "required": true,
+      "expectedRed": "AssertionError: expected { code: 'CONTROL_OPERATION_UNKNOWN' } to deeply equal { code: 'PROJECT_REPOSITORY_INVALID' }",
+      "green": "Exact frozen assertions in the named native test",
+      "cleanup": "Owned temporary Git roots, listeners, App Server hosts and leases removed"
+    },
+    {
+      "identity": "PC-L2-BOUNDARY rejects missing-source before source execution",
+      "layer": "L2:INTEGRATION",
+      "target": "@codex/daemon:test-project-context-l2",
+      "runtime": "Vitest 4.1.10",
+      "required": true,
+      "expectedRed": "AssertionError: expected { code: 'CONTROL_OPERATION_UNKNOWN' } to deeply equal { code: 'PROJECT_SOURCE_MISSING' }",
+      "green": "Exact frozen assertions in the named native test",
+      "cleanup": "Owned temporary Git roots, listeners, App Server hosts and leases removed"
+    },
+    {
+      "identity": "PC-L2-DIAGNOSTICS preserves single-context calls and rejects ambiguous, wrong and missing sources without private paths",
+      "layer": "L2:INTEGRATION",
+      "target": "@codex/daemon:test-project-context-l2",
+      "runtime": "Vitest 4.1.10",
+      "required": true,
+      "expectedRed": "AssertionError: expected { code: 'ENOENT' } to deeply equal { code: 'WORKFLOW_SOURCE_NOT_FOUND' }",
+      "green": "Exact frozen assertions in the named native test",
+      "cleanup": "Owned temporary Git roots, listeners, App Server hosts and leases removed"
+    }
+  ],
+  "gates": [
+    {
+      "command": "bun nx affected -t lint,typecheck,build --base=48bdb3eef84dd23a4eb6a20ed01a327133202417 --skipNxCache",
+      "projects": 8,
+      "exitCode": 0
+    },
+    {
+      "command": "bun nx affected -t test-l1 --base=48bdb3eef84dd23a4eb6a20ed01a327133202417 --skipNxCache",
+      "projects": 6,
+      "passedTests": 191,
+      "exitCode": 0
+    },
+    {
+      "command": "bun nx affected -t test-l2 --base=48bdb3eef84dd23a4eb6a20ed01a327133202417 --skipNxCache",
+      "projects": 7,
+      "exitCode": 0
+    },
+    {
+      "command": "bun nx affected -t test-l3 --base=48bdb3eef84dd23a4eb6a20ed01a327133202417 --skipNxCache",
+      "projects": 4,
+      "passedScenarios": 9,
+      "exitCode": 0
+    },
+    {
+      "command": "bun nx run @codex/testing:test-policy --skipNxCache",
+      "selected": 116,
+      "standingTargets": 13,
+      "exitCode": 0
+    },
+    {
+      "command": "bun nx run @codex/plugin-codex-control:validate-plugin --skipNxCache",
+      "exitCode": 0
+    },
+    {
+      "command": "bun nx run @codex/plugin-codex-control:generator-e2e --skipNxCache",
+      "runs": 2,
+      "exitCode": 0
+    }
+  ],
+  "nativePlugin": {
+    "credentialFree": true,
+    "paidTurn": false,
+    "tools": 10,
+    "nativeInstall": true,
+    "reinstall": true,
+    "persistedAfterRestart": true,
+    "cleanup": "owned-container-absent",
+    "packageSha256": "0ba4ed2899376818d349429bd780f93c9d112c4364a875ce6295f8d23d0d1f21",
+    "log": "/tmp/cas-project-context-native-final.log"
+  },
+  "plumbingAfterFreeze": [
+    "Prettier formatting without assertion, title, value or scenario changes",
+    "Widened mock context TypeScript return type; removed incompatible literal cast",
+    "Extracted an identical MCP request object into a local variable so the standing Then-body scanner observes the existing assertions"
+  ],
+  "catalogueUpdate": "Expected inventories now include the admit_project capability whose absence was proven by PC-L3-ADMISSION RED",
+  "limitations": [
+    "The canonical live daemon was not reconfigured or restarted",
+    "The original project was not modified and its transcript was not read",
+    "No original design workflow or paid model turn was launched",
+    "Legacy static unscoped retries retain their old identity; switching to explicit selection changes identity",
+    "Admission does not copy dirty or untracked files into leases"
+  ],
+  "resources": {
+    "remainingProjectFixtures": 0,
+    "canonicalCheckoutClean": true,
+    "leaseRetained": true
+  },
+  "productCommit": "083330b111aa0f9f280f5cfcbe38ae175a6e9001",
+  "pullRequest": "https://github.com/michael-casas/codex/pull/6"
+}

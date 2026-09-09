@@ -32,6 +32,11 @@ import {
   parseWorkflowSourceRegistrations,
   type WorkflowSourceRegistration,
 } from './workflow-execution/workflow-source.module.js';
+import {
+  createLocalProjectAdmission,
+  parseLocalProjectPolicies,
+  type LocalProjectPolicy,
+} from './workflow-execution/local-project-admission.js';
 
 interface RepositoryConfig {
   readonly hostId: string;
@@ -50,6 +55,7 @@ export interface ProductionControlConfig {
   readonly repositories: readonly RepositoryConfig[];
   readonly workflows: readonly WorkflowConfig[];
   readonly workflowSources?: readonly WorkflowSourceRegistration[];
+  readonly localProjectPolicies?: readonly LocalProjectPolicy[];
   readonly viewer: {
     readonly host: '127.0.0.1';
     readonly port: number;
@@ -91,17 +97,24 @@ export function parseProductionControlConfig(
     'workflows',
     'viewer',
     ...('workflowSources' in config ? ['workflowSources'] : []),
+    ...('localProjectPolicies' in config ? ['localProjectPolicies'] : []),
   ]);
   const workflowSources = parseWorkflowSourceRegistrations(
     config['workflowSources'],
+  );
+  const localProjectPolicies = parseLocalProjectPolicies(
+    config['localProjectPolicies'],
   );
   if (
     !Array.isArray(config['hosts']) ||
     config['hosts'].length === 0 ||
     !Array.isArray(config['repositories']) ||
-    config['repositories'].length === 0 ||
+    (config['repositories'].length === 0 &&
+      localProjectPolicies.length === 0) ||
     !Array.isArray(config['workflows']) ||
-    (config['workflows'].length === 0 && workflowSources.length === 0)
+    (config['workflows'].length === 0 &&
+      workflowSources.length === 0 &&
+      localProjectPolicies.length === 0)
   )
     throw new Error('CONTROL_CONFIG_INVALID');
   const repositories = config['repositories'].map((entry) => {
@@ -153,6 +166,7 @@ export function parseProductionControlConfig(
     repositories,
     workflows,
     ...(workflowSources.length ? { workflowSources } : {}),
+    ...(localProjectPolicies.length ? { localProjectPolicies } : {}),
     viewer: {
       host: '127.0.0.1',
       port: Number(viewer['port']),
@@ -221,10 +235,16 @@ export async function createProductionControlRuntime(
     },
   });
   for (const host of config.hosts) hosts.register(host);
+  const projects = await createLocalProjectAdmission({
+    policies: config.localProjectPolicies ?? [],
+    hosts: config.hosts,
+    repositories: config.repositories,
+    workflowSources: config.workflowSources ?? [],
+  });
   const workspaces = createWorkspaceLeaseService({
     hosts,
     async resolveRepository(identity) {
-      const repository = config.repositories.find(
+      const repository = projects.repositories.find(
         (candidate) =>
           candidate.hostId === identity.hostId &&
           candidate.repositoryId === identity.repositoryId,
@@ -261,8 +281,8 @@ export async function createProductionControlRuntime(
     },
   );
   const sourceModule = createWorkflowSourceModule(
-    config.workflowSources ?? [],
-    config.repositories,
+    projects.workflowSources,
+    projects.repositories,
     (command) => workflows.runWorkflow(command),
   );
   const workflows = createProductionWorkflowExecutionDaemon(
@@ -313,12 +333,18 @@ export async function createProductionControlRuntime(
   };
   const messenger = createAgentMessenger(messaging.store);
   const controlImplementation: CodexControlPlane = {
-    delegateAgent: (command) => delegation.delegateAgent(command as never),
+    admitProject: projects.admitProject,
+    delegateAgent: async (command, authorization) =>
+      delegation.delegateAgent(
+        (await projects.authorizeCommand(command, authorization)) as never,
+      ),
     sendAgentMessage: (kind, command, authorization) =>
       messenger[kind](command as never, authorization),
-    runWorkflow: (command, authorization) => {
-      if (command && typeof command === 'object' && 'source' in command)
+    runWorkflow: async (command, authorization) => {
+      if (command && typeof command === 'object' && 'source' in command) {
+        await projects.validateSource(command, authorization);
         return sourceModule.submitSource(command, authorization);
+      }
       if (
         command &&
         typeof command === 'object' &&
@@ -328,7 +354,9 @@ export async function createProductionControlRuntime(
         throw new WorkflowSourceAdmissionError(
           'WORKFLOW_SOURCE_REQUIRES_ADMISSION',
         );
-      return workflows.runWorkflow(command as never);
+      return workflows.runWorkflow(
+        (await projects.authorizeCommand(command, authorization)) as never,
+      );
     },
     cancelAgent: (delegationId) => delegation.cancelAgent(delegationId),
     cancelWorkflow: (runId) => workflows.cancelWorkflow(runId),

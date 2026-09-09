@@ -1,17 +1,12 @@
 {
   "name": "codex-control",
-  "version": "0.1.0+codex.20260908123510",
+  "version": "0.1.0+codex.20260908200100",
   "description": "Observe and control durable local and remote Codex workflows.",
   "author": {
     "name": "Michael Casas"
   },
   "license": "MIT",
-  "keywords": [
-    "codex",
-    "workflows",
-    "agents",
-    "orchestration"
-  ],
+  "keywords": ["codex", "workflows", "agents", "orchestration"],
   "skills": "./skills/",
   "interface": {
     "displayName": "Codex Control",
@@ -19,11 +14,7 @@
     "longDescription": "Launch and observe durable Codex agents and workflows through compact task-level tools and one accessible live control surface.",
     "developerName": "Michael Casas",
     "category": "Developer Tools",
-    "capabilities": [
-      "Interactive",
-      "Read",
-      "Write"
-    ],
+    "capabilities": ["Interactive", "Read", "Write"],
     "defaultPrompt": [
       "Show my active Codex workflows",
       "Delegate this task and open its live view",

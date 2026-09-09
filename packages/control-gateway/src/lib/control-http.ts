@@ -176,6 +176,10 @@ async function invoke(
 ) {
   const value = object(input);
   switch (operation) {
+    case 'admitProject':
+      if (!control.admitProject)
+        throw new ControlHttpError('PROJECT_ADMISSION_UNAVAILABLE', 503);
+      return control.admitProject(value, authorization);
     case 'delegateAgent':
       return control.delegateAgent(value, authorization);
     case 'sendAgentMessage':
@@ -235,6 +239,7 @@ export function createControlHttpServer(
   const authorization = options.authorization ?? {
     actorAgentId: 'codex-control',
     scopes: [
+      'control:project',
       'control:delegate',
       'control:message',
       'control:workflow',
@@ -418,6 +423,7 @@ export function createControlHttpClient(
   };
 
   const control: CodexControlPlane = {
+    admitProject: (command) => call('admitProject', command),
     delegateAgent: (command) => call('delegateAgent', command),
     sendAgentMessage: (kind, command) =>
       call(
