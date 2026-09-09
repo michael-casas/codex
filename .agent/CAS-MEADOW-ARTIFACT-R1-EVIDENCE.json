@@ -1,0 +1,558 @@
+{
+  "assignmentId": "CAS-MEADOW-ARTIFACT-R1",
+  "status": "worker-evidence-for-independent-review",
+  "baseRevision": "eb28fb541ec24494aa2660f400a301ba327e3cb5",
+  "recordedAt": "2026-09-09T04:41:34.081112+00:00",
+  "cwd": "/Users/mcasa_atlantis/.codex/.agent/workspaces/35033329351f57d5bba9191783907ffef8759f829b8021a88632ef554b425545",
+  "branch": "CAS/CAS-BASE_meadow-artifacts",
+  "deliveryRepository": "https://github.com/michael-casas/codex",
+  "prBase": "CAS/integration",
+  "bunVersion": "1.4.2",
+  "standingCodexPathPrefix": "/Users/mcasa_atlantis/.local/opt/codex-0.151.0/node_modules/.bin",
+  "affectedProjects": [
+    "@codex/daemon",
+    "@codex/daemon-e2e",
+    "@codex/testing"
+  ],
+  "contract": {
+    "path": ".agent/CAS-MEADOW-ARTIFACT-R1-GC1.json",
+    "sha256": "10df2560973fd9584018ced3394fd63f64e84142cd672a271901a66d2bcf5baf",
+    "integrity": "all frozen source hashes unchanged"
+  },
+  "focused": [
+    {
+      "phase": "red",
+      "layer": "l1",
+      "command": "bun nx run @codex/daemon:test-artifact-l1 --skipNxCache",
+      "cwd": "/Users/mcasa_atlantis/.codex/.agent/workspaces/35033329351f57d5bba9191783907ffef8759f829b8021a88632ef554b425545",
+      "runtime": "Node / Vitest 4.1.10",
+      "exitCode": 1,
+      "counts": {
+        "selected": 5,
+        "executed": 5,
+        "passed": 0,
+        "failed": 5
+      },
+      "cases": [
+        {
+          "identity": "[L1:INTEGRATION] artifact publication ARTIFACT-L1-NAMES keeps names and content distinct from storage classification",
+          "status": "failed",
+          "durationMs": 6.425542000000007
+        },
+        {
+          "identity": "[L1:INTEGRATION] artifact publication ARTIFACT-L1-FAILURE classifies 23514 without exposing publisher detail (5)",
+          "status": "failed",
+          "durationMs": 1.304916999999989
+        },
+        {
+          "identity": "[L1:INTEGRATION] artifact publication ARTIFACT-L1-FAILURE classifies 42501 without exposing publisher detail (5)",
+          "status": "failed",
+          "durationMs": 0.6236250000000041
+        },
+        {
+          "identity": "[L1:INTEGRATION] artifact publication ARTIFACT-L1-FAILURE classifies UNKNOWN without exposing publisher detail (24)",
+          "status": "failed",
+          "durationMs": 0.47787500000004
+        },
+        {
+          "identity": "[L1:INTEGRATION] artifact publication ARTIFACT-L1-FAILURE classifies UNKNOWN without exposing publisher detail (5)",
+          "status": "failed",
+          "durationMs": 0.4458750000000009
+        }
+      ],
+      "nativeReport": "test-output/artifact/r1/artifact-red-l1.json",
+      "nativeSha256": "49ee21d38a249becd2417190e71457c12f8bbc559daa5e69c0511319d4fd102b",
+      "log": ".codex-workspace-tmp/artifact-red-l1.log",
+      "logSha256": "0037f0a5427ace6a016aadf021e75c25d47c97dd619a71a9a80b656c7b514ff9"
+    },
+    {
+      "phase": "red",
+      "layer": "l2",
+      "command": "bun nx run @codex/daemon:test-artifact-l2 --skipNxCache",
+      "cwd": "/Users/mcasa_atlantis/.codex/.agent/workspaces/35033329351f57d5bba9191783907ffef8759f829b8021a88632ef554b425545",
+      "runtime": "Node / Vitest 4.1.10",
+      "exitCode": 1,
+      "counts": {
+        "selected": 4,
+        "executed": 4,
+        "passed": 1,
+        "failed": 3
+      },
+      "cases": [
+        {
+          "identity": "[L2:INTEGRATION] durable artifact publication ARTIFACT-L2-REPRO reproduces mixed-case kind rejection in the unchanged real schema",
+          "status": "passed",
+          "durationMs": 446.97683300000006
+        },
+        {
+          "identity": "[L2:INTEGRATION] durable artifact publication ARTIFACT-L2-NAMES persists exact names, IDs, bytes and legacy metadata across replay",
+          "status": "failed",
+          "durationMs": 480.6393750000001
+        },
+        {
+          "identity": "[L2:INTEGRATION] durable artifact publication ARTIFACT-L2-FAILURE retains safe classification for real storage rejection and rolls back registration",
+          "status": "failed",
+          "durationMs": 410.7602909999998
+        },
+        {
+          "identity": "[L2:INTEGRATION] durable artifact publication ARTIFACT-L2-CONFLICT preserves original JSON content when a name is reused with different bytes",
+          "status": "failed",
+          "durationMs": 570.7682090000001
+        }
+      ],
+      "nativeReport": "test-output/artifact/r1/artifact-red-l2.json",
+      "nativeSha256": "d043400d5ce4510e77fd5a5b0293a4cb31a953ba810a41665a845463dbcf303e",
+      "log": ".codex-workspace-tmp/artifact-red-l2.log",
+      "logSha256": "3819816ca5a9c69c16a2fed8beda70b76d1f1d6e3f39813bf2b5a2883615a00c"
+    },
+    {
+      "phase": "red",
+      "layer": "l3",
+      "command": "bun nx run @codex/daemon:test-artifact-l3 --skipNxCache",
+      "cwd": "/Users/mcasa_atlantis/.codex/.agent/workspaces/35033329351f57d5bba9191783907ffef8759f829b8021a88632ef554b425545",
+      "runtime": "Node / Cucumber 13.1.0",
+      "exitCode": 1,
+      "counts": {
+        "source": 1,
+        "selected": 1,
+        "executed": 1,
+        "passed": 0,
+        "failed": 1,
+        "generated": 0
+      },
+      "cases": [
+        {
+          "identity": "ARTIFACT-L3-NAMES A workflow preserves named evidence through delivery and restart",
+          "steps": [
+            "passed",
+            "failed",
+            "skipped",
+            "passed"
+          ]
+        }
+      ],
+      "nativeReport": "test-output/artifact/r1/artifact-red-l3.json",
+      "nativeSha256": "82becb0f869c81a9e21429b7f08b4fe4d762cfa60b71302c8799ca7fee441dc7",
+      "log": ".codex-workspace-tmp/artifact-red-l3.log",
+      "logSha256": "665a6b64486eab311d5ec5c7784a8a8da0817c619bb1771ef721a19ed439c3c6"
+    },
+    {
+      "phase": "green",
+      "layer": "l1",
+      "command": "bun nx run @codex/daemon:test-artifact-l1 --skipNxCache",
+      "cwd": "/Users/mcasa_atlantis/.codex/.agent/workspaces/35033329351f57d5bba9191783907ffef8759f829b8021a88632ef554b425545",
+      "runtime": "Node / Vitest 4.1.10",
+      "exitCode": 0,
+      "counts": {
+        "selected": 5,
+        "executed": 5,
+        "passed": 5,
+        "failed": 0
+      },
+      "cases": [
+        {
+          "identity": "[L1:INTEGRATION] artifact publication ARTIFACT-L1-NAMES keeps names and content distinct from storage classification",
+          "status": "passed",
+          "durationMs": 3.1198329999999714
+        },
+        {
+          "identity": "[L1:INTEGRATION] artifact publication ARTIFACT-L1-FAILURE classifies 23514 without exposing publisher detail (5)",
+          "status": "passed",
+          "durationMs": 0.4117500000000405
+        },
+        {
+          "identity": "[L1:INTEGRATION] artifact publication ARTIFACT-L1-FAILURE classifies 42501 without exposing publisher detail (5)",
+          "status": "passed",
+          "durationMs": 0.2675000000000409
+        },
+        {
+          "identity": "[L1:INTEGRATION] artifact publication ARTIFACT-L1-FAILURE classifies UNKNOWN without exposing publisher detail (24)",
+          "status": "passed",
+          "durationMs": 0.2287499999999909
+        },
+        {
+          "identity": "[L1:INTEGRATION] artifact publication ARTIFACT-L1-FAILURE classifies UNKNOWN without exposing publisher detail (5)",
+          "status": "passed",
+          "durationMs": 0.20454100000000608
+        }
+      ],
+      "nativeReport": "apps/daemon/test-output/artifact/l1.json",
+      "nativeSha256": "9b59d4d3387b350fb9793ab548122292226be60c1d03eb1c23c070eb40ae7d28",
+      "log": ".codex-workspace-tmp/artifact-green-l1.log",
+      "logSha256": "97faee52a9c0c8e4d104916ef8c0b52cce365f2f05752c3ed82e607fab023595"
+    },
+    {
+      "phase": "green",
+      "layer": "l2",
+      "command": "bun nx run @codex/daemon:test-artifact-l2 --skipNxCache",
+      "cwd": "/Users/mcasa_atlantis/.codex/.agent/workspaces/35033329351f57d5bba9191783907ffef8759f829b8021a88632ef554b425545",
+      "runtime": "Node / Vitest 4.1.10",
+      "exitCode": 0,
+      "counts": {
+        "selected": 4,
+        "executed": 4,
+        "passed": 4,
+        "failed": 0
+      },
+      "cases": [
+        {
+          "identity": "[L2:INTEGRATION] durable artifact publication ARTIFACT-L2-REPRO reproduces mixed-case kind rejection in the unchanged real schema",
+          "status": "passed",
+          "durationMs": 309.837084
+        },
+        {
+          "identity": "[L2:INTEGRATION] durable artifact publication ARTIFACT-L2-NAMES persists exact names, IDs, bytes and legacy metadata across replay",
+          "status": "passed",
+          "durationMs": 697.600167
+        },
+        {
+          "identity": "[L2:INTEGRATION] durable artifact publication ARTIFACT-L2-FAILURE retains safe classification for real storage rejection and rolls back registration",
+          "status": "passed",
+          "durationMs": 427.56666599999994
+        },
+        {
+          "identity": "[L2:INTEGRATION] durable artifact publication ARTIFACT-L2-CONFLICT preserves original JSON content when a name is reused with different bytes",
+          "status": "passed",
+          "durationMs": 429.6005829999999
+        }
+      ],
+      "nativeReport": "apps/daemon/test-output/artifact/l2.json",
+      "nativeSha256": "0c149c96d9bda4639b1cafadf724535c0c98f20c3437b2a5a6c8db31a3b3f82e",
+      "log": ".codex-workspace-tmp/artifact-green-l2.log",
+      "logSha256": "ec0f5b8b6abade8f0ba4a2a7269b728e03a4a4125b0221511db00c5e7a8367f9"
+    },
+    {
+      "phase": "green",
+      "layer": "l3",
+      "command": "bun nx run @codex/daemon:test-artifact-l3 --skipNxCache",
+      "cwd": "/Users/mcasa_atlantis/.codex/.agent/workspaces/35033329351f57d5bba9191783907ffef8759f829b8021a88632ef554b425545",
+      "runtime": "Node / Cucumber 13.1.0",
+      "exitCode": 0,
+      "counts": {
+        "source": 1,
+        "selected": 1,
+        "executed": 1,
+        "passed": 1,
+        "failed": 0,
+        "generated": 0
+      },
+      "cases": [
+        {
+          "identity": "ARTIFACT-L3-NAMES A workflow preserves named evidence through delivery and restart",
+          "steps": [
+            "passed",
+            "passed",
+            "passed",
+            "passed"
+          ]
+        }
+      ],
+      "nativeReport": "test-output/cucumber/artifact-publication.json",
+      "nativeSha256": "66a51c320cfa990ee2c596618e804a167e3b647b0dcecc63337b987e0f72ff2a",
+      "log": ".codex-workspace-tmp/artifact-green-l3.log",
+      "logSha256": "49c70988170cfc49f73c974de7d8426c495cae297a8458ed69603097911c5e9c"
+    }
+  ],
+  "standing": [
+    {
+      "command": "bun nx run-many -t lint,typecheck,build -p @codex/daemon,@codex/daemon-e2e --skipNxCache --parallel=2",
+      "exitCode": 0,
+      "summaries": [
+        "Run duration:      5.0s"
+      ],
+      "log": ".codex-workspace-tmp/artifact-quality.log",
+      "sha256": "e8c3402772815b6aea1960a0e00bab2011a2138af863775ccd4453ebd780117d"
+    },
+    {
+      "command": "bun nx run @codex/daemon:test-l1 --skipNxCache",
+      "exitCode": 0,
+      "summaries": [
+        "Tests  44 passed (44)",
+        "Run duration:      1.1s"
+      ],
+      "log": ".codex-workspace-tmp/artifact-standing-l1.log",
+      "sha256": "1474cd447882c9702de32d45f9b4213e22aa36a2339523a88a3dea3f72762cbc"
+    },
+    {
+      "command": "bun nx run @codex/daemon:test-l2 --skipNxCache",
+      "exitCode": 0,
+      "summaries": [
+        "Tests  20 passed (20)",
+        "Tests  6 passed (6)",
+        "Tests  1 passed (1)",
+        "Run duration:      3.1s",
+        "Tests  4 passed (4)",
+        "Tests  3 passed (3)",
+        "Tests  4 passed (4)",
+        "Run duration:      2.3s",
+        "Run duration:      49.9s"
+      ],
+      "log": ".codex-workspace-tmp/artifact-standing-l2.log",
+      "sha256": "358d2c8d648232ab075119acb0ad65fa2ae5fd1c0551a30cd5f8c4296bd4f666"
+    },
+    {
+      "command": "bun nx run @codex/daemon:test-l3 --skipNxCache",
+      "exitCode": 0,
+      "summaries": [
+        "1 scenario (1 passed)",
+        "1 scenario (1 passed)",
+        "2 scenarios (2 passed)",
+        "3 scenarios (3 passed)",
+        "1 scenario (1 passed)",
+        "Run duration:      23.3s"
+      ],
+      "log": ".codex-workspace-tmp/artifact-standing-l3.log",
+      "sha256": "912fafc3a56896ca37bc99d02e73cbf24cab3dab9b80cb5ea38b47b9dc9a31de"
+    },
+    {
+      "command": "bun nx run @codex/testing:test-policy --skipNxCache",
+      "exitCode": 0,
+      "summaries": [
+        "Run duration:      75ms"
+      ],
+      "log": ".codex-workspace-tmp/artifact-policy.log",
+      "sha256": "a411b94ec6d8f887e02ccebe2f55eca64fac675053923a52a4074e1d609969d4"
+    },
+    {
+      "command": "bun nx run @codex/testing:test --configuration=ground-zero --skipNxCache",
+      "exitCode": 0,
+      "summaries": [
+        "Tests  21 passed | 3 skipped (24)",
+        "Tests  3 passed | 21 skipped (24)",
+        "Tests  25 passed | 2 skipped (27)",
+        "Tests  2 passed | 25 skipped (27)",
+        "1 scenario (1 passed)",
+        "Run duration:      8.4s"
+      ],
+      "log": ".codex-workspace-tmp/artifact-testing.log",
+      "sha256": "690576df0abb021741aa4fad746d9ee82bc9dec39852eef9fdf5aedc4cbcaa66"
+    },
+    {
+      "command": "bun nx run-many -t lint,typecheck -p @codex/testing --skipNxCache",
+      "exitCode": 0,
+      "summaries": [
+        "Run duration:      759ms"
+      ],
+      "log": ".codex-workspace-tmp/artifact-testing-quality.log",
+      "sha256": "7573bfcf5a69d2fe7477c5f3d83dc2b7d257eec2705330734d5277bd80256b5d"
+    },
+    {
+      "command": "bun nx run @codex/daemon:test --configuration=ground-zero --skipNxCache",
+      "exitCode": 0,
+      "summaries": [
+        "Tests  7 passed | 3 skipped (10)",
+        "Tests  16 passed | 3 skipped (19)",
+        "Tests  25 passed (25)",
+        "Tests  6 passed (6)",
+        "Tests  1 passed | 6 skipped (7)",
+        "Tests  1 passed (1)",
+        "1 scenario (1 passed)",
+        "1 scenario (1 passed)",
+        "1 scenario (1 passed)",
+        "Run duration:      50.1s"
+      ],
+      "log": ".codex-workspace-tmp/artifact-aggregate.log",
+      "sha256": "09532157218fa50671c3e3ecbd1963fa5a09e2e4a7180b81d8306b6535f9f6c2"
+    }
+  ],
+  "aggregateReports": {
+    "test-output/ground-zero/daemon.json": {
+      "schemaVersion": 1,
+      "project": "@codex/daemon",
+      "status": "passed",
+      "startedAt": "2026-09-09T04:38:48.983Z",
+      "durationMs": 47964,
+      "children": [
+        {
+          "artifact": "nx://@codex/daemon/test/l1-unit",
+          "command": "bun vitest run --config apps/daemon/vitest.config.ts src/main.test.ts src/workflow-execution/__tests__/workflow-execution-daemon.test.ts --testNamePattern=L1:UNIT",
+          "durationMs": 525,
+          "executed": 7,
+          "exitCode": 0,
+          "layer": "l1-unit",
+          "selected": 7,
+          "status": "passed"
+        },
+        {
+          "artifact": "nx://@codex/daemon/test/l1-integration",
+          "command": "bun vitest run --config apps/daemon/vitest.config.ts src/control-runtime.test.ts src/workflow-execution/__tests__/workflow-execution-daemon.test.ts src/visibility/__tests__/control-visibility.test.ts src/visibility/__tests__/legacy-title-replay.test.ts src/workflow-execution/__tests__/artifact-publication.test.ts --testNamePattern=L1:INTEGRATION",
+          "durationMs": 452,
+          "executed": 16,
+          "exitCode": 0,
+          "layer": "l1-integration",
+          "selected": 16,
+          "status": "passed"
+        },
+        {
+          "artifact": "nx://@codex/daemon/test/l2-legacy-replay",
+          "command": "bun vitest run --config apps/daemon/vitest.config.ts src/visibility/__specs__/legacy-replay.spec.ts src/workflow-execution/__specs__/project-context.spec.ts src/workflow-execution/__specs__/artifact-publication.spec.ts --testNamePattern=L2:INTEGRATION",
+          "durationMs": 3941,
+          "executed": 25,
+          "exitCode": 0,
+          "layer": "l2-integration",
+          "selected": 25,
+          "status": "passed"
+        },
+        {
+          "artifact": "nx://@codex/daemon/test/l2-runtime-e2e",
+          "command": "bun vitest run --config apps/daemon/vitest.config.ts src/control-runtime.spec.ts src/agent-messaging/__specs__/agent-messaging-daemon.spec.ts src/delegation/__specs__/delegation-daemon.spec.ts src/visibility/__specs__/runtime-visibility-daemon.spec.ts src/visibility/__specs__/control-visibility.spec.ts --testNamePattern=L2:E2E",
+          "durationMs": 2511,
+          "executed": 6,
+          "exitCode": 0,
+          "layer": "l2-e2e",
+          "selected": 6,
+          "status": "passed"
+        },
+        {
+          "artifact": "nx://@codex/daemon/test-l2-delivery-failure",
+          "command": "bun vitest run --config apps/daemon/vitest.config.ts src/workflow-execution/__specs__/workflow-execution-daemon.spec.ts --testNamePattern=DELIVERY-EXHAUSTED-L2",
+          "durationMs": 19314,
+          "executed": 1,
+          "exitCode": 0,
+          "layer": "l2-e2e",
+          "selected": 1,
+          "status": "passed"
+        },
+        {
+          "artifact": "nx://@codex/daemon-e2e/test/l2-e2e",
+          "command": "bun vitest run --config apps/daemon-e2e/vitest.config.ts src/daemon/daemon.spec.ts --testNamePattern=L2:E2E",
+          "durationMs": 1479,
+          "executed": 1,
+          "exitCode": 0,
+          "layer": "l2-e2e",
+          "selected": 1,
+          "status": "passed"
+        },
+        {
+          "artifact": "test-output/cucumber/daemon-remote-workflow.json",
+          "command": "bun packages/testing/src/cli.ts verify-cucumber apps/daemon/src/workflow-execution/remote-workflow-execution.feature apps/daemon/out-tsc/cucumber/workflow-execution/index.steps.js test-output/cucumber/daemon-remote-workflow.json",
+          "durationMs": 16119,
+          "executed": 1,
+          "exitCode": 0,
+          "layer": "l3",
+          "selected": 1,
+          "status": "passed"
+        },
+        {
+          "artifact": "test-output/cucumber/project-context.json",
+          "command": "bun packages/testing/src/cli.ts verify-cucumber apps/daemon/src/workflow-execution/project-context.feature apps/daemon/out-tsc/cucumber/workflow-execution/project-context.steps.js test-output/cucumber/project-context.json",
+          "durationMs": 565,
+          "executed": 1,
+          "exitCode": 0,
+          "layer": "l3",
+          "selected": 1,
+          "status": "passed"
+        },
+        {
+          "artifact": "test-output/cucumber/artifact-publication.json",
+          "command": "bun packages/testing/src/cli.ts verify-cucumber apps/daemon/src/workflow-execution/artifact-publication.feature apps/daemon/out-tsc/cucumber/workflow-execution/artifact-publication.steps.js test-output/cucumber/artifact-publication.json",
+          "durationMs": 3054,
+          "executed": 1,
+          "exitCode": 0,
+          "layer": "l3",
+          "selected": 1,
+          "status": "passed"
+        }
+      ]
+    },
+    "test-output/ground-zero/testing.json": {
+      "schemaVersion": 1,
+      "project": "@codex/testing",
+      "status": "passed",
+      "startedAt": "2026-09-09T04:37:51.067Z",
+      "durationMs": 7938,
+      "children": [
+        {
+          "artifact": "nx://@codex/testing/test/l1-unit",
+          "command": "bun vitest run --config packages/testing/vitest.config.ts src/ground-zero/harness.test.ts --testNamePattern=L1:UNIT",
+          "durationMs": 315,
+          "executed": 21,
+          "exitCode": 0,
+          "layer": "l1-unit",
+          "selected": 21,
+          "status": "passed"
+        },
+        {
+          "artifact": "nx://@codex/testing/test/l1-integration",
+          "command": "bun vitest run --config packages/testing/vitest.config.ts src/ground-zero/harness.test.ts --testNamePattern=L1:INTEGRATION",
+          "durationMs": 261,
+          "executed": 3,
+          "exitCode": 0,
+          "layer": "l1-integration",
+          "selected": 3,
+          "status": "passed"
+        },
+        {
+          "artifact": "nx://@codex/testing/test/l2-integration",
+          "command": "bun vitest run --config packages/testing/vitest.config.ts src/ground-zero/harness.spec.ts --testNamePattern=L2:INTEGRATION",
+          "durationMs": 6635,
+          "executed": 25,
+          "exitCode": 0,
+          "layer": "l2-integration",
+          "selected": 25,
+          "status": "passed"
+        },
+        {
+          "artifact": "nx://@codex/testing/test/l2-e2e",
+          "command": "bun vitest run --config packages/testing/vitest.config.ts src/ground-zero/harness.spec.ts --testNamePattern=L2:E2E",
+          "durationMs": 386,
+          "executed": 2,
+          "exitCode": 0,
+          "layer": "l2-e2e",
+          "selected": 2,
+          "status": "passed"
+        },
+        {
+          "artifact": "test-output/cucumber/ground-zero.json",
+          "command": "bun packages/testing/src/cli.ts verify-cucumber packages/testing/src/ground-zero/ground-zero.feature packages/testing/src/ground-zero/index.steps.ts test-output/cucumber/ground-zero.json",
+          "durationMs": 336,
+          "executed": 1,
+          "exitCode": 0,
+          "layer": "l3",
+          "selected": 1,
+          "status": "passed"
+        }
+      ]
+    }
+  },
+  "implementationHashes": {
+    "apps/daemon/src/workflow-execution/workflow-execution-daemon.ts": "6b680ddec4edda12aa115f4cc3efb1e7d6b7dce4832b193abd61f9070bbe37a4",
+    "apps/daemon/package.json": "627a50741dbe7fd8a1bc9ea60f443a99eba9b6d3607d0619811ca82dee7d7778",
+    "packages/testing/manifests/daemon.json": "a396fd80a5e335af3d33ee66f899df1ebbaa586c71c2613ec096a36054e6f11f"
+  },
+  "resourceCheck": {
+    "scope": "test process IDs observed in this task logs",
+    "processCount": 87,
+    "remainingDatabases": [],
+    "remainingRoles": []
+  },
+  "resourceNotes": [
+    "Focused fixtures close owned database roles and services in finally/After. Scoped database/role leftovers = zero.",
+    "One defective initial L3 fixture setup created codex_control_test_17511_1788928349047_d7b3233d before cwd failure; explicitly removed this owned database. Cwd plumbing fixed before freeze and meaningful RED rerun.",
+    "No global before/after resource inventory was captured; cleanup claim is scoped to recorded test processes and fixture guarantees."
+  ],
+  "reproduction": "Real disposable migration002 rejects firstHalf.md and README.md as kind with SQLSTATE 23514, constraint control_artifact_kind_check; commands/events roll back. Does not claim historical SQL exception was logged.",
+  "compatibility": "No SQL/store/authoring/local journal changes; legacy filename kind and public metadata/bytes preserved. Generic artifact kind only for newly written durable workflow artifacts.",
+  "failureContract": "workflow.failed artifact-failed plus allowlisted storageCode/UNKNOWN; preceding phase.failed retains phase; existing phase diagnostic remains generic.",
+  "limitations": [
+    "Lint exits zero with 7 no-non-null-assertion warnings: 3 existing and 4 in new test plumbing; no lint errors.",
+    "No scoped archive-byte reader exists; owner SQL byte assertions are only in disposable tests.",
+    "Independent verifier/judge and live rollout remain coordinator responsibilities; no original retry or completion claim."
+  ],
+  "forbiddenActivity": {
+    "paidModelTurns": 0,
+    "originalOutputsRead": false,
+    "liveRuntimeMutations": false,
+    "migrationsChanged": false,
+    "subagentsSpawned": 0
+  },
+  "sqliteCheckpoint": {
+    "path": "/Users/mcasa_atlantis/.codex/.agent/workspaces/35033329351f57d5bba9191783907ffef8759f829b8021a88632ef554b425545/.agent/sqlite/session-01a0846a-233e-7181-88cf-d6b90ec3480a.db",
+    "checkpointIds": [
+      1,
+      2
+    ],
+    "readback": true,
+    "integrityCheck": "ok"
+  }
+}

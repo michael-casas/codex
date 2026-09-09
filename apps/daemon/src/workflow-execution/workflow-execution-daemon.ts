@@ -539,7 +539,7 @@ export function createWorkflowExecutionDaemon(
                 [
                   {
                     artifactId,
-                    kind: request.name,
+                    kind: 'artifact',
                     mediaType: artifact.mediaType,
                     content,
                   },
@@ -570,11 +570,39 @@ export function createWorkflowExecutionDaemon(
             runId: prepared.runId,
           });
         else if (ambiguousFailure) throw error;
-        else
+        else {
+          const artifactFailed =
+            payload(error).code === 'WORKFLOW_ARTIFACT_FAILED';
+          const storageCode = payload(payload(error).details).storageCode;
           await append(prepared.runId, 'failed', 'workflow.failed', {
             runId: prepared.runId,
-            diagnostic: 'execution-failed',
+            diagnostic: artifactFailed ? 'artifact-failed' : 'execution-failed',
+            ...(artifactFailed
+              ? {
+                  storageCode:
+                    typeof storageCode === 'string' &&
+                    [
+                      '23514',
+                      '23505',
+                      '42501',
+                      '22001',
+                      '53100',
+                      '53200',
+                      '53300',
+                      '08006',
+                      '57P01',
+                      'ECONNREFUSED',
+                      'ETIMEDOUT',
+                      'ENOSPC',
+                      'EACCES',
+                      'EIO',
+                    ].includes(storageCode)
+                      ? storageCode
+                      : 'UNKNOWN',
+                }
+              : {}),
           });
+        }
       }
     } catch (error) {
       primaryError = error;
