@@ -42,6 +42,7 @@ service_tier = "default"
 [shell_environment_policy]
 inherit = "all"
 include_only = [
+  "HERDR_*",
   "HOME",
   "PATH",
   "USER",
